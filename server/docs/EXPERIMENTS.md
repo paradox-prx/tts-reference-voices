@@ -100,3 +100,40 @@ shehbaz, long, c=48, n=96, through the gateway (max_inflight 32 → 16 queue, re
 
 One take hit the length cap (engine HTTP 500 codec limit) and the gateway retried it: 57.5 s end to end, audio
 22.8 s, pace ratio 1.10. The gateway's cap + retry + in-flight limit keep throughput at the c=32 level.
+
+### E03: async_chunk off vs on: `results/03_ab_async_chunk/{no_async_chunk,async_chunk}/`
+Single-variable A/B on the (by then updated) prod YAML: stage 0 gpu_memory_utilization **0.60** (KV 9.73 GiB =
+**91,120 tokens**, "22.25x at 4,096 tokens"), stage 1 0.18. `--no-async-chunk` on the CLI vs the YAML default
+(async_chunk true). Engine direct, inline references, `long` pool texts, committed `bench_tts.py`.
+
+| voice | c | mode | lat p50 s | p99 | TTFA p50 s | x realtime | GPU MiB (incl. ~350 desktop) |
+|---|---|---|---|---|---|---|---|
+| trump | 1 | async off | 3.06 | 3.38 | | 5.26 | 22817 |
+| trump | 1 | async on | 3.00 | 3.21 | | 5.55 | 19156 |
+| trump | 8 | async off | 7.28 | 8.02 | | 16.51 | 22817 |
+| trump | 8 | async on | 6.50 | 7.16 | | 19.01 | 19186 |
+| trump | 32 | async off | 15.92 | 20.47 | | 28.56 | 22965 |
+| trump | 32 | async on | 13.97 | 17.99 | | **34.48** | 19337 |
+| trump stream | 1 | async off | 3.45 | 3.63 | 3.447 | 4.96 | 22967 |
+| trump stream | 1 | async on | 2.89 | 3.53 | **0.115** | 5.54 | 19339 |
+| trump stream | 8 | async off | 7.24 | 7.99 | 7.236 | 16.27 | 22968 |
+| trump stream | 8 | async on | 6.12 | 7.73 | **0.333** | 18.95 | 19339 |
+| shehbaz | 1 | async off | 4.49 | 4.92 | | 4.90 | 23187 |
+| shehbaz | 1 | async on | 4.05 | 4.88 | | 5.49 | 19642 |
+| shehbaz | 8 | async off | 9.69 | 11.35 | | 17.14 | 23186 |
+| shehbaz | 8 | async on | 8.70 | 10.37 | | 18.30 | 19643 |
+| shehbaz | 32 | async off | 21.81 | 25.90 | | 18.38* | 23193 |
+| shehbaz | 32 | async on | 18.76 | 24.19 | | 21.60* | 19647 |
+| shehbaz stream | 1 | async off | 4.53 | 5.57 | 4.528 | 4.91 | 23186 |
+| shehbaz stream | 1 | async on | 4.22 | 4.76 | **0.136** | 5.43 | 19639 |
+| shehbaz stream | 8 | async off | 9.56 | 11.04 | 9.559 | 16.28 | 23188 |
+| shehbaz stream | 8 | async on | 9.13 | 9.80 | **0.416** | 19.07 | 19643 |
+
+\* each shehbaz c=32 run had exactly one Urdu runaway (engine log: 1 "failed generation validation; retrying once"
+per engine); that single straggler (65 s / 76 s end to end) set the run's wall time, halving aggregate throughput
+(E01 without a runaway: 35.5x).
+
+**Conclusion:** on vllm-omni 0.28 on this 3090, async_chunk **on** is better on every axis: +5-21% throughput, TTFA
+0.1-0.4 s instead of the whole generation, and 3.5-4.5 GB less VRAM (async off pushed the card to 23.2 of 24 GB,
+which leaves the desktop almost nothing). The older reports that async off is 15-70% faster (#4371, vLLM-Omni
+0.20-0.22) predate 0.27's cached incremental decode. Keep async_chunk on; drop no_async_chunk from further screening.
