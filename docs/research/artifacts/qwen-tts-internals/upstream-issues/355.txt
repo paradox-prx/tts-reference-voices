@@ -1,0 +1,21 @@
+#355 [open] fix(modeling): cast logits to float32 to prevent FP16 sampling overflow
+URL https://github.com/QwenLM/Qwen3-TTS/pull/355
+created 2026-08-07T01:25:29Z by vikramiiitm
+
+## Summary
+
+This PR casts the output logits of `Qwen3TTSTalkerCodePredictorModelForConditionalGeneration` and `Qwen3TTSTalkerForConditionalGeneration` to `float32` prior to returning them for generation sampling. 
+
+This resolves an unrecoverable CUDA assertion failure (`RuntimeError: CUDA error: device-side assert triggered`) when running inference in FP16 precision (`--dtype float16`).
+
+---
+
+## Root Cause
+
+When running autoregressive generation with half precision (`float16`), logit values produced during forward passes can exceed the `float16` maximum dynamic range limit (~65,504). During downstream sampling steps (such as temperature scaling and Softmax in `transformers.generation.utils._sample`), these overflowing logits yield `+inf` and `NaN` probability values, triggering the PyTorch kernel failure:
+
+```text
+../aten/src/ATen/native/cuda/TensorCompare.cu:110: _assert_async_cuda_kernel: 
+Assertion `probability tensor contains either `inf`, `nan` or element < 0` failed.
+RuntimeError: CUDA error: device-side assert triggered
+

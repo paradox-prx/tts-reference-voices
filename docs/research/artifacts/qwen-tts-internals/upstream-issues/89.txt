@@ -1,0 +1,1115 @@
+#89 [closed] Very slow inference on 5090
+URL https://github.com/QwenLM/Qwen3-TTS/issues/89
+created 2026-01-26T07:48:10Z by dur-randir
+
+### Description
+
+I have tried in the following environments: Windows 11, CUDA 13.1, python3.11+torch 2.9 and python 3.13+torch 2.10. In both cases, inference is 10 times slower than realtime. For the following text "Looks interesting but those Huggingface hub files are just annoying with all those extra json files." it takes over 50 seconds to generate audio with preloaded model, both from qwen-tts-demo and suggested python snippets from huggingface. I've checked that the model is loaded on cuda:0 device, but despite that GPU usage, observed through nvitop, remains ~4-5%.
+
+### Known Issue
+
+- [x] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by woshitoutouge (NONE) 2026-01-26T09:15:12Z
+4070ti super, It takes 5 seconds to generate 1 sec audio 
+
+--- comment by dffdeeq (NONE) 2026-01-26T12:36:39Z
+i got ~6x speedup on regular inference and about the same with streaming which I also implemented (ttfb ~0.08s on a 5090, RTF < 0.25) by using torch.compile + cuda graphs for the decoder, torch.compile for CodePredictor and Talker, fast codebook and `torch.set_float32_matmul_precision('high')` 
+
+all of this is in my [fork](https://github.com/dffdeeq/Qwen3-TTS-streaming)
+examples are in:
+- examples/test_streaming_optimized.py
+- examples/test_optimized_no_streaming.py
+
+
+benchmarks on a 5090:
+- full inference:
+
+<img width="602" height="145" alt="Image" src="https://github.com/user-attachments/assets/70d4224d-c49b-428a-8062-68577bbf8f7b" />
+
+- streaming:
+
+<img width="766" height="183" alt="Image" src="https://github.com/user-attachments/assets/03602a40-f154-4129-94a6-be493f172e16" />
+
+
+--- comment by dariox1337 (NONE) 2026-01-26T14:54:31Z
+Great work (honestly)! But the architecture of this tts leaves much to be desired because even with all optimizations, RTF of 0.5 is ridiculous for what is fundamentally a 1.7B LM with a small MTP module on top. RTF 0.5 means 25 tokens per second. I get this speed on CPU alone with Qwen3-1.7B. And even the most anemic GPU should give 100+ t/s.
+
+--- comment by nukex (NONE) 2026-01-26T16:32:15Z
+On the 3060 - 12GB model 1.7B - 3 characters/sec, meaning 1 sec of audio takes 5 seconds. And what's typical is the same result on the 0.6B model. It feels like there's a programmed limit.
+
+--- comment by dffdeeq (NONE) 2026-01-26T17:17:21Z
+> On the 3060 - 12GB model 1.7B - 3 characters/sec, meaning 1 sec of audio takes 5 seconds. And what's typical is the same result on the 0.6B model. It feels like there's a programmed limit.
+
+did you try running my [fork](https://github.com/dffdeeq/Qwen3-TTS-streaming)? it sounds like you might be hitting some kind of "hard gap" and I'd really like to collect benchmarks across different GPUs. if you can, please run one of the examples/ ([test_streaming_optimized.py](https://github.com/dffdeeq/Qwen3-TTS-streaming/blob/main/examples/test_streaming_optimized.py) or [test_optimized_no_streaming.py](https://github.com/dffdeeq/Qwen3-TTS-streaming/blob/main/examples/test_optimized_no_streaming.py))
+
+--- comment by nukex (NONE) 2026-01-26T17:22:10Z
+> > On the 3060 - 12GB model 1.7B - 3 characters/sec, meaning 1 sec of audio takes 5 seconds. And what's typical is the same result on the 0.6B model. It feels like there's a programmed limit.
+> 
+> did you try running my [fork](https://github.com/dffdeeq/Qwen3-TTS-streaming)? it sounds like you might be hitting some kind of "hard gap" and I'd really like to collect benchmarks across different GPUs. if you can, please run one of the examples/ ([test_streaming_optimized.py](https://github.com/dffdeeq/Qwen3-TTS-streaming/blob/main/examples/test_streaming_optimized.py) or [test_optimized_no_streaming.py](https://github.com/dffdeeq/Qwen3-TTS-streaming/blob/main/examples/test_optimized_no_streaming.py))
+
+Ok, I'll let you know once I launch your fork.
+
+--- comment by dur-randir (NONE) 2026-01-26T18:11:16Z
+> i got ~3x speedup on regular inference and about the same with streaming which I also implemented (ttft ~0.17s on a 5090, RTF < 0.5) by using torch.compile + cuda graphs for the decoder, torch.compile for CodePredictor, also tweaking the eos check to avoid cpu sync, and `torch.set_float32_matmul_precision('high')`
+> 
+> all of this is in my [fork](https://github.com/dffdeeq/Qwen3-TTS-streaming)
+
+What version of CUDA do you have? 12.x? As I get the following numbers (speedup with your fork is great btw, but I don't understand why my absolute numbers are so low, this is CUDA 13.0 + python 3.13 + torch 2.10 + fa 2.8.3):
+
+```
+Method                    Total      Audio      RTF    Speedup
+------------------------------------------------------------
+baseline                 88.52s      9.42s     9.40      1.00x
+optimized                33.20s     11.41s     2.91      2.67x
+optimized_2              29.10s     10.06s     2.89      3.04x
+optimized_3              27.63s      9.50s     2.91      3.20x
+
+[293.55s] TOTAL SCRIPT TIME
+
+============================================================
+OPTIMIZATIONS APPLIED
+============================================================
+
+1. torch.set_float32_matmul_precision('high') - TensorFloat32 on Ampere+ GPUs
+2. bfloat16 dtype - faster computation with minimal quality loss
+3. flash_attention_2 - efficient attention computation
+4. use_fast_codebook=True - bypasses HuggingFace generate() for 2-3x speedup
+5. torch.compile with max-autotune mode for decoder
+6. compile_codebook_predictor=True - compiled code predictor
+```
+
+--- comment by hben35096 (NONE) 2026-01-26T21:06:59Z
+From my usage, the GPU utilization rate is very low, with a maximum of 16%.
+
+--- comment by supy0001 (NONE) 2026-01-27T02:25:51Z
+I used vllm-omni and the rtf is about 1.6 on 4090. Is that correct? 
+
+--- comment by supy0001 (NONE) 2026-01-27T07:39:31Z
+<img width="953" height="294" alt="Image" src="https://github.com/user-attachments/assets/858f6059-087a-4606-9124-3afb2a1faddd" />
+
+Hello~
+I run your examples/test_streaming_optimized.py code on 4090, but I got the result like this. How could you get the rtf<1?  Is there any operations you didn't mention？I'd like to have your reply.
+
+--- comment by dffdeeq (NONE) 2026-01-27T07:42:26Z
+> <img alt="Image" width="953" height="294" src="https://private-user-images.githubusercontent.com/94920559/540888453-858f6059-087a-4606-9124-3afb2a1faddd.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk0OTk5MzcsIm5iZiI6MTc2OTQ5OTYzNywicGF0aCI6Ii85NDkyMDU1OS81NDA4ODg0NTMtODU4ZjYwNTktMDg3YS00NjA2LTkxMjQtM2FmYjJhMWZhZGRkLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjclMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI3VDA3NDAzN1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWQ3MDkxYWJiMTg4OGNlMTEwMzRkNDM0ZmI0ZmQ3ZWY2MzFmNGZhNWQxMzYzOWNmZmE4OTY3MmJjODQ5YzFkZjcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.idmaSsk1lxSXUlKho8jEBcwXI-_O7azhs9WTvwpGV9g">
+> Hello~ I run your examples/test_streaming_optimized.py code on 4090, but I got the result like this. How could you get the rtf<1? Is there any operations you didn't mention？I'd like to have your reply.
+
+Hi~
+Can you pull the latest changes? I updated it ~22 minutes ago - upstream from the main repo broke performance
+
+--- comment by supy0001 (NONE) 2026-01-27T08:21:21Z
+Thx for your reply, I have the speedup result now. But I hear some stuttering or clicking artifacts (like a 'da-da' sound) in the audio. Is this expected behavior?
+
+<img width="925" height="199" alt="Image" src="https://github.com/user-attachments/assets/3cb2a187-e26b-4c2d-a22f-17a242367535" />
+
+[output_streaming_optimized.wav](https://github.com/user-attachments/files/24877737/output_streaming_optimized.wav)
+
+--- comment by FlynnFlag (NONE) 2026-01-27T08:30:24Z
+The authors said the speech tokenizer is 12HZ, but since they use RVQ codec with 16 quantizers，the model actually generate 16 audio tokens in one step. So the actually compression rate is 12*16, to some extent. I think that's the key of the low inference speed, even though they use multiple lm heads to speed up. 
+
+--- comment by huukim136 (NONE) 2026-01-27T09:00:19Z
+Thanks for sharing your code @dffdeeq.
+I run on RTX 6000 and got this result
+
+<img width="604" height="143" alt="Image" src="https://github.com/user-attachments/assets/0c05da5e-264c-4882-810f-41b344675aa7" />
+
+--- comment by dffdeeq (NONE) 2026-01-27T10:03:53Z
+> Thx for your reply, I have the speedup result now. But I hear some stuttering or clicking artifacts (like a 'da-da' sound) in the audio. Is this expected behavior?
+
+yep, known issue. I hadn't worked on it yet, but I'm looking into it now. It's mostly about chunk merging, not the streaming code itself
+
+--- comment by anurag12-webster (NONE) 2026-01-27T12:44:12Z
+> I used vllm-omni and the rtf is about 1.6 on 4090. Is that correct?
+
+@supy0001 with the vllm_omni are you using the fa2? 
+
+--- comment by samhaswon (NONE) 2026-01-27T16:42:41Z
+On a Tesla P40, the generation takes ~2x as long as the output for roughly 1-2 sentences. What I've found speeds things up is to do batching. Then, even though the P40 is relatively slow, it can generate more audio than the time it took to generate. Because of how old the card is, I'm only on CUDA 11.8 and PyTorch 2.5.x, so there are still other optimizations on the table for newer PyTorch features.
+
+--- comment by taresh18 (NONE) 2026-01-27T17:00:12Z
+@dffdeeq i tested your fork on 4090, getting rtf of 1.7, I have pulled the latest code from the repo, any idea on what I might be missing?
+
+<img width="596" height="166" alt="Image" src="https://github.com/user-attachments/assets/d9e00c19-9f56-4503-af1c-b6806295544e" />
+
+--- comment by nukex (NONE) 2026-01-27T19:18:21Z
+I ran a test using test_streaming_optimized.py
+**RTX 3060 12GB + Win11 + Python 3.14 + CUDA 13 (Triton Windows)**
+ 
+<img width="734" height="394" alt="Image" src="https://github.com/user-attachments/assets/70921161-60ab-41cf-bf2b-6aac7909c508" />
+
+**test_optimized_no_streaming.py:**
+
+<img width="683" height="504" alt="Image" src="https://github.com/user-attachments/assets/d13f9bb7-e987-4907-bf68-117843680bcd" />
+
+--- comment by nfranke (NONE) 2026-01-28T02:23:16Z
+I did some basic testing with a 5070 ti and a 5090 and the stock Qwen3-TTS. In both cases processing was faster without fast-attn on outputs of about 11 seconds. Typical savings were 15% without flash-attn. 
+
+Using the 5070 ti and CUDA 12.9 without flash-attn (after commenting out the attention line in "examples/test_optimized_no_streaming.py") I get this for this fork:
+
+```
+Method                    Total      Audio      RTF    Speedup
+------------------------------------------------------------
+baseline                  5.31s      7.03s     0.75      1.00x
+optimized                 1.80s      6.71s     0.27      2.96x
+optimized_2               1.90s      7.11s     0.27      2.79x
+optimized_3               1.85s      6.87s     0.27      2.86x
+```
+
+Installing with flash-attn still with CUDA 12.9 and this fork (reenabling the attention line):
+
+```
+Method                    Total      Audio      RTF    Speedup
+------------------------------------------------------------
+baseline                  5.66s      7.11s     0.80      1.00x
+optimized                 1.88s      6.95s     0.27      3.01x
+optimized_2               1.94s      7.27s     0.27      2.92x
+optimized_3               1.80s      6.71s     0.27      3.15x
+```
+
+Looked interesting.
+
+--- comment by nfranke (NONE) 2026-01-28T02:28:28Z
+For "test_streaming_optimized.py" without flash-attn:
+
+```
+Method                     1st Chunk    Total    Audio    RTF  Chunks  Speedup
+--------------------------------------------------------------------------------
+Standard (no streaming)          N/A    5.39s    6.95s   0.78     N/A      N/A
+streaming_baseline             0.25s    4.19s    6.24s   0.67      20    1.00x
+streaming_optimized            0.14s    2.22s    6.40s   0.35      20    1.89x
+streaming_optimized_2          0.14s    2.10s    6.00s   0.35      19    2.00x
+```
+
+and with flash-attn:
+
+```
+Method                     1st Chunk    Total    Audio    RTF  Chunks  Speedup
+--------------------------------------------------------------------------------
+Standard (no streaming)          N/A    5.30s    6.47s   0.82     N/A      N/A
+streaming_baseline             0.25s    4.47s    6.72s   0.67      21    1.00x
+streaming_optimized            0.14s    2.22s    6.24s   0.36      20    2.01x
+streaming_optimized_2          0.14s    2.30s    6.48s   0.35      21    1.95x
+```
+
+
+--- comment by dur-randir (NONE) 2026-01-28T11:26:00Z
+Just for the record, after switching from Windows to Linux - x3 speedup, same hardware, python 3.11+cu130+torch 2.9.1:
+```
+Method                    Total      Audio      RTF    Speedup
+------------------------------------------------------------
+baseline                 27.30s      8.31s     3.28      1.00x
+optimized                 6.93s      6.79s     1.02      3.94x
+optimized_2               7.57s      7.43s     1.02      3.61x
+optimized_3               7.09s      6.95s     1.02      3.85x
+```
+I suspect there's more CPU contention, as processor here is quite slow.
+
+--- comment by dffdeeq (NONE) 2026-01-28T12:26:38Z
+@nfranke hey, looking at your own numbers - RTF is basically identical:
+
+- streaming: 0.35 vs 0.36 is about 3% (probably measurement noise)
+- non-streaming: 0.27 vs 0.27
+
+the only difference is in baseline (no torch compile). in the compiled path, flash-attn vs eager makes no real difference. could you clarify where the 15% figure is coming from (which metric/config/comparison)?
+
+--- comment by yangxing5200 (NONE) 2026-01-28T14:55:48Z
+生成3秒音频需要15秒左右，2080ti ,  Index TTS2 GPT-SoVits 都很快（2秒左右），为什么这个这么慢
+
+--- comment by mame82 (NONE) 2026-01-28T18:08:36Z
+RTX 4070 mobile with 0.6b base model ... cool, thx for your work:
+
+```
+Total: 6.69s, Audio: 6.79s, RTF: 0.98
+
+================================================================================
+SUMMARY
+================================================================================
+
+Method                    Total      Audio      RTF    Speedup
+------------------------------------------------------------
+baseline                 16.47s      5.83s     2.82      1.00x
+optimized                 6.50s      6.63s     0.98      2.53x
+optimized_2               6.08s      7.03s     0.86      2.71x
+optimized_3               6.69s      6.79s     0.98      2.46x
+
+[84.74s] TOTAL SCRIPT TIME
+
+============================================================
+OPTIMIZATIONS APPLIED
+============================================================
+```
+
+--- comment by nfranke (NONE) 2026-01-28T18:34:18Z
+> the only difference is in baseline (no torch compile). in the compiled path, flash-attn vs eager makes no real difference. could you clarify where the 15% figure is coming from (which metric/config/comparison)?
+
+That was the original Qwen3-TTS project doing a clone and creating a voice file based on my data, sorry that wasn't clear.
+
+--- comment by dffdeeq (NONE) 2026-01-28T20:14:33Z
+> > the only difference is in baseline (no torch compile). in the compiled path, flash-attn vs eager makes no real difference. could you clarify where the 15% figure is coming from (which metric/config/comparison)?
+> 
+> That was the original Qwen3-TTS project doing a clone and creating a voice file based on my data, sorry that wasn't clear.
+
+ah ok, got it now. I was confused because you first refer to the stock repo being 15% faster without flash-attn, and then right after that you posted benchmark numbers for my fork
+
+--- comment by RyrieNorth (NONE) 2026-01-28T20:29:17Z
+> > > the only difference is in baseline (no torch compile). in the compiled path, flash-attn vs eager makes no real difference. could you clarify where the 15% figure is coming from (which metric/config/comparison)?
+> > 
+> > 
+> > That was the original Qwen3-TTS project doing a clone and creating a voice file based on my data, sorry that wasn't clear.
+> 
+> ah ok, got it now. I was confused because you first refer to the stock repo being 15% faster without flash-attn, and then right after that you posted benchmark numbers for my fork
+
+**In my current environment, I have received the following:**
+
+```bash
+(qwen3-tts) northsky@qyw-ai-server:/data/northsky/Qwen3-TTS/Qwen3-TTS-streaming$ nvidia-smi -q | grep "Product Name" | head -1
+    Product Name                                       : NVIDIA GeForce RTX 5090
+
+(qwen3-tts) northsky@qyw-ai-server:/data/northsky/Qwen3-TTS/models$ nvcc -V | grep cuda
+Build cuda_13.1.r13.1/compiler.36836380_0
+
+(qwen3-tts) northsky@qyw-ai-server:/data/northsky/Qwen3-TTS/models$ python -c "import torch; print(torch.__version__)"
+2.10.0+cu130
+
+(qwen3-tts) northsky@qyw-ai-server:/data/northsky/Qwen3-TTS/models$ python -c "import flash_attn; print(flash_attn.__version__)"
+2.8.3
+```
+
+```bash
+================================================================================
+SUMMARY
+================================================================================
+
+Method                     1st Chunk    Total    Audio    RTF  Chunks  Speedup
+--------------------------------------------------------------------------------
+Standard (no streaming)          N/A   10.09s    5.75s   1.75     N/A      N/A
+streaming_baseline             0.49s    8.83s    6.48s   1.36      21    1.00x
+streaming_optimized            0.21s    3.42s    6.16s   0.55      20    2.58x
+streaming_optimized_2          0.20s    4.03s    7.36s   0.55      23    2.19x
+
+Chunk duration: ~309ms (7405 samples @ 24000Hz)
+```
+
+```bash
+================================================================================
+SUMMARY
+================================================================================
+
+Method                    Total      Audio      RTF    Speedup
+------------------------------------------------------------
+baseline                 11.27s      7.19s     1.57      1.00x
+optimized                 3.76s      7.43s     0.51      3.00x
+optimized_2               3.70s      7.35s     0.50      3.04x
+optimized_3               3.81s      7.59s     0.50      2.96x
+```
+
+Thanks to this, the 5090 can achieve over 90% utilization in short bursts.
+
+
+--- comment by supy0001 (NONE) 2026-01-29T03:16:47Z
+
+
+> > I used vllm-omni and the rtf is about 1.6 on 4090. Is that correct?
+> 
+> [@supy0001](https://github.com/supy0001) with the vllm_omni are you using the fa2?
+
+@yeap
+
+--- comment by controZheng (NONE) 2026-01-29T11:54:43Z
+> 我使用 torch.compile 和 cuda 图实现了流式推理，速度提升了约 3 倍（在 5090 上 ttft 速度约为 0.17 秒，RTF 速度小于 0.5 秒），解码器也使用了 torch.compile，代码预测器也使用了 torch.compile，同时调整了 eos 检查以避免 CPU 同步问题。`torch.set_float32_matmul_precision('high')`
+> 
+> 所有这些都在我的[分支](https://github.com/dffdeeq/Qwen3-TTS-streaming)里 ，示例如下：
+> 
+> * examples/test_streaming_optimized.py
+> * examples/test_optimized_no_streaming.py
+> 
+> 5090 的基准测试：
+> 
+> * 完整推论：
+> 
+> <img alt="图像" width="580" height="127" src="https://private-user-images.githubusercontent.com/89968655/540492739-3fa22630-8ede-492b-9462-931d9f519247.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2ODc4NjMsIm5iZiI6MTc2OTY4NzU2MywicGF0aCI6Ii84OTk2ODY1NS81NDA0OTI3MzktM2ZhMjI2MzAtOGVkZS00OTJiLTk0NjItOTMxZDlmNTE5MjQ3LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDExNTI0M1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTU3Nzg4ZjliOGYwMzlmODQ4NjQzNGJkMGFjMjRhOTUxNjI5MjdlODQ1NzJjNmRiZGUxNjRhNDcwYzBkZDhmNzcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.zHOJBu6ZknKQSrvAh9XFrxyuVek2x5GS9capd5nlneo">
+> * 流媒体：
+> 
+> <img alt="图像" width="738" height="130" src="https://private-user-images.githubusercontent.com/89968655/540493422-997a30c8-9310-420f-9c7b-901bd33f85c4.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2ODc4NjMsIm5iZiI6MTc2OTY4NzU2MywicGF0aCI6Ii84OTk2ODY1NS81NDA0OTM0MjItOTk3YTMwYzgtOTMxMC00MjBmLTljN2ItOTAxYmQzM2Y4NWM0LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDExNTI0M1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTc1YTAxODJmM2Q2Y2U2NzRmYzNjNTc5Yjg0NDI5MDYxOTExZjljZDEyMzhhMmU1MDNlMDdmYjFjZjIzNzVlY2EmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.uAFPeVf6Yg6gQzMKBGmN155dL0UAcDHBff37SnFRFnI">
+
+<img width="1417" height="414" alt="Image" src="https://github.com/user-attachments/assets/843f8e05-c06c-46b6-828e-8ba670bb1676" />
+Hello, thank you for your contribution. May I ask why my P40 graphics card is not working
+
+--- comment by RyrieNorth (NONE) 2026-01-29T12:00:49Z
+> > 我使用 torch.compile 和 cuda 图实现了流式推理，速度提升了约 3 倍（在 5090 上 ttft 速度约为 0.17 秒，RTF 速度小于 0.5 秒），解码器也使用了 torch.compile，代码预测器也使用了 torch.compile，同时调整了 eos 检查以避免 CPU 同步问题。`torch.set_float32_matmul_precision('high')`
+> > 所有这些都在我的[分支](https://github.com/dffdeeq/Qwen3-TTS-streaming)里 ，示例如下：
+> > 
+> > * examples/test_streaming_optimized.py
+> > * examples/test_optimized_no_streaming.py
+> > 
+> > 5090 的基准测试：
+> > 
+> > * 完整推论：
+> > 
+> > <img alt="图像" width="580" height="127" src="https://private-user-images.githubusercontent.com/89968655/540492739-3fa22630-8ede-492b-9462-931d9f519247.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2ODc4NjMsIm5iZiI6MTc2OTY4NzU2MywicGF0aCI6Ii84OTk2ODY1NS81NDA0OTI3MzktM2ZhMjI2MzAtOGVkZS00OTJiLTk0NjItOTMxZDlmNTE5MjQ3LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDExNTI0M1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTU3Nzg4ZjliOGYwMzlmODQ4NjQzNGJkMGFjMjRhOTUxNjI5MjdlODQ1NzJjNmRiZGUxNjRhNDcwYzBkZDhmNzcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.zHOJBu6ZknKQSrvAh9XFrxyuVek2x5GS9capd5nlneo">
+> > * 流媒体：
+> > <img alt="图像" width="738" height="130" src="https://private-user-images.githubusercontent.com/89968655/540493422-997a30c8-9310-420f-9c7b-901bd33f85c4.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2ODc4NjMsIm5iZiI6MTc2OTY4NzU2MywicGF0aCI6Ii84OTk2ODY1NS81NDA0OTM0MjItOTk3YTMwYzgtOTMxMC00MjBmLTljN2ItOTAxYmQzM2Y4NWM0LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDExNTI0M1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTc1YTAxODJmM2Q2Y2U2NzRmYzNjNTc5Yjg0NDI5MDYxOTExZjljZDEyMzhhMmU1MDNlMDdmYjFjZjIzNzVlY2EmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.uAFPeVf6Yg6gQzMKBGmN155dL0UAcDHBff37SnFRFnI">
+> 
+> <img alt="Image" width="1417" height="414" src="https://private-user-images.githubusercontent.com/42229960/542174499-843f8e05-c06c-46b6-828e-8ba670bb1676.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2ODgxODMsIm5iZiI6MTc2OTY4Nzg4MywicGF0aCI6Ii80MjIyOTk2MC81NDIxNzQ0OTktODQzZjhlMDUtYzA2Yy00NmI2LTgyOGUtOGJhNjcwYmIxNjc2LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDExNTgwM1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWEwODVhOTY4ZGYxMDdlMmNiY2RlOTZiYWU2ODY5MWRjMWNhOGM3NDQxYmIyOTYxZGYzZmE4MzY1ZmM5NjYwNzMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.UobMXRyjGuW7QNrAquyz2Y58-3RwVRh4-peJlPBpeEE"> Hello, thank you for your contribution. May I ask why my P40 graphics card is not working
+
+你检查一下代码有没有拉全或者是安装qwen-tts，这个create_voice_clone_prompt是在qwen_tts/inference/qwen3_tts_model.py里面的
+
+--- comment by Joydn90 (NONE) 2026-01-29T14:22:13Z
+I don’t have Flash installed, only PyTorch SDPA, and my GPU is an RX 7900 XT.
+
+![Image](https://github.com/user-attachments/assets/a803c614-25c9-4781-bbab-43ffe3a9de2d)
+
+--- comment by iwanders (NONE) 2026-01-30T00:39:48Z
+Just chiming in here, I went down the rabbithole of building flash attention, first I ran into the dtype warning, then found #15, checked out that version. Discovered that generation still wasn't faster, tried disabling disabled flash attention, which led to a 1m7s generation time for my testcase, with no modifications (which makes me assume it defaults to flash attention) it resulted in 45s. (Edit; clarified this sentence)
+
+Reading further, I don't think you need to manually install flash attention anymore. Pytorch has a [blog post](https://pytorch.org/blog/pytorch2-2/) on it being integrated, and the [scaled_dot_product_attention](https://docs.pytorch.org/docs/2.10/generated/torch.nn.functional.scaled_dot_product_attention.html#:~:text=All%20implementations%20are%20enabled%20by%20default.%20Scaled%20dot%20product%20attention%20attempts%20to%20automatically%20select%20the%20most%20optimal%20implementation%20based%20on%20the%20inputs) states all implementations (Including FlashAttention-2) are enabled by default. I'm not sure if there's other functions that may benefit from it though.
+
+
+--- comment by mrwd2005 (NONE) 2026-01-30T05:53:10Z
+> i got ~3x speedup on regular inference and about the same with streaming which I also implemented (ttft ~0.17s on a 5090, RTF < 0.5) by using torch.compile + cuda graphs for the decoder, torch.compile for CodePredictor, also tweaking the eos check to avoid cpu sync, and `torch.set_float32_matmul_precision('high')`
+> 
+> all of this is in my [fork](https://github.com/dffdeeq/Qwen3-TTS-streaming) examples are in:
+> 
+> * examples/test_streaming_optimized.py
+> * examples/test_optimized_no_streaming.py
+> 
+> benchmarks on a 5090:
+> 
+> * full inference:
+> 
+> <img alt="Image" width="580" height="127" src="https://private-user-images.githubusercontent.com/89968655/540492739-3fa22630-8ede-492b-9462-931d9f519247.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk3NTIzNzcsIm5iZiI6MTc2OTc1MjA3NywicGF0aCI6Ii84OTk2ODY1NS81NDA0OTI3MzktM2ZhMjI2MzAtOGVkZS00OTJiLTk0NjItOTMxZDlmNTE5MjQ3LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMzAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTMwVDA1NDc1N1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWM2ZWYyOTk1ZWVmZjEzMjJkOWJmODk4MjBmMDAwZWVjMGFjMGE2NmExNWJhZmY2MjU3ZGFjY2VhN2E5MzQ5YWImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.v9ZDjxMX0xCMq6Tf0W8O2UdGaIABDOCsoTOtmujs87w">
+> * streaming:
+> 
+> <img alt="Image" width="738" height="130" src="https://private-user-images.githubusercontent.com/89968655/540493422-997a30c8-9310-420f-9c7b-901bd33f85c4.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk3NTIzNzcsIm5iZiI6MTc2OTc1MjA3NywicGF0aCI6Ii84OTk2ODY1NS81NDA0OTM0MjItOTk3YTMwYzgtOTMxMC00MjBmLTljN2ItOTAxYmQzM2Y4NWM0LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMzAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTMwVDA1NDc1N1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWVjODg5YzYwZTgxNmIzYzgxNGRlZDhjZGYyODI1OTBiMWEzNmM5ZGIzYmQ0ZjJkODM0YWY4YzU5OWM5ZDI2YmEmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.lq-fqP8LS3TIokF8FGSVP0VX0TKacVhssUMdfTxe044">
+
+good job! I tested it on 4080s, result is 3x speed and rtf<0.7! 
+But besides streaming the audio output, I also need to stream text input. Is this possible to implement?
+
+--- comment by anurag12-webster (NONE) 2026-01-30T12:30:26Z
+https://github.com/QwenLM/Qwen3-TTS/discussions/144
+
+i have created a discussion thread we can discuss about more speedups there.
+
+--- comment by Egor4More (NONE) 2026-01-30T19:14:52Z
+
+Thanks a lot for the repository, speed boost and streaming mode are a must for real-time TTS like this one. ran it on 5080 with FA2 inside a docker container inside a WSL of Ubuntu. here is the benchmark:
+
+Method                     1st Chunk    Total    Audio    RTF  Chunks  Speedup
+Standard (no streaming)          N/A    8.39s    6.15s   1.36     N/A      N/A
+streaming_baseline             0.35s    6.98s    5.92s   1.18      19    1.00x
+streaming_optimized            0.19s    2.89s    6.40s   0.45      20    2.42x
+streaming_optimized_2          0.18s    3.03s    6.24s   0.48      20    2.31x
+
+Chunk duration: ~312ms (7477 samples @ 24000Hz)
+
+[61.61s] TOTAL SCRIPT TIME
+
+also would love to know if using Qwen3-TTS-12Hz-1.7B-VoiceDesign model is possible with streaming and this optimization and if so, what would be the right approach?
+
+--- comment by andytyrer (NONE) 2026-01-31T19:46:24Z
+Getting some popping in the output audio.
+
+--- comment by rekuenkdr (NONE) 2026-02-02T23:01:38Z
+Hi, 
+I have forked @dffdeeq streeaming implementation and fix the audio problems and clicks, you can find it here:
+
+https://github.com/rekuenkdr/Qwen3-TTS-streaming
+
+I have also added a 2 phase emit for improving latency and TTFB.
+
+I already have this implemented on a pipeline with Qwen3-ASR-0.6B (vLLM backend with cuda graphs) + Qwen3-TTS + and LLM for an AI multi language voice assistant.
+
+Full pipeline 600-700 ms on a 5060Ti 16GB VRAM.
+ 
+I will be releasing the full pipeline code soon, and a demo video.
+
+Thanks to @dffdeeq for the implementation of the qwen streaming and optimizations in the first place, and @acatovic for his OVA project, that was the base for this project.
+
+<img width="1916" height="964" alt="Image" src="https://github.com/user-attachments/assets/d7c5308d-8dd5-46ea-8caf-f63cea70a3d5" />
+<img width="1916" height="964" alt="Image" src="https://github.com/user-attachments/assets/0bec21a2-4dd9-453a-8ec0-b04ede0bf77f" />
+<img width="1916" height="964" alt="Image" src="https://github.com/user-attachments/assets/1d3f8e07-869c-473f-942e-e64c8e4b9c38" />
+<img width="1920" height="963" alt="Image" src="https://github.com/user-attachments/assets/bc46dfde-1396-4996-b383-2dc89d450172" />
+
+
+
+
+--- comment by aquagull (NONE) 2026-02-03T06:42:43Z
+> Getting some popping in the output audio.
+
+I encountered the same situation. Without any modifications to the code, I just executed `test_streaming_optmized.py`.
+
+[output_standard.wav](https://github.com/user-attachments/files/25034137/output_standard.wav)
+[output_streaming_baseline-ref-fixed.wav](https://github.com/user-attachments/files/25034139/output_streaming_baseline-ref-fixed.wav)
+[output_streaming_optimized-ref-fixed.wav](https://github.com/user-attachments/files/25034138/output_streaming_optimized-ref-fixed.wav)
+
+
+--- comment by Dan250124 (NONE) 2026-02-03T07:04:25Z
+> > Getting some popping in the output audio.
+> 
+> I encountered the same situation. Without any modifications to the code, I just executed `test_streaming_optmized.py`.
+> 
+> [output_standard.wav](https://github.com/user-attachments/files/25034137/output_standard.wav) [output_streaming_baseline-ref-fixed.wav](https://github.com/user-attachments/files/25034139/output_streaming_baseline-ref-fixed.wav) [output_streaming_optimized-ref-fixed.wav](https://github.com/user-attachments/files/25034138/output_streaming_optimized-ref-fixed.wav)
+
+set overlap_samples = 0
+ works for me.
+
+--- comment by aquagull (NONE) 2026-02-03T07:54:50Z
+> > > Getting some popping in the output audio.
+> > 
+> > 
+> > I encountered the same situation. Without any modifications to the code, I just executed `test_streaming_optmized.py`.
+> > [output_standard.wav](https://github.com/user-attachments/files/25034137/output_standard.wav) [output_streaming_baseline-ref-fixed.wav](https://github.com/user-attachments/files/25034139/output_streaming_baseline-ref-fixed.wav) [output_streaming_optimized-ref-fixed.wav](https://github.com/user-attachments/files/25034138/output_streaming_optimized-ref-fixed.wav)
+> 
+> set overlap_samples = 0 works for me.
+
+it works, thanks!
+
+--- comment by tsdocode (NONE) 2026-02-05T17:24:07Z
+I've made the more optimize version of Qwen3TTS using nano-vllm style, hope you guys can take a look:
+https://github.com/tsdocode/nano-qwen3tts-vllm
+
+### Performance Comparison (Voice Design Model)
+
+Tested on NVIDIA H100 with `Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign` with script `examples/quick_benchmark.py`:
+| Metric | nano-vllm | Original Qwen3-TTS | Improvement |
+|--------|-----------|-------------------|-------------|
+| **Avg Generation Time** | 2.612s | 8.487s | **3.25x faster** |
+| **Real-Time Factor (RTF)** | 0.399 | 1.467 | **3.68x better** |
+
+
+Tested on NVIDIA L4 with `Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign` with script `examples/quick_benchmark.py`:
+| Metric | nano-vllm | Original Qwen3-TTS | Improvement |
+|--------|-----------|-------------------|-------------|
+| **Avg Generation Time** | 4.319s | 16.613s | **3.85x faster** |
+| **Real-Time Factor (RTF)** | 0.742 | 3.311 | **4.46x better** |
+
+
+
+
+
+
+--- comment by dingausmwald (NONE) 2026-02-10T06:57:48Z
+Hey guys.
+I took the work from groxaxo und dffdeeq (thanks to you!) and enabled cudagraphs and stuff on amd strix halo. Its claude d together in 3 days but i hope he created the docs and docker container right for you to try out. I get nearly double realtime speeds with 1.1s to first byte with REAL STREAMING, tried with pipecat. Fluid conversation possible with cloned german voice or the predefined voices.
+You get slightly better RTF speeds but TTFB = RTF with openwebui since it does not support streaming. (controlled by the steaming: true flag in the request message).
+I updated the container for nvidia and amd, but haven't tested with nvidia. It should work with the appropriate driver packages.
+I hope he removed the german translation. Otherwise, "gesamt" means "total" ^^
+
+https://github.com/dingausmwald/Qwen3-TTS-Openai-Fastapi
+
+```
+026-02-10 07:36:40,608 - api.routers.openai_compatible - INFO - TTS request: model=tts-1-de, voice=clone:friedrich, format=pcm, len=18
+2026-02-10 07:36:40,608 - api.routers.openai_compatible - INFO - Voice profile 'friedrich': lang=German, xvec_only=False, stream=True
+INFO:     127.0.0.1:43434 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+2026-02-10 07:36:41,496 - api.routers.openai_compatible - INFO - Voice clone stream: First-Byte=0.89s Gesamt=0.89s Audio=0.96s RTF=0.93x Chunks=1
+2026-02-10 07:36:41,499 - api.routers.openai_compatible - INFO - TTS request: model=tts-1-de, voice=clone:friedrich, format=pcm, len=24
+2026-02-10 07:36:41,499 - api.routers.openai_compatible - INFO - Voice profile 'friedrich': lang=German, xvec_only=False, stream=True
+INFO:     127.0.0.1:43434 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+2026-02-10 07:36:42,578 - api.routers.openai_compatible - INFO - Voice clone stream: First-Byte=1.08s Gesamt=1.08s Audio=1.52s RTF=0.71x Chunks=1
+2026-02-10 07:36:53,033 - api.routers.openai_compatible - INFO - TTS request: model=tts-1-de, voice=clone:friedrich, format=pcm, len=6
+2026-02-10 07:36:53,034 - api.routers.openai_compatible - INFO - Voice profile 'friedrich': lang=German, xvec_only=False, stream=True
+INFO:     127.0.0.1:42470 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+2026-02-10 07:36:53,867 - api.routers.openai_compatible - INFO - Voice clone stream: First-Byte=0.83s Gesamt=0.83s Audio=0.48s RTF=1.74x Chunks=1
+2026-02-10 07:36:53,870 - api.routers.openai_compatible - INFO - TTS request: model=tts-1-de, voice=clone:friedrich, format=pcm, len=83
+2026-02-10 07:36:53,870 - api.routers.openai_compatible - INFO - Voice profile 'friedrich': lang=German, xvec_only=False, stream=True
+INFO:     127.0.0.1:42470 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+2026-02-10 07:36:58,823 - api.routers.openai_compatible - INFO - Voice clone stream: First-Byte=1.10s Gesamt=4.95s Audio=8.48s RTF=0.58x Chunks=5
+2026-02-10 07:37:09,833 - api.routers.openai_compatible - INFO - TTS request: model=tts-1-de, voice=clone:friedrich, format=pcm, len=63
+2026-02-10 07:37:09,834 - api.routers.openai_compatible - INFO - Voice profile 'friedrich': lang=German, xvec_only=False, stream=True
+INFO:     127.0.0.1:55638 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+2026-02-10 07:37:13,916 - api.routers.openai_compatible - INFO - Voice clone stream: First-Byte=1.26s Gesamt=4.08s Audio=6.64s RTF=0.61x Chunks=4
+2026-02-10 07:37:13,920 - api.routers.openai_compatible - INFO - TTS request: model=tts-1-de, voice=clone:friedrich, format=pcm, len=40
+2026-02-10 07:37:13,921 - api.routers.openai_compatible - INFO - Voice profile 'friedrich': lang=German, xvec_only=False, stream=True
+INFO:     127.0.0.1:55638 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+2026-02-10 07:37:15,731 - api.routers.openai_compatible - INFO - Voice clone stream: First-Byte=1.10s Gesamt=1.81s Audio=2.80s RTF=0.65x Chunks=2
+
+```
+
+--- comment by wwfcnu (NONE) 2026-02-10T09:51:03Z
+torch2.10对应的flash-attn的whl文件在哪里可以找到呢
+
+--- comment by RyrieNorth (NONE) 2026-02-10T09:55:04Z
+> torch2.10对应的flash-attn的whl文件在哪里可以找到呢
+
+可以直接pip编译下载，也可以直接在这里的预编译中下载：
+https://github.com/mjun0812/flash-attention-prebuild-wheels/releases
+
+--- comment by dffdeeq (NONE) 2026-02-10T10:06:48Z
+ok folks, I just pushed another ~2x on top of the existing optimizations [(my fork)](https://github.com/dffdeeq/Qwen3-TTS-streaming)
+
+**fresh benchmark (5090):**
+<img width="766" height="183" alt="Image" src="https://github.com/user-attachments/assets/ead997ca-79fc-49ec-964c-3f4c4c7c9eb0" />
+
+**fresh benchmark (5060ti):**
+<img width="678" height="166" alt="Image" src="https://github.com/user-attachments/assets/3aa3a04d-d111-460c-b881-afe4bdb6e560" />
+
+so even budget cards should be comfortably RTF<1 now
+this one is from the fast_codebook and torch.compile for the talker
+
+also set `overlap_samples = 0` by default (per @Dan250124 - thanks). this fixes the popping/clicking artifacts in the output audio
+
+--- comment by dingausmwald (NONE) 2026-02-10T11:39:59Z
+Nice man, good work @dffdeeq. For amd Strix halo torch.compile for the talker is not good. I could further tweak it to
+```
+2026-02-10 12:12:40,491 - api.routers.openai_compatible - INFO - Voice clone stream: First-Byte=0.35s Gesamt=6.20s Audio=9.44s RTF=0.66x Chunks=20
+2026-02-10 12:12:52,234 - api.routers.openai_compatible - INFO - TTS request: model=tts-1-de, voice=clone:friedrich, format=pcm, len=25
+2026-02-10 12:12:52,234 - api.routers.openai_compatible - INFO - Voice profile 'friedrich': lang=German, xvec_only=False, stream=True
+INFO:     127.0.0.1:38046 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+2026-02-10 12:12:55,536 - api.routers.openai_compatible - INFO - Voice clone stream: First-Byte=0.60s Gesamt=3.30s Audio=4.40s RTF=0.75x Chunks=10
+2026-02-10 12:12:55,539 - api.routers.openai_compatible - INFO - TTS request: model=tts-1-de, voice=clone:friedrich, format=pcm, len=59
+2026-02-10 12:12:55,539 - api.routers.openai_compatible - INFO - Voice profile 'friedrich': lang=German, xvec_only=False, stream=True
+INFO:     127.0.0.1:38046 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+2026-02-10 12:12:57,770 - api.routers.openai_compatible - INFO - Voice clone stream: First-Byte=0.35s Gesamt=2.23s Audio=3.12s RTF=0.71x Chunks=7
+2026-02-10 12:12:57,772 - api.routers.openai_compatible - INFO - TTS request: model=tts-1-de, voice=clone:friedrich, format=pcm, len=1
+2026-02-10 12:12:57,773 - api.routers.openai_compatible - INFO - Voice profile 'friedrich': lang=German, xvec_only=False, stream=True
+INFO:     127.0.0.1:38046 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+2026-02-10 12:12:58,494 - api.routers.openai_compatible - INFO - Voice clone stream: First-Byte=0.35s Gesamt=0.72s Audio=0.72s RTF=1.00x Chunks=2
+2026-02-10 12:14:10,447 - api.routers.openai_compatible - INFO - TTS request: model=tts-1-de, voice=clone:friedrich, format=pcm, len=146
+2026-02-10 12:14:10,448 - api.routers.openai_compatible - INFO - Voice profile 'friedrich': lang=German, xvec_only=False, stream=True
+INFO:     127.0.0.1:57318 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+2026-02-10 12:14:17,880 - api.routers.openai_compatible - INFO - Voice clone stream: First-Byte=0.89s Gesamt=7.43s Audio=10.00s RTF=0.74x Chunks=21
+2026-02-10 12:14:17,883 - api.routers.openai_compatible - INFO - TTS request: model=tts-1-de, voice=clone:friedrich, format=pcm, len=205
+2026-02-10 12:14:17,884 - api.routers.openai_compatible - INFO - Voice profile 'friedrich': lang=German, xvec_only=False, stream=True
+INFO:     127.0.0.1:57318 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+2026-02-10 12:14:26,506 - api.routers.openai_compatible - INFO - Voice clone stream: First-Byte=0.35s Gesamt=8.62s Audio=13.28s RTF=0.65x Chunks=28
+2026-02-10 12:14:26,509 - api.routers.openai_compatible - INFO - TTS request: model=tts-1-de, voice=clone:friedrich, format=pcm, len=1
+2026-02-10 12:14:26,509 - api.routers.openai_compatible - INFO - Voice profile 'friedrich': lang=German, xvec_only=False, stream=True
+INFO:     127.0.0.1:57318 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+```
+
+but slowly hitting the mem bandwidth limitation, strix halo only has 256gb/s (nearly half of the 5060ti). I have to mention those are real life benchmarks, testing through pipecat with gpt oss 120b running as llm via llama.cpp on the same machine.
+
+--- comment by rekuenkdr (NONE) 2026-02-10T12:17:22Z
+These are my tests, full pipeline voice -> voice, no pipecat but custom implementation with full CUDA graphs. (Qwen3 ASR 0.6B vLLM Backend) + Qwen3 1.7B + Ollama (ministral-3:3b-instruct-2512-q4_K_M) as LLM. Got it stable between 295ms and 390ms. I used @dffdeeq as base and added plenty of changes to get to this point. I'm really happy with the result 😃 5060Ti 16GB VRAM as gpu.
+
+Demo:
+
+https://github.com/user-attachments/assets/cc12fea9-5ad2-4156-be97-d06a296a5cde
+
+
+Benchmark (different voice and language):
+------------------------------------------------------------
+- Using profile audio: profiles/es/martina/ref_audio.wav
+- Using system prompt: profiles/es/martina/prompt.txt
+- Language: es, Voice: martina
+- Test text: Hola, ¿cómo estás?
+- Runs: 3 (+ 1 warmup)
+------------------------------------------------------------
+- ✓ ASR: embedded mode (subprocess)
+- ✓ Backend ready at http://localhost:5173
+------------------------------------------------------------
+Warming up (1 runs)...
+
+------------------------------------------------------------
+INDIVIDUAL COMPONENT PROFILING
+------------------------------------------------------------
+
+Run 1/3:
+  ASR:    138.8ms  →  "Muy buenas, bienvenidos. Hoy tenemos un programa l..."
+  LLM:    337.6ms  →  "¡Hola! Estoy aquí, lista y con mucha energía para ..."
+  TTS:    444.3ms  (TTFB: 185.3ms, 45.0KB, RTF: 0.46)
+
+Run 2/3:
+  ASR:    138.8ms  →  "Muy buenas, bienvenidos. Hoy tenemos un programa l..."
+  LLM:    390.4ms  →  "¡Hola, qué tal estás hoy! Aquí estoy, con mucha en..."
+  TTS:    505.4ms  (TTFB: 185.7ms, 56.3KB, RTF: 0.42)
+
+Run 3/3:
+  ASR:    139.4ms  →  "Muy buenas, bienvenidos. Hoy tenemos un programa l..."
+  LLM:    334.5ms  →  "¡Hola! Estoy aquí, lista y con mucha energía para ..."
+  TTS:    468.8ms  (TTFB: 186.2ms, 48.8KB, RTF: 0.45)
+
+------------------------------------------------------------
+FULL PIPELINE PROFILING (voice → voice)
+------------------------------------------------------------
+  Run 1:  4990.8ms total  **(TTFB (Playback): 373.6ms**, 579.4KB, RTF: 0.40)
+  Run 2:  4835.6ms total  **(TTFB (Playback): 296.5ms**, 578.5KB, RTF: 0.39)
+  Run 3:  5828.2ms total  **(TTFB (Playback): 307.2ms**, 702.2KB, RTF: 0.39)
+
+------------------------------------------------------------
+SUMMARY (averages)
+------------------------------------------------------------
+
+  Component Breakdown:
+  ├─ ASR:       139.0ms  ( 14.4%)
+  ├─ LLM:       354.1ms  ( 36.7%)
+  └─ TTS:       472.8ms  ( 48.9%)  [TTFB: 185.7ms, RTF: 0.44]
+  ─────────────────────────
+  Sum:          966.0ms
+
+  Full Pipeline:
+  └─ Total:    5218.2ms  **[TTFB (Playback): 325.8ms, RTF: 0.39]**
+
+  Bottleneck Analysis:
+  └─ Slowest: TTS (472.8ms)
+
+--- comment by treetreeder (NONE) 2026-02-12T22:54:55Z
+> > > the only difference is in baseline (no torch compile). in the compiled path, flash-attn vs eager makes no real difference. could you clarify where the 15% figure is coming from (which metric/config/comparison)?
+> > 
+> > 
+> > That was the original Qwen3-TTS project doing a clone and creating a voice file based on my data, sorry that wasn't clear.
+> 
+> ah ok, got it now. I was confused because you first refer to the stock repo being 15% faster without flash-attn, and then right after that you posted benchmark numbers for my fork
+
+i've been struggle with the qwen tts for several days, to deal with extremely high RTF, version concliction, and flash attn. Until I saw your repo, its really a saver for me! Thanks for your excellent contribution
+
+--- comment by andimarafioti (NONE) 2026-02-12T22:58:20Z
+This thread is such a goldmine, thank you everyone 🙏 
+@rekuenkdr is there code for that speech-to-speech demo? I'm thinking of integrating the qwen models to my s2s project (https://github.com/huggingface/speech-to-speech), but thought they would be too slow. Your demo seems to show I'm wrong 😅 
+
+
+--- comment by treetreeder (NONE) 2026-02-13T04:24:18Z
+> These are my tests, full pipeline voice -> voice, no pipecat but custom implementation with full CUDA graphs. (Qwen3 ASR 0.6B vLLM Backend) + Qwen3 1.7B + Ollama (ministral-3:3b-instruct-2512-q4_K_M) as LLM. Got it stable between 295ms and 390ms. I used [@dffdeeq](https://github.com/dffdeeq) as base and added plenty of changes to get to this point. I'm really happy with the result 😃 5060Ti 16GB VRAM as gpu.
+> 
+> Demo:
+> 
+>  full-pipeline-test.mp4 
+> ## Benchmark (different voice and language):
+> * Using profile audio: profiles/es/martina/ref_audio.wav
+> * Using system prompt: profiles/es/martina/prompt.txt
+> * Language: es, Voice: martina
+> * Test text: Hola, ¿cómo estás?
+> * Runs: 3 (+ 1 warmup)
+> 
+> * ✓ ASR: embedded mode (subprocess)
+> * ✓ Backend ready at http://localhost:5173
+> 
+> Warming up (1 runs)...
+> 
+> ## INDIVIDUAL COMPONENT PROFILING
+> Run 1/3: ASR: 138.8ms → "Muy buenas, bienvenidos. Hoy tenemos un programa l..." LLM: 337.6ms → "¡Hola! Estoy aquí, lista y con mucha energía para ..." TTS: 444.3ms (TTFB: 185.3ms, 45.0KB, RTF: 0.46)
+> 
+> Run 2/3: ASR: 138.8ms → "Muy buenas, bienvenidos. Hoy tenemos un programa l..." LLM: 390.4ms → "¡Hola, qué tal estás hoy! Aquí estoy, con mucha en..." TTS: 505.4ms (TTFB: 185.7ms, 56.3KB, RTF: 0.42)
+> 
+> Run 3/3: ASR: 139.4ms → "Muy buenas, bienvenidos. Hoy tenemos un programa l..." LLM: 334.5ms → "¡Hola! Estoy aquí, lista y con mucha energía para ..." TTS: 468.8ms (TTFB: 186.2ms, 48.8KB, RTF: 0.45)
+> 
+> ## FULL PIPELINE PROFILING (voice → voice)
+> Run 1: 4990.8ms total **(TTFB (Playback): 373.6ms**, 579.4KB, RTF: 0.40) Run 2: 4835.6ms total **(TTFB (Playback): 296.5ms**, 578.5KB, RTF: 0.39) Run 3: 5828.2ms total **(TTFB (Playback): 307.2ms**, 702.2KB, RTF: 0.39)
+> 
+> ## SUMMARY (averages)
+> Component Breakdown: ├─ ASR: 139.0ms ( 14.4%) ├─ LLM: 354.1ms ( 36.7%) └─ TTS: 472.8ms ( 48.9%) [TTFB: 185.7ms, RTF: 0.44] ───────────────────────── Sum: 966.0ms
+> 
+> Full Pipeline: └─ Total: 5218.2ms **[TTFB (Playback): 325.8ms, RTF: 0.39]**
+> 
+> Bottleneck Analysis: └─ Slowest: TTS (472.8ms)
+
+Hi Rekuenkdr,
+
+I saw the demo video you posted for this repo, the Qwen TTS cloning works soo smoothy, Im wondering did you applied any optimization for it? 
+
+I'm using the same RTX5070 as you, but the RTF is ~2 no matter flash-attn enabled or not.
+
+Thanks
+
+--- comment by rekuenkdr (NONE) 2026-02-13T18:20:40Z
+> This thread is such a goldmine, thank you everyone 🙏 [@rekuenkdr](https://github.com/rekuenkdr) is there code for that speech-to-speech demo? I'm thinking of integrating the qwen models to my s2s project (https://github.com/huggingface/speech-to-speech), but thought they would be too slow. Your demo seems to show I'm wrong 😅
+
+
+> Hi Rekuenkdr,
+> 
+> I saw the demo video you posted for this repo, the Qwen TTS cloning works soo smoothy, Im wondering did you applied any optimization for it?
+> 
+> I'm using the same RTX5070 as you, but the RTF is ~2 no matter flash-attn enabled or not.
+> 
+> Thanks
+
+
+Hi! I will be releasing the full application, api client included soon, I'm giving the assistant tools and mcps at the moment, wiring it to frontend notifications.
+
+I want to release it with once I have all this polished, but every day I find a new thing to implement 😃 
+
+It has VAD, interrupts, wake word like "OK Google" and plenty of other features.
+
+TTS is still the major bottleneck on my humble 16GB card.
+
+How did I improved TTFB?
+
+I tweaked the llm prompt to first answer the user with a short sentenced, then the rest.
+I can gate that first sentence by punctuation,and send that first short sentence to the TTS to decode, then the rest, improving latency.
+
+The TTS also is already receiving partial transcripts from the ASR instead of full transcriptions, so when the user starts to talk, I send few chunks of audio without the full context so ASR can start to work on transcription, and send that early too to the TTS.
+
+When the user has finished talking the ASR has transcribed most of the text already and the TTS has also generated a lot since it started way earlier.
+
+The 2 phase approach I implemented on my fork is the other main advantage, I've explained it [there](https://github.com/rekuenkdr/Qwen3-TTS-streaming). First phase emit frames are lower , and window decode too, that gives you faster TTFB with the caveat of also lower audio quality but most of the time it works perfect and you don't even notice.
+
+That and CUDA graphs on almost everything(this was the hardest part, isolating without the whole thing exploding), PCM, prebuffering, websockets,warming up passes on runtime application for all 3 services (ASR,TTS and LLM).
+
+The ASR is vllm backend on a sub-process (to isolate those CUDA graphs) and that is the only separated thing, everything is monolithic you could say, because I tried separating the ASR on an http server but even it was faster generating, only the communication added more latency. So nice and simple Unix sockets with Pickle (that support numpy arrays natively) is a win win on this situation and I dropped that separated approach (although I have a branch with that architecture too).
+
+I hope this clarifies it, is not a simple fix, but tweaking many, including the qwen library, because I'm GPU poor you could say, so where there is necessity, creativity appears. 😃 
+
+I'll be open sourcing the whole thing soon, I'll be in touch.
+
+--- comment by asiff00 (NONE) 2026-02-16T06:26:32Z
+> > > On the 3060 - 12GB model 1.7B - 3 characters/sec, meaning 1 sec of audio takes 5 seconds. And what's typical is the same result on the 0.6B model. It feels like there's a programmed limit.
+> > 
+> > 
+> > did you try running my [fork](https://github.com/dffdeeq/Qwen3-TTS-streaming)? it sounds like you might be hitting some kind of "hard gap" and I'd really like to collect benchmarks across different GPUs. if you can, please run one of the examples/ ([test_streaming_optimized.py](https://github.com/dffdeeq/Qwen3-TTS-streaming/blob/main/examples/test_streaming_optimized.py) or [test_optimized_no_streaming.py](https://github.com/dffdeeq/Qwen3-TTS-streaming/blob/main/examples/test_optimized_no_streaming.py))
+> 
+> Ok, I'll let you know once I launch your fork.
+
+@nukex I have the same GPU. I was wondering if you have tried the fork as mentioned, and what are the results. 
+
+--- comment by nukex (NONE) 2026-02-16T07:19:37Z
+@asiff00 Yes, I did tests with optimization, see this thread above.
+
+--- comment by Rezonansce (NONE) 2026-02-16T08:28:33Z
+@rekuenkdr @dffdeeq Hi fellas, huge thanks for the forks - I've been working on a realtime discord bot and looking to move from pipertts to voice clones since with a filesystem that provides a lot of flexibility and quick voice changes. I've run a few benchmarks to decide which fork to use, only base model as don't care about the other ones using my 3080 + ryzen7 3700x, it might come useful to you or others so I'm leaving it here.
+
+I used 1 warmup run for rekuenkdr repo as in the repo and 3 runs for dffdeeq. All tests are based on 3 iterations. I am working on a better benchmark with a variety of voice lengths in and generation text, might post the results later, but I found the lack of posted figures a bit sad so here's  a little writeup what I've got for now, sorry for any typos:
+
+## Comparison of the optimizations
+Parameter | rekuenkdr | dffdeeq
+-- | -- | --
+Crossfade | Hann window (512 samples) | no crossfade
+Compile targets | decoder + codepredictor | decoder + talker + codepredictor
+Fast codebook | no | yes
+CUDA graphs | manual | no
+
+**Note:** I am intentionally NOT using the 2-phase streaming approach proposed by rekuenkdr for a better comparison
+
+## Environment
+
+| Component | Value |
+|-----------|-------|
+| GPU | NVIDIA RTX 3080 (10GB) |
+| CUDA | 13.0 |
+| PyTorch | 2.9.1+cu130 |
+| Flash Attention | 2.8.3 |
+| Python | 3.11.14 |
+| Docker Image | pytorch/pytorch:2.9.1-cuda13.0-cudnn9-devel base |
+
+## Test Configuration
+
+Parameter | Value
+-- | --
+Models | BASE 0.6 & 1.7B
+Reference Audio | kuklina-1.wav (Russian, identical in both forks)
+Test Text | "Всем привет! Это тестовый текст для озвучки! Стриминг звучит нормально только через несколько секунд. Мы проверяем скорость генерации и задержку первого фрагмента аудио. Результаты будут сохранены в формате JSON для дальнейшего анализа."
+Iterations | 3
+Sample Rate | 24000Hz
+Decode Window | 80
+Emit Every | 8
+
+## Results
+
+### rekuenkdr 0.6B
+
+| Iter | TTFT | Total | Audio | RTF | Chunks |
+|------|------|-------|-------|-----|--------|
+| 1 | 0.508s | 14.13s | 14.48s | 0.976 | 23 |
+| 2 | 0.931s | 19.95s | 16.64s | 1.199 | 26 |
+| 3 | 1.132s | 15.68s | 15.04s | 1.043 | 24 |
+
+### dffdeeq 0.6B
+
+| Iter | TTFT | Total | Audio | RTF | Chunks |
+|------|------|-------|-------|-----|--------|
+| 1 | 0.618s | 12.20s | 15.52s | 0.786 | 25 |
+| 2 | 0.406s | 13.00s | 16.64s | 0.782 | 26 |
+| 3 | 0.618s | 10.61s | 16.72s | 0.635 | 27 |
+
+### rekuenkdr 1.7B
+
+| Iter | TTFT | Total | Audio | RTF | Chunks |
+|------|------|-------|-------|-----|--------|
+| 1 | 0.737s | 20.34s | 17.20s | 1.183 | 27 |
+| 2 | 0.972s | 18.32s | 16.00s | 1.145 | 25 |
+| 3 | 1.250s | 17.96s | 16.64s | 1.079 | 26 |
+
+### dffdeeq 1.7B
+
+| Iter | TTFT | Total | Audio | RTF | Chunks |
+|------|------|-------|-------|-----|--------|
+| 1 | 0.398s | 11.21s | 15.84s | 0.708 | 25 |
+| 2 | 0.515s | 13.65s | 15.36s | 0.889 | 24 |
+| 3 | 0.559s | 14.92s | 16.56s | 0.901 | 26 |
+
+### Comparison Table
+
+| Config | RTF (mean ± std) | TTFT |
+|------|------|------|
+| dffdeeq 0.6B | 0.734 ± 0.070 |  0.547s ± 0.100s |
+| rekuenkdr 0.6B | 1.073 ± 0.093 | 0.857s ± 0.260s |
+| dffdeeq 1.7B | 0.833 ± 0.088 | 0.491s ± 0.068s |
+| rekuenkdr 1.7B | 1.136 ± 0.043 | 0.986s ± 0.210s |
+
+## Future Work
+- A better bench
+- I am now modifying the dffdeeq fork in order to attempt achieving an RTF of ~0.7 on the 1.7B model AND deal with hallucinations. Once in a while I get an 800s hallucinated generation which sounds like jerking off... 
+- Text streaming in (with a buffer ofc)
+- One-phase vs two-phase streaming quality && TTFT comparison
+
+## Conclusion
+Overall, I think there's a lot of potential here! Bear in mind, the 1.7B model essentially maxes out my VRAM usage on 800s hallucinated generations, while maintaining an RTF < 1. This ultimately means similar new-gen cards can still run this in realtime and won't crush under max load! Would be great to see some 4060 ti & 5060 ti benchmarks
+
+I did see the 5060 ti results posted above achieving RTX < 0.5 - 3080 should be pulling more, but I am not managing to get such a low RTF... I wonder what the main cause is - if ya got any ideas, lmk
+
+--- comment by asiff00 (NONE) 2026-02-16T11:34:54Z
+> ok folks, I just pushed another ~2x on top of the existing optimizations [(my fork)](https://github.com/dffdeeq/Qwen3-TTS-streaming)
+> 
+> **fresh benchmark (5090):** <img alt="Image" width="766" height="183" src="https://private-user-images.githubusercontent.com/89968655/547619049-ead997ca-79fc-49ec-964c-3f4c4c7c9eb0.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzEyNDE3MjIsIm5iZiI6MTc3MTI0MTQyMiwicGF0aCI6Ii84OTk2ODY1NS81NDc2MTkwNDktZWFkOTk3Y2EtNzlmYy00OWVjLTk2NGMtM2Y0YzRjN2M5ZWIwLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAyMTYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMjE2VDExMzAyMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTE1YzdlMmMwMjg1MmRiYTU1ZmVlMGUwYjkwNzNhMjg5ZDkxMjI2OTA1NGFhNTZiZTAwZmViNjJhOWRmOGVhMDcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.6wb1N6xXCMUjaEdVs0LlO0vbVTKw3oQWfYYcDxdmVqo">
+> 
+> **fresh benchmark (5060ti):** <img alt="Image" width="678" height="166" src="https://private-user-images.githubusercontent.com/89968655/547619263-3aa3a04d-d111-460c-b881-afe4bdb6e560.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzEyNDE3MjIsIm5iZiI6MTc3MTI0MTQyMiwicGF0aCI6Ii84OTk2ODY1NS81NDc2MTkyNjMtM2FhM2EwNGQtZDExMS00NjBjLWI4ODEtYWZlNGJkYjZlNTYwLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAyMTYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMjE2VDExMzAyMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTA5MzgwYzQwNjM3M2I1MTRlYjZjYWE3MWY0ZTMzZTQ4ODI2NjFmNjllMzMwYmY5ZTk0MzMyMDEzMjE2ZjI2ZDkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.BZ74vDhOhwp9a1yi1Y_L0jUGG1J-nZ-DNTaqtGMw6F4">
+> 
+> so even budget cards should be comfortably RTF<1 now this one is from the fast_codebook and torch.compile for the talker
+> 
+> also set `overlap_samples = 0` by default (per [@Dan250124](https://github.com/Dan250124) - thanks). this fixes the popping/clicking artifacts in the output audio
+
+Getting this using the fork mentioned here. Thanks, @dffdeeq
+GPU: On 3060 (12GB).
+<img width="765" height="370" alt="Image" src="https://github.com/user-attachments/assets/280f0083-6d68-471e-981c-a15f7994cdbf" />
+
+
+--- comment by rekuenkdr (NONE) 2026-02-16T14:28:29Z
+Hi, the optimizations in my fork are for streaming only, I didn't touch the rest, (although I've been messing around with generate_fast instead of HF generate, async decoder etc on the wip branch. (and they are on that branch for a reason, at the moment on single GPU neither of those accomplished better results). 
+
+The fork has some values as false like the codebook, to not brake other people's implementation including my own pipeline with cuda graphs. 
+
+So again, If you are using mine use the same optimizations as @dffdeeq  fork, overlap samples to 0 too and pass the fast codebook for regular tests.
+
+When streaming the important thing is when the user hears the audio, and my tests benchmark that, with the optimizations made to the whole pipeline, not only library, as I've explain before, this is the important thing on my use case, that is a real time AI  assistant.
+
+So if you are only looking for optimizations on generation without streaming, avoid my fork entirely, as I'm not focused on that, the only thing I tweaked on the wip branch was the batch offline generation, for an api endpoint to batch generate, no streaming.
+
+I have a benchmark log, with different approaches to fast streaming with this library, that's why you can see me taking the library apart on the fork/wip branch. 
+
+I can post my results if anyone is looking to grasps those ms to TTFB an low RTF, those 800s generations are related to EOS and max tokens, more frequent on the 0.6B model).
+
+The longer the texts are the slower the generation, for offline is better to cut the text in 4 chunks, use a batch of 4  on 1 single pass, (and way faster), than generating a single long text pass, if what your are looking is to create audio books or similar, or work with long texts I found out this gives the best and faster results.
+
+The main branch is as close as it can be to the regular qwen_tts and @dffdeeq implementation regarding non streaming generation.
+
+ 
+
+--- comment by rekuenkdr (NONE) 2026-02-16T17:50:25Z
+Here are some tests regarding secuential vs batch generation (no streaming):
+
+  ## Batch vs Sequential Benchmark — Qwen3-TTS                                                                                                                            
+  
+  | Setting | Value |                                                                                                                                                     
+  |---------|-------|
+  | **Model** | `Qwen/Qwen3-TTS-12Hz-1.7B-Base` |
+  | **Voice** | `cassidy` |
+  | **Emit every** | 12 frames |
+  | **Decode window** | 80 frames |
+  | **Paragraphs** | 3 |
+
+  <details>
+  <summary>Test paragraphs</summary>
+
+  1. "The development of artificial intelligence has transformed nearly every aspect of modern life, from the way we communicate with one another
+  to the fundamental nature of work itself. Machine learning algorithms now power recommendation systems that curate our news feeds, voice assistants that manage our
+  daily schedules, and autonomous vehicles that navigate complex urban environments. Yet despite these remarkable advances, the field continues to grapple with profound
+  questions about bias, transparency, and the ethical implications of delegating critical decisions to automated systems that operate in ways their creators do not fully
+  understand."
+
+  2. "Throughout history, technological revolutions have always been accompanied by periods of significant social disruption
+  and adaptation. The industrial revolution displaced millions of agricultural workers, but eventually created entirely new categories of employment that no one could
+  have predicted. Similarly, the digital revolution of the late twentieth century eliminated countless clerical and manufacturing positions while simultaneously giving
+  rise to the software industry, e-commerce, and the gig economy. The current wave of artificial intelligence promises to follow a comparable pattern, though the speed
+  and scale of disruption may exceed anything we have experienced before."
+
+  3. "Looking ahead, the most transformative applications of artificial intelligence are likely to emerge not from any single breakthrough, but
+  from the convergence of multiple technologies working in concert. Large language models combined with robotics could revolutionize healthcare delivery in underserved
+  communities. Computer vision paired with satellite imagery and climate models could provide early warning systems for natural disasters with unprecedented accuracy. And
+   generative AI tools are already enabling artists, musicians, and writers to explore creative possibilities that were previously unimaginable, raising fascinating
+  questions about the nature of authorship and artistic expression in an age of human-machine collaboration."
+
+  </details>
+  ---
+
+  ### [1/4] Non-streaming Sequential
+
+
+  > **Total: 55.82s | Audio: 109.84s | Throughput: 1.97x**
+
+  ---
+
+  ### [2/4] Non-streaming Batched
+
+
+  > **Total: 19.86s | Audio: 104.56s | Throughput: 5.27x**
+
+  ---
+
+  ### Non-Streaming: Sequential vs Batched
+
+  | Metric | Sequential | Batched | Speedup |
+  |--------|----------:|--------:|--------:|
+  | Total wall time | 55.82s | 19.86s | **2.81x** |
+  | Total audio duration | 109.84s | 104.56s | — |
+  | Throughput (audio/wall) | 1.97x | 5.27x | — |
+  | RTF (wall/audio) | 0.508 | 0.190 | — |
+  | Peak GPU memory | 4.64 GB | 5.99 GB | — |
+
+  **Sequential per-item:**
+
+  | Paragraph | Wall Time | Audio Duration |
+  |:---------:|----------:|--------------:|
+  | 1 | 18.15s | 35.60s |
+  | 2 | 17.94s | 35.36s |
+  | 3 | 19.73s | 38.88s |
+
+  **Batched per-item audio:**
+
+  | Paragraph | Audio Duration |
+  |:---------:|--------------:|
+  | 1 | 34.08s |
+  | 2 | 33.76s |
+  | 3 | 36.72s |
+
+  ---
+
+  ### Overall Summary
+
+  | Mode | Wall Time | Audio | Throughput | RTF | Memory |
+  |------|----------:|------:|-----------:|----:|-------:|
+  | Non-stream Sequential | 55.82s | 109.84s | 1.97x | 0.508 | 4.64 GB |
+  | Non-stream Batched | 19.86s | 104.56s | 5.27x | 0.190 | 5.99 GB |
+
+  ### Reading the Numbers
+>**Batching is ~2.8x faster than sequential, using ~29% more GPU memory (4.64 → 5.99 GB).** 🚀
+> The RAM increment is linked to the batch number, 3 in this case.
+
+
+
+--- comment by rekuenkdr (NONE) 2026-02-16T18:43:09Z
+Same as before but only 1 full large text vs the same text on 3 parts/ 1 batch call:
+
+## Single Pass vs Chunked Batch Benchmark — Qwen3-TTS
+                
+  | Setting | Value |                                                                                                                                                     
+  |---------|-------|
+  | **Model** | `Qwen/Qwen3-TTS-12Hz-1.7B-Base` |                                                                                                                         
+  | **Voice** | `cassidy` |           
+  | **Chunks** | 3 |
+  | **Text length** | 2080 chars |
+  | **Chunk lengths** | 785, 756, 537 chars |
+
+  <details>
+  <summary>Test text (same text used for both modes)</summary>
+
+  "The development of artificial intelligence has transformed nearly every aspect of modern life, from the way we communicate with one another to the fundamental nature
+  of work itself. Machine learning algorithms now power recommendation systems that curate our news feeds, voice assistants that manage our daily schedules, and
+  autonomous vehicles that navigate complex urban environments. Yet despite these remarkable advances, the field continues to grapple with profound questions about bias,
+  transparency, and the ethical implications of delegating critical decisions to automated systems that operate in ways their creators do not fully understand. Throughout
+   history, technological revolutions have always been accompanied by periods of significant social disruption and adaptation. The industrial revolution displaced
+  millions of agricultural workers, but eventually created entirely new categories of employment that no one could have predicted. Similarly, the digital revolution of
+  the late twentieth century eliminated countless clerical and manufacturing positions while simultaneously giving rise to the software industry, e-commerce, and the gig
+  economy. The current wave of artificial intelligence promises to follow a comparable pattern, though the speed and scale of disruption may exceed anything we have
+  experienced before. Looking ahead, the most transformative applications of artificial intelligence are likely to emerge not from any single breakthrough, but from the
+  convergence of multiple technologies working in concert. Large language models combined with robotics could revolutionize healthcare delivery in underserved
+  communities. Computer vision paired with satellite imagery and climate models could provide early warning systems for natural disasters with unprecedented accuracy. And
+   generative AI tools are already enabling artists, musicians, and writers to explore creative possibilities that were previously unimaginable, raising fascinating
+  questions about the nature of authorship and artistic expression in an age of human-machine collaboration."
+
+  </details>
+
+  ---
+
+  ### [1/2] Single Pass (full text)
+
+  > **Wall time: 53.49s | Audio: 103.04s**
+
+  ### [2/2] Chunked Batch (3 chunks)
+
+  > **Wall time: 23.56s | Audio: 110.48s**
+
+  ---
+
+  ### Results
+
+  | Metric | Single Pass | Chunked Batch | Speedup |
+  |--------|----------:|--------:|--------:|
+  | Total wall time | 53.49s | 23.56s | **2.27x** |
+  | Total audio duration | 103.04s | 110.48s | — |
+  | Peak GPU memory | 4.68 GB | 6.17 GB | — |
+
+  **Chunked batch per-item audio:**
+
+  | Chunk | Chars | Audio Duration |
+  |:-----:|------:|--------------:|
+  | 1 | 785 | 43.12s |
+  | 2 | 756 | 38.80s |
+  | 3 | 537 | 28.56s |
+
+  > **Splitting into 3 chunks and batching is ~2.3x faster than a single pass, using ~32% more GPU memory (4.68 → 6.17 GB).**
+
+And here is the 2 phase test script I use: (it will need my fork to test it and same audio as @dffdeeq uses) is focused on 1st chunk latency comparison:
+
+[test_streaming_two_phase.py](https://github.com/user-attachments/files/25347834/test_streaming_two_phase.py)
+
+If you want more tests I have a bunch of them 😅, I asked Claude to do a little app to keep track of mine:
+
+<img width="1920" height="1410" alt="Image" src="https://github.com/user-attachments/assets/c91a7be9-6ff1-4ef4-b6ac-e4e9d1b0b194" />
+
+I can modify it for your tests if you like and put it online so we can have a shared and centralized place to compare optimizations.
+
+--- comment by andimarafioti (NONE) 2026-02-20T22:50:04Z
+Hi everyone 👋
+I’ve been working on deploying Qwen3TTS for Reachy Mini users and needed an implementation that runs reliably across a wide range of NVIDIA GPUs (Jetson boards, DGX Spark, desktop GPUs, etc.).
+Inspired by this thread, I built a small project using CUDA Graphs to get consistent speedups and better streaming TTFA across devices:
+https://github.com/andimarafioti/faster-qwen3-tts
+I’ve benchmarked it on multiple boards (Orin, Thor, DGX Spark, RTX 4090, H100) and attached results below.
+Happy to discuss details if useful.
+
+<img width="850" height="1166" alt="Image" src="https://github.com/user-attachments/assets/249886cf-3b29-45e9-a188-5f855ddf6365" />
+
+--- comment by upsangel (NONE) 2026-02-25T13:36:30Z
+> On the 3060 - 12GB model 1.7B - 3 characters/sec, meaning 1 sec of audio takes 5 seconds. And what's typical is the same result on the 0.6B model. It feels like there's a programmed limit.
+
+My 3060 12GB is a little bit faster, 100s audio cloning took 388s
+I ran on Comfy UI works flow. 1.7B model.
+
+--- comment by seafever-web (NONE) 2026-03-03T10:50:34Z
+> > <img alt="图像" width="953" height="294" src="https://private-user-images.githubusercontent.com/94920559/540888453-858f6059-087a-4606-9124-3afb2a1faddd.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk0OTk5MzcsIm5iZiI6MTc2OTQ5OTYzNywicGF0aCI6Ii85NDkyMDU1OS81NDA4ODg0NTMtODU4ZjYwNTktMDg3YS00NjA2LTkxMjQtM2FmYjJhMWZhZGRkLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjclMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI3VDA3NDAzN1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWQ3MDkxYWJiMTg4OGNlMTEwMzRkNDM0ZmI0ZmQ3ZWY2MzFmNGZhNWQxMzYzOWNmZmE4OTY3MmJjODQ5YzFkZjcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.idmaSsk1lxSXUlKho8jEBcwXI-_O7azhs9WTvwpGV9g">
+> > 您好~ 我在 4090 显卡上运行了 examples/test_streaming_optimized.py 代码，但得到了这样的结果。请问如何才能得到 rtf<1 的结果？是不是您漏掉了什么步骤？期待您的回复。
+> 
+> 你好~ 可以拉取最新的更改吗？我大约 22 分钟前更新了，主仓库上游的更新破坏了性能。
+
+我也是4090显卡，我部署到服务器上，使用你的分支，为什么和不使用没有区别呢？
+
+--- comment by wincing2 (NONE) 2026-03-09T01:43:03Z
+> RTF 0.5 means 25 tokens per second. I get this speed on CPU alone with Qwen3-1.7B. And even the most anemic GPU should give 100+ t/s.
+
+Qwen3-1.7B can only output texts, whose dimension is way smaller than speech output. There is no comparision here.
+
+--- comment by rekuenkdr (NONE) 2026-03-15T15:44:58Z
+> Hi Rekuenkdr,
+> 
+> I saw the demo video you posted for this repo, the Qwen TTS cloning works soo smoothy, Im wondering did you applied any optimization for it?
+> 
+> I'm using the same RTX5070 as you, but the RTF is ~2 no matter flash-attn enabled or not.
+> 
+> Thanks
+
+Hi, for all of you that want to try it, i have released the AI voice assistant that uses my fork with the optimization:
+https://github.com/rekuenkdr/ova
+And the python sdk to work with it too: (it needs the server to be online)
+https://github.com/rekuenkdr/ova-python-sdk
+
+In case anyone want to try it, is the first release, if you don't have cuda 13 you may need to tweak pyproject.toml as the deps are pinned to this version.
+
+I will update it on the upcoming weeks to be more flexible on that end.
+This is meant to be used locally, single tenant, I have another branch with a different architecture for the ASR and multi-tenant more server oriented that I will be publishing soon too.
+
+I'll be happy to hear your comments, .env.example has all the variables you can tweak, on a single GPU the defaults should give you best performance and TTFA ( after a bunch of tests at least, those are the ones that work well for me).
+
+Thanks.
+
+
+
+--- comment by Astral793 (NONE) 2026-03-21T01:22:19Z
+Was anyone able to get this to run on a 5090 with good speed? I am trying to make this work with https://github.com/WhiskeyCoder/Qwen3-Audiobook-Converter 
+
+--- comment by github-actions[bot] (NONE) 2026-05-05T08:55:34Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.
+
+--- comment by lcy19930619 (NONE) 2026-05-20T14:11:05Z
+没有人解决这个问题吗
+
+--- comment by github-actions[bot] (NONE) 2026-07-06T09:31:20Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.

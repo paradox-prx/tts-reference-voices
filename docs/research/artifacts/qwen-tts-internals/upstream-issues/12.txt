@@ -1,0 +1,121 @@
+#12 [closed] Run failed without flash-attn
+URL https://github.com/QwenLM/Qwen3-TTS/issues/12
+created 2026-01-23T07:41:28Z by AlexHe99
+
+### Description
+
+I run failed without flash-attn installed. Any way run without flash-attn?
+
+```
+
+(qwen3-tts) alex@GZ302EA:/media/alex/MD4T/Repo/Qwen3-TTS$ python examples/test_model_12hz_custom_voice.py
+
+********
+Warning: flash-attn is not installed. Will only run the manual PyTorch version. Please install flash-attn for faster inference.
+********
+
+Traceback (most recent call last):
+  File "/media/alex/MD4T/Repo/Qwen3-TTS/examples/test_model_12hz_custom_voice.py", line 78, in <module>
+    main()
+  File "/media/alex/MD4T/Repo/Qwen3-TTS/examples/test_model_12hz_custom_voice.py", line 28, in main
+    tts = Qwen3TTSModel.from_pretrained(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/alex/MD4T/Repo/Qwen3-TTS/qwen_tts/inference/qwen3_tts_model.py", line 112, in from_pretrained
+    model = AutoModel.from_pretrained(pretrained_model_name_or_path, **kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/alex/miniconda3/envs/qwen3-tts/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 604, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/alex/MD4T/Repo/Qwen3-TTS/qwen_tts/core/models/modeling_qwen3_tts.py", line 1872, in from_pretrained
+    model = super().from_pretrained(
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/alex/miniconda3/envs/qwen3-tts/lib/python3.12/site-packages/transformers/modeling_utils.py", line 277, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/alex/miniconda3/envs/qwen3-tts/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4971, in from_pretrained
+    model = cls(config, *model_args, **model_kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/alex/MD4T/Repo/Qwen3-TTS/qwen_tts/core/models/modeling_qwen3_tts.py", line 1818, in __init__
+    super().__init__(config)
+  File "/home/alex/miniconda3/envs/qwen3-tts/lib/python3.12/site-packages/transformers/modeling_utils.py", line 2076, in __init__
+    self.config._attn_implementation_internal = self._check_and_adjust_attn_implementation(
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/alex/miniconda3/envs/qwen3-tts/lib/python3.12/site-packages/transformers/modeling_utils.py", line 2686, in _check_and_adjust_attn_implementation
+    applicable_attn_implementation = self.get_correct_attn_implementation(
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/alex/miniconda3/envs/qwen3-tts/lib/python3.12/site-packages/transformers/modeling_utils.py", line 2714, in get_correct_attn_implementation
+    self._flash_attn_2_can_dispatch(is_init_check)
+  File "/home/alex/miniconda3/envs/qwen3-tts/lib/python3.12/site-packages/transformers/modeling_utils.py", line 2422, in _flash_attn_2_can_dispatch
+    raise ImportError(f"{preface} the package flash_attn seems to be not installed. {install_message}")
+ImportError: FlashAttention2 has been toggled on, but it cannot be used due to the following error: the package flash_attn seems to be not installed. Please refer to the documentation of https://huggingface.co/docs/transformers/perf_infer_gpu_one#flashattention-2 to install Flash Attention 2.
+```
+
+### Reproduction
+
+- Setup the environment with conda
+- Download the mode
+- run the `python examples/test_model_12hz_custom_voice.py`
+
+
+
+### Logs
+
+```shell
+
+```
+
+### Environment Information
+
+torch              2.10.0+rocm7.1
+torchaudio         2.10.0+rocm7.1
+torchvision        0.25.0+rocm7.1
+
+
+### Known Issue
+
+- [ ] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by yonota (NONE) 2026-01-23T08:36:56Z
+you can try 
+`
+model = Qwen3TTSModel.from_pretrained(
+    "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
+    device_map="cuda:0",
+    dtype=torch.bfloat16,
+)
+`
+    attn_implementation="flash_attention_2", // remove this line
+
+--- comment by bdim404 (NONE) 2026-01-23T09:24:45Z
+Same issue when use `qwen-tts-demo`
+
+--- comment by wangxiongts (COLLABORATOR) 2026-01-23T09:57:15Z
+> Same issue when use `qwen-tts-demo`
+
+run `qwen-tts-demo help` to get more.
+
+run `qwen-tts-demo --no-flash-attn` to avoid using flash attention
+
+--- comment by grigio (NONE) 2026-01-25T19:29:16Z
+Hi, i disabled attention but i get this
+
+```
+qwen-tts-demo --no-flash-attn ./models/Qwen3-TTS-12Hz-1.7B-Base --ip 0.0.0.0 --port 8000
+
+********
+Warning: flash-attn is not installed. Will only run the manual PyTorch version. Please install flash-attn for faster inference.
+********
+ 
+Segmentation fault (core dumped)
+
+```
+
+--- comment by grigio (NONE) 2026-01-25T19:49:54Z
+Ok
+
+```
+qwen-tts-demo ./models/Qwen3-TTS-12Hz-1.7B-Base --ip 0.0.0.0 --port 8000 --no-flash-attn --device cpu
+```
+
+--- comment by github-actions[bot] (NONE) 2026-05-21T09:20:03Z
+This issue has been automatically locked since there has not been any recent activity after it was closed. Please open a new issue for related bugs.

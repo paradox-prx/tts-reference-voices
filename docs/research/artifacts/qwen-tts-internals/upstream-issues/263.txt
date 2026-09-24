@@ -1,0 +1,98 @@
+#263 [closed] Unstable inference when using vllm with cloning
+URL https://github.com/QwenLM/Qwen3-TTS/issues/263
+created 2026-03-12T02:36:39Z by univa-HARRY
+
+### Description
+
+Details in [here](https://github.com/vllm-project/vllm-omni/issues/1707)
+
+### Reproduction
+
+Details in [here](https://github.com/vllm-project/vllm-omni/issues/1707)
+
+### Logs
+
+```shell
+
+```
+
+### Environment Information
+
+.
+
+### Known Issue
+
+- [x] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by Omni-NexusAI (NONE) 2026-03-13T21:49:47Z
+I noticed this also. I just started using VLLM-Omni last night and tested it out with the latest version, but there is some oddities that occur. Sometimes the voice will start like a different person, and then reform into the original intent of the source track, or the voice has unintelligible artifacts that make the voice useless.
+
+I've tried the Qwen3tts fast api groxaxo version, and it doesn't seem to have this issue. So, it seems like VLLM-Omni is still working out the kinks for these models. 
+
+--- comment by univa-HARRY (NONE) 2026-03-16T02:02:24Z
+Are you referring to this repository?
+https://github.com/groxaxo/Qwen3-TTS-Openai-Fastapi
+
+Also, is this API implementation designed to handle concurrent connections?
+
+--- comment by univa-HARRY (NONE) 2026-03-16T04:57:57Z
+@Omni-NexusAI 
+
+Have you tried running the groxaxo version on GPU and testing voice cloning?
+I'm trying it with the optimized backend, but there are quite a few small bugs. Also, CUDA graph compilation doesn't seem to work properly, so inference itself isn't running. Were you able to get it working successfully?
+
+--- comment by Sy0307 (NONE) 2026-03-16T19:15:13Z
+> I noticed this also. I just started using VLLM-Omni last night and tested it out with the latest version, but there is some oddities that occur. Sometimes the voice will start like a different person, and then reform into the original intent of the source track, or the voice has unintelligible artifacts that make the voice useless.
+> 
+> I've tried the Qwen3tts fast api groxaxo version, and it doesn't seem to have this issue. So, it seems like VLLM-Omni is still working out the kinks for these models.
+
+Sorry. We have found out the root cause and will fix it in https://github.com/vllm-project/vllm-omni/pull/1930.
+
+--- comment by univa-HARRY (NONE) 2026-03-17T00:16:32Z
+@Sy0307 I tested on this [branch](https://github.com/JuanPZuluaga/vllm-omni/commits/feat/talker-cuda-graph-batched) which merged the resolved commit 2 hours ago.
+
+It still includes distortion sometimes. Is this the issue of model, not the engine?
+However, I never got the same issue with the other custom engine.
+
+[sample_.wav](https://github.com/user-attachments/files/26039477/sample_.wav)
+
+--- comment by Omni-NexusAI (NONE) 2026-03-17T00:34:31Z
+> [@Omni-NexusAI](https://github.com/Omni-NexusAI)
+> 
+> Have you tried running the groxaxo version on GPU and testing voice cloning? I'm trying it with the optimized backend, but there are quite a few small bugs. Also, CUDA graph compilation doesn't seem to work properly, so inference itself isn't running. Were you able to get it working successfully?
+
+Yes, I'm using GPU. I can't say I've noticed any bugs with it specifically from my experience, outside of the inherent variability of the seed generation. I do currently have it working, and it's much faster than VLLM-Omni at present, from my testing. For one sentence on average generation speed is about 4-9s on my laptop RTX 3080 16GB. 
+
+Here's a sample of one of the generations I've done with it using the 1.7b base model.
+[Jarvis_Q3TTS_IM3Src_noseed2.wav](https://github.com/user-attachments/files/26039996/Jarvis_Q3TTS_IM3Src_noseed2.wav)
+
+--- comment by Omni-NexusAI (NONE) 2026-03-17T00:41:12Z
+> > I noticed this also. I just started using VLLM-Omni last night and tested it out with the latest version, but there is some oddities that occur. Sometimes the voice will start like a different person, and then reform into the original intent of the source track, or the voice has unintelligible artifacts that make the voice useless.
+> > I've tried the Qwen3tts fast api groxaxo version, and it doesn't seem to have this issue. So, it seems like VLLM-Omni is still working out the kinks for these models.
+> 
+> Sorry. We have found out the root cause and will fix it in [vllm-project/vllm-omni#1930](https://github.com/vllm-project/vllm-omni/pull/1930).
+
+That's good if so. What about the issue I and I've noticed others have mentioned, where it is also seems to be using a lot more VRAM than it appears it should? This also could be what's contributing to the significantly slower generation times being experienced compared to groxaxo api version.
+
+--- comment by univa-HARRY (NONE) 2026-03-17T00:48:54Z
+@Omni-NexusAI 
+
+I am currently trying the method described on GitHub that launches the container using Docker Compose, but that approach seems to include some bugs (such as incorrect config paths).
+
+Once the `v1/audio/speech` endpoint is running properly—whether via Docker or directly with Python—I’m wondering if it can robustly handle multiple concurrent requests.
+
+
+--- comment by Omni-NexusAI (NONE) 2026-03-17T02:26:13Z
+> [@Omni-NexusAI](https://github.com/Omni-NexusAI)
+> 
+> I am currently trying the method described on GitHub that launches the container using Docker Compose, but that approach seems to include some bugs (such as incorrect config paths).
+> 
+> Once the `v1/audio/speech` endpoint is running properly—whether via Docker or directly with Python—I’m wondering if it can robustly handle multiple concurrent requests.
+
+I haven't tried using it as an api endpoint yet, but that's something I'm getting around to. I've just been testing quality and speed for the last few iterations of this version. Now it's not ultra low latency, but it is fast enough now to be useful in some scenarios. So it could possibly work with concurrent requests just fine. I also have it running in a docker compose as well. I'd recommend getting an agent to set it up for you. As I've often found, I overlook certain things when trying to set up these types of containers if I run the commands manually.
+
+--- comment by univa-HARRY (NONE) 2026-03-18T08:01:40Z
+resolved by vllm-omni update
+
+--- comment by github-actions[bot] (NONE) 2026-05-17T08:51:15Z
+This issue has been automatically locked since there has not been any recent activity after it was closed. Please open a new issue for related bugs.

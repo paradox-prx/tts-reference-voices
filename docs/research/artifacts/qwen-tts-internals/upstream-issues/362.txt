@@ -1,0 +1,51 @@
+#362 [open] Default generate_voice_clone to non_streaming_mode=True to prevent speaking-rate drift (#239)
+URL https://github.com/QwenLM/Qwen3-TTS/pull/362
+created 2026-08-28T18:40:32Z by sherifhanna700
+
+## Summary
+
+`generate_voice_clone` defaults to simulated-streaming text input (`non_streaming_mode=False`), which causes the speaking rate to climb over long generations — the behavior reported in #239. This PR changes the default to `non_streaming_mode=True` (the layout `generate_custom_voice` and `generate_voice_design` already default to) and documents the trade-off in the docstring so streaming users can make an informed choice.
+
+## Mechanism
+
+In simulated-streaming mode the target text is fed to the talker at **one token per codec frame** (12.5 tokens/s), several times faster than speech consumes text (~4–5 tokens/s). Early in a generation the model cannot speak ahead of the text it has received — an implicit pacing brake. As the feed outpaces consumption, the backlog grows, the brake disappears, and the speaking rate climbs toward the model's fast prior.
+
+Long reference audio makes this much worse. `generate_icl_prompt` feeds the **concatenated ref+target text across the reference's codec frames**, so the reference pre-consumes the target text during the prefill: a 12.9s reference (161 frames) delivers ~160 target-text tokens before the first generated frame. The brake never exists at all, and generation is rushed from the first word.
+
+## Measurements
+
+Articulation rate (syllable nuclei per second of speech) measured on the first vs last third of each generation; 1.7B-Base, MPS, seed pinned, identical text (~150 words) and identical sampling parameters throughout:
+
+| configuration | within-generation drift | notes |
+|---|---|---|
+| streaming, 12.9s reference | **+16.7%** | the #239 symptom |
+| streaming, 4s slice of the same reference | **−2.3%** | brake intact |
+| non-streaming, 12.9s reference | **0.0%** | this PR's default |
+
+Rate over five references (112–182 wpm speaking pace, 12.9–48.5s long): output converges to ~195 wpm regardless of reference pacing in streaming mode, consistent with the backlog mechanism rather than reference imitation.
+
+## Why not fix the streaming feed instead?
+
+We tried; the results are informative negative data (details in #239):
+
+- Feeding only the reference transcript across the reference frames (pad afterward) → immediate EOS: pad-after-text at the generation boundary is the trained end-of-utterance signal.
+- Non-streaming-style block layout for the reference, then streaming the target from generation start → immediate EOS, same reason.
+- Right-aligning the reference transcript against the reference audio's end (leading pad) → runaway generation (655s of mostly silence for a 25s utterance).
+- Slowing the feed to 1 token per N frames (token injected once, pad between) → long silences and bursts; fractional strides destabilize pacing entirely.
+
+The talker tolerates exactly one streaming prompt shape — contiguous text, left-aligned from frame 0 — so an inference-side repair does not appear possible with the current weights. A training-side fix (e.g., randomized text-feed schedules, or reference-transcript-aligned prompt layouts in ICL training) would be needed to make streaming mode rate-stable; until then, non-streaming is the correct default for the offline synthesis this API is mostly used for.
+
+## Compatibility
+
+Callers that need streaming latency can still pass `non_streaming_mode=False` explicitly; the docstring now recommends keeping references under ~5s in that mode.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01T8TJ66RRgG8AnyanBzbF6a
+
+
+--- comment by HaujetZhao (NONE) 2026-09-02T18:56:36Z
+That's the perfect explanation I am looking for.
+
+--- comment by HaujetZhao (NONE) 2026-09-03T01:10:01Z
+Using the Custom-Voice model for cloning can maintain the speaking rate.

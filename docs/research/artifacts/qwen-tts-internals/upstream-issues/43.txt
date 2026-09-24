@@ -1,0 +1,161 @@
+#43 [closed] CUDA device-side assert triggered on Turing GPUs (RTX 2060) during FP16 inference
+URL https://github.com/QwenLM/Qwen3-TTS/issues/43
+created 2026-01-24T01:44:21Z by ByAndrius
+
+### Description
+
+When running inference with dtype=torch.float16 on an NVIDIA RTX 2060 (Turing architecture), the model triggers a CUDA assertion failure during the token generation phase. The error persists even when using the official Gradio demo provided in the repository.
+
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/f6735651-a48f-4ecb-8a9a-52c5b426bf07" />
+
+The model seems to generate NaNs or overflows during the Multi-Token Prediction (MTP) or subtalker sampling steps when using FP16. **Native FP32 works**. Flash-Attention 2 is installed but does not resolve the numerical instability.
+
+### Reproduction
+
+1. Install qwen-tts on a Windows environment with an RTX 2060.
+2. Run the official demo:
+3. `qwen-tts-demo Qwen/Qwen3-TTS-12Hz-0.6B-custom --ip 0.0.0.0 --port 8000 --dtype fp16` (using 'uv' during test).
+4. Input any text and click "Generate".
+
+### Logs
+
+```shell
+PS C:\Users\Andrew\Desktop\ARIA> uv run qwen-tts-demo Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice --ip 0.0.0.0 --port 8000 --dtype fp16
+Fetching 4 files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:00<?, ?it/s]
+C:\Users\Andrew\Desktop\ARIA\.venv\Lib\site-packages\qwen_tts\cli\demo.py:277: UserWarning: The parameters have been moved from the Blocks constructor to the launch() method in Gradio 6.0: theme, css. Please pass these parameters to launch() instead.
+  with gr.Blocks(theme=theme, css=css) as demo:
+* Running on local URL:  http://0.0.0.0:8000
+* To create a public link, set `share=True` in `launch()`.
+Setting `pad_token_id` to `eos_token_id`:2150 for open-end generation.
+C:\actions-runner\_work\pytorch\pytorch\pytorch\aten\src\ATen\native\cuda\TensorCompare.cu:112: block: [0,0,0], thread: [0,0,0] Assertion `input[0] != 0` failed.
+```
+
+### Environment Information
+
+OS: Windows 11 24H2 (26100.6584)
+GPU: NVIDIA GeForce RTX 2060 (6GB VRAM)
+Driver: 591.59
+PyTorch: 2.9.1+cu130
+CUDA: 13.0
+Library: qwen-tts (0.0.5)
+
+### Known Issue
+
+- [x] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by hum-ma (NONE) 2026-01-24T09:09:43Z
+Same kind of error with GTX 970 (Maxwell). Usually any other model works in float16 whereas bfloat16 produces errors but with this it's the opposite, somehow bfloat16 works but with a heavy load on CPU and I suspect float16 might be faster if it were to work. Cannot test float32 because OOM with 4 GB VRAM.
+
+OS: Linux
+Driver: 550
+PyTorch: 2.9.1
+CUDA: 12.4
+
+<details>
+
+<summary>stack trace after changing dtype in the test script to float16</summary>
+
+```
+$ python test_model_12hz_custom_voice.py
+
+********
+Warning: flash-attn is not installed. Will only run the manual PyTorch version. Please install flash-attn for faster inference.
+********
+
+Setting `pad_token_id` to `eos_token_id`:2150 for open-end generation.
+Traceback (most recent call last):
+  File "/home/hum/gradioenv/Qwen3-TTS/examples/test_model_12hz_custom_voice.py", line 80, in <module>
+    main()
+    ~~~~^^
+  File "/home/hum/gradioenv/Qwen3-TTS/examples/test_model_12hz_custom_voice.py", line 63, in main
+    wavs, sr = tts.generate_custom_voice(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        text=texts,
+        ^^^^^^^^^^^
+    ...<3 lines>...
+        max_new_tokens=1024,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/qwen_tts/inference/qwen3_tts_model.py", line 829, in generate_custom_voice
+    talker_codes_list, _ = self.model.generate(
+                           ~~~~~~~~~~~~~~~~~~~^
+        input_ids=input_ids,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        **gen_kwargs,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/qwen_tts/core/models/modeling_qwen3_tts.py", line 2267, in generate
+    talker_result = self.talker.generate(
+        inputs_embeds=talker_input_embeds,
+    ...<3 lines>...
+        **talker_kwargs,
+    )
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/transformers/generation/utils.py", line 2564, in generate
+    result = decoding_method(
+        self,
+    ...<5 lines>...
+        **model_kwargs,
+    )
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/transformers/generation/utils.py", line 2787, in _sample
+    outputs = model_forward(**model_inputs, return_dict=True)
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/transformers/utils/generic.py", line 918, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/qwen_tts/core/models/modeling_qwen3_tts.py", line 1672, in forward
+    predictor_result = self.code_predictor.generate(
+        inputs_embeds=torch.cat((past_hidden, last_id_hidden), dim=1),
+    ...<6 lines>...
+        return_dict_in_generate=True,
+    )
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/transformers/generation/utils.py", line 2564, in generate
+    result = decoding_method(
+        self,
+    ...<5 lines>...
+        **model_kwargs,
+    )
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/transformers/generation/utils.py", line 2842, in _sample
+    unfinished_sequences = unfinished_sequences & ~stopping_criteria(input_ids, scores)
+                                                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/transformers/generation/stopping_criteria.py", line 502, in __call__
+    is_done = is_done | criteria(input_ids, scores, **kwargs)
+                        ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hum/gradioenv/lib/python3.13/site-packages/transformers/generation/stopping_criteria.py", line 85, in __call__
+    return torch.full((input_ids.shape[0],), is_done, device=input_ids.device, dtype=torch.bool)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.AcceleratorError: CUDA error: device-side assert triggered
+Search for `cudaErrorAssert' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+```
+</details>
+
+--- comment by CrackerHax (NONE) 2026-01-24T09:56:33Z
+Same on RTX3080
+
+--- comment by ObifourKenobi (NONE) 2026-01-25T17:00:12Z
+Same ont RTX3060
+
+--- comment by GordonBreazz (NONE) 2026-01-25T18:20:05Z
+I have the same thing on a 3060 12Gb
+
+--- comment by wangxiongts (COLLABORATOR) 2026-01-26T03:31:48Z
+Since we used `bfloat16` during training, and the code predictor model—being a small-parameter AR module—is extremely sensitive to precision, we strongly recommend using `float32` for inference on machines that do not support `bfloat16`, or keeping an eye on the `vllm-omni` community support (which will be closer to industrial deployment).
+
+--- comment by github-actions[bot] (NONE) 2026-03-27T08:24:10Z
+This issue has been automatically locked since there has not been any recent activity after it was closed. Please open a new issue for related bugs.

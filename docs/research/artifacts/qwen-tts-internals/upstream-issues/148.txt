@@ -1,0 +1,72 @@
+#148 [closed] Very slow with vllm-omni on A800, how to improve the speed...
+URL https://github.com/QwenLM/Qwen3-TTS/issues/148
+created 2026-01-31T10:01:30Z by bnuzhouwei
+
+### Description
+
+Very slow, and can not generate long voice.
+
+### Reproduction
+
+```bash
+vllm serve ./Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice --served-model-name Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice \
+    --stage-configs-path qwen3_tts.yaml \
+    --host 0.0.0.0 \
+    --port 8006 \
+    --gpu-memory-utilization 0.3 \
+    --trust-remote-code \
+    --enforce-eager \
+    --omni
+```
+
+### Logs
+
+```shell
+APIServer pid=68584) INFO 01-31 09:59:14 [serving_speech.py:236] TTS speech request speech-b32c5f6f011ede19: text='后台的化妆间里，空气紧张得像拉满的弓弦。小雅穿着洁白的纱裙，正在仔细地系紧足尖鞋的缎带。今天是她第一...', task_type=CustomVoice
+(APIServer pid=68584) INFO 01-31 09:59:14 [async_omni.py:319] [AsyncOrchestrator] Entering scheduling loop: stages=1, final_stage=0
+(Worker pid=69231) [Stage-0] INFO 01-31 09:59:14 [configuration_qwen3_tts.py:441] code_predictor_config is None. Initializing code_predictor model with default values
+(Worker pid=69231) Setting `pad_token_id` to `eos_token_id`:2150 for open-end generation.
+(EngineCore_DP0 pid=69093) [Stage-0] INFO 01-31 10:00:14 [shm_broadcast.py:542] No available shared memory broadcast block found in 60 seconds. This typically happens when some processes are hanging or doing some time-consuming work (e.g. compilation, weight/kv cache quantization).
+(APIServer pid=68584) INFO 01-31 10:00:54 [async_omni.py:361] [AsyncOrchestrator] Request speech-b32c5f6f011ede19 aborted.
+```
+
+### Environment Information
+
+stage_args:
+  - stage_id: 0
+    stage_type: llm  # Use llm stage type to launch OmniLLM
+    runtime:
+      devices: "0"
+      max_batch_size: 1
+    engine_args:
+      model_stage: qwen3_tts
+      model_arch: Qwen3TTSForConditionalGeneration
+      worker_type: generation
+      scheduler_cls: vllm_omni.core.sched.omni_generation_scheduler.OmniGenerationScheduler
+      enforce_eager: true
+      trust_remote_code: true
+      async_scheduling: false
+      enable_prefix_caching: false
+      engine_output_type: audio  # Final output: audio waveform
+      gpu_memory_utilization: 0.3
+      distributed_executor_backend: "mp"
+      max_num_batched_tokens: 1000000
+
+    final_output: true
+    final_output_type: audio
+
+
+### Known Issue
+
+- [x] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by piyushgit011 (NONE) 2026-01-31T13:28:36Z
+In our testing, vLLM-Omni batching for this TTS setup appears unstable (we hit an IndexError when batch_size > 1). We got better throughput by keeping batch_size=1 and scaling with multiple instances + load balancing.
+
+--- comment by tsdocode (NONE) 2026-02-01T20:10:30Z
+https://github.com/QwenLM/Qwen3-TTS/discussions/153
+
+It may help 
+
+--- comment by github-actions[bot] (NONE) 2026-03-19T08:21:45Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.

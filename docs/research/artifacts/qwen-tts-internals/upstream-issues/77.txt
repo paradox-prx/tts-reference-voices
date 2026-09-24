@@ -1,0 +1,131 @@
+#77 [closed] Streaming support inference
+URL https://github.com/QwenLM/Qwen3-TTS/issues/77
+created 2026-01-25T18:28:29Z by saifulislam79
+
+### Description
+
+The author mentioned in their paper that the module already supports streaming inference. What are the plans or timeline for releasing the streaming inference codebase?"
+
+### Reproduction
+
+N/A
+
+### Logs
+
+```shell
+N/A
+```
+
+### Environment Information
+
+N/A
+
+### Known Issue
+
+- [ ] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by dffdeeq (NONE) 2026-01-25T19:34:26Z
+they already answered in #10 , btw if you just want to try streaming inference in practice, I implemented an experimental version in my [fork](https://github.com/dffdeeq/Qwen3-TTS-streaming/tree/main) 
+
+--- comment by gad2103 (NONE) 2026-01-25T19:56:14Z
+> they already answered in #10 , btw if you just want to try streaming inference in practice, I implemented an experimental version in my [fork](https://github.com/dffdeeq/Qwen3-TTS-streaming/tree/main) 
+
+@dffdeeq thanks for taking a stab at this. It looks like your ttfb is much higher than the claimed <100ms. I'm guessing it is partially cause you are sending in a large batch payload to be rendered? 
+
+Do you have a sense for how to replicate the sub 100ms ttfb performance? I'm happy to collaborate on this if that would be helpful
+
+--- comment by dffdeeq (NONE) 2026-01-25T20:23:11Z
+> > they already answered in [#10](https://github.com/QwenLM/Qwen3-TTS/issues/10) , btw if you just want to try streaming inference in practice, I implemented an experimental version in my [fork](https://github.com/dffdeeq/Qwen3-TTS-streaming/tree/main)
+> 
+> [@dffdeeq](https://github.com/dffdeeq) thanks for taking a stab at this. It looks like your ttfb is much higher than the claimed <100ms. I'm guessing it is partially cause you are sending in a large batch payload to be rendered?
+> 
+> Do you have a sense for how to replicate the sub 100ms ttfb performance? I'm happy to collaborate on this if that would be helpful
+
+
+looking at their [paper](https://github.com/QwenLM/Qwen3-TTS/blob/main/assets/Qwen3_TTS.pdf) (section 3.4), they benchmark on vLLM v0 + torch.compile + cuda graphs on the tokenizer decode. I'm on vanilla transformers with flash attention 2, no compile, no cuda graphs. Also they emit every 4 tokens, I have emit every 8, so that's extra wait time for first chunk
+
+and hardware, they probably ran on a100/h100, I tested on 5090
+
+down to collab on vllm part if you wanna tackle that
+
+
+UPD (not streaming-specific): improved TTFT from ~0.8s. -> 0.17s. on a 5090 
+Main levers were CUDA/torch.compile -side optimization (compiled the talker forward). For reference I'm running bf16 + flash attention 2 and `torch.set_float32_matmul_precision("high")` [examples/test_streaming_optimized.py](https://github.com/dffdeeq/Qwen3-TTS-streaming/blob/main/examples/test_streaming_optimized.py) and [test_optimized_no_streaming.py](https://github.com/dffdeeq/Qwen3-TTS-streaming/blob/main/examples/test_optimized_no_streaming.py)
+
+
+--- comment by dffdeeq (NONE) 2026-01-26T00:21:48Z
+@wangxiongts Would you be open to a PR adding streaming inference support to the qwen-tts package? I have a working implementation in my fork. Happy to adapt to your code style if needed =)
+
+--- comment by 1277331747 (NONE) 2026-01-30T07:57:47Z
+> they already answered in [#10](https://github.com/QwenLM/Qwen3-TTS/issues/10) , btw if you just want to try streaming inference in practice, I implemented an experimental version in my [fork](https://github.com/dffdeeq/Qwen3-TTS-streaming/tree/main)
+
+Hello, thank you for providing the streaming version. However, I encountered an issue while reproducing it. Looking forward to your response.
+### 🎯 Observation
+- From the attached waveform comparison plot, a clear waveform discontinuity can be observed at chunk boundaries (e.g., between timestamps `1.27995s ~ 1.28000s`).
+- Chunk concatenation consistently results in a loss of **0.0005 seconds** of audio data.
+
+### 📌 Expected Outcome
+- The concatenated audio should be identical to the original full audio, with no content loss whatsoever.
+- The timeline between adjacent chunks should be perfectly continuous, with no gaps.
+
+---
+
+### 🖼️ Attachment
+- **Waveform Comparison Plot**: Clearly demonstrates the content loss in the interval `1.27995s ~ 1.28000s`.
+
+<img width="796" height="690" alt="Image" src="https://github.com/user-attachments/assets/7e90e2de-93c5-4cb2-a6ea-3a8f5d1fdcb2" />
+
+--- comment by andytyrer (NONE) 2026-02-01T07:18:20Z
+@dffdeeq excellent implementation. I am getting a fair bit of popping in the audio output. Is this a known issue and been addressed?
+
+--- comment by rekuenkdr (NONE) 2026-02-04T08:18:30Z
+> [@dffdeeq](https://github.com/dffdeeq) excellent implementation. I am getting a fair bit of popping in the audio output. Is this a known issue and been addressed?
+
+Hi @andytyrer, 
+I fixed the popping issues in my fork, in case you want to try it:
+https://github.com/rekuenkdr/Qwen3-TTS-streaming
+
+It also has a 2 phase emit instead of one implemented, to improve latency and TTFB on low end hardware.
+Hope it helps.
+
+--- comment by rodrigo-barraza (NONE) 2026-02-10T00:03:54Z
+Hey @rekuenkdr good stuff, it definitely outputs speech quicker, but something I noticed with your changes was, that the stream ends up generating a lot of repeated text. It will output one out of two sentences, and then go back to the start and read both sentences. Doesn't seem to happen with the original streaming fork, nor the original non-streaming.
+
+--- comment by rekuenkdr (NONE) 2026-02-10T08:50:38Z
+> Hey [@rekuenkdr](https://github.com/rekuenkdr) good stuff, it definitely outputs speech quicker, but something I noticed with your changes was, that the stream ends up generating a lot of repeated text. It will output one out of two sentences, and then go back to the start and read both sentences. Doesn't seem to happen with the original streaming fork, nor the original non-streaming.
+
+Hi @rodrigo-barraza , it was working fine until yesterday, I'm introducing new changes and backporting upstream fixes that may have break something, I noticed that too, need to look again to fix it or revert.
+
+Can you checkout this commit instead https://github.com/rekuenkdr/Qwen3-TTS-streaming/commit/a48510a58db6499735460e78534242a6d6e0f0d8
+
+and not the latest and tell me if that fixes the repeating for you?
+
+and can you tell me if you are using the streaming functions or the regular ones? they work differently
+
+--- comment by rekuenkdr (NONE) 2026-02-10T09:53:06Z
+@rodrigo-barraza should be fixed now, the repetition penalty I introduced a few commits ago was not properly passed and it was been filtered out, it is now disabled on streaming by default (as that was the intention of that commit).
+
+Tested and working perfectly again, but try it out with short and long sentences and let me know.
+In case you want to use other value you can add it too, I have added a window penalty for those use cases.
+
+Recommended: disabled for streaming. (non streaming are unaffected by this change)
+
+--- comment by eeshaSh (NONE) 2026-02-10T23:13:40Z
+> > > they already answered in [#10](https://github.com/QwenLM/Qwen3-TTS/issues/10) , btw if you just want to try streaming inference in practice, I implemented an experimental version in my [fork](https://github.com/dffdeeq/Qwen3-TTS-streaming/tree/main)
+> > 
+> > 
+> > [@dffdeeq](https://github.com/dffdeeq) thanks for taking a stab at this. It looks like your ttfb is much higher than the claimed <100ms. I'm guessing it is partially cause you are sending in a large batch payload to be rendered?
+> > Do you have a sense for how to replicate the sub 100ms ttfb performance? I'm happy to collaborate on this if that would be helpful
+> 
+> looking at their [paper](https://github.com/QwenLM/Qwen3-TTS/blob/main/assets/Qwen3_TTS.pdf) (section 3.4), they benchmark on vLLM v0 + torch.compile + cuda graphs on the tokenizer decode. I'm on vanilla transformers with flash attention 2, no compile, no cuda graphs. Also they emit every 4 tokens, I have emit every 8, so that's extra wait time for first chunk
+> 
+> and hardware, they probably ran on a100/h100, I tested on 5090
+> 
+> down to collab on vllm part if you wanna tackle that
+> 
+> UPD (not streaming-specific): improved TTFT from ~0.8s. -> 0.17s. on a 5090 Main levers were CUDA/torch.compile -side optimization (compiled the talker forward). For reference I'm running bf16 + flash attention 2 and `torch.set_float32_matmul_precision("high")` [examples/test_streaming_optimized.py](https://github.com/dffdeeq/Qwen3-TTS-streaming/blob/main/examples/test_streaming_optimized.py) and [test_optimized_no_streaming.py](https://github.com/dffdeeq/Qwen3-TTS-streaming/blob/main/examples/test_optimized_no_streaming.py)
+
+Hey @dffdeeq, thanks for the streaming implementation! Are you still working on a vllm implementation? I saw inference was way slower even with two concurrent requests, and some torch compile modes errored out... I wonder if vllm would fix that
+
+--- comment by github-actions[bot] (NONE) 2026-04-06T08:41:32Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.

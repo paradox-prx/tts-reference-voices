@@ -1,0 +1,449 @@
+#333 [closed] Nan logits with flash attention backend
+URL https://github.com/QwenLM/Qwen3-TTS/issues/333
+created 2026-06-13T19:10:15Z by thangld201
+
+### Description
+
+I'm running voice clone evaluation on https://huggingface.co/datasets/MiniMaxAI/TTS-Multilingual-Test-Set, but got the following error with `attn_implementation` set as `flash_attention_2`:
+```
+    next_tokens = torch.multinomial(probs, num_samples=1).squeeze(1)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.AcceleratorError: CUDA error: device-side assert triggered
+Search for `cudaErrorAssert' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+```
+
+On close inspection, this was due to nan logits at some point during generation. However, inference works fine with `sdpa` or `eager` attn-implementation.
+
+### Reproduction
+
+First, clone the test set:
+```
+git clone https://huggingface.co/datasets/MiniMaxAI/TTS-Multilingual-Test-Set
+```
+Assuming `qwen-tts` and `flash_attn` is already installed, run the below codes:
+```
+import argparse
+import json
+import re
+from dataclasses import asdict, dataclass
+from pathlib import Path
+from typing import Any, Iterable
+
+DATASET_DEFAULT = "TTS-Multilingual-Test-Set"
+DEFAULT_MODEL_ID = "Qwen/Qwen3-TTS-12Hz-1.7B-Base"
+
+LANGUAGE_NAME = {
+    "arabic": "Arabic",
+    "cantonese": "Cantonese",
+    "chinese": "Chinese",
+    "czech": "Czech",
+    "dutch": "Dutch",
+    "english": "English",
+    "finnish": "Finnish",
+    "french": "French",
+    "german": "German",
+    "greek": "Greek",
+    "hindi": "Hindi",
+    "indonesian": "Indonesian",
+    "italian": "Italian",
+    "japanese": "Japanese",
+    "korean": "Korean",
+    "polish": "Polish",
+    "portuguese": "Portuguese",
+    "romanian": "Romanian",
+    "russian": "Russian",
+    "spanish": "Spanish",
+    "thai": "Thai",
+    "turkish": "Turkish",
+    "ukrainian": "Ukrainian",
+    "vietnamese": "Vietnamese",
+}
+
+
+WHISPER_LANGUAGE = {
+    "arabic": "arabic",
+    "cantonese": "chinese",
+    "chinese": "chinese",
+    "czech": "czech",
+    "dutch": "dutch",
+    "english": "english",
+    "finnish": "finnish",
+    "french": "french",
+    "german": "german",
+    "greek": "greek",
+    "hindi": "hindi",
+    "indonesian": "indonesian",
+    "italian": "italian",
+    "japanese": "japanese",
+    "korean": "korean",
+    "polish": "polish",
+    "portuguese": "portuguese",
+    "romanian": "romanian",
+    "russian": "russian",
+    "spanish": "spanish",
+    "thai": "thai",
+    "turkish": "turkish",
+    "ukrainian": "ukrainian",
+    "vietnamese": "vietnamese",
+}
+
+
+@dataclass
+class EvalItem:
+    utt: str
+    language: str
+    qwen_language: str
+    speaker_key: str
+    ref_audio: str
+    ref_text: str
+    text: str
+    output_wav: str
+    line_index: int
+
+
+def safe_id(value: str) -> str:
+    value = re.sub(r"[^A-Za-z0-9_.-]+", "_", value.strip())
+    value = re.sub(r"_+", "_", value).strip("_")
+    return value or "item"
+
+
+def read_prompt_text(dataset_dir: Path) -> dict[str, str]:
+    path = dataset_dir / "speaker" / "prompt_text.txt"
+    out = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or "|" not in line:
+            continue
+        audio_name, text = line.split("|", 1)
+        out[audio_name] = text
+    return out
+
+
+def discover_ref_speakers(dataset_dir: Path, language: str, prompt_text: dict[str, str]) -> list[tuple[str, Path, str]]:
+    lang_dir = dataset_dir / "speaker" / language
+    speakers = []
+    if not lang_dir.exists():
+        return speakers
+    for speaker_dir in sorted(p for p in lang_dir.iterdir() if p.is_dir()):
+        audios = sorted(speaker_dir.glob("*.mp3")) + sorted(speaker_dir.glob("*.wav"))
+        if not audios:
+            continue
+        if len(audios) > 1:
+            raise ValueError(f"Expected one ref audio in {speaker_dir}, found {audios}")
+        audio = audios[0]
+        ref_text = prompt_text.get(audio.name)
+        if ref_text is None:
+            raise KeyError(f"No prompt_text entry for {audio.name}")
+        speakers.append((speaker_dir.name, audio, ref_text))
+    return speakers
+
+
+def read_text_lines(dataset_dir: Path, language: str) -> list[tuple[str, str]]:
+    path = dataset_dir / "text" / f"{language}.txt"
+    rows = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or "|" not in line:
+            continue
+        speaker_key, text = line.split("|", 1)
+        rows.append((speaker_key, text))
+    return rows
+
+
+def select_languages(dataset_dir: Path, languages: str) -> list[str]:
+    if languages.strip().lower() == "all":
+        return sorted(p.stem for p in (dataset_dir / "text").glob("*.txt"))
+    return [x.strip().lower() for x in languages.split(",") if x.strip()]
+
+
+def resolve_qwen_language(language: str, supported: set[str] | None) -> str:
+    qwen_lang = LANGUAGE_NAME.get(language, language.title())
+    if supported is None:
+        return qwen_lang
+    if qwen_lang.lower() in supported:
+        return qwen_lang
+    return "Auto"
+
+
+def get_hf_supported_languages(tts: Any) -> set[str] | None:
+    try:
+        languages = tts.get_supported_languages()
+        return {str(x).lower() for x in languages} if languages else None
+    except Exception as exc:
+        print(f"warning: could not read supported language set from HF Qwen wrapper: {exc}")
+    return None
+
+
+def patch_qwen_hf_config_compat() -> None:
+    """Patch missing config aliases expected by the local HF model code."""
+    from qwen_tts.core.models.configuration_qwen3_tts import (
+        Qwen3TTSTalkerCodePredictorConfig,
+        Qwen3TTSTalkerConfig,
+    )
+
+    def _talker_pad_token_id(self):
+        return self.codec_pad_id
+
+    def _set_talker_pad_token_id(self, value):
+        self.codec_pad_id = value
+
+    def _code_predictor_pad_token_id(self):
+        return getattr(self, "_pad_token_id", None)
+
+    def _set_code_predictor_pad_token_id(self, value):
+        self._pad_token_id = value
+
+    if not hasattr(Qwen3TTSTalkerConfig, "pad_token_id"):
+        Qwen3TTSTalkerConfig.pad_token_id = property(_talker_pad_token_id, _set_talker_pad_token_id)
+    if not hasattr(Qwen3TTSTalkerCodePredictorConfig, "pad_token_id"):
+        Qwen3TTSTalkerCodePredictorConfig.pad_token_id = property(
+            _code_predictor_pad_token_id,
+            _set_code_predictor_pad_token_id,
+        )
+
+def build_items(args, supported_languages: Iterable[str] | None = None) -> list[EvalItem]:
+    dataset_dir = Path(args.dataset_dir).expanduser().resolve()
+    out_dir = Path(args.out_dir).expanduser().resolve()
+    prompt_text = read_prompt_text(dataset_dir)
+    supported = {x.lower() for x in supported_languages} if supported_languages is not None else None
+
+    items = []
+    for language in select_languages(dataset_dir, args.languages):
+        rows = read_text_lines(dataset_dir, language)
+        speakers = discover_ref_speakers(dataset_dir, language, prompt_text)
+        if args.speaker_filter:
+            keep = {x.strip() for x in args.speaker_filter.split(",") if x.strip()}
+            speakers = [s for s in speakers if s[0] in keep]
+
+        qwen_language = resolve_qwen_language(language, supported)
+        for speaker_key, ref_audio, ref_text in speakers:
+            for line_index, (__, text) in enumerate(rows):
+                utt = f"{safe_id(language)}_{safe_id(speaker_key)}_{line_index:05d}"
+                output_wav = out_dir / "wav" / language / speaker_key / f"{utt}.wav"
+                items.append(
+                    EvalItem(
+                        utt=utt,
+                        language=language,
+                        qwen_language=qwen_language,
+                        speaker_key=speaker_key,
+                        ref_audio=str(ref_audio),
+                        ref_text=ref_text,
+                        text=text,
+                        output_wav=str(output_wav),
+                        line_index=line_index,
+                    )
+                )
+    return items
+
+
+def write_manifest(items: list[EvalItem], out_dir: Path) -> None:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    manifest = out_dir / "manifest.jsonl"
+    manifest.write_text("\n".join(json.dumps(asdict(item), ensure_ascii=False) for item in items) + "\n", encoding="utf-8")
+
+    meta = out_dir / "seed_style_meta.lst"
+    lines = []
+    for item in items:
+        rel_wav = str(Path(item.output_wav).relative_to(out_dir / "wav"))
+        utt_no_ext = str(Path(rel_wav).with_suffix(""))
+        lines.append("|".join([utt_no_ext, item.ref_text, item.ref_audio, item.text]))
+    meta.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    pairs = out_dir / "wav_res_ref_text"
+    pair_lines = ["|".join([item.output_wav, item.ref_audio, item.text]) for item in items if Path(item.output_wav).exists()]
+    pairs.write_text("\n".join(pair_lines) + ("\n" if pair_lines else ""), encoding="utf-8")
+
+
+def load_manifest(out_dir: Path) -> list[EvalItem]:
+    manifest = out_dir / "manifest.jsonl"
+    items = []
+    for line in manifest.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            items.append(EvalItem(**json.loads(line)))
+    return items
+
+
+
+def resolve_torch_dtype(dtype_name: str):
+    import torch
+
+    return {
+        "float32": torch.float32,
+        "float16": torch.float16,
+        "bfloat16": torch.bfloat16,
+    }[dtype_name]
+
+
+def build_generate_kwargs(args) -> dict[str, Any]:
+    return {
+        "max_new_tokens": args.max_new_tokens,
+        "top_k": args.top_k,
+        "top_p": args.top_p,
+        "temperature": args.temperature,
+        "repetition_penalty": args.repetition_penalty,
+        "subtalker_top_k": args.subtalker_top_k,
+        "subtalker_top_p": args.subtalker_top_p,
+        "subtalker_temperature": args.subtalker_temperature,
+    }
+
+
+def iter_batches(items: list[EvalItem], batch_size: int):
+    for start in range(0, len(items), batch_size):
+        end = min(start + batch_size, len(items))
+        yield start, end, items[start:end]
+
+
+def get_or_create_prompt_item(tts: Any, item: EvalItem, x_vector_only: bool, prompt_cache: dict[tuple[str, str, bool], Any]):
+    prompt_key = (item.ref_audio, item.ref_text, bool(x_vector_only))
+    if prompt_key not in prompt_cache:
+        print(f"building clone prompt: {item.language}/{item.speaker_key}")
+        prompt_items = tts.create_voice_clone_prompt(
+            ref_audio=item.ref_audio,
+            ref_text=item.ref_text,
+            x_vector_only_mode=x_vector_only,
+        )
+        if len(prompt_items) != 1:
+            raise RuntimeError(f"Expected one prompt item for {prompt_key}, got {len(prompt_items)}")
+        prompt_cache[prompt_key] = prompt_items[0]
+    return prompt_cache[prompt_key]
+
+
+def prepare_generation_batch(
+    tts: Any,
+    batch: list[EvalItem],
+    x_vector_only: bool,
+    prompt_cache: dict[tuple[str, str, bool], Any],
+) -> tuple[list[str], list[str], list[Any]]:
+    texts = []
+    languages = []
+    prompt_items = []
+
+    for item in batch:
+        output_path = Path(item.output_wav)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        texts.append(item.text)
+        languages.append(item.qwen_language)
+        prompt_items.append(get_or_create_prompt_item(tts, item, x_vector_only, prompt_cache))
+
+    return texts, languages, prompt_items
+
+
+def generate(args) -> list[EvalItem]:
+    import soundfile as sf
+    from qwen_tts import Qwen3TTSModel
+    out_dir = Path(args.out_dir).expanduser().resolve()
+    dtype = resolve_torch_dtype(args.dtype)
+    print(f"loading HF Qwen3-TTS model: {args.model}")
+
+    tts = Qwen3TTSModel.from_pretrained(
+        args.model,
+        device_map=args.device_map,
+        dtype=dtype,
+        attn_implementation=args.attn_implementation,
+    )
+    supported = get_hf_supported_languages(tts)
+    items = build_items(args, supported_languages=supported)
+    write_manifest(items, out_dir)
+
+    pending = [item for item in items if args.overwrite or not Path(item.output_wav).exists()]
+    print(f"items={len(items)} pending={len(pending)} out_dir={out_dir}")
+
+    if pending:
+        gen_kwargs = build_generate_kwargs(args)
+        prompt_cache: dict[tuple[str, str, bool], Any] = {}
+        for start, end, batch in iter_batches(pending, args.batch_size):
+            texts, languages, prompt_items = prepare_generation_batch(
+                tts=tts,
+                batch=batch,
+                x_vector_only=args.x_vector_only,
+                prompt_cache=prompt_cache,
+            )
+            print(f"generate batch {start}-{end} / {len(pending)}")
+            wavs, sr = tts.generate_voice_clone(
+                text=texts,
+                language=languages,
+                voice_clone_prompt=prompt_items,
+                **gen_kwargs,
+            )
+
+            if len(wavs) != len(batch):
+                raise RuntimeError(f"Expected {len(batch)} wavs for batch {start}-{end}, got {len(wavs)}")
+            for item, wav in zip(batch, wavs):
+                sf.write(Path(item.output_wav), wav, sr)
+
+    write_manifest(items, out_dir)
+    return items
+
+
+
+
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    
+    parser.add_argument("--dataset-dir", default=str(DATASET_DEFAULT))
+    parser.add_argument("--out-dir", default="multilingual_voice_clone_eval")
+    parser.add_argument("--languages", default="all", help="Comma-separated language names or all.")
+    parser.add_argument("--speaker-filter", default=None, help="Comma-separated speaker keys, e.g. english_female,english_male.")
+    parser.add_argument("--model", default=DEFAULT_MODEL_ID)
+    parser.add_argument("--device-map", default="cuda:0")
+    parser.add_argument("--dtype", default="bfloat16", choices=["float32", "float16", "bfloat16"])
+    parser.add_argument("--attn-implementation", default="flash_attention_2")
+    parser.add_argument("--batch-size", type=int, default=8)
+    parser.add_argument("--max-new-tokens", type=int, default=2048)
+    parser.add_argument("--top-k", type=int, default=50)
+    parser.add_argument("--top-p", type=float, default=1.0)
+    parser.add_argument("--temperature", type=float, default=0.9)
+    parser.add_argument("--repetition-penalty", type=float, default=1.05)
+    parser.add_argument("--subtalker-top-k", type=int, default=50)
+    parser.add_argument("--subtalker-top-p", type=float, default=1.0)
+    parser.add_argument("--subtalker-temperature", type=float, default=0.9)
+    parser.add_argument("--x-vector-only", action="store_true")
+    parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument("--eval-device", default="cuda:0")
+    parser.add_argument("--skip-wer", action="store_true")
+    parser.add_argument("--skip-sim", action="store_true")
+    parser.add_argument("--seed", type=int, default=42)
+    args = parser.parse_args()
+
+    if args.seed is not None:
+        from transformers import set_seed
+        set_seed(args.seed)
+
+
+    generate(args)
+        
+
+if __name__ == "__main__":
+    main()
+```
+
+To run with `eager` or `sdpa` backend, add flag `--attn-implementation eager` or `--attn-implementation sdpa`
+
+### Logs
+
+```shell
+....
+    next_tokens = torch.multinomial(probs, num_samples=1).squeeze(1)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.AcceleratorError: CUDA error: device-side assert triggered
+Search for `cudaErrorAssert' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+```
+
+### Environment Information
+
+transformers==4.57.3
+torch=='2.12.0+cu130'
+flash_attn==2.8.4
+
+Tested with A100 GPU.
+
+### Known Issue
+
+- [ ] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by github-actions[bot] (NONE) 2026-07-29T09:03:33Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.

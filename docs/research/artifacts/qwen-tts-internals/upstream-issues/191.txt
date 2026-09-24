@@ -1,0 +1,59 @@
+#191 [open] Add compile_codec option for 3-4x faster batch decoding
+URL https://github.com/QwenLM/Qwen3-TTS/pull/191
+created 2026-02-07T08:45:20Z by Finrandojin
+
+## Summary
+
+- Add `compile_codec` parameter to `Qwen3TTSModel.from_pretrained()` that applies `torch.compile(mode="max-autotune", dynamic=True)` to the speech tokenizer codec decoder
+- Add `_compile_codec()` instance method for post-construction compilation
+- Document the optimization in a new "Performance Tips" README section
+
+## Motivation
+
+The codec decoder contains 136+ attention modules whose Python dispatch overhead dominates waveform decoding time. Profiling shows:
+
+| Component | CPU time | CUDA time |
+|-----------|----------|-----------|
+| Codec decoder (single gen) | 9.8s | 3.5s |
+| Share of total batch time | — | ~85% |
+
+Applying `torch.compile` eliminates this overhead:
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Single generation | ~14s | ~9s |
+| Batch=12 throughput | 1.3x real-time | 4.3x real-time |
+
+Tested on AMD RX 7900 XTX (ROCm 6.3) and the optimization is hardware-agnostic — `torch.compile` with `dynamic=True` works on NVIDIA, AMD, and CPU backends.
+
+## API
+
+```python
+# Opt-in via from_pretrained (default: no compilation, fully backward-compatible)
+model = Qwen3TTSModel.from_pretrained(
+    "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
+    device_map="cuda:0",
+    dtype=torch.bfloat16,
+    compile_codec=True,  # or "max-autotune", "reduce-overhead", "default"
+)
+
+# Or compile after construction
+model._compile_codec()
+```
+
+## Trade-offs
+
+- First call incurs ~30-60s warmup (one-time compilation cost)
+- Recommended for batch/repeated generation (audiobooks, datasets), not single one-off calls
+- No behavior change when `compile_codec=False` (default)
+
+## Test plan
+
+- [x] Verify `compile_codec=False` produces identical results to current behavior
+- [x] Verify `compile_codec=True` compiles codec and generation works correctly
+- [x] Verify `compile_codec="max-autotune"` string mode works
+- [x] End-to-end batch generation benchmarks showing 3-4x improvement
+- [x] Tested with CustomVoice model (`generate_custom_voice`)
+
+--- comment by Iamgoofball (NONE) 2026-03-08T03:32:14Z
+Set this up locally on top of that Faster Qwen3-TTS fork that's using CUDAGraphs and I'm getting massive speedups with no change in generation quality. PR works 👍 

@@ -1,0 +1,81 @@
+#16 [closed] The generated audio has unwanted laughter, or text that is not present in the text.
+URL https://github.com/QwenLM/Qwen3-TTS/issues/16
+created 2026-01-23T09:24:28Z by onlytiancai
+
+### Description
+
+I'm generating voice for a piece of text, but the generated voice has unnecessary laughter and text in it.
+
+<img width="3794" height="1192" alt="Image" src="https://github.com/user-attachments/assets/521896f2-7489-4355-af38-1b8a7c95a2b5" />
+
+### Reproduction
+
+I use this command
+
+```
+qwen-tts-demo --device mps --no-flash-attn /Volumes/data/modelscope_models/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice --ip 0.0.0.0 --port 8000
+```
+
+
+
+### Logs
+
+```shell
+% qwen-tts-demo --device mps --no-flash-attn /Volumes/data/modelscope_models/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice --ip 0.0.0.0 --port 8000
+
+********
+Warning: flash-attn is not installed. Will only run the manual PyTorch version. Please install flash-attn for faster inference.
+********
+
+/Users/huhao/.pyenv/versions/qwen3-tts/lib/python3.12/site-packages/qwen_tts/cli/demo.py:277: UserWarning: The parameters have been moved from the Blocks constructor to the launch() method in Gradio 6.0: theme, css. Please pass these parameters to launch() instead.
+  with gr.Blocks(theme=theme, css=css) as demo:
+* Running on local URL:  http://0.0.0.0:8000
+* To create a public link, set `share=True` in `launch()`.
+Setting `pad_token_id` to `eos_token_id`:2150 for open-end generation.
+^@/Users/huhao/.pyenv/versions/qwen3-tts/lib/python3.12/site-packages/gradio/processing_utils.py:689: UserWarning: Trying to convert audio automatically from float32 to 16-bit int format.
+  warnings.warn(warning.format(data.dtype))
+^@Setting `pad_token_id` to `eos_token_id`:2150 for open-end generation.
+/Users/huhao/.pyenv/versions/qwen3-tts/lib/python3.12/site-packages/gradio/processing_utils.py:689: UserWarning: Trying to convert audio automatically from float32 to 16-bit int format.
+  warnings.warn(warning.format(data.dtype))
+```
+
+### Environment Information
+
+- M4 Mac mini 
+- python3.12
+
+### Known Issue
+
+- [x] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by wangxiongts (COLLABORATOR) 2026-01-23T10:09:04Z
+Due to the high expressiveness of our model and your instruct "very happy," the model simulates natural human speech behavior by incorporating laughter. If you prefer the model not to generate laughter, you can try refining the instruction to something like "very happy but without laughing." Thanks to the model's strong generalization capability, it may be able to follow such nuanced and complex instruct.
+
+--- comment by onlytiancai (NONE) 2026-01-26T01:05:45Z
+<img width="2326" height="1218" alt="Image" src="https://github.com/user-attachments/assets/0818701e-5a79-4f12-b72e-1358c36740b2" />
+this case comes from QWen blog https://qwen.ai/blog?id=qwen3tts-0115, but I can't get she same result.
+
+What can I do to get audio that reads as standard as a newscaster? Just a simple standard read-aloud like edge-tts do.
+
+thanks.
+
+--- comment by wangxiongts (COLLABORATOR) 2026-01-26T03:21:54Z
+Maybe you could try other speakers? The speaker "Ryan" is inherently expressive, non-broadcast in style, and carries rich paralinguistic information in timbre. We also strongly recommend trying the base model for voice cloning—clone audio with the desired style (can be synthesized by other systems) and then generate continuously.
+
+--- comment by icemagno (NONE) 2026-01-26T12:50:07Z
+I'm stuck on creating onomatopoeia. Like "Uh, HMMMM, outch!, smack (the kiss sound), tsc (upset tongue sound)" , sighs and moans (uh.. just out of curiosity) 
+
+--- comment by onlytiancai (NONE) 2026-01-27T01:07:23Z
+I told it to read the text aloud in the tone of a newscast, no laughter or other inflections, but it doesn't seem to work, it still says “OK” before reading the text aloud.
+
+<img width="3082" height="1074" alt="Image" src="https://github.com/user-attachments/assets/b20beaf6-36ed-44aa-ad0c-0dd14dbc366b" />
+
+
+
+--- comment by onlytiancai (NONE) 2026-01-28T00:50:38Z
+> Maybe you could try other speakers? The speaker "Ryan" is inherently expressive, non-broadcast in style, and carries rich paralinguistic information in timbre. We also strongly recommend trying the base model for voice cloning—clone audio with the desired style (can be synthesized by other systems) and then generate continuously.
+
+Thanks @wangxiongts , will try it.
+
+--- comment by github-actions[bot] (NONE) 2026-03-14T08:14:40Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.

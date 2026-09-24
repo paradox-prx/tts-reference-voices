@@ -1,0 +1,61 @@
+#341 [open] Voice-clone (ICL) generation echoes the tail of the reference audio before the requested text
+URL https://github.com/QwenLM/Qwen3-TTS/issues/341
+created 2026-07-09T06:12:17Z by karlanghas
+
+## Voice-clone (ICL) generation echoes the tail of the reference audio before the requested text
+
+**Model:** `Qwen/Qwen3-TTS-12Hz-1.7B-Base`
+**Path:** `Qwen3TTSModel.create_voice_clone_prompt(..., x_vector_only_mode=False)` → `Qwen3TTSModel.generate_voice_clone(...)` (ICL mode)
+**Environment:** PyTorch 2.7.1+cu126, CUDA (Tesla P40, fp32 — no native bf16), transformers 4.57.3, Linux, `qwen_tts` installed from `git+https://github.com/QwenLM/Qwen3-TTS.git`
+
+### Symptom
+
+With a cloned voice profile (reference audio + `ref_text`, ICL mode), the first ~1–2 seconds of the *generated* audio audibly repeats the last few words of the *reference* recording's transcript before moving on to the requested text — even though the requested text has nothing to do with those words.
+
+Example:
+- `ref_text` ends with `"...y los servicios de Instagram y de Facebook que vamos a montar"`
+- Requested `text`: `"Buenos días, hoy vamos a revisar el reporte semanal del equipo."`
+- Whisper transcript of the generated output: **`"que vamos a montar buenos días, hoy vamos a revisar el reporte semanal del equipo."`**
+
+The leaked prefix is always an exact (or near-exact) suffix of `ref_text`, confirmed across multiple reference recordings and requested texts, in Spanish. Leak duration is not fixed — it varied from ~1.0s to ~1.9s+ across otherwise-identical calls with different requested-text lengths against the same reference.
+
+### What it's *not*
+
+I initially assumed this was a slicing bug in the reference/generated boundary computed in `generate_voice_clone`:
+
+```python
+codes_for_decode = torch.cat([ref_code, codes], dim=0)
+wavs_all, fs = self.model.speech_tokenizer.decode([{"audio_codes": c} for c in codes_for_decode])
+...
+cut = int(ref_len / max(total_len, 1) * wav.shape[0])
+wavs_out.append(wav[cut:])
+```
+
+I instrumented this directly (bypassing the public method) and confirmed the `cut` computed this way is **exact**: it matches, to zero samples, the length of `ref_code` decoded standalone via `speech_tokenizer.decode([{"audio_codes": ref_code}])`. Verified with two different requested-text lengths against the same reference (`ref_code` shape `(353, 16)`, 24kHz, 1920 samples/frame exactly both times). So this is not a proportional/rounding error in the trim math.
+
+### Reproduction attempts that did *not* fix it
+
+All tested against the same reference + requested text, via the public `generate_voice_clone(text=..., voice_clone_prompt=voice_prompt_items, language="Spanish", instruct=None, **kwargs)` API (`voice_prompt_items` from `create_voice_clone_prompt`):
+
+1. **`repetition_penalty`** 1.05 (default) → 1.2 → 1.4, 3 trials each: leaked in **9/9**.
+2. **`do_sample=False`** (greedy, main talker only), 3 trials: leaked in **3/3** — identical wording each time, as expected for greedy, but still leaked.
+3. **`do_sample=False, subtalker_dosample=False`** (fully deterministic, both talker and subtalker): generation became degenerate — didn't terminate within several minutes (presumably hit `max_new_tokens=8192` without an EOS), not viable regardless of whether it would have fixed the leak.
+
+Default `generate_config` observed: `{'do_sample': True, 'repetition_penalty': 1.05, 'temperature': 0.9, 'top_p': 1.0, 'top_k': 50, 'subtalker_dosample': True, 'subtalker_temperature': 0.9, 'subtalker_top_p': 1.0, 'subtalker_top_k': 50, 'max_new_tokens': 8192}`.
+
+### Hypothesis
+
+This looks like a generation-quality issue specific to ICL conditioning: right after the `<|im_end|>` boundary between the reference continuation and the new text, the model has some probability of continuing to "coast" on the reference content for a few tokens before locking onto the new text — and the *default* sampling settings don't reliably prevent it. Given (2) and (3) above, this doesn't look fixable by adjusting `repetition_penalty`/`temperature` alone, and full determinism isn't practical (degenerate generation).
+
+### What we're doing in the meantime
+
+We added a downstream mitigation in our own project (VoiceBox): transcribe the leading edge of the generated audio with word-level timestamps and trim anything that matches the tail of `ref_text`. It works, but it's a band-aid — happy to share the implementation if useful, but the real fix belongs in the ICL generation/conditioning itself.
+
+Is this a known issue? Is there a recommended way to suppress it (e.g. inserting a stronger separator, a minimum "settle" token count, or a different template for the ICL boundary) that doesn't require full greedy decoding?
+
+---
+*Investigation and this report by Claude (Anthropic), working with @karlanghas.*
+
+
+--- comment by KiwiGen17 (NONE) 2026-08-20T02:08:55Z
+Had the same issue. Was working with 6 different character voices and only one was doing it, and doing it about 50% of the time. I removed the tail phrase of the reference audio that was causing the issue and it stopped doing it. I don't know what it was about this particular tail, but removing it seems to have fixed it.

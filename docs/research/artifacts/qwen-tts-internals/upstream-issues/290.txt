@@ -1,0 +1,45 @@
+#290 [closed] Speaking Rate Ignored in Clone.  It is Always Faster than Cloned Voice and Time Compressed
+URL https://github.com/QwenLM/Qwen3-TTS/issues/290
+created 2026-04-08T16:31:32Z by MrEdwards007
+
+### Description
+
+I am using a reference audio, cloned voice and the output for what should be approximately one minute of output is **ALWAYS** 41-48 seconds.  I have tried a multitude of modifications based on the available parameters, including temperature, subtalker temperature, do_sample and subtalker_dosample.  None of these parameters appear to have an effect on speaking rate.
+
+Something that I did as a test was to **change the  input reference to 20% _slower_** (using Audacity or other program), making the audio reference significantly slower than the original.  Yet, the one minute of text outcome was still time compressed to  41-48 seconds and as you get closer to the end, pausing and stopping for punctuation is almost always greatly compressed.  
+
+The speaker pacing is not respected and I cant find a parameter that will help with that.  The cloned voice sounds like the original but accelerated, where periods sound like commas and commas effectively vanish by the time you get close to the one minute mark.  
+
+1. I lowered the input reference tempo to **20% slower** than normal (using Audacity and others program), so it was pretty slow but the output was still the same speed and length, though the input speaking rate was much slower.
+2. I thought that maybe it was either related to the maximum new tokens, changing it from 2048 to 4096 but that didnt resolve the issue.
+3. I also though that maybe 1 minute of continuous text may have been too much, even with a token buffer of 4096, so I shortened the output to approximately 30 seconds but the speaking rate was still accelerated.
+
+<img width="832" height="958" alt="Image" src="https://github.com/user-attachments/assets/1ca785d2-17de-4847-8a47-39f4b72fb2a3" />
+
+### Reproduction
+
+Utilize different reference text and have it speak a minute worth of text
+
+### Logs
+
+```shell
+
+```
+
+### Environment Information
+
+Linux 22.04
+
+
+### Known Issue
+
+- [x] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by github-actions[bot] (NONE) 2026-05-24T09:00:33Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.
+
+--- comment by MrEdwards007 (NONE) 2026-05-29T22:33:54Z
+yes, this issue remains.  Even providing a slowed speaker version as input, still renders at an accelerated rate, not matching the prosody of the input.
+
+--- comment by github-actions[bot] (NONE) 2026-07-15T08:53:25Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.

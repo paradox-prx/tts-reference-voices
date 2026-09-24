@@ -1,0 +1,110 @@
+#80 [closed] Base model voice clone sometimes change speaker
+URL https://github.com/QwenLM/Qwen3-TTS/issues/80
+created 2026-01-25T20:52:14Z by saifulislam79
+
+### Description
+
+I have used reference prompt on based  model inference but sometime it taken random speaker. Could you suggest me what is the issue. 
+suppose i used my voice but sometimes it not generate my voice.
+
+This issue found on base model voice clone approach.
+
+### Reproduction
+
+N/A
+
+### Logs
+
+```shell
+N/A
+```
+
+### Environment Information
+
+N/A
+
+### Known Issue
+
+- [ ] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by samhaswon (NONE) 2026-01-27T17:13:15Z
+I've run into the same issue on rare occasions using `Qwen/Qwen3-TTS-12Hz-1.7B-Base`. What I've found that seems to work around it is just regenerating the audio.
+
+--- comment by YanTianlong-01 (NONE) 2026-02-14T02:39:06Z
+Same issue happened when using a reference audio with language not math to the TTS output language.
+
+--- comment by github-actions[bot] (NONE) 2026-03-31T08:33:49Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.
+
+--- comment by YanTianlong-01 (NONE) 2026-03-31T08:37:52Z
+If the reference audio is in English, this problem can be alleviated.
+
+--- comment by jstangroome (NONE) 2026-04-09T01:21:29Z
+>What I've found that seems to work around it is just regenerating the audio.
+
+Regenerating the audio is unsuitable in real-time streaming usage due to [a] the latency impact of discarding generated audio and retrying and [b] the difficulty of automatically detecting that the voice is incorrect.
+
+>If the reference audio is in English, this problem can be alleviated.
+
+This issue occurs for me in an all English setting.
+
+However, the issue seemingly depends on some aspect of the reference audio, for example I have tried the following against Qwen3-TTS-12Hz-1.7B-Base hosted with vllm-omni mainline on an NVidia H100, and the output will not used the reference audio voice for part or all of the output at least twice in 10 attempts:
+
+```sh
+ref_text='I would like to buy an ice cream on Tuesday'
+ref_audio=$(
+  base64 -w0 ./ref_audio.wav
+)
+
+printf '{
+    "model": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+    "input": "Okay, so you want me to be Joseph,",
+    "response_format": "pcm",
+    "stream": true,
+    "ref_audio": "data:audio/wav;base64,%s",
+    "ref_text": "%s",
+    "language": "English",
+    "task_type": "Base"
+}' "$ref_audio" "$ref_text" >.curl.in
+
+curl https://my-vllm-omni.example.com/v1/audio/speech \
+  -H "Content-Type: application/json" \
+  --data @.curl.in \
+  --output .curl.out
+
+aplay -f S16_LE -r 24000 .curl.out
+```
+
+Attempting with an alternate reference audio, I have not yet been able to reproduce the issue.
+
+--- comment by github-actions[bot] (NONE) 2026-05-24T09:00:43Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.
+
+--- comment by jstangroome (NONE) 2026-06-01T23:34:51Z
+I have now used three more reference audio samples, all English language, and will often experience output audio that significantly diverges from the reference for all or some (typically several leading words) for approximately 20% of requests.
+
+I may be able to provide the reference audio samples privately for analysis/reproduction if that would help diagnosis.
+
+At this point I'm not sure if there is a model issue or a reference audio issue.
+
+The reference audio is all 24kHz 16-bit mono linear PCM WAV, typically between 4 and 20 seconds duration. The reference audio transcription used includes:
+
+- "'I would like to buy an ice cream on Tuesday"
+- "Sydney frequently ranks in the top ten of lists of the most livable cities in the world"
+- "Please call Stella.  Ask her to bring these things with her from the store:  Six spoons of fresh snow peas, five thick slabs of blue cheese, and maybe a snack for her brother Bob.  We also need a small plastic snake and a big toy frog for the kids.  She can scoop these things into three red bags, and we will go meet her Wednesday at the train station."
+
+--- comment by ukemamaster (NONE) 2026-06-15T16:01:53Z
+I hit the same issue with Spanish language. both the reference and output audios are in Spanish, yet the model will sometimes output a different gender voice (male instead of female in this case). 
+@jstangroome Any updtaes?
+
+--- comment by jstangroome (NONE) 2026-06-17T23:34:25Z
+@ukemamaster I have had not been able to identify or correct the issues I've been having with the zero-shot voice cloning.
+Instead I have decided to fine tune the model instead and that seems to be working better at the moment.
+
+I found issue #179 had helpful discussion for getting the fine tuning to work well.
+
+--- comment by github-actions[bot] (NONE) 2026-08-02T08:53:02Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.
+
+--- comment by Sumidu (NONE) 2026-09-07T13:25:26Z
+Same problem happens in German. Frequently when I have direct speech in the clips I generate. I think especially when it starts with quotation marks it picks whether to have the given voice simulate direct speech or sometimes just uses a different voice.

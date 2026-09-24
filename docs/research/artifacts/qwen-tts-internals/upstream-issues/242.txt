@@ -1,0 +1,50 @@
+#242 [closed] Memory leak (runaway) after multiple generations
+URL https://github.com/QwenLM/Qwen3-TTS/issues/242
+created 2026-03-01T01:06:27Z by StructuralWizard
+
+### Description
+
+When trying to generate multiple texts one after the other, the model gets corrupted and starts eating VRAM. I tried to flush the gpu ram and reload the model using the colab example attached and it didn't work. 
+
+
+### Reproduction
+
+[colab_generate_from_saved (1).ipynb](https://github.com/user-attachments/files/25646804/colab_generate_from_saved.1.ipynb)
+
+### Logs
+
+```shell
+included in the notebook.
+```
+
+### Environment Information
+
+RTX 2060, L4, T4, A100
+python 10 and python 13
+
+### Known Issue
+
+- [x] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by gambikules (NONE) 2026-03-05T18:57:20Z
+Yeah same here  3060 12gb 
+For me after 2-3 generations.
+
+--- comment by github-actions[bot] (NONE) 2026-04-20T08:55:58Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.
+
+--- comment by bacca87 (NONE) 2026-07-07T09:35:40Z
+I’m experiencing the same issue described here.
+
+As a temporary workaround, I tried setting:
+
+```python
+os.environ.setdefault(
+    "PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True"
+)
+```
+
+This seems to slow down the memory leak, but it does not actually solve it. The GPU memory is still increasing over time; it is just allocated more slowly.
+
+I hope this additional information helps with debugging the issue.
+

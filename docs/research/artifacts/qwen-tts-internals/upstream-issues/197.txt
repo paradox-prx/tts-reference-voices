@@ -1,0 +1,44 @@
+#197 [closed] 如何实现并发推理？
+URL https://github.com/QwenLM/Qwen3-TTS/issues/197
+created 2026-02-10T05:37:49Z by maxin9966
+
+### Description
+
+现在这个qwen3-tts-1.7b，仅支持单并发？现在用这个vllm-omni推理慢到无法忍受，单个请求就非常慢（慢的不正常），而且似乎不支持并发？
+
+vllm-omni部署参考的：https://github.com/vllm-project/vllm-omni/tree/main/examples/online_serving/qwen3_tts
+
+50系显卡推理过程中功耗仅30W不到
+
+### Reproduction
+
+vllm-omni serve "$MODEL"
+--stage-configs-path vllm_omni/model_executor/stage_configs/qwen3_tts.yaml
+--host 0.0.0.0
+--port 8000
+--gpu-memory-utilization 0.9
+--trust-remote-code
+--enforce-eager
+--omni
+
+### Logs
+
+```shell
+
+```
+
+### Environment Information
+
+50系消费级显卡
+
+### Known Issue
+
+- [ ] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by hwk06023 (NONE) 2026-02-10T06:19:39Z
+It seems vLLM-Omni integration is still a work in progress.
+
+Please check this [link](https://github.com/vllm-project/vllm-omni/tree/59024bee62df5ff8660d59fe27f87445f36d4d41/vllm_omni/model_executor/models/qwen3_omni)
+
+--- comment by github-actions[bot] (NONE) 2026-03-27T08:23:57Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.

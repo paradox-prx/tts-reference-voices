@@ -1,0 +1,22 @@
+# environments and downloads (re-creatable; large)
+venvs/
+wheels-extra/
+ops/upstream/
+*.whl
+*.part
+# generated audio and run output (AI-generated audio: never publish)
+results/
+*.wav
+*.flac
+*.mp3
+*.opus
+logs/
+state/
+# secrets
+.env
+*.env
+!deploy/env.example
+# python
+__pycache__/
+*.pyc
+.pytest_cache/

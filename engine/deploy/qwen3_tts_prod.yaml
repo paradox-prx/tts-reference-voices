@@ -1,0 +1,176 @@
+# qwen3-tts-server production deploy for Qwen/Qwen3-TTS-12Hz-1.7B-Base on ONE RTX 3090.
+#
+# A FULL copy of vllm_omni 0.28.0 deploy/qwen3_tts.yaml (sha256 02892b13...5632d). It is not a `base_config`
+# overlay because 0.28 replaces the `connectors:` block wholesale in overlays (config/stage_config.py
+# resolve_deploy_yaml, L689-700). Changes from upstream, everything else kept as shipped:
+#   * stage 0 gpu_memory_utilization 0.3 -> 0.45, stage 1 0.3 -> 0.18 (arithmetic below)
+#   * stage 0 enforce_eager: false written out (upstream leaves it unset; same value, CUDA graphs on)
+#   * comments: the stage-0 max_num_batched_tokens note (upstream says 512, the 0.28 value is 32768)
+#
+# Placement: `devices: "0"` is a LOGICAL index into CUDA_VISIBLE_DEVICES (entrypoints/stage_utils.py
+# set_stage_devices), and engine/run_engine.sh exports CUDA_VISIBLE_DEVICES=1, so both stages land on physical GPU 1.
+#
+# Memory arithmetic (per stage process; vllm_omni worker/base.py determine_available_memory):
+#   budget = total * gpu_memory_utilization, total ~= 23.6 GiB (cudaMemGetInfo of a 24576 MiB 3090);
+#   capped to the free memory at startup with a warning (worker/memory_utils.py), never an error.
+#   KV cache = budget - this process's own NVML usage after the profiling run.
+#   GPU 1 already carries ~4.4 GiB (4505 MiB) of another tenant  -> ~19.2 GiB free.
+#   stage 0 (talker + code predictor + speaker/codec encoders), 0.45 * 23.6 = 10.6 GiB:
+#     CUDA context + libraries ~0.6, weights ~3.8 (model.safetensors 3.6 GiB bf16 + bf16 codec encoder),
+#     profiling peak at max_num_batched_tokens=32768 ~1.3  ->  KV ~4.9 GiB.
+#     KV per token = 28 layers * 8 KV heads * 128 * 2 (K,V) * 2 B = 112 KiB  ->  ~45k tokens
+#     = 64 requests * ~700 tokens (ICL prompt ~400 for a 25 s reference + text, ~250 frames = 20 s of audio).
+#   stage 1 (Code2Wav decoder, no attention KV), 0.18 * 23.6 = 4.25 GiB:
+#     context ~0.5, fp32 decoder ~0.45, decode activations + CUDA graphs + per-stream stateful decoder caches ~2-3.
+#   total ~14.9 GiB of budgets + ~0.5 GiB of CUDA graphs captured after sizing -> ~15.4 GiB, plus the tenant
+#   ~19.8 of 24 GiB: ~4 GiB stays free for the tenant to grow and for fragmentation.
+#
+# vllm-omni 0.30.0rc1 reads this file too: `model_runner` is absent so it runs the V1 runner (0.30 upstream
+# defaults to the experimental MRV2), and Code2Wav follows the stage dtype (auto -> bf16) instead of 0.28's
+# forced fp32. See engine/make_variant.py --model-runner / --code2wav-dtype.
+#
+# Qwen3-TTS deploy: talker → code2wav via shared-memory chunk streaming.
+# Verified on 1x H100.
+#
+# Fields omitted from a stage fall back to StageDeployConfig defaults (see
+# vllm_omni/config/stage_config.py). Notable choices for this model:
+#   * Stage 0 (talker) sets max_num_batched_tokens=32768 in 0.28 (upstream's
+#     comment said 512; 0.30 lowered it to 512 for async-chunk first-chunk
+#     latency, validated with its MRV2 profiles).
+#   * Stage 1 (code2wav) sets max_num_batched_tokens=65536 for correctness:
+#     codec prefill length (Q * num_frames) exceeds the 32k default.
+#   * Stage 0 runs CUDA graphs (enforce_eager: false).
+#     Stage 1 defaults to false so Code2Wav can use its inner cudagraph;
+#     set true to disable that path in eager mode.
+# The CLI flag --async-chunk / --no-async-chunk overrides this key (config/config_factory.py L456-458).
+async_chunk: true
+
+connectors:
+  connector_of_shared_memory:
+    name: SharedMemoryConnector
+    extra:
+      codec_streaming: true
+      connector_get_sleep_s: 0.01
+      connector_get_max_wait_first_chunk: 3000
+      connector_get_max_wait: 300
+      # Must match the decoder sliding attention window.
+      codec_chunk_frames: 25
+      codec_left_context_frames: 72
+      # Emit only the first audio chunk early, then return to codec_chunk_frames.
+      initial_codec_chunk_frames: 1
+      # Chunk ramp (opt-in): gradual size increase for first N chunks to
+      # eliminate the IC→steady cliff (1→25). Uncomment to enable.
+      # Each entry is the size of that chunk index; indices past the table
+      # fall back to codec_chunk_frames. When enabled, ramp overrides
+      # initial_codec_chunk_frames (including the per-request API field).
+      # Example:
+      #   codec_chunk_ramp: [4, 4, 8, 16, 25]
+      # Adaptive chunk ramp (opt-in, takes precedence over fixed codec_chunk_ramp):
+      # Chunk 0 uses dynamic IC; chunk 1+ sizes from live buffer-depth feedback.
+      # Self-tunes across hardware (NPU/NVIDIA) and load conditions.
+      # codec_chunk_adaptive: true
+      # codec_chunk_min_frames: 2
+      # Code2Wav decode + transfer margin
+      # codec_chunk_safety_margin_ms: 50
+      # EWMA->delta divisor (delta=max(delta_min, int(ewma/divisor))); higher=gentler ramp
+      # codec_chunk_ramp_divisor: 15
+      # min chunk-size growth per emit
+      # codec_chunk_ramp_delta_min: 2
+      # Decoder CUDA Graph sizing:
+      #   * async_chunk=true derives all stateful ICL/xvec shapes from
+      #     codec_chunk_ramp when enabled, otherwise from
+      #     initial_codec_chunk_frames, codec_chunk_frames, and sliding_window;
+      #     decode_cudagraph_capture_sizes is ignored in this mode.
+      #   * async_chunk=false captures stateless shapes 150 and
+      #     decode_chunk_frames + decode_left_context_frames (325 by default).
+      #     Extra stateless shapes may be added (union, not intersection) with:
+      #       decode_cudagraph_capture_sizes: [97, 400]
+      # Graph batch size defaults to 1. Add larger buckets only when needed:
+      #   decode_cudagraph_batch_sizes: [1, 2, 4]
+      # Limit eager batches to reduce temporary stateful cache allocations; CUDA Graph batching uses the buckets above.
+      decode_batch_max_size: 4
+
+stages:
+  - stage_id: 0
+    max_num_seqs: 64
+    # 0.45 of the card: see the arithmetic at the top.
+    gpu_memory_utilization: 0.45
+    trust_remote_code: true
+    # Prefix caching on by default. The HS opt-out (talker only consumes the
+    # last token's hidden state) and deferred mm-output writes added in this
+    # PR make per-step bookkeeping negligible, and any text repetition across
+    # requests (same voice or shared ref_audio) is a net throughput win.
+    # Disable explicitly if memory headroom is tight on a single-GPU deploy.
+    enable_prefix_caching: false
+    async_scheduling: true
+    max_num_batched_tokens: 32768
+    max_model_len: 4096
+    # CUDA graphs for the talker and the code predictor (upstream leaves this unset: same default).
+    enforce_eager: false
+    devices: "0"
+    output_connectors:
+      to_stage_1: connector_of_shared_memory
+    # Talker (codebook 0) sampling defaults = the checkpoint's generation_config.json. Per request, extra_params
+    # {temperature, top_p, top_k} override them; repetition_penalty needs engine/patches (apply_patches.py).
+    default_sampling_params:
+      temperature: 0.9
+      top_k: 50
+      max_tokens: 4096
+      # Official qwen-tts generates the talker with min_new_tokens=2; without
+      # it, checkpoints that sample codec EOS on the first frame return empty
+      # audio (HTTP 400). See #4962.
+      min_tokens: 2
+      repetition_penalty: 1.05
+    # Suppress codebook-0 silence tokens for the first N decode frames of a
+    # request (#4966). Applies to every request on this stage, so intended
+    # for x-vector-only (Base voice-clone) deploys. 0 = off.
+    silence_ban_frames: 0
+    subtalker_sampling_params:
+      do_sample: true
+      temperature: 0.9
+      top_k: 50
+      top_p: 1.0
+
+  - stage_id: 1
+    # Tuned for Base voice clone; CustomVoice / VoiceDesign are TTFA-optimal at 1.
+    max_num_seqs: 64
+    # 0.18 of the card: see the arithmetic at the top.
+    gpu_memory_utilization: 0.18
+    enforce_eager: false
+    trust_remote_code: true
+    enable_prefix_caching: false
+    async_scheduling: true
+    # Must be divisible by num_code_groups and cover (left_context + chunk).
+    # Prefill length is Q * num_frames (e.g. 16 * 2148 = 34368); keep
+    # headroom past 32k.
+    max_num_batched_tokens: 65536
+    # async_chunk appends windows per step; max_model_len must cover the
+    # accumulated flat codec stream.
+    max_model_len: 65536
+    devices: "0"
+    input_connectors:
+      from_stage_0: connector_of_shared_memory
+    default_sampling_params:
+      temperature: 0.0
+      top_p: 1.0
+      top_k: -1
+      max_tokens: 65536
+      repetition_penalty: 1.0
+
+platforms:
+  rocm:
+    stages:
+      - stage_id: 1
+        # MIOpen Conv1d cannot be invoked while vLLM captures the outer
+        # Code2Wav model graph. Keep CUDA's graph-enabled default, but run
+        # Stage 1 eager on ROCm so decoder convolutions execute normally.
+        enforce_eager: true
+  npu:
+    stages:
+      - stage_id: 0
+        enforce_eager: false
+        compilation_config:
+          cudagraph_mode: PIECEWISE
+      - stage_id: 1
+        compilation_config:
+          cudagraph_mode: PIECEWISE
