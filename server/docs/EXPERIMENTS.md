@@ -137,3 +137,34 @@ per engine); that single straggler (65 s / 76 s end to end) set the run's wall t
 0.1-0.4 s instead of the whole generation, and 3.5-4.5 GB less VRAM (async off pushed the card to 23.2 of 24 GB,
 which leaves the desktop almost nothing). The older reports that async off is 15-70% faster (#4371, vLLM-Omni
 0.20-0.22) predate 0.27's cached incremental decode. Keep async_chunk on; drop no_async_chunk from further screening.
+
+### E04: do the knobs we benchmark actually change behaviour? `results/04_knob_verification/`
+Engine: `engine/deploy/variants/custom_voices.yaml` (prod YAML + `custom_voice_dir: state/custom_voices`), with the
+per-request repetition-penalty patch applied. Startup log: "Loaded 4 precomputed Qwen3-TTS custom voice profile(s)"
+(`trump-avg`, `trump-prompt`, `shehbaz-avg`, `shehbaz-prompt`; `engine/precompute_voices.py`: ICL reference codes of
+`references/qwen3-tts.wav`; `-avg` = mean of the per-clip x-vectors rescaled to the mean clip norm, `-prompt` = the
+reference clip's own x-vector; cosine(avg, prompt) 0.995 shehbaz, 0.997 trump).
+
+**Seeds do not reproduce on 0.28 (CUDA graphs on), even one request at a time.** The same request with `seed: 1234`
+twice gave different audio (trump 67 vs 62 codec frames; shehbaz 109 vs 93). So hash-equality checks are useless,
+takes cannot be paired by seed across settings, and every experiment uses unseeded independent takes (seeds would
+also serialize the code predictor inside a batch and disable the engine's retry). Paired analyses pair by prompt.
+
+Knob checks (a: 18 single requests, `results.json`; b: validation + 8 takes per setting, `b_validation_and_effects/`):
+
+| field | evidence it is read | verdict |
+|---|---|---|
+| `extra_params.repetition_penalty` | -1 → 400 "must be a finite number > 0" (our patch) | read (patched engine) |
+| top-level `repetition_penalty` | -1 → 200 | silently ignored |
+| `extra_params.temperature` | -1 → 400 "temperature must be non-negative" | read |
+| top-level `temperature` | -1 → 200 | silently ignored |
+| `extra_params.top_k` | 0 → 200 (vLLM: 0 = no top-k) | read (0 is legal) |
+| `language` | "Urdu" → 400 "Invalid language" | read |
+| `non_streaming_mode` | "x" → 400; source: serving_speech.py:2577-2579 → prompt_embeds_builder.py:952-963, 896 (Base default False) | read |
+| `voice` = custom voice | unknown name → 400; `trump-avg` / `shehbaz-avg` → 200 | read |
+| `max_new_tokens` | 40 → HTTP 500 "did not emit codec EOS before its token budget (40/40)" | read |
+
+Mean audio duration over 8 takes (trump, one 18-word sentence): default 5.19 s (sd 0.21), rp 3.0 4.89 (0.19),
+temperature 0.05 5.25 (0.30), temperature 1.5 4.98 (0.37), non_streaming_mode true 4.99 (0.47), language Auto 5.13
+(0.17). Duration barely moves, so the effect of these knobs is measured with ASR / speaker similarity (quality eval),
+not with duration.
