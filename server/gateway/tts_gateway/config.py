@@ -45,6 +45,10 @@ class Settings(BaseSettings):
 
     retry_max: int = Field(1, ge=0, le=5)
     retry_on: NameSet = RETRY_REASONS
+    # split texts longer than this many words at sentence ends into parts (0 = never); the parts of a non-streaming
+    # request run in parallel on free engine slots and are joined with a short pause (long Urdu takes run away or
+    # skip text: docs/EXPERIMENTS.md, P2)
+    split_words: int = Field(0, ge=0)
     length_cap: bool = True  # send max_new_tokens: min(words formula, pace cap), see textproc.pace_cap
     length_cap_headroom: float = Field(1.2, ge=1.0)  # pace cap = headroom x suspect band's upper edge x expected
     # a take is suspect when its seconds per letter fall outside this multiple of the voice's expected pace

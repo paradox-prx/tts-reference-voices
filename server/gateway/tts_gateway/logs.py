@@ -85,6 +85,7 @@ class RequestLog:
     qc: str | None = None  # QC sidecar verdict on the delivered take: pass / fail / error (None: not checked)
     qc_reasons: list[str] | None = None
     qc_ms: float | None = None  # QC time over all takes
+    parts: int = 1  # the text was split into this many parts (TTS_SPLIT_WORDS)
     error: str | None = None
     started: float = field(default_factory=time.perf_counter, repr=False)
 

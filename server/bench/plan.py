@@ -264,6 +264,15 @@ PHASES += [
                       "non_streaming_mode=true", "--timeout", QUALITY_TIMEOUT, tag="nsm_true"),
                direct("--voice", "trump", "--size", "xxlong", "-n", "43", "-c", "16", "--param",
                       "non_streaming_mode=true", "--timeout", QUALITY_TIMEOUT, tag="nsm_true")]},
+    *[{"name": f"X7_split_{label}", "engine": engine(), "kind": "quality",
+       "gateway": GW_PERF | {"TTS_RETRY_MAX": "0", "TTS_SPLIT_WORDS": words},
+       "checks": [gateway_headers_check(f"split_{label}", {"x-tts-retries": ["0"]})],
+       "note": f"gateway sentence splitting {label} (TTS_SPLIT_WORDS={words}; parts run in parallel on free slots), "
+               "retries 0: shehbaz + trump xxlong (~200 words), 43 texts each, c=8 -- failure rate, skips and latency "
+               "of long texts with and without splitting (P2: 31/68 unsplit shehbaz xxlong takes hit the cap)",
+       "bench": [via_gateway("--voice", v, "--size", "xxlong", "-n", "43", "-c", "8", "--timeout", QUALITY_TIMEOUT,
+                             tag=f"split_{label}") for v in ("shehbaz", "trump")]}
+      for label, words in (("off", "0"), ("60", "60"))],
     {"name": "X2_language", "engine": engine(), "kind": "quality",
      "checks": [{"name": "language", "via": "engine", "voice": "trump", "fails": {"urdu": {"language": "Urdu"}},
                  "succeeds": {"auto": {"language": "Auto"}}}],

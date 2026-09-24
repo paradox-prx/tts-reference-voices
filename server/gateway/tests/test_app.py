@@ -189,7 +189,7 @@ async def test_request_log_line(start: Start, caplog: pytest.LogCaptureFixture) 
     ok, missing = lines["log-1"], lines["log-2"]
     assert set(ok) == {"request_id", "voice", "lang", "chars", "words", "stream", "format", "status", "http_status",
                        "queue_ms", "engine_ms", "total_ms", "audio_s", "rtf", "retries", "suspect", "suspect_reason",
-                       "pace_ratio", "qc", "qc_reasons", "qc_ms", "error"}
+                       "pace_ratio", "qc", "qc_reasons", "qc_ms", "parts", "error"}
     assert ok["pace_ratio"] == pytest.approx(1.0, abs=0.01) and ok["qc"] is None
     assert (ok["voice"], ok["lang"], ok["words"], ok["status"], ok["http_status"]) == ("alice", "en", WORDS, "ok", 200)
     assert ok["audio_s"] == pytest.approx(pcm_seconds(0.35), abs=1e-3) and ok["rtf"] is not None
@@ -458,3 +458,38 @@ async def test_repetition_penalty_needs_capability(start: Start) -> None:
     async with start(stub=StubBackend(repetition_penalty=True)) as h:
         assert (await h.client.post("/v1/audio/speech", json=body)).status_code == 200
         assert h.stub.requests[-1].repetition_penalty == 1.1
+
+
+# ------------------------------------------------------------------------------------------------ split texts
+
+LONG = " ".join(f"This is sentence {w} with seven words." for w in ("one", "two", "three", "four", "five", "six"))
+
+
+async def test_split_words_runs_parts_in_parallel_on_free_slots(start: Start) -> None:
+    async with start(stub=StubBackend(base_latency_s=0.2), split_words=14, max_inflight=4) as h:
+        t = asyncio.get_running_loop().time()
+        r = await h.client.post("/v1/audio/speech", json={"input": LONG, "voice": "alice", "response_format": "pcm"})
+        elapsed = asyncio.get_running_loop().time() - t
+        assert r.status_code == 200 and r.headers["x-tts-parts"] == "3"
+        assert sorted(q.text.count("sentence") for q in list(h.stub.requests)[-3:]) == [2, 2, 2]
+        assert len(r.content) == 2 * (3 * round(14 * 0.35 * SR) + 2 * round(0.2 * SR))  # parts in order + 2 gaps
+        assert elapsed < 0.5  # 3 parts x 0.2 s ran side by side on free slots
+        assert h.gw.admission.inflight == 0
+        r = await h.client.post("/v1/audio/speech", json={"input": TEXT, "voice": "alice"})
+        assert r.headers["x-tts-parts"] == "1"  # short texts are never split
+
+
+async def test_split_parts_without_free_slots_run_in_turn(start: Start) -> None:
+    async with start(stub=StubBackend(base_latency_s=0.2), split_words=14, max_inflight=1) as h:
+        t = asyncio.get_running_loop().time()
+        r = await h.client.post("/v1/audio/speech", json={"input": LONG, "voice": "alice", "response_format": "pcm"})
+        assert r.status_code == 200 and r.headers["x-tts-parts"] == "3"
+        assert asyncio.get_running_loop().time() - t >= 0.6  # one slot: the parts ran one after another
+        assert h.gw.admission.inflight == 0
+
+
+async def test_split_part_failure_fails_the_request_and_frees_every_slot(start: Start) -> None:
+    async with start(stub=StubBackend(fail_takes=5, fail_kind="failure"), split_words=14, max_inflight=4,
+                     warmup=False) as h:
+        r = await h.client.post("/v1/audio/speech", json={"input": LONG, "voice": "alice"})
+        assert r.status_code == 502 and h.gw.admission.inflight == 0

@@ -216,6 +216,21 @@ def test_pace_file_and_overrides(tmp_path: Path) -> None:
 
 # ------------------------------------------------------------------------------------------------ admission
 
+async def test_admission_try_acquire_never_waits_or_jumps_the_queue() -> None:
+    adm = Admission(max_inflight=2, max_queue=4, timeout_s=1.0)
+    first = await adm.acquire()
+    extra = adm.try_acquire()
+    assert extra is not None and adm.inflight == 2 and adm.try_acquire() is None  # full
+    waiter = asyncio.create_task(adm.acquire())
+    await asyncio.sleep(0)
+    extra.release()  # the queued waiter gets the freed slot; try_acquire must not take it first
+    assert adm.try_acquire() is None
+    second = await waiter
+    first.release()
+    second.release()
+    assert adm.inflight == 0 and adm.try_acquire() is not None
+
+
 async def test_admission_queue_full_timeout_and_cancel() -> None:
     adm = Admission(max_inflight=1, max_queue=1, timeout_s=0.2)
     first = await adm.acquire()

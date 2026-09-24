@@ -62,6 +62,16 @@ class Admission:
         self.inflight += 1
         return Slot(self, time.monotonic() - start)
 
+    def try_acquire(self) -> Slot | None:
+        """A slot only if one is free right now and nobody is queued for it (never jumps the queue, never waits)."""
+        if self.waiting or self._sem.locked():
+            return None
+        # the semaphore has a free permit and no waiters: take it synchronously, exactly as asyncio.Semaphore.acquire's
+        # fast path does (CPython 3.12 locks.py: `if not self.locked(): self._value -= 1; return True`)
+        self._sem._value -= 1
+        self.inflight += 1
+        return Slot(self, 0.0)
+
     @asynccontextmanager
     async def slot(self) -> AsyncIterator[Slot]:
         slot = await self.acquire()

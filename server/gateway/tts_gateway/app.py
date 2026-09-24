@@ -55,7 +55,7 @@ from .voices import REF_SECONDS, Voice, VoiceRegistry, engine_language, load_pac
 MAX_BODY_BYTES = 16 << 20  # JSON body: the input text plus, at most, an inline reference clip in base64
 MAX_REF_AUDIO_BYTES = 10 << 20
 OFFLOAD_BYTES = 1 << 20  # bodies to parse and PCM to encode above this size go to a worker thread
-PART_GAP_S = 0.2  # silence between the parts of a request split for a backend's per-call ceiling
+PART_GAP_S = 0.2  # silence between the parts of a split request (TTS_SPLIT_WORDS or a backend's per-call ceiling)
 WARMUP_TEXT = {"en": "Hello, this is a short warmup.", "ur": "السلام علیکم، یہ ایک مختصر آزمائش ہے۔"}
 
 
@@ -434,11 +434,13 @@ class Gateway:
             language = normalize_language(body.language)
         else:  # the voice's language (English for trump, Auto for shehbaz); inline: the text's
             language = voice.language if voice else engine_language(lang)
-        parts = [text]
+        max_words = s.split_words or 0
         if caps.max_seconds_per_call:  # a conservative words-per-part estimate from the language's centre pace
             est = language_band(lang, s) or language_band("en", s)
             assert est is not None
-            parts = split_for_ceiling(text, max(1, int(caps.max_seconds_per_call / (1.5 * est.expected))))
+            ceiling = max(1, int(caps.max_seconds_per_call / (1.5 * est.expected)))
+            max_words = min(max_words, ceiling) if max_words else ceiling
+        parts = split_for_ceiling(text, max_words) if max_words and log.words > max_words else [text]
         retries = 0 if body.stream else min(s.retry_max, s.retry_max if body.retries is None else body.retries)
         base = SynthesisRequest(text=text, voice=voice, language=language, temperature=body.temperature,
                                 top_k=body.top_k, top_p=body.top_p, repetition_penalty=body.repetition_penalty,
@@ -501,27 +503,46 @@ class Gateway:
                 "X-TTS-Sample-Rate": str(self.backend.capabilities.sample_rate)}
 
     async def respond(self, plan: Plan, log: RequestLog) -> Response:
-        """Non-streaming: every part through the retry policy, within one slot."""
+        """Non-streaming: every part through the retry policy. The request holds one slot; the parts of a split text
+        also use whatever slots are free right now (never more, so the engine never sees more than max_inflight and
+        nobody queued is overtaken), and parts without a slot of their own run in turn."""
         slot = await self._acquire(log)
-        pcm: list[bytes] = []
-        sample_rate = self.backend.capabilities.sample_rate
+        parts = list(self._part_requests(plan))
+        extra = [s for s in (self.admission.try_acquire() for _ in parts[1:]) if s is not None]
+        lanes = asyncio.Semaphore(1 + len(extra))
+        outcomes: list[quality.Outcome | None] = [None] * len(parts)
         start = time.perf_counter()
-        try:
-            for check, req in self._part_requests(plan):
-                outcome = await quality.synthesize(
+
+        async def run(i: int, check: Check, req: SynthesisRequest) -> None:
+            async with lanes:
+                outcomes[i] = await quality.synthesize(
                     self.backend, req, check=check, retries=plan.retries, retry_on=self.settings.retry_on,
                     timeout_s=self.settings.request_timeout_s, metrics=self.metrics, voice=plan.voice_label)
-                log.retries += outcome.retries
-                log.take(outcome.take, outcome.qc_ms)
-                sample_rate = outcome.take.result.sample_rate
-                if pcm:
-                    pcm.append(audio.silence(PART_GAP_S, sample_rate))
-                pcm.append(outcome.take.result.pcm)
-        except BackendError as exc:
-            raise engine_error(exc) from exc
+
+        try:
+            if len(parts) == 1:
+                await run(0, *parts[0])
+            else:
+                async with asyncio.TaskGroup() as group:
+                    for i, (check, req) in enumerate(parts):
+                        group.create_task(run(i, check, req))
+        except* BackendError as group_exc:
+            raise engine_error(group_exc.exceptions[0]) from group_exc.exceptions[0]
         finally:
-            slot.release()
+            for s in (slot, *extra):
+                s.release()
             log.engine_ms = (time.perf_counter() - start) * 1000  # every take, failed ones included
+        pcm: list[bytes] = []
+        sample_rate = self.backend.capabilities.sample_rate
+        for outcome in outcomes:
+            assert outcome is not None
+            log.retries += outcome.retries
+            log.take(outcome.take, outcome.qc_ms)
+            sample_rate = outcome.take.result.sample_rate
+            if pcm:
+                pcm.append(audio.silence(PART_GAP_S, sample_rate))
+            pcm.append(outcome.take.result.pcm)
+        log.parts = len(parts)
         joined = b"".join(pcm)
         log.audio_s = audio.duration_s(len(joined), sample_rate)
         if log.suspect:
@@ -533,7 +554,7 @@ class Gateway:
         headers = self._headers(plan, log) | {
             "X-TTS-Sample-Rate": str(sample_rate), "X-TTS-Audio-Seconds": f"{log.audio_s:.3f}",
             "X-TTS-Suspect": str(int(log.suspect)), "X-TTS-Engine-Ms": f"{log.engine_ms:.0f}",
-            "X-TTS-QC": log.qc or "off"}
+            "X-TTS-QC": log.qc or "off", "X-TTS-Parts": str(len(parts))}
         if log.suspect_reason:
             headers["X-TTS-Suspect-Reason"] = log.suspect_reason
         if log.pace_ratio is not None:

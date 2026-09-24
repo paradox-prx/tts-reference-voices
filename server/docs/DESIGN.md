@@ -117,6 +117,8 @@ red because of it (QC is advisory).
 | `TTS_MAX_INPUT_CHARS` | 3000 | -> 413 |
 | `TTS_RETRY_MAX` | 1 | extra takes when a take is suspect or the engine fails (non-streaming only) |
 | `TTS_RETRY_ON` | `suspect,engine_error,qc` | which failures trigger a retry |
+| `TTS_SPLIT_WORDS` | `0` | split longer texts at sentence ends into parts of at most this many words; a non-streaming request's parts run in parallel on free engine slots (never beyond `TTS_MAX_INFLIGHT`, never ahead of queued requests) and are joined with 0.2 s of silence; streaming parts run in order |
+| `TTS_NON_STREAMING_MODE_LANGS` | – | text languages (`en`, `ur`) for which `non_streaming_mode=true` is sent (whole text in the prefill) |
 | `TTS_LENGTH_CAP` | `1` | send `max_new_tokens = words/2.5*12.5*2.4 + 60` (bounded 96..4096) |
 | `TTS_SUSPECT_BAND` | `0.6,1.8` | a take is suspect when its seconds per letter fall outside this multiple of the voice's expected pace |
 | `TTS_PACE_FILE` | `<checkout>/server/calibration/pace.json` | expected output pace per voice (s/letter); a voice missing there uses its reference clip's pace |
