@@ -1,0 +1,23 @@
+# Template: deploy/install_units.sh renders @SERVER@ (this checkout's server/ directory), @ENV_FILE@ and @PYTHON3@.
+[Unit]
+Description=Qwen3-TTS engine /health watchdog (restarts the engine when /health keeps failing)
+Documentation=file://@SERVER@/deploy/health_watchdog.py
+# vLLM-Omni keeps serving 503 on /health when a stage process died, so the engine unit never fails by itself.
+# The watchdog acts only while the engine unit is active and never starts a stopped engine.
+After=qwen3-tts-engine.service
+
+[Service]
+Type=exec
+Environment=PYTHONUNBUFFERED=1
+# Optional here: TTS_ENGINE_PORT, TTS_WATCHDOG_INTERVAL_S, TTS_WATCHDOG_FAILURES.
+EnvironmentFile=-@ENV_FILE@
+ExecStart=@PYTHON3@ @SERVER@/deploy/health_watchdog.py --unit qwen3-tts-engine.service
+Restart=always
+RestartSec=30
+NoNewPrivileges=yes
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=qwen3-tts-watchdog
+
+[Install]
+WantedBy=default.target

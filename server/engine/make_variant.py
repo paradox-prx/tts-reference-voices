@@ -18,6 +18,11 @@ Where things live (0.28.0 source):
   chunking/batching  connectors.connector_of_shared_memory.extra (read by qwen3_tts_code2wav.py L663-688 and
                      stage_input_processors/qwen3_tts.py L106)
   per-stage knobs    stages[i] (StageDeployConfig; other keys such as `dtype` pass through to vLLM EngineArgs)
+  custom_voice_dir   top-level (DeployConfig L528, copied into every stage's engine args L847-860); the engine sets
+                     it on hf_config (engine/stage_init_utils.py L1490-1492), where the talker preloads the voices
+                     (qwen3_tts_talker.py L519-558) and the API lists and validates them (tts_adapters/qwen3_tts.py
+                     L129-137, serving_speech.py L2529-2542). A relative path resolves against the engine's working
+                     directory: engine/run_engine.sh runs it from the server/ directory.
 """
 
 from __future__ import annotations
@@ -48,12 +53,14 @@ STANDARD: dict[str, tuple[list[str], str]] = {
                        "whole-utterance Code2Wav (same as the CLI --no-async-chunk); streaming returns at the end"),
     "eager": (["--enforce-eager", "both"], "no CUDA graphs in either stage"),
     "fp16_talker": (["--talker-dtype", "float16"], "talker + code predictor in fp16"),
-    "fp32_talker": (["--talker-dtype", "float32", "--mem0", "0.55", "--max-num-batched-tokens", "8192"],
-                    "talker + code predictor in fp32: weights double to ~7.4 GiB and KV to 224 KiB/token, so stage 0 "
-                    "gets 0.55 and a smaller profiling batch (8192) to leave ~4 GiB of KV (~19k tokens)"),
+    "fp32_talker": (["--talker-dtype", "float32", "--mem0", "0.70", "--max-num-batched-tokens", "8192",
+                     "--max-num-seqs", "32"],
+                    "talker + code predictor in fp32 (UNMEASURED): weights ~+3.6 GiB and KV 224 KiB/token, so stage 0 "
+                    "gets 0.70 (KV ~8.5 GiB, ~40k tokens >= 32 x 1,248), 32 sequences and a smaller profiling batch"),
     "seqs32": (["--max-num-seqs", "32"], "32 sequences per stage"),
     "seqs128": (["--max-num-seqs", "128"],
-                "128 sequences per stage at the production memory budget (KV ~45k tokens is the real limit)"),
+                "128 sequences per stage at the production memory budget: the 91k-token KV holds 128 takes of up to "
+                "~710 tokens (~27 s of audio after a ~360-position prompt) without preemption; short/medium only"),
     "rp110": (["--rep-penalty", "1.10"], "talker repetition_penalty 1.10"),
     "rp115": (["--rep-penalty", "1.15"], "talker repetition_penalty 1.15"),
     "rp120": (["--rep-penalty", "1.20"], "talker repetition_penalty 1.20"),
@@ -61,6 +68,9 @@ STANDARD: dict[str, tuple[list[str], str]] = {
                 "Code2Wav decodes up to 8 streams per group, with CUDA graphs for batch 1/2/4/8"),
     "mrv2": (["--model-runner", "v2", "--max-num-batched-tokens", "512", "--code2wav-dtype", "bfloat16"],
              "0.30.0rc1 upstream defaults (MRV2 runner, 512-token steps, bf16 Code2Wav); 0.28 ignores model_runner"),
+    "custom_voices": (["--custom-voice-dir", "state/custom_voices"],
+                      "production + the precomputed voices of engine/precompute_voices.py (<id>-avg: averaged speaker "
+                      "embedding + ICL, <id>-prompt: prompt-clip embedding + ICL)"),
 }
 
 # Deploy schema, read from vllm_omni config/stage_config.py (DeployConfig, StageDeployConfig, load_deploy_config).
@@ -82,7 +92,10 @@ STAGE_KEYS = {"stage_id", "devices", "num_replicas", "env", "output_connectors",
 STAGE_KEYS_030 = {"async_chunk"}
 SAMPLING_KEYS = {"temperature", "top_p", "top_k", "min_p", "max_tokens", "min_tokens", "repetition_penalty",
                  "presence_penalty", "frequency_penalty", "seed", "stop_token_ids", "detokenize", "ignore_eos"}
-MEMORY_WARN = 0.75  # summed utilisation per device above this may not fit next to the ~4.4 GiB tenant on GPU 1
+# Summed gpu_memory_utilization per device above this is tight on a 24 GiB 3090 that also drives a desktop (keep
+# >= 1.5 GiB free): stage 0 really uses its fraction plus ~1.7 GiB (activation peak + CUDA graphs, which the
+# process-scoped KV sizing of worker/base.py does not subtract), and stage 1 uses ~3.5-4.2 GiB whatever it asks for.
+MEMORY_WARN = 0.80
 
 
 def _bool(text: str) -> bool:
@@ -141,6 +154,8 @@ def add_override_args(parser: argparse.ArgumentParser) -> list[argparse.Action]:
                        help="initial_codec_chunk_frames: frames in the first streamed chunk (0 = load-based dynamic)"),
         g.add_argument("--model-runner", choices=("v1", "v2"),
                        help="top-level model_runner. 0.30.0rc1 only; 0.28.0 ignores the key"),
+        g.add_argument("--custom-voice-dir", metavar="DIR",
+                       help="top-level custom_voice_dir (precomputed voices; relative = against the server/ dir)"),
     ]
     return actions
 
@@ -186,6 +201,8 @@ def apply_overrides(doc: dict[str, Any], a: argparse.Namespace) -> dict[str, Any
         extra["initial_codec_chunk_frames"] = a.initial_chunk_frames
     if a.model_runner:
         doc["model_runner"] = a.model_runner
+    if a.custom_voice_dir:
+        doc["custom_voice_dir"] = a.custom_voice_dir
     return doc
 
 
@@ -203,6 +220,13 @@ def validate(doc: Any) -> tuple[list[str], list[str]]:
         warnings.append("model_runner is read by 0.30.0rc1 only; 0.28.0 ignores it")
     if not isinstance(doc.get("async_chunk", True), bool):
         errors.append("async_chunk must be a boolean")
+    if "custom_voice_dir" in doc:
+        voice_dir = doc["custom_voice_dir"]
+        if not isinstance(voice_dir, str) or not voice_dir.strip():
+            errors.append("custom_voice_dir must be a non-empty path string")
+        elif not voice_dir.startswith(("/", "~")):
+            warnings.append(f"custom_voice_dir {voice_dir!r} is relative: it resolves against the engine's working "
+                            "directory (engine/run_engine.sh runs the engine from server/)")
 
     connectors = doc.get("connectors")
     if not isinstance(connectors, dict) or not isinstance(connectors.get(CONNECTOR), dict):
@@ -273,8 +297,8 @@ def validate(doc: Any) -> tuple[list[str], list[str]]:
         if total > 1.0:
             errors.append(f"device {device}: gpu_memory_utilization sums to {total:.2f} > 1")
         elif total > MEMORY_WARN:
-            warnings.append(f"device {device}: gpu_memory_utilization sums to {total:.2f}; "
-                            "tight next to the ~4.4 GiB tenant on GPU 1")
+            warnings.append(f"device {device}: gpu_memory_utilization sums to {total:.2f}; tight on a 24 GiB card "
+                            "that also drives a desktop (stage 0 adds ~1.7 GiB of activations + graphs)")
     return errors, warnings
 
 
@@ -315,8 +339,16 @@ def run_loader_check(python: str, files: list[Path]) -> dict[str, Any]:
     return json.loads(r.stdout.strip().splitlines()[-1])
 
 
+# Stage keys the loader consumes itself instead of copying them into the stage's engine args
+# (config/stage_config.py _STAGE_RESERVED_KEYS); compare_resolved checks devices and sampling separately.
+RESERVED_STAGE_KEYS = {"stage_id", "devices", "num_replicas", "env", "output_connectors", "input_connectors",
+                       "default_sampling_params", "default_pooling_params", "engine_extras", "engine_args", "runtime"}
+
+
 def compare_resolved(doc: dict[str, Any], resolved: dict[str, Any]) -> list[str]:
-    """Differences between what the file says and what the upstream loader resolved."""
+    """Differences between what the file says and what the upstream loader resolved: every stage key that is not
+    reserved must reach the stage's engine args unchanged, plus devices, sampling, connectors and the top-level
+    async_chunk / custom_voice_dir / model_runner."""
     problems: list[str] = []
     extra = doc["connectors"][CONNECTOR].get("extra") or {}
     got_extra = resolved["connectors"].get(CONNECTOR, {}).get("extra", {})
@@ -328,9 +360,10 @@ def compare_resolved(doc: dict[str, Any], resolved: dict[str, Any]) -> list[str]
             problems.append(f"stage {sid} missing after merge")
             continue
         args, runtime = got["engine_args"], got["runtime"]
-        wanted = {k: s[k] for k in ("gpu_memory_utilization", "max_num_seqs", "max_num_batched_tokens",
-                                    "max_model_len", "enforce_eager", "dtype") if k in s}
+        wanted = {k: v for k, v in s.items() if k not in RESERVED_STAGE_KEYS and k != "async_chunk"}
         wanted["async_chunk"] = doc.get("async_chunk", True)
+        if "custom_voice_dir" in doc:
+            wanted["custom_voice_dir"] = doc["custom_voice_dir"]
         if resolved["model_runner_supported"]:
             wanted["use_v2_model_runner"] = doc.get("model_runner") == "v2"
         problems += [f"stage {sid} {k}: file {v!r}, loader {args.get(k)!r}"

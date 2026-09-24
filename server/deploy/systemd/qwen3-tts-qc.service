@@ -1,0 +1,32 @@
+# Template: deploy/install_units.sh renders @SERVER@ (this checkout's server/ directory), @ENV_FILE@ and @PYTHON3@.
+# OPTIONAL: enable it (install_units.sh --with-qc) and set TTS_QC_URL=http://127.0.0.1:8092 in the env file to have
+# the gateway check each non-streaming take. Nothing depends on it: the gateway fails open when it is down.
+[Unit]
+Description=Qwen3-TTS quality-check sidecar (ASR + speaker similarity, 127.0.0.1:8092; optional)
+Documentation=file://@SERVER@/qc
+# Start before the gateway when both start together (the gateway orders itself After= this unit, without depending).
+Before=qwen3-tts-gateway.service
+StartLimitIntervalSec=600
+StartLimitBurst=5
+
+[Service]
+Type=exec
+# Whisper large-v3 + WavLM run on the GPU the engine uses (one 3090 here); the env file may override the device.
+Environment=PYTHONUNBUFFERED=1 CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0 HF_HUB_OFFLINE=1
+EnvironmentFile=@ENV_FILE@
+WorkingDirectory=@SERVER@/qc
+ExecStart=@SERVER@/venvs/eval/bin/python -m tts_qc
+# Loading the ASR and similarity models can take a while on a cold page cache.
+TimeoutStartSec=600
+Restart=on-failure
+RestartSec=10
+KillMode=mixed
+TimeoutStopSec=30
+NoNewPrivileges=yes
+UMask=0077
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=qwen3-tts-qc
+
+[Install]
+WantedBy=default.target

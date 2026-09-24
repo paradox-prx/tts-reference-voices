@@ -1,19 +1,22 @@
+# Template: deploy/install_units.sh renders @SERVER@ (this checkout's server/ directory), @ENV_FILE@ and @PYTHON3@.
 [Unit]
 Description=Qwen3-TTS gateway (OpenAI-compatible /v1/audio/speech on :8090)
-Documentation=file://%h/qwen3-tts-server/docs/DESIGN.md
+Documentation=file://@SERVER@/docs/DESIGN.md
 # Wants= pulls the engine in; After= waits for its start job, which ends once wait_ready.py got audio back. The
 # gateway also survives engine restarts on its own: /ready turns red and requests get 503 until the engine is back.
 Wants=qwen3-tts-engine.service
-After=qwen3-tts-engine.service
+# The QC sidecar is optional (TTS_QC_URL; the gateway fails open when it is down): ordering only, no dependency, so
+# the gateway starts whether qwen3-tts-qc.service is enabled, missing or failed.
+After=qwen3-tts-engine.service qwen3-tts-qc.service
 StartLimitIntervalSec=600
 StartLimitBurst=5
 
 [Service]
 Type=exec
-EnvironmentFile=%h/.config/qwen3-tts/env
 Environment=PYTHONUNBUFFERED=1
-WorkingDirectory=%h/qwen3-tts-server/gateway
-ExecStart=%h/qwen3-tts-server/venvs/gateway/bin/python -m tts_gateway
+EnvironmentFile=@ENV_FILE@
+WorkingDirectory=@SERVER@/gateway
+ExecStart=@SERVER@/venvs/gateway/bin/python -m tts_gateway
 TimeoutStartSec=120
 Restart=on-failure
 RestartSec=5

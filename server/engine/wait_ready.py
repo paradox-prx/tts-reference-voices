@@ -2,9 +2,10 @@
 """Wait until a vLLM-Omni Qwen3-TTS engine is up and actually synthesises: poll GET /health, then run one short Base
 voice-clone request and check that WAV audio comes back.
 
-  wait_ready.py [URL] [--timeout 1200] [--voice NAME] [--ref-voice trump]
+  wait_ready.py [URL] [--timeout 1200] [--voice NAME] [--ref-voice trump] [--voices-dir DIR]
 
-URL defaults to http://127.0.0.1:$TTS_ENGINE_PORT (8091).
+URL defaults to http://127.0.0.1:$TTS_ENGINE_PORT (8091). The voices directory defaults to $TTS_VOICES_DIR, else the
+voices/ folder of this checkout.
 
 The request uses the registered engine voice --voice when GET /v1/audio/voices lists it, otherwise the reference of
 --ref-voice from the voices directory inline (data: URL + ref_text). No seed and no max_new_tokens, like production
@@ -27,7 +28,9 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-VOICES_DIR = Path("/home/vector/tts-reference-voices/voices")
+# voice-server/v1 folders: $TTS_VOICES_DIR (the gateway reads the same variable), else the voices/ folder of the
+# checkout this file lives in (<repo>/server/engine/wait_ready.py -> <repo>/voices).
+VOICES_DIR = Path(os.environ.get("TTS_VOICES_DIR") or Path(__file__).resolve().parents[2] / "voices")
 LANGUAGES = {"en": "English"}  # vLLM-Omni has no "Urdu"; everything else goes as "Auto"
 TEXT = "The engine is ready to speak."
 
@@ -56,9 +59,23 @@ def request(url: str, key: str | None, body: dict | None = None, timeout: float 
         raise NotReady(str(getattr(exc, "reason", exc))) from exc
 
 
+def voice_folder(voices_dir: Path, name: str) -> str:
+    """The voice folder an engine voice name belongs to: the name itself, or the longest folder name it starts with
+    followed by '-' (gateway-registered 'trump-<sha256[:10]>', precomputed 'trump-avg' / 'trump-prompt')."""
+    if (voices_dir / name / "voice.json").is_file():
+        return name
+    try:
+        folders = [p.name for p in voices_dir.iterdir() if (p / "voice.json").is_file()]
+    except OSError:
+        return name
+    matches = [f for f in folders if name.lower().startswith(f.lower() + "-")]
+    return max(matches, key=len) if matches else name
+
+
 def language(voices_dir: Path, voice_id: str) -> str:
     try:
-        code = json.loads((voices_dir / voice_id / "voice.json").read_text()).get("language", "")
+        meta = json.loads((voices_dir / voice_folder(voices_dir, voice_id) / "voice.json").read_text())
+        code = meta.get("language", "") if isinstance(meta, dict) else ""
     except (OSError, ValueError):
         code = ""
     return LANGUAGES.get(code, "Auto")
@@ -82,7 +99,10 @@ def registered(url: str, key: str | None, voice: str) -> bool:
     status, _, body = request(f"{url}/v1/audio/voices", key)
     if status != 200:
         raise Fatal(f"GET /v1/audio/voices -> {status}: {body[:200]!r}")
-    listing = json.loads(body)
+    try:
+        listing = json.loads(body)
+    except ValueError as exc:
+        raise Fatal(f"GET /v1/audio/voices: not JSON: {body[:200]!r}") from exc
     names = {str(v.get("name", v) if isinstance(v, dict) else v).lower()
              for v in (listing.get("voices") or []) + (listing.get("uploaded_voices") or [])}
     return voice.lower() in names
