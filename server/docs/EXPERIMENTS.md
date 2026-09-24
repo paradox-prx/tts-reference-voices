@@ -204,3 +204,18 @@ The prod config (bf16 talker, fp32 Code2Wav, CUDA graphs, async_chunk on, max_nu
 batching) is chosen: eager is 2.4-2.7x slower at c=1; seqs32/seqs128 are identical at c<=32; decode4g (graph buckets
 1/2/4) gives the same throughput for +4.7 GB; decode8 does not fit; fp16/fp32 talkers crash; async_chunk off loses
 5-21%. Stage-0 memory 0.45 vs 0.60 changes nothing at c<=32 (only KV headroom), which frees ~3.5 GB for the QC sidecar.
+
+### P2 findings (main matrix, `results/P2_matrix/`; full tables in `results/INDEX.md` / REPORT.md)
+Engine direct, custom_voices engine (prod YAML), inline references, gateway sampling (0.9/50) and length cap sent as
+`max_new_tokens` (a runaway ends as an HTTP 500 and counts as an error), non-stream, c = 1..32.
+- Throughput (x realtime by p90 wall) at c=32: short 18-21x, medium 27-28x, long 31-32x, xlong 33-34x, xxlong 35x
+  (trump). c=1: 5.0-5.7x for every size (RTF ~0.18-0.2).
+- **Long Urdu fails:** shehbaz xxlong (two prompts, ~200 words, ~55 s): **31 of 68 requests hit the length cap without
+  EOS** (c=1: 4/4); the 37 that finished ran at 0.066 s/letter vs 0.105-0.118 at shorter sizes, i.e. they skipped text.
+  shehbaz xlong (~95 words): 1 error in 38. trump: 0 errors at every size. Hypothesis (tested in X6): with the Base
+  default `non_streaming_mode=false` the text beyond the reference is fed one token per codec frame (12.5 tokens/s);
+  Urdu needs ~3.2 Qwen tokens per word (~10-12 tokens/s of speech), so the feed barely stays ahead of the speech,
+  while English (1.3 tokens/word) always has the whole text in hand early.
+- **Pace recalibrated** (`calibration/pace.json`, used by phases started after 04:45): trump 0.070 s/letter (was
+  0.0795), shehbaz 0.111 (was the 0.088 prior). Suspect flags in P0-P3 rows used the old values; the report recomputes
+  them from the stored durations with the calibrated pace.

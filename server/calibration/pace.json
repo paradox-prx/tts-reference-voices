@@ -1,11 +1,11 @@
 {
-  "_doc": "Expected Qwen3-TTS output pace per voice, in seconds of audio per letter (letters = characters for which str.isalnum() is True). The gateway (TTS_PACE_FILE) and bench/bench_tts.py (--pace-file) both read this file; a voice missing here falls back to its reference clip's pace. Recalibrate from real takes (median s/letter of good takes) after the P2 matrix.",
+  "_doc": "Expected Qwen3-TTS output pace per voice, in seconds of audio per letter (letters = characters for which str.isalnum() is True). The gateway (TTS_PACE_FILE), bench/bench_tts.py (--pace-file) and the QC sidecar read this file; a voice missing here falls back to its reference clip's pace. Calibrated 2026-09-25 04:50 PKT from results/P2_matrix: the median s/letter of all successful takes of sizes short..xlong on vLLM-Omni 0.28 (xxlong Urdu excluded: those takes skip text, see docs/EXPERIMENTS.md). Before that, a prior (trump 0.0795 = the reference clip, shehbaz 0.088 from the Kaggle runs) was used by phases P0-P3.",
   "trump": {
-    "s_per_letter": 0.0795,
-    "source": "reference clip references/qwen3-tts.wav: 23.21 s / 292 letters; Kaggle trump pace 3.3-3.9 words/s gives a ratio of 0.81-0.95 against it"
+    "s_per_letter": 0.070,
+    "source": "P2_matrix: n=482 takes short..xxlong, median 0.0699 (per size 0.068-0.077, p10-p90 0.060-0.10); the reference clip is 0.0795"
   },
   "shehbaz": {
-    "s_per_letter": 0.088,
-    "source": "prior: Kaggle good Urdu takes 0.25-0.33 s/word x 3.29 letters/word in benchmarks/shehbaz_ur.json = 0.076-0.100 s/letter; the reference clip (0.183 s/letter) is a slow, pause-heavy address and is NOT used"
+    "s_per_letter": 0.111,
+    "source": "P2_matrix: n=413 takes short..xlong, median 0.111 (per size 0.105-0.118, p10-p90 0.093-0.145); the reference clip (a slow, pause-heavy address) is 0.183; xxlong takes that finished ran at 0.066 (skipped text)"
   }
 }
