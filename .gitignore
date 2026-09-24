@@ -20,3 +20,7 @@ state/
 __pycache__/
 *.pyc
 .pytest_cache/
+# local model weights (see HANDOFF.md §5.5) and eval scratch audio
+models/
+eval/models
+eval/lab/synth/

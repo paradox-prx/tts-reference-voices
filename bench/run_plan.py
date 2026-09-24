@@ -314,7 +314,7 @@ class Child:
     """A long-running subprocess in its own session (process group), output appended to a log file."""
 
     def __init__(self, cmd: list[str], env: dict[str, str], cwd: Path, log: Path) -> None:
-        self.cmd, self.log = cmd, log
+        self.log = log
         log.parent.mkdir(parents=True, exist_ok=True)
         self._log = open(log, "ab")
         self._log.write(f"\n=== {iso()} run_plan: {env_prefix(env)} {shlex.join(cmd)}\n".encode())

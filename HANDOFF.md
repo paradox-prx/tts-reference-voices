@@ -148,6 +148,9 @@ root, so whether 8090 is reachable from the LAN is unknown.
                                               *.part files resume with curl -C -). ~54 of 158 wheels, ~100 MB as of 19:00.
   gateway/, engine/, deploy/, bench/          being written by the build workflow (§7); may be complete, partial or missing
   logs/                                       download logs
+  models/eval/                                eval models (faster-whisper-large-v3, WavLM-large SV, wavlm-base-plus-sv, ECAPA); gitignored
+  eval/lab/                                   eval scripts from the eval research agent (asr_eval, sim_eval, normalizers, checks, retry_sim)
+  venvs/eval-asr, venvs/eval-sim              working eval venvs (faster-whisper; torch-cpu + transformers)
 ~/.cache/huggingface/hub/
   models--microsoft--wavlm-base-plus-sv       COMPLETE (sha256 verified); blob lives in hub/blobs/a4/... (xet layout, §4.1)
   models--Qwen--Qwen3-TTS-12Hz-1.7B-Base      config/tokenizer files only (weights NOT downloaded)
@@ -466,20 +469,57 @@ Covered above (§2, §4). Extra points:
   JIT path could fail (UNVERIFIED); SASS paths are fine.
 - Process note from that agent: it ran `sudo -n true` once, which failed harmlessly.
 
-### 5.5 Eval tooling (`docs/research/eval-tooling.md`, if present)
-This research agent was **still running** when this file was written. Planned approach (independent of its output):
-- **ASR:** stock `openai/whisper-large-v3` via transformers on **GPU 0**, fp16, batched, `language` forced
-  ("en"/"ur"), temperature 0, no timestamps.
-- **WER and CER:** English via Whisper's EnglishTextNormalizer; Urdu via a custom normalizer (strip aerab/diacritics;
-  unify ی/ي/ى, ک/ك, ہ/ه/ة, ۓ; map ۔ and ؟ to nothing; drop punctuation and ZWNJ/ZWJ; map Eastern-Arabic/Urdu digits to
-  ASCII). Report WER and CER for Urdu.
-- **Speaker similarity:** cosine of `microsoft/wavlm-base-plus-sv` x-vectors (the NOTES "WavLM ≈ 0.974" most likely
-  used this), with ECAPA (`speechbrain/spkrec-ecapa-voxceleb`) as a second metric. The reference is the
-  `references/qwen3-tts.wav` file (also try the mean over the individual clips).
-- **Loop and skip detectors** beyond seconds-per-word: repeated n-grams in the ASR output, the ratio of ASR length to
-  input length, long internal silences (energy VAD), trailing silence.
-- **Retry simulation:** from K takes per prompt, simulate "retry up to R when suspect / WER > 0.22 / SIM < 0.88" and
-  report the resulting failure rate and extra compute.
+### 5.5 Eval tooling (`docs/research/eval-tooling.md`, 31 findings, READ IT)
+The eval research agent finished after the first push. It **built and calibrated a working eval stack on CPU**, now
+copied out of the temporary scratchpad:
+- `models/eval/` (gitignored, 4.6 GB, sha256-verified): `faster-whisper-large-v3` (stock Whisper large-v3 converted to
+  CTranslate2, Systran rev edaa852e, model.bin sha 69f74147…), `wavlm-base-plus-sv`, `beatrice/` (the seed-tts-eval
+  **WavLM-Large + ECAPA-TDNN** SV model, torch-native port), `sb_ecapa_embedding_model.ckpt` (SpeechBrain ECAPA).
+  **So the Whisper in the user's bundle is not needed for eval.**
+- `venvs/eval-asr` (faster-whisper 1.2.1, ctranslate2 4.8.2, jiwer) and `venvs/eval-sim` (torch 2.11 CPU,
+  transformers 5.17, jiwer, soundfile). Both were copied from the scratchpad, so call them as `venvs/<v>/bin/python`.
+  Their `bin/*` script shebangs point to the old paths.
+- `eval/lab/`: `asr_eval.py` (WER/CER/CER-nospace, loop/skip checks, VAD audio checks, decode diagnostics; reads
+  `results/<ts>/requests.jsonl`), `sim_eval.py` (SIM vs the prompt reference and vs a held-out-clip centroid;
+  backends `base`/`large`; models via `eval/models` → `../models/eval`), `tts_textnorm.py` (Urdu + English
+  normalizers), `tts_checks.py` (detectors), `retry_sim.py` (offline retry-policy simulation), calibration
+  manifests/outputs (`asr_refs_int8*.jsonl`, `asr_synth.jsonl`), and `synth/` (synthetic loop/gap/truncation WAVs
+  spliced from the reference clips; gitignored).
+- ASR on GPU needs cuBLAS 12 on the loader path: `LD_LIBRARY_PATH=/usr/local/cuda-12.8/lib64` (or pip
+  `nvidia-cublas-cu12`). Don't mix ctranslate2 into a torch-cu13 venv. Pass
+  `--model /home/vector/qwen3-tts-server/models/eval/faster-whisper-large-v3`.
+
+Key findings that change the plan:
+- **ASR = faster-whisper large-v3** (fp16, beam 5, sequential long-form, **language forced** en/ur, `vad_filter=False`).
+  Reject vLLM Whisper for scoring: it pre-splits audio > 30 s and can drop audio, hiding loops.
+  `BatchedInferencePipeline` doesn't batch across files, so use several CT2 workers instead. Estimate ~4.5 GB per
+  worker, **on GPU 0**.
+- **Whisper's own Urdu error is ~18-26% WER on real speech**, so NOTES' "WER > 0.22 → re-roll" is unusable for Urdu.
+  **Report WER, CER and CER-nospace, and gate Urdu on CER-nospace**: word segmentation varies (صورتحال vs صورت حال),
+  and two spacing variants cost WER 0.105 but CER-nospace 0.
+- **Whisper large-v3 swallows synthetic Urdu loops**: a syllable repeated 12× or a phrase 3× gave an unchanged
+  transcript. So loops must be caught by audio and alignment checks (unaligned tail, char ratio, VAD gaps, repeated
+  n-grams), not by WER alone. Compression ratio is computed on UTF-8 bytes, so the Urdu baseline runs higher
+  (1.45-2.11) than English. Loops score 14-18.
+- Text normalizers: English uses Whisper's `EnglishTextNormalizer` (vendored, no torch). For Urdu, **don't use
+  BasicTextNormalizer**, which splits words on combining marks. Use `UrduNormalizer` (NFKC, hamza/yeh/kaf/heh
+  folding, digit mapping, drop ZW*/bidi marks, strip diacritics and punctuation).
+- **Speaker similarity:** primary is **seed-tts-eval SIM (WavLM-Large + ECAPA)**. Calibration: same-speaker
+  0.90-0.95, cross-speaker 0.11-0.18. Secondary is `wavlm-base-plus-sv` for continuity with NOTES ("0.974";
+  same-speaker ≥0.975, cross-speaker 0.75-0.80, a compressed range). Compute SIM-prompt (vs
+  `references/qwen3-tts.wav`) and SIM-heldout (vs the centroid of clips not in the prompt; shehbaz 02-06). SIM runs
+  on **CPU** (WavLM-large at 15× realtime, ~26 min per 6.6 h of audio), so no GPU is needed.
+- **The `bench_tts.py` "suspect" band misses all 4 known Kaggle Urdu failures** (their s/word 0.22, 0.25, 1.01 and
+  1.01 all fall inside 0.18-1.1; good Qwen Urdu runs ~0.25-0.33 s/word). Replace it with a **voice-relative band**
+  plus the detector suite: char_ratio outside 0.85-1.15, deletion run ≥4 (ur) / ≥3 (en), insertion run ≥4, n-gram
+  repeat excess ≥4, unaligned tail, VAD gaps. **Also update the gateway's `quality.py` suspect logic
+  accordingly.**
+- **Retry evaluation:** generate **K=6 seeded takes per prompt per setting** (bench `--takes 6 --seed B`; seeds pair
+  across rp settings). Label gate_pass online and "bad" offline, then simulate R retries empirically; **don't assume
+  f^(R+1)**, since failures cluster on hard prompts. **Sample size:** the Kaggle 5/46 has a 95% CI of 4.7-23%.
+  Detecting 11% → 4% needs ~221 takes per arm, so use ≥43 xlong prompts × K=6 per rp value. (Seeds are fine in
+  these quality runs; just not in throughput runs.)
+- Run eval after the load tests, never alongside them, so it doesn't perturb them.
 
 ---
 
@@ -603,8 +643,8 @@ Extra experiments worth adding if time allows:
    --find-links <bundle1>/wheels --find-links wheels-extra vllm==0.28.0 vllm-omni==0.28.0`
    (or `engine/install_engine.sh`). Then run `engine/patches/apply_patches.py` for per-request rp. Optionally repeat
    as `venvs/engine30` for 0.30.0rc1 (with `model_runner: v1` as well as default MRV2).
-4. **Eval venv:** torch 2.14 (bundle 1) or 2.13 + transformers + jiwer + soundfile + librosa (+ speechbrain).
-   Separate from the engine venv.
+4. **Eval:** already set up (§5.5): `venvs/eval-asr` + `venvs/eval-sim` + `models/eval/` + `eval/lab/*.py`.
+   Smoke them on the reference clips first (`sim_eval.py --calibrate`).
 5. **First GPU start** on GPU 1: `engine/run_engine.sh engine/deploy/qwen3_tts_prod.yaml 8091`.
    - Expect a FlashInfer JIT compile (minutes). If JIT fails, it is likely the nvcc/CUDA_HOME issue (§2.1) or
      CUDA 13.4 PTX vs driver 13.0.

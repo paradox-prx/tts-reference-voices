@@ -1,0 +1,32 @@
+[Unit]
+Description=Qwen3-TTS engine (vLLM-Omni on GPU 1, 127.0.0.1:8091)
+Documentation=file://%h/qwen3-tts-server/docs/DESIGN.md
+# At most 3 failed starts in 30 min: a crash loop must not keep reloading the model onto a shared GPU.
+StartLimitIntervalSec=1800
+StartLimitBurst=3
+
+[Service]
+Type=exec
+EnvironmentFile=%h/.config/qwen3-tts/env
+Environment=PYTHONUNBUFFERED=1
+WorkingDirectory=%h/qwen3-tts-server
+# Deploy YAML, port and venv come from TTS_ENGINE_DEPLOY / TTS_ENGINE_PORT / TTS_ENGINE_VENV in the env file.
+ExecStart=%h/qwen3-tts-server/engine/run_engine.sh
+# The unit turns active (and the gateway, ordered after it, starts) only once a real synthesis returns audio.
+ExecStartPost=/usr/bin/python3 %h/qwen3-tts-server/engine/wait_ready.py --timeout 1700
+# Model load + torch.compile + CUDA graph capture + FlashInfer JIT take several minutes on a cold cache.
+TimeoutStartSec=1800
+Restart=on-failure
+RestartSec=15
+# SIGTERM to the API server only; it shuts its stage processes down, anything left is killed after the timeout.
+KillMode=mixed
+TimeoutStopSec=90
+LimitNOFILE=65536
+NoNewPrivileges=yes
+UMask=0077
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=qwen3-tts-engine
+
+[Install]
+WantedBy=default.target

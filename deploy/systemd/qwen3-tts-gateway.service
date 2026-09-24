@@ -1,0 +1,31 @@
+[Unit]
+Description=Qwen3-TTS gateway (OpenAI-compatible /v1/audio/speech on :8090)
+Documentation=file://%h/qwen3-tts-server/docs/DESIGN.md
+# Wants= pulls the engine in; After= waits for its start job, which ends once wait_ready.py got audio back. The
+# gateway also survives engine restarts on its own: /ready turns red and requests get 503 until the engine is back.
+Wants=qwen3-tts-engine.service
+After=qwen3-tts-engine.service
+StartLimitIntervalSec=600
+StartLimitBurst=5
+
+[Service]
+Type=exec
+EnvironmentFile=%h/.config/qwen3-tts/env
+Environment=PYTHONUNBUFFERED=1
+WorkingDirectory=%h/qwen3-tts-server/gateway
+ExecStart=%h/qwen3-tts-server/venvs/gateway/bin/python -m tts_gateway
+TimeoutStartSec=120
+Restart=on-failure
+RestartSec=5
+# Longer than TTS_SHUTDOWN_GRACE_S (30 s) so in-flight requests can finish.
+KillMode=mixed
+TimeoutStopSec=45
+LimitNOFILE=65536
+NoNewPrivileges=yes
+UMask=0077
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=qwen3-tts-gateway
+
+[Install]
+WantedBy=default.target

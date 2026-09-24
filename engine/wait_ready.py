@@ -2,7 +2,9 @@
 """Wait until a vLLM-Omni Qwen3-TTS engine is up and actually synthesises: poll GET /health, then run one short Base
 voice-clone request and check that WAV audio comes back.
 
-  wait_ready.py http://127.0.0.1:8091 [--timeout 1200] [--voice NAME] [--ref-voice trump]
+  wait_ready.py [URL] [--timeout 1200] [--voice NAME] [--ref-voice trump]
+
+URL defaults to http://127.0.0.1:$TTS_ENGINE_PORT (8091).
 
 The request uses the registered engine voice --voice when GET /v1/audio/voices lists it, otherwise the reference of
 --ref-voice from the voices directory inline (data: URL + ref_text). No seed and no max_new_tokens, like production
@@ -109,7 +111,8 @@ def wav_seconds(data: bytes) -> float:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("url", help="engine base URL, e.g. http://127.0.0.1:8091")
+    ap.add_argument("url", nargs="?", default=f"http://127.0.0.1:{os.environ.get('TTS_ENGINE_PORT') or 8091}",
+                    help="engine base URL (default %(default)s)")
     ap.add_argument("--timeout", type=float, default=1200.0, help="overall deadline in seconds (default %(default)s)")
     ap.add_argument("--voice", help="registered engine voice to use when the engine lists it")
     ap.add_argument("--ref-voice", default="trump", help="voice folder for the inline fallback (default %(default)s)")

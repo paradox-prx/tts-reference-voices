@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     model: str = "Qwen/Qwen3-TTS-12Hz-1.7B-Base"  # listed by /v1/models; the served engine model
     engine_url: str = "http://127.0.0.1:8091"
     engine_api_key: SecretStr | None = None
+    # the engine runs with engine/patches rep_penalty applied, so extra_params.repetition_penalty reaches the talker
+    engine_per_request_rp: bool = False
     voices_dir: Path = Path("/home/vector/tts-reference-voices/voices")
     voice_mode: Literal["registered", "inline"] = "registered"
 
