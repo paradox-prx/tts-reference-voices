@@ -1,0 +1,80 @@
+#118 [closed] EOS token not being found on pretrained base models
+URL https://github.com/QwenLM/Qwen3-TTS/issues/118
+created 2026-01-28T05:27:30Z by Khochawongwat
+
+### Description
+
+The model rarely wasn't able to produce EOS token and get stuck generating until the max_new_tokens is reached.
+Tested on different reference audio and prompt pairs; no pattern discovered. 
+
+**Affected Models**
+- Qwen3-TTS-12Hz-1.7B-Base
+- Qwen3-TTS-12Hz-0.6B-Base
+
+**Issue**
+- ~0.5% of inferences (1/200) fail to generate EOS token
+- Generation runs until max_new_tokens limit
+
+**Generation Parameters (default config)**
+- temperature: 0.9
+- top_p: 1.0
+- top_k: 50
+- repetition_penalty: 1.05
+- max_new_tokens: 8192
+
+**Expected**
+- EOS token generated to terminate inference naturally
+
+### Reproduction
+
+No identifiable pattern in triggering inputs. 
+
+### Logs
+
+```shell
+
+```
+
+### Environment Information
+
+**Environment**
+- Python 3.11.14
+- transformers 4.57.3
+- torch 2.10.0+cu126
+- CUDA 12.6
+- GPU: NVIDIA L4 (22 GB)
+
+
+### Known Issue
+
+- [ ] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by fortunehomestay56-dev (NONE) 2026-02-01T09:55:56Z
+eos_token_id = [2150, 2157, 151670, 151673, 151645, 151643] I added all 6 tokens and it fixed the error.
+
+2026-02-01 16:53:23,272 - INFO - code_predictor_config is None. Initializing code_predictor model with default values
+Setting `pad_token_id` to `eos_token_id`:2150 for open-end generation.
+2026-02-01 16:55:24,204 - INFO - 🎯 EOS tokens set: [2150, 2157, 151670, 151673, 151645, 151643]
+
+--- comment by foldl (NONE) 2026-02-12T06:53:28Z
+@fortunehomestay56-dev I don't think `[151670, 151673, 151645, 151643]` are needed, because `vocab_size` of `talker` is 3072.
+
+--- comment by cgisky1980 (NONE) 2026-02-12T13:17:25Z
+我又发现几个  1 2  6
+
+--- comment by risan-raja (NONE) 2026-03-14T17:13:53Z
+what other tokens have you found @cgisky1980 ?
+
+--- comment by fortunehomestay56-dev (NONE) 2026-03-16T14:20:44Z
+EOS token set: [2150, 2157, 151670, 151673, 151645, 151643]
+
+--- comment by fortunehomestay56-dev (NONE) 2026-03-16T14:20:59Z
+> [@fortunehomestay56-dev](https://github.com/fortunehomestay56-dev) I don't think `[151670, 151673, 151645, 151643]` are needed, because `vocab_size` of `talker` is 3072.
+
+EOS token set: [2150, 2157, 151670, 151673, 151645, 151643]
+
+--- comment by risan-raja (NONE) 2026-03-17T16:48:14Z
+@fortunehomestay56-dev  Can you help me understand with how you got these?
+
+--- comment by github-actions[bot] (NONE) 2026-05-02T08:39:28Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.

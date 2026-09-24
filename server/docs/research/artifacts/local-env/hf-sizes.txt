@@ -1,0 +1,88 @@
+## Qwen/Qwen3-TTS-12Hz-1.7B-Base  sha=fd4b254389122332181a7c3db7f27e918eec64e3 gated=False lastModified=2026-01-23T05:25:33.000Z  files=13 total=4.544 GB
+      3857.41 MB  model.safetensors (lfs)
+       682.29 MB  speech_tokenizer/model.safetensors (lfs)
+         2.78 MB  vocab.json
+         1.67 MB  merges.txt
+         0.06 MB  README.md
+         0.01 MB  tokenizer_config.json
+         0.00 MB  config.json
+         0.00 MB  speech_tokenizer/config.json
+         0.00 MB  .gitattributes
+         0.00 MB  generation_config.json
+         0.00 MB  speech_tokenizer/preprocessor_config.json
+         0.00 MB  preprocessor_config.json
+         0.00 MB  speech_tokenizer/configuration.json
+## Qwen/Qwen3-TTS-12Hz-0.6B-Base  sha=5d83992436eae1d760afd27aff78a71d676296fc gated=False lastModified=2026-01-29T08:01:19.000Z  files=13 total=2.516 GB
+      1829.34 MB  model.safetensors (lfs)
+       682.29 MB  speech_tokenizer/model.safetensors (lfs)
+         2.78 MB  vocab.json
+         1.67 MB  merges.txt
+         0.01 MB  tokenizer_config.json
+         0.00 MB  config.json
+         0.00 MB  README.md
+         0.00 MB  speech_tokenizer/config.json
+         0.00 MB  .gitattributes
+         0.00 MB  generation_config.json
+         0.00 MB  speech_tokenizer/preprocessor_config.json
+         0.00 MB  preprocessor_config.json
+         0.00 MB  speech_tokenizer/configuration.json
+## Qwen/Qwen3-TTS-Tokenizer-12Hz  sha=<urlopen error _ssl.c:983: The handshake operation timed out> gated=<urlopen error _ssl.c:983: The handshake operation timed out> lastModified=<urlopen error _ssl.c:983: The handshake operation timed out>  files=6 total=0.682 GB
+       682.29 MB  model.safetensors (lfs)
+         0.00 MB  README.md
+         0.00 MB  config.json
+         0.00 MB  .gitattributes
+         0.00 MB  preprocessor_config.json
+         0.00 MB  configuration.json
+## openai/whisper-large-v3  sha=06f233fe06e710322aca913c1bc4249a0d71fce1 gated=False lastModified=2024-08-12T10:20:10.000Z  files=21 total=24.702 GB
+      6174.01 MB  flax_model.msgpack (lfs)
+      4993.68 MB  pytorch_model.fp32-00001-of-00002.bin (lfs)
+      4993.45 MB  model.fp32-00001-of-00002.safetensors (lfs)
+      3087.39 MB  pytorch_model.bin (lfs)
+      3087.13 MB  model.safetensors (lfs)
+      1180.73 MB  pytorch_model.fp32-00002-of-00002.bin (lfs)
+      1180.66 MB  model.fp32-00002-of-00002.safetensors (lfs)
+         2.48 MB  tokenizer.json
+         1.04 MB  vocab.json
+         0.49 MB  merges.txt
+         0.28 MB  tokenizer_config.json
+         0.12 MB  pytorch_model.bin.index.fp32.json
+         0.12 MB  model.safetensors.index.fp32.json
+         0.05 MB  normalizer.json
+         0.03 MB  added_tokens.json
+         0.02 MB  README.md
+         0.00 MB  generation_config.json
+         0.00 MB  special_tokens_map.json
+         0.00 MB  .gitattributes
+         0.00 MB  config.json
+         0.00 MB  preprocessor_config.json
+## Systran/faster-whisper-large-v3  sha=edaa852ec7e145841d8ffdb056a99866b5f0a478 gated=False lastModified=2023-11-23T09:41:12.000Z  files=7 total=3.091 GB
+      3087.28 MB  model.bin (lfs)
+         2.48 MB  tokenizer.json
+         1.07 MB  vocabulary.json
+         0.00 MB  config.json
+         0.00 MB  README.md
+         0.00 MB  .gitattributes
+         0.00 MB  preprocessor_config.json
+## microsoft/wavlm-base-plus-sv  sha=feb593a6c23c1cc3d9510425c29b0a14d2b07b1e gated=False lastModified=2022-03-25T10:39:41.000Z  files=5 total=0.405 GB
+       404.55 MB  pytorch_model.bin (lfs)
+         0.06 MB  config.json
+         0.00 MB  README.md
+         0.00 MB  .gitattributes
+         0.00 MB  preprocessor_config.json
+## microsoft/wavlm-large  sha=c1423ed94bb01d80a3f5ce5bc39f6026a0f4828c gated=False lastModified=2022-02-02T21:21:50.000Z  files=5 total=1.262 GB
+      1261.99 MB  pytorch_model.bin (lfs)
+         0.00 MB  README.md
+         0.00 MB  config.json
+         0.00 MB  .gitattributes
+         0.00 MB  preprocessor_config.json
+## speechbrain/spkrec-ecapa-voxceleb  sha=0f99f2d0ebe89ac095bcc5903c4dd8f72b367286 gated=False lastModified=2025-02-18T12:29:58.000Z  files=10 total=0.089 GB
+        83.32 MB  embedding_model.ckpt (lfs)
+         5.53 MB  classifier.ckpt (lfs)
+         0.13 MB  label_encoder.txt
+         0.10 MB  example1.wav
+         0.04 MB  example2.flac
+         0.01 MB  README.md
+         0.00 MB  mean_var_norm_emb.ckpt
+         0.00 MB  hyperparams.yaml
+         0.00 MB  .gitattributes
+         0.00 MB  config.json

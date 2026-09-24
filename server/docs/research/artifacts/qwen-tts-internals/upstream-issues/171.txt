@@ -1,0 +1,309 @@
+#171 [closed] Inference is too slow
+URL https://github.com/QwenLM/Qwen3-TTS/issues/171
+created 2026-02-04T01:10:44Z by skytodmoon
+
+### Description
+
+
+Code:`# ======================================
+# 1. 导入核心依赖库（新增：time模块，用于计时）
+# ======================================
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
+import torch
+import soundfile as sf
+import librosa
+from qwen_tts import Qwen3TTSModel
+from typing import Optional
+from contextlib import asynccontextmanager
+import time  # 新增：导入time模块，用于高精度计时
+
+# ======================================
+# 2. 全局变量：存储持久化模型
+# ======================================
+global_qwen_tts_model = None
+DEFAULT_REF_AUDIO = "reference_voice.wav"#kejigan.wav"
+#DEFAULT_REF_TEXT = "AI时代汹涌而来，大模型的上车让世界看到了人车交互的无限可能，为智能出行成起了更大想象空间。从大装列车在晶片和中央计算架构，到自动驾驶和自然交互。智能接车的每个细节都值得，且正在被重新发明。"
+DEFAULT_REF_TEXT = "如果提前了解了你们要面对的人生，不知道你们是否还会有勇气前来"
+DEFAULT_LANGUAGE = "Chinese"
+
+# ======================================
+# 3. 模型加载/销毁：使用lifespan上下文管理器
+# ======================================
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """服务生命周期管理：启动加载模型，关闭清理资源"""
+    global global_qwen_tts_model
+    
+    try:
+        print("✅ 开始加载Qwen3-TTS模型（仅加载一次，后续请求复用）...")
+        start_load_time = time.perf_counter()  # 新增：模型加载计时开始
+        
+        global_qwen_tts_model = Qwen3TTSModel.from_pretrained(
+            "data/Qwen3-TTS-12Hz-1.7B-Base",
+            device_map="cuda:0",
+            dtype=torch.bfloat16,
+        )
+        
+        load_cost = time.perf_counter() - start_load_time  # 新增：计算模型加载耗时
+        print(f"✅ Qwen3-TTS模型加载成功！加载耗时：{load_cost:.4f} 秒")
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"模型加载失败：{str(e)}"
+        )
+    
+    yield
+    
+    # 服务关闭：清理资源
+#     global global_qwen_tts_model
+    global_qwen_tts_model = None
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+    print("❌ 服务已关闭，模型资源已清理！")
+
+# ======================================
+# 4. 初始化FastAPI实例
+# ======================================
+app = FastAPI(
+    title="Qwen3-TTS 语音合成服务",
+    description="持久化模型服务，带全流程日志和耗时统计",
+    version="1.0.0",
+    lifespan=lifespan
+)
+
+# ======================================
+# 5. 定义请求体模型
+# ======================================
+class TTSRequest(BaseModel):
+    text: str = Field(..., description="需要合成语音的文本内容")
+    spk_id: int = Field(0, description="说话人ID（兼容原有接口，暂对应默认参考音频/文本）")
+    speed: float = Field(1.0, description="语音语速（>0，1.0为默认语速）")
+    volume: float = Field(1.0, description="语音音量（>0，1.0为默认音量）")
+    sample_rate: int = Field(0, description="采样率（0为默认，使用模型返回的采样率）")
+    save_path: str = Field("./output_voice_clone.wav", description="合成音频保存路径（wav格式）")
+    ref_audio: Optional[str] = Field(None, description="自定义参考音频路径（可选，覆盖默认kejigan.wav）")
+    ref_text: Optional[str] = Field(None, description="自定义参考文本（可选，覆盖默认参考文本）")
+
+# ======================================
+# 6. 核心接口：/paddlespeech/tts（新增全流程日志+耗时统计）
+# ======================================
+@app.post("/paddlespeech/tts", summary="语音合成接口（支持语音克隆，带耗时统计）")
+async def tts_service(request: TTSRequest):
+    """
+    接收JSON请求，执行语音合成，返回全流程耗时统计
+    """
+    # ======================================
+    # 新增：阶段1 - 接收请求，总耗时开始
+    # ======================================
+    total_start_time = time.perf_counter()
+    request_text_summary = request.text[:50] + "..." if len(request.text) > 50 else request.text
+    print(f"\n==================================================")
+    print(f"📩 [{time.strftime('%Y-%m-%d %H:%M:%S')}] 接收新请求 - 文本摘要：{request_text_summary}")
+    print(f"📩 保存路径：{request.save_path} | 语速：{request.speed} | 音量：{request.volume}")
+    
+    # 1. 校验模型是否已加载
+    if global_qwen_tts_model is None:
+        total_cost = time.perf_counter() - total_start_time
+        print(f"❌ [{time.strftime('%Y-%m-%d %H:%M:%S')}] 请求处理失败 - 模型未加载完成")
+        print(f"❌ 总耗时：{total_cost:.4f} 秒")
+        print(f"==================================================")
+        raise HTTPException(
+            status_code=500,
+            detail="模型未加载完成，请稍后再试"
+        )
+    
+    try:
+        # 2. 配置参数
+        ref_audio = request.ref_audio if request.ref_audio else DEFAULT_REF_AUDIO
+        ref_text = request.ref_text if request.ref_text else DEFAULT_REF_TEXT
+        save_path = request.save_path
+        speed = request.speed
+        volume = request.volume
+        
+        # 3. 校验参数合法性
+        if speed <= 0 or volume <= 0:
+            total_cost = time.perf_counter() - total_start_time
+            print(f"❌ [{time.strftime('%Y-%m-%d %H:%M:%S')}] 请求处理失败 - 语速/音量必须大于0")
+            print(f"❌ 总耗时：{total_cost:.4f} 秒")
+            print(f"==================================================")
+            raise HTTPException(
+                status_code=400,
+                detail="语速（speed）和音量（volume）必须大于0"
+            )
+        
+        # ======================================
+        # 新增：阶段2 - 模型推理，开始计时
+        # ======================================
+        infer_start_time = time.perf_counter()
+        print(f"⚙️ [{time.strftime('%Y-%m-%d %H:%M:%S')}] 开始模型推理 - 参考音频：{ref_audio}")
+        
+        # 4. 模型推理生成语音
+        wavs, sr = global_qwen_tts_model.generate_voice_clone(
+            text=request.text,
+            language=DEFAULT_LANGUAGE,
+            ref_audio=ref_audio,
+            ref_text=ref_text,
+        )
+        
+        # 新增：计算模型推理耗时
+        infer_cost = time.perf_counter() - infer_start_time
+        print(f"✅ [{time.strftime('%Y-%m-%d %H:%M:%S')}] 模型推理完成 - 耗时：{infer_cost:.4f} 秒")
+        
+        # ======================================
+        # 新增：阶段3 - 音频处理，开始计时
+        # ======================================
+        audio_process_start_time = time.perf_counter()
+        print(f"⚙️ [{time.strftime('%Y-%m-%d %H:%M:%S')}] 开始音频处理 - 调整语速/音量")
+        
+        # 5. 调整语速、音量
+        wav_data = wavs[0]
+        if speed != 1.0:
+            wav_data = librosa.effects.time_stretch(wav_data, rate=speed)
+        if volume != 1.0:
+            wav_data = wav_data * volume
+        
+        # 新增：计算音频处理耗时
+        audio_process_cost = time.perf_counter() - audio_process_start_time
+        print(f"✅ [{time.strftime('%Y-%m-%d %H:%M:%S')}] 音频处理完成 - 耗时：{audio_process_cost:.4f} 秒")
+        
+        # ======================================
+        # 新增：阶段4 - 音频保存，开始计时
+        # ======================================
+        save_start_time = time.perf_counter()
+        print(f"⚙️ [{time.strftime('%Y-%m-%d %H:%M:%S')}] 开始保存音频文件 - 路径：{save_path}")
+        
+        # 6. 保存音频
+        sf.write(save_path, wav_data, sr)
+        
+        # 新增：计算音频保存耗时
+        save_cost = time.perf_counter() - save_start_time
+        print(f"✅ [{time.strftime('%Y-%m-%d %H:%M:%S')}] 音频保存完成 - 耗时：{save_cost:.4f} 秒")
+        
+        # ======================================
+        # 新增：阶段5 - 请求处理完成，计算总耗时
+        # ======================================
+        total_cost = time.perf_counter() - total_start_time
+        print(f"🎉 [{time.strftime('%Y-%m-%d %H:%M:%S')}] 整个请求处理完成 - 总耗时：{total_cost:.4f} 秒")
+        print(f"==================================================")
+        
+        # 7. 返回成功响应（新增：各阶段耗时数据）
+        return {
+            "code": 0,
+            "message": "语音合成成功",
+            "data": {
+                "text": request.text,
+                "spk_id": request.spk_id,
+                "save_path": save_path,
+                "sample_rate": sr,
+                "speed": speed,
+                "volume": volume,
+                # 新增：耗时统计数据
+                "time_statistics": {
+                    "total_cost_seconds": round(total_cost, 4),
+                    "model_infer_cost_seconds": round(infer_cost, 4),
+                    "audio_process_cost_seconds": round(audio_process_cost, 4),
+                    "audio_save_cost_seconds": round(save_cost, 4)
+                }
+            }
+        }
+    
+    except FileNotFoundError as e:
+        total_cost = time.perf_counter() - total_start_time
+        print(f"❌ [{time.strftime('%Y-%m-%d %H:%M:%S')}] 请求处理失败 - 文件不存在：{str(e)}")
+        print(f"❌ 总耗时：{total_cost:.4f} 秒")
+        print(f"==================================================")
+        raise HTTPException(
+            status_code=404,
+            detail=f"文件不存在：{str(e)}（请检查参考音频或保存路径是否正确）"
+        )
+    except Exception as e:
+        total_cost = time.perf_counter() - total_start_time
+        print(f"❌ [{time.strftime('%Y-%m-%d %H:%M:%S')}] 请求处理失败 - 未知错误：{str(e)}")
+        print(f"❌ 总耗时：{total_cost:.4f} 秒")
+        print(f"==================================================")
+        raise HTTPException(
+            status_code=500,
+            detail=f"语音合成失败：{str(e)}"
+        )
+
+# ======================================
+# 7. 服务启动入口
+# ======================================
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        app=app,
+        host="0.0.0.0",
+        port=8000,  # 改为你使用的4555端口，与curl命令一致
+        reload=False
+    )`
+
+### Reproduction
+
+Can reproduce each time
+
+### Logs
+
+```shell
+********
+Warning: flash-attn is not installed. Will only run the manual PyTorch version. Please install flash-attn for faster inference.
+********
+ 
+src/hijack_call.c:671 in initialize_dlsym
+src/hijack_call.c:671 in initialize_dlsym
+INFO:     Started server process [4685]
+INFO:     Waiting for application startup.
+✅ 开始加载Qwen3-TTS模型（仅加载一次，后续请求复用）...
+I0204 09:02:38.778246    4706 logger.go:49] parsed scheme: ""
+I0204 09:02:38.778410    4706 logger.go:49] scheme "" not registered, fallback to default scheme
+I0204 09:02:38.778485    4706 logger.go:49] ccResolverWrapper: sending update to cc: {[{/etc/vcuda/vcuda.sock  <nil> 0 <nil>}] <nil> <nil>}
+I0204 09:02:38.778522    4706 logger.go:49] ClientConn switching balancer to "pick_first"
+I0204 09:02:38.778541    4706 logger.go:49] Channel switches to new LB policy "pick_first"
+I0204 09:02:38.778603    4706 logger.go:49] Subchannel Connectivity change to CONNECTING
+I0204 09:02:38.778674    4706 logger.go:49] Subchannel picks a new address "/etc/vcuda/vcuda.sock" to connect
+I0204 09:02:38.778932    4706 logger.go:49] Channel Connectivity change to CONNECTING
+I0204 09:02:38.779283    4706 logger.go:49] Subchannel Connectivity change to READY
+I0204 09:02:38.779325    4706 logger.go:49] Channel Connectivity change to READY
+I0204 09:02:39.795450    4706 logger.go:49] Channel Connectivity change to SHUTDOWN
+I0204 09:02:39.795555    4706 logger.go:49] Subchannel Connectivity change to SHUTDOWN
+✅ Qwen3-TTS模型加载成功！加载耗时：6.2738 秒
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+
+==================================================
+📩 [2026-02-04 09:02:55] 接收新请求 - 文本摘要：阴极炭块：采用机械强度与孔隙度适中、热膨胀率较低、抗钠侵蚀能力强的阴极炭块（半石墨质、半石墨化炭块和...
+📩 保存路径：./output529.wav | 语速：1.0 | 音量：1.0
+⚙️ [2026-02-04 09:02:55] 开始模型推理 - 参考音频：reference_voice.wav
+Setting `pad_token_id` to `eos_token_id`:2150 for open-end generation.
+✅ [2026-02-04 09:03:10] 模型推理完成 - 耗时：15.4775 秒
+⚙️ [2026-02-04 09:03:10] 开始音频处理 - 调整语速/音量
+✅ [2026-02-04 09:03:10] 音频处理完成 - 耗时：0.0000 秒
+⚙️ [2026-02-04 09:03:10] 开始保存音频文件 - 路径：./output529.wav
+✅ [2026-02-04 09:03:10] 音频保存完成 - 耗时：0.0469 秒
+🎉 [2026-02-04 09:03:10] 整个请求处理完成 - 总耗时：15.5248 秒
+```
+
+### Environment Information
+
+EV:Qwen3-TTS-12Hz-1.7B-Base/CPU-10 core/GPU-H800*0.5/Memory-50GB. 
+
+### Known Issue
+
+- [ ] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by iamantonreznik (NONE) 2026-02-04T14:06:39Z
+@skytodmoon hello there! could you please tell what model of CPU you have?
+I'm getting very different inference speeds on the same GPU, but different CPUs.
+
+--- comment by whatnick (NONE) 2026-02-06T00:48:47Z
+Does installing flash-attn help as in the debug message ?
+
+--- comment by cgisky1980 (NONE) 2026-02-09T04:42:25Z
+试试https://github.com/cgisky1980/qwen3-tts-rust
+
+--- comment by moustar (NONE) 2026-02-14T21:20:51Z
+I experienced the same using ROCm with my 780m igpu, and consistently got 32-36 RTF! Using my CPU, the 8745hs, had a reasonable 1.2-1.4 RTF. Wonder why this struggles with GPUs, and not CPUs
+
+--- comment by github-actions[bot] (NONE) 2026-04-10T08:40:40Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.

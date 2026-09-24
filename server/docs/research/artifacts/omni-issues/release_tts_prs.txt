@@ -1,0 +1,185 @@
+=================== v0.24.0
+* [TTS][New Model] support bosonai/higgs-audio-v3-tts-4b #4169
+* [Perf][Higgs-Audio-V3] LRU cache for voice-clone ref-audio encode #4200
+* [Bugfix] Fish Speech Gradio hardcoded default voice causes 400 error #3941
+* [Model] Support languages added by fine-tuned Qwen3-TTS checkpoints #4210
+* [Perf][Bugfix] qwen3-tts hot path: prefix-cache OOM guards + talker/orchestrator micro-opts #3689
+* [Perf][TTS] Optimize cosyvoice TTFP and throughput using TensorRT #4168
+* [Bugfix] Fix Fish Speech prefix cache collision from missing cache_salt #4008
+* [Bugfix] qwen3-tts prefix cache: drop per-key size cap that corrupted… #4317
+* [Bugfix][VoxCPM2] Fix VoxCPM2 concurrent speech quality  #4319
+* Feat: `non_streaming_mode` for Qwen3-TTS Base Models During Online Inference #4198
+* [Bugfix] Fix Qwen3-TTS gradio streaming TTFP by using audio/pcm #4346
+* [Hardware][Ascend] Adapt Qwen3 TTS for 310P #4283
+* [Bugfix] Fix cross-request codes.ref leak in Qwen3-TTS make_omni_output #4373
+* [Bugfix] Qwen3-TTS: trim reference audio in no_async_chunk voice clone #4429
+* Update VoxCPM and Qwen3TTS perf baseline. #4521
+* [Doc] Qwen3-TTS: add 0.6B on 1x RTX 4090 and fix broken links #4026
+* [Chore][TTS] Reference recipes.vllm.ai recipes, remove dead code, and fix stale references #4567
+* [Bugfix][Qwen3-Omni] Fix Code2Wav CUDA-graph output length surplus (#4466) #4525
+* [Bugfix] Fix Fish Speech kvcache attention KV cache unpacking for vLLM 0.23.0 #4428
+* Add SSE stream_format support for audio speech streaming #4490
+* [Model] Add IndexTTS2 text-to-speech support #3838
+* fix: return proper HTTP status codes for audio voice endpoints #3969
+* Qwen3-TTS full-payload: emit empty-finished payload on degenerate take instead of dropping (fixes Stage-1 300s hang) #4465
+* [Bugfix] [AURA] Correct aura results when use qwen3-tts in custom voice mode #4650
+* [Bugfix] Stream Qwen3-TTS WebSocket input as one request #4731
+* [Bugfix] Fix /v1/audio/speech usage token accounting for Qwen3-TTS (#4646) #4673
+* [Test] Skip Qwen3-TTS batch E2E tests #4758
+* [Test] Un-skip Qwen3-TTS batch E2E; match documented omit-null response shape (#4757) #4759
+* [Bugfix] CosyVoice3: wrap ref_text in instruction template (#4644) #4756
+* Make speech streaming default to SSE #4679
+* [BugFix] Fix Code2Wav async_chunk streaming tail drop (boundary clicks + ~1.2% time compression) #4706
+* [Bugfix] Qwen3-TTS talker handles multi-token replay on resume #4559
+* [BugFix][Ming-TTS] Improve Seed-TTS WER accuracy #4859
+* [Bugfix][Qwen3-TTS] Seed residual MTP sampling #4869
+* [Bugfix] Fix Qwen3-TTS no-async-chunk payload splitting #4870
+* [Bugfix][Qwen3-TTS] Keep seeded residual MTP sampling batched #4889
+=================== v0.25.0rc1
+* [Refactor] Migrate MammothModa2 and OmniVoice to pipeline registry #4647
+* [Bugfix] Drop out-of-vocabulary stop ids from min-tokens masking (qwen3-tts min_tokens engine crash) #4971
+* [Perf][Qwen3-TTS] Skip per-step hidden-state D2H via hidden pooler payload opt-out #4879
+* [Perf][Qwen3-TTS] Drop default seed from qwen3_tts.yaml to restore batched MTP sampling #4970
+* [Perf][Qwen3-TTS] Align talker MTP CUDA graph capture with Qwen3-Omni & Adapt to async output #4923
+* [Perf][Qwen3-TTS] Sample code predictor outputs via Gumbel-max #4261
+* [BugFix][Ming-TTS] Use uploaded direct speaker embeddings by voice #5005
+=================== v0.26.0rc1
+* [Perf][Ming-TTS] Add initial latent chunk for lower streaming TTFP #5011
+* [Hardware][Ascend][Model] Optimize Qwen3-TTS on 310P #4841
+* [CI][NPU]:  Add nightly performance test for NPU - Qwen3-TTS on A3 #5158
+* Support Fish Speech TTS inference on XPU platform #4856
+* [Cleanup]Migrate model validation to adapters and clean up serving_speech.py #4833
+* [Bugfix][Qwen3-TTS] Mode-aware ref_audio artifact readiness (fixes #5049) #5157
+* [Bugfix][Perf] mimo_audio: fix per-request speech-code routing under continuous batching #5070
+* [Perf][Ming-TTS] Cache speaker embeddings for uploaded reference audio #5240
+* perf(qwen3-tts): cache decoder masks and compile pre-transformer  #5107
+* feat(qwen3-tts): add codec_chunk_ramp for gradual chunk size warmup #5152
+* [Refactor][Ming-TTS] Move speaker extraction and caching to Stage-0 #5351
+=================== v0.26.0
+* [Refactor] Migrate MammothModa2 and OmniVoice to pipeline registry #4647
+* [Bugfix] Drop out-of-vocabulary stop ids from min-tokens masking (qwen3-tts min_tokens engine crash) #4971
+* [Perf][Qwen3-TTS] Skip per-step hidden-state D2H via hidden pooler payload opt-out #4879
+* [Perf][Qwen3-TTS] Drop default seed from qwen3_tts.yaml to restore batched MTP sampling #4970
+* [Perf][Qwen3-TTS] Align talker MTP CUDA graph capture with Qwen3-Omni & Adapt to async output #4923
+* [Perf][Qwen3-TTS] Sample code predictor outputs via Gumbel-max #4261
+* [BugFix][Ming-TTS] Use uploaded direct speaker embeddings by voice #5005
+* [Perf][Ming-TTS] Add initial latent chunk for lower streaming TTFP #5011
+* [Hardware][Ascend][Model] Optimize Qwen3-TTS on 310P #4841
+* [CI][NPU]:  Add nightly performance test for NPU - Qwen3-TTS on A3 #5158
+* Support Fish Speech TTS inference on XPU platform #4856
+* [Cleanup]Migrate model validation to adapters and clean up serving_speech.py #4833
+* [Bugfix][Qwen3-TTS] Mode-aware ref_audio artifact readiness (fixes #5049) #5157
+* [Bugfix][Perf] mimo_audio: fix per-request speech-code routing under continuous batching #5070
+* [Perf][Ming-TTS] Cache speaker embeddings for uploaded reference audio #5240
+* perf(qwen3-tts): cache decoder masks and compile pre-transformer  #5107
+* feat(qwen3-tts): add codec_chunk_ramp for gradual chunk size warmup #5152
+* [Refactor][Ming-TTS] Move speaker extraction and caching to Stage-0 #5351
+* [Feature] Flush the speech WebSocket on input.done without closing it #5517
+* [Hardware] Enable CosyVoice3 on Moore Threads MUSA #5164
+* [Bugfix] Qwen3-TTS full-payload: emit one placeholder frame on a degenerate take instead of an empty payload #5472
+* [Bugfix] Use MiniCPM-o speech template in long audio test #5623
+=================== v0.27.0rc1
+* [Perf][Qwen3-TTS] Fuse QKV and gate_up projections in code predictor #4958
+* [CI failed] Revert "[Perf][Qwen3-TTS] Fuse QKV and gate_up projections in code predictor" #5777
+* [Perf][MiniCPM-o] TensorRT acceleration for the Code2Wav vocoder (DiT estimator + campplus) #5638
+* [Bugfix][NPU] Fallback to BSND RoPE when Qwen3-TTS short-seq BNSD li… #5608
+* [Refactor][TTS] Derive TTS model detection from adapter metadata #5682
+* [Perf][TTS] voxtral_tts hot path: cudagraph opt-out, host-sync removal, kernel caches #5175
+* [Perf][TTS] step_audio2: keep streaming tokens on-device and batch audio-feature length syncs #5067
+* [Perf][Qwen3-TTS]Cached Incremental Decode #5202
+=================== v0.28.0rc1
+* [Model] Support NVIDIA-NemotronLabs-VoiceChat-11B offline speech-to-speech #5842
+* [Perf][TTS] glm_tts: hoist loop-invariant text embed, RoPE, mask and CFG batch out of Euler loop #5068
+* [Perf][TTS] omnivoice hot path: D2H batching, mask caching, cached text embeddings #5174
+* [Bugfix] Fix diffusion TTS adapter lookup in speech serving #6121
+* [Model][TTS] Add dots.tts (rednote-hilab): continuous-AR 48kHz TTS #4765
+* [BugFix][TTS] R1.1-R1.4: turn silent async-chunk failures into visible ones #6033
+* [MiniCPM-o][NPU] Enable MiniCPM-o Code2Wav NPUGraph replay #5604
+* Add speech token usage headers #4499
+* [BugFix][TTS] Move user input from INFO to DEBUG in TTS/audio log lines #6329
+* [Bugfix][MiniCPM-o][NPU] Skip Code2Wav dynamo unwrap when flow.encode… #6397
+* [Model] Suppress silence codec tokens for the first N Qwen3-TTS decod… #5048
+* [Perf][Qwen3-TTS] Fuse QKV and gate_up projections in code predictor #5791
+* [BugFix]: CosyVoice3 STFT window device mismatch #6454
+* [tts][bugfix] Fix CosyVoice3 sampling and stage handoff #6424
+* [Model] Optimize CosyVoice3 TensorRT stream handoff #5673
+* [Model] Add native full-duplex Nemotron VoiceChat serving #6089
+=================== v0.28.0
+* [Perf][Qwen3-TTS] Fuse QKV and gate_up projections in code predictor #4958
+* [CI failed] Revert "[Perf][Qwen3-TTS] Fuse QKV and gate_up projections in code predictor" #5777
+* [Perf][MiniCPM-o] TensorRT acceleration for the Code2Wav vocoder (DiT estimator + campplus) #5638
+* [Bugfix][NPU] Fallback to BSND RoPE when Qwen3-TTS short-seq BNSD li… #5608
+* [Refactor][TTS] Derive TTS model detection from adapter metadata #5682
+* [Perf][TTS] voxtral_tts hot path: cudagraph opt-out, host-sync removal, kernel caches #5175
+* [Perf][TTS] step_audio2: keep streaming tokens on-device and batch audio-feature length syncs #5067
+* [Perf][Qwen3-TTS]Cached Incremental Decode #5202
+* [Model] Support NVIDIA-NemotronLabs-VoiceChat-11B offline speech-to-speech #5842
+* [Perf][TTS] glm_tts: hoist loop-invariant text embed, RoPE, mask and CFG batch out of Euler loop #5068
+* [Perf][TTS] omnivoice hot path: D2H batching, mask caching, cached text embeddings #5174
+* [Bugfix] Fix diffusion TTS adapter lookup in speech serving #6121
+* [Model][TTS] Add dots.tts (rednote-hilab): continuous-AR 48kHz TTS #4765
+* [BugFix][TTS] R1.1-R1.4: turn silent async-chunk failures into visible ones #6033
+* [MiniCPM-o][NPU] Enable MiniCPM-o Code2Wav NPUGraph replay #5604
+* Add speech token usage headers #4499
+* [BugFix][TTS] Move user input from INFO to DEBUG in TTS/audio log lines #6329
+* [Bugfix][MiniCPM-o][NPU] Skip Code2Wav dynamo unwrap when flow.encode… #6397
+* [Model] Suppress silence codec tokens for the first N Qwen3-TTS decod… #5048
+* [Perf][Qwen3-TTS] Fuse QKV and gate_up projections in code predictor #5791
+* [BugFix]: CosyVoice3 STFT window device mismatch #6454
+* [tts][bugfix] Fix CosyVoice3 sampling and stage handoff #6424
+* [Model] Optimize CosyVoice3 TensorRT stream handoff #5673
+* [Model] Add native full-duplex Nemotron VoiceChat serving #6089
+* [Feature][TTS] adaptive chunk ramp (Phase 2 buffer-feedback controller) #6001
+* [BugFix] Fix local media access for diffusion speech #6622
+* [Bugfix][Qwen3-TTS] Handle codec generations that exhaust their token budget #6728
+* [CI] Fix Speech CI Validation Messages #6827
+* [CI][Bugfix]Drop dummy-weight Qwen3-TTS Base from Ready CI #6861
+=================== v0.29.0rc1
+* [Frontend] Add configurable output sample rate to Speech API #6553
+* [Bugfix][Qwen3-TTS] Reject task mismatches before EngineCore dispatch #6113
+* [Bugfix][TTS] Isolate concurrent StepAudio2 TRT builds #6957
+* [Perf][Bugfix][OmniVoice] Restore float16 serving, and fuse the generator hot loop #6317
+* [Bugfix][Qwen2.5-Omni] Fix two stale call sites in the speech helpers #6886
+* [Bugfix][TTS] Make CosyVoice3 TRT plan publication concurrency-safe #6955
+* [Perf][NemotronVoiceChat] Fast defaults for all three deploy profiles: 2.8x offline, realtime full-duplex audio #6354
+* [Feat][dots.tts] Add Online Serving Support #6235
+* [Bugfix] Fix Higgs Audio v3 voice-clone token validation #7065
+* [Feature][Moss-TTS] Reference Audio Preprocessing #4982
+* [CI][Bugfix] Use the matching checkpoint for Qwen3-TTS VoiceDesign tests #7054
+* [CI/Build] Stabilize Qwen3-TTS speaker-embedding tests against miss-EOS flake #6924
+* [Migrate]Move model-specific helpers out of serving_speech #6697
+* [Refactor] fish_speech: vendor DAC codec modules, drop external fish-speech dependency #4871
+* [Bugfix][MiMo-Audio] Align code2wav decode with tokenizer device #6539
+* [Feat][OmniVoice]Support Varlen Attn,  Request-Batch and Step-Execution #6408
+* [Bugfix][TTS] Isolate shared Higgs v3 reference encode from request cancellation #7076
+* [Bugfix][CosyVoice3] Resolve hash snapshot pipeline #6896
+* [Doc] Qwen3-TTS: add 0.6B on 1x A100 40GB #7289
+* [BugFix] Add field validators for /v1/audio/generate request #4741
+=================== v0.30.0rc1
+* [Feature][TTS] Add Speech API streaming metrics #6853
+* [Model] Add Tencent AuK speech generation and editing (encoder + diffusion pipeline) #7385
+* Optimize CosyVoice3 Stage1 flow batching #4876
+* [Bugfix] Allow Fish Speech phoneme-control tokens through normalize_fish_speech_text #7043
+* [Bugfix][Hardware][Ascend] Fix Qwen3-TTS code predictor dtype and nested graph replay #6639
+* [Bugfix][Qwen3-TTS] Gate async-chunk Code2Wav on non_streaming_mode (#4371) #6898
+* [Model] Add Gepard-1.0 OpenAI /v1/audio/speech serving #7499
+* [NPU][CosyVoice3] Add CPU STFT fallback #7520
+* [CI][Bugfix] Update Qwen3-TTS CI Validation Message #7276
+* [Bugfix] Per-key accumulation strategy for Qwen3-TTS codec frame outputs #7608
+* [Feature][Qwen3-TTS] Make Code2Wav honor the stage dtype #6059
+* [Bugfix][MiniCPM-o] Stabilize code2wav CFM CUDA graph caching with reference audio normalization and mel-frame bucketing #7416
+* [Perf][CosyVoice3] Bounded-window incremental HiFT vocoder streaming #7521
+* [BugFix][NPU] Fix Fish Speech S2 Pro NPU support #7546
+* [BugFix][TTS] Fix MOSS Realtime serving and generation #5661
+* [Bugfix] Fix Qwen3-TTS word timestamps with async chunking #7544
+* [Feature][TTS] MOSS-TTS: place the reference-audio encoder on the code2wav stage's GPU #7724
+* [BugFix][TTS] Restore MOSS v1 codec streaming #6420
+* [Core][Model] Enable Qwen3-TTS MRV2 and optimize the TTS pipeline #7781
+* [BugFix] Fix diffusion TTS voice error responses #7798
+* [Model] Default Qwen3-TTS to experimental Model Runner V2 #7930
+* [Perf][Qwen3-TTS] Enable event-driven orchestration by default #7088
+* [tts][feature][NPU] Add 2-NPU and 3-NPU disaggregated deploy profiles for MOSS-TTS-Local #7052
+* [CI][ROCm] Shorten the blocking CosyVoice test path #7748
+* [Frontend] Reject built-in name collisions in voice upload and add VLLM_OMNI_SPEAKER_REGISTRATION_POLICY #6848
+* [Bugfix][TTS] Fix Audio8 voice clone reference resolution #7815
+* [CI][Voxtral] Resolve failing test_prepare_speech_generation_awaits_voxtral_async  #7601

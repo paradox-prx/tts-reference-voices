@@ -1,0 +1,55 @@
+#55 [open] The audio generated for Japanese and Korean is incomplete.
+URL https://github.com/QwenLM/Qwen3-TTS/issues/55
+created 2026-01-24T11:35:05Z by miles-god
+
+### Description
+
+I noticed that when generating audio for Japanese and Korean, the last word of the speech is always incomplete. May I ask what the issue might be?
+
+[incomplete.wav](https://github.com/user-attachments/files/24836693/incomplete.wav)
+
+### Reproduction
+
+"input": "아, 고맙습니다. 음, 회의 목적에 대해 설명드리겠습니다."
+
+### Logs
+
+```shell
+
+```
+
+### Environment Information
+
+python3.11
+
+### Known Issue
+
+- [ ] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by changh95 (NONE) 2026-01-24T17:36:22Z
+Same goes for Russian
+
+--- comment by github-actions[bot] (NONE) 2026-03-11T08:19:17Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.
+
+--- comment by desidia-cyber (NONE) 2026-03-27T07:32:09Z
+I have the same issue with Japanese. Almost never encountered it with English. 
+
+--- comment by github-actions[bot] (NONE) 2026-05-11T09:22:51Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.
+
+--- comment by changh95 (NONE) 2026-05-12T00:48:35Z
+This issue has not yet been resolved
+
+--- comment by github-actions[bot] (NONE) 2026-06-26T09:16:45Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.
+
+--- comment by tianxiansheng2003 (NONE) 2026-07-01T08:56:42Z
+尚未解决
+
+
+--- comment by github-actions[bot] (NONE) 2026-08-16T08:09:48Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.
+
+--- comment by desidia-cyber (NONE) 2026-08-16T09:40:05Z
+The issue hasn't been solved and is being ignored by developers.

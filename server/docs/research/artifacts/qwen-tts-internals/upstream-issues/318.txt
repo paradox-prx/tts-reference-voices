@@ -1,0 +1,169 @@
+#318 [closed] [Bug] generate_voice_clone() hangs indefinitely on mixed-script Thai inputs (Qwen3-TTS-12Hz-1.7B-Base)
+URL https://github.com/QwenLM/Qwen3-TTS/issues/318
+created 2026-05-13T16:18:34Z by zxwsysu
+
+## Summary
+
+`Qwen3TTSModel.generate_voice_clone()` enters an unbounded token-generation loop and never
+returns EOS when the `text` argument contains Thai script mixed with stray
+non-Thai characters (Latin, CJK, Cyrillic, Korean, replacement char, etc.).
+The worker hangs at ~90% CPU until the process is externally killed.
+
+## Environment
+
+- `qwen-tts==0.1.1` (pip install of the official package; flash-attn not installed)
+- `transformers==4.57.3`
+- `torch==2.8.0+cu128`
+- Python 3.10 (conda env, isolated)
+- GPU: NVIDIA L20 (46 GB), single-card serving
+- Model: `Qwen/Qwen3-TTS-12Hz-1.7B-Base` (downloaded from HF, ~4.4 GB)
+- API: `model.generate_voice_clone(text=..., ref_audio=..., ref_text=...)`
+
+## How we found it
+
+While running a multilingual TTS benchmark (3 engines × 2 languages = 129 cases),
+Qwen-TTS hung on 27 of 30 Thai test samples. The cases that did complete returned
+output with CER ≥ 1.0 (no correspondence to the target text).
+
+The hangs are deterministic: replaying the same `(text, prompt_audio, seed)` from
+a freshly started microservice reproduces the hang every time. A simple in-process
+`max_new_tokens` cap would have prevented the indefinite hang.
+
+## Reproduction
+
+Minimal repro (assumes `qwen-tts==0.1.1` installed + a reference WAV ≥ 16 kHz mono):
+
+```python
+from qwen_tts.core.models import Qwen3TTSModel
+import torchaudio
+
+model = Qwen3TTSModel.from_pretrained(
+    "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+    device_map="cuda:0",
+)
+prompt_audio, sr = torchaudio.load("ref_thai_3s.wav")  # 16 kHz mono Thai voice
+prompt_text = "เป็นไม้ไซซี่นั่นแหละทีวีเก่าดํา"  # ASR transcription of ref
+
+# Baseline (works, ~3-10s):
+audio_ok = model.generate_voice_clone(
+    text="Hello, this is a test.",
+    ref_audio=prompt_audio,
+    ref_text=prompt_text,
+    seed=42,
+)
+
+# HANGS — no return after 30+ minutes (90% CPU, no log output):
+audio_hang = model.generate_voice_clone(
+    text="เกือนมัน構นายต้องENS",  # Thai + Chinese 構 + English ENS
+    ref_audio=prompt_audio,
+    ref_text=prompt_text,
+    seed=42,
+)
+```
+
+### Other texts that consistently trigger the hang
+
+```
+"แต่ฉันจะรับกับเจ็ดยุค 2 213 ประมาณ นี่"     (Thai + Arabic digits + tone marks)
+"เกือนมัน構นายต้องENS"                      (Thai + CJK + Latin caps)
+"มันเมื่อก 진행ไปได้กับ ได้กับไม่มันледexisting Record MM อะไรกัน"  (Thai + Korean + Cyrillic + Latin)
+"แล้วอยู่พรอ 6 ดีบา ble ตอนนั้นอ่ะ มหัสantwort�วรีอ่ะ"  (Thai + Latin + replacement char)
+"เกิมเออมาเปิด ไปจาก剛ând มหัสหรือโมห มหัส识มอะ Grabbit"  (Thai + CJK + romanized + Latin)
+```
+
+Triggering texts share two features:
+1. Predominantly Thai script (≥ 50% Thai chars)
+2. Sprinkled non-Thai characters from one or more other scripts
+
+Full bench data: we have 27 reproducible hangs vs 3 that returned within ~30s
+(all 3 short pure-Thai targets ≤ 20 chars). The 3 that returned still produced
+CER 1.0 output (no recoverable Thai content).
+
+## Observed behavior
+
+- HTTP `POST /synthesize` to a Qwen-TTS FastAPI wrapper hangs > 60s without response
+- `/health` continues to return 200 (FastAPI main thread fine)
+- Worker process holds 90% CPU for as long as the host is online
+  (we observed up to 30 minutes before manually `pkill -9`-ing)
+- No traceback, no warning, no token-count log — the model is generating tokens
+  but never emits `eos_token_id`
+- After kill + restart, the same input reproduces the hang
+
+## Expected behavior
+
+The synthesis call should respect a `max_new_tokens` upper bound (e.g. derived
+from a maximum reasonable speech duration like 30s × frame_rate) and return
+cleanly when reached, even if EOS was never produced. Optionally, the model
+could refuse to synthesize text whose script mix is incompatible with the
+trained languages.
+
+## Mitigations we are applying locally
+
+1. Client-side strict `--timeout 60s` on the calling FastAPI proxy (does not free
+   the worker, but lets the supervisor notice)
+2. Pre-filter input text: drop / split inputs whose dominant-script ratio is < 0.95
+3. Plan to add a hard `max_new_tokens` cap on top of the model in our microservice
+   wrapper as a defensive bound
+
+## Asks
+
+- Add a hard `max_new_tokens` upper bound inside `generate_voice_clone()` (and
+  the equivalent on `generate_custom_voice()` — untested, may have the same issue)
+- Surface an option for callers to set max generation steps explicitly
+- Document supported scripts / language coverage so callers can pre-filter inputs
+- Consider an explicit "language code" knob (rumored in `language=` param)
+  to constrain the LLM decoder to a known script
+
+
+--- comment by kawshikbuet17 (NONE) 2026-06-01T07:42:37Z
+@zxwsysu
+
+[Solved at #326 ]
+
+* You might have fine-tuned your model according to the repository-provided script (`sft_12hz.py`).
+* The `sft_12hz.py` script is not mature enough; it is a rather naive implementation based on my investigation.
+* I faced the same problem as yours.
+* Eventually, I found a solution and wanted to share it here.
+
+The issue lies in the following code (`sft_12hz.py`):
+
+```python
+if accelerator.sync_gradients:
+    accelerator.clip_grad_norm_(model.parameters(), 1.0)
+
+optimizer.step()
+optimizer.zero_grad()
+```
+
+Replace it with:
+
+```python
+if accelerator.sync_gradients:
+    accelerator.clip_grad_norm_(model.parameters(), 1.0)
+    optimizer.step()
+    optimizer.zero_grad()
+```
+
+### Why this works
+
+When gradient accumulation is enabled, `accelerator.sync_gradients` remains `False` during intermediate accumulation steps and becomes `True` only when the accumulated gradients are ready for synchronization and an optimizer update.
+
+In the original implementation, `optimizer.step()` and `optimizer.zero_grad()` are executed for every micro-batch regardless of the value of `sync_gradients`. As a result:
+
+* Parameters are updated before gradient accumulation is complete.
+* Accumulated gradients are cleared prematurely.
+* The effective training behavior differs from the intended gradient accumulation strategy.
+* Model training can become unstable and may produce a poorly trained checkpoint.
+
+By moving `optimizer.step()` and `optimizer.zero_grad()` inside the `if accelerator.sync_gradients:` block, optimizer updates occur only at the correct accumulation boundary. This matches the intended training pattern of Hugging Face Accelerate and ensures that gradient accumulation functions properly.
+
+Fine-tune the model with the corrected code above. Hopefully, this will resolve the issue of `generate_voice_clone()` hanging indefinitely after training. Also, please let me know updates on this.
+
+Thanks,
+
+**Kawshik Kumar Paul**  
+Software Engineer  
+kawshikbuet17@gmail.com
+
+--- comment by github-actions[bot] (NONE) 2026-07-18T08:39:51Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.

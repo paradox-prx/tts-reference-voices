@@ -1,0 +1,80 @@
+#219 [closed] BUG + FIX] First audio token distorted on cold-start decode (e.g. "一" → "给")
+URL https://github.com/QwenLM/Qwen3-TTS/issues/219
+created 2026-02-18T22:44:06Z by tangyongfeng
+
+### Description
+
+**Description:**
+
+When generating short phrases starting with numerals or certain characters (e.g. `一、二、三`), the first character is consistently distorted into an unrelated syllable. This is **not a text tokenization issue** — it reproduces on every cold inference.
+
+**Root cause:** The `speech_tokenizer.decode` (12Hz vocoder) lacks warm-up context on its first call. The decoder starts processing without any prior hidden state, causing the first few audio frames to be reconstructed incorrectly.
+
+**Reproduction:**
+
+
+
+
+
+### Reproduction
+
+```python
+wavs, sr = model.generate_custom_voice(text="一、二、三、四、五。", speaker="Vivian", language="Chinese")
+# "一" is heard as "给" or similar
+```
+
+**Fix (tested on MPS/macOS, Qwen3-TTS-12Hz-1.7B-CustomVoice):**
+
+Monkey-patch `speech_tokenizer.decode` to prepend silence codes as warm-up context, then trim the corresponding samples from the output:
+
+```python
+import numpy as np
+
+_silence_wav = np.zeros(int(24000 * 0.25), dtype=np.float32)
+_sil_enc = model.model.speech_tokenizer.encode(_silence_wav, sr=24000)
+_sil_codes = _sil_enc.audio_codes[0].cpu()   # shape: (4, 16) at 12Hz
+_n_sil_frames = _sil_codes.shape[0]
+_orig_decode = model.model.speech_tokenizer.decode
+
+def _patched_decode(encoded_list, **kw):
+    patched = [{"audio_codes": torch.cat([_sil_codes.to(c["audio_codes"].device), c["audio_codes"]], dim=0)}
+               for c in encoded_list]
+    wavs_raw, fs = _orig_decode(patched, **kw)
+    trim = int(_n_sil_frames * fs / 12)
+    return [w[trim:] for w in wavs_raw], fs
+
+model.model.speech_tokenizer.decode = _patched_decode
+```
+
+### Logs
+
+```shell
+
+```
+
+### Environment Information
+
+M4 pro
+
+### Known Issue
+
+- [ ] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by tangyongfeng (NONE) 2026-02-18T23:08:28Z
+根本原因： 与 TTS 引擎本身无关。WAV 文件输出完全正常。问题出在 lame MP3 编码环节——LAME 有约 576 samples（24ms）的 encoder delay，而 WhatsApp/Telegram 在解码 MP3 时不处理 gapless metadata，直接将 encoder delay 对应的开头截掉，导致第一个字被吃掉一半。
+# WAV→MP3 转换前，在 WAV 头部插入 100ms 零值静音，
+# 让 lame encoder delay 消耗空白而不是真正的语音
+import wave as _wave
+with _wave.open(wav, "rb") as _r:
+    _p = _r.getparams()
+    _data = _r.readframes(_r.getnframes())
+_pad = b"\x00" * int(_p.framerate * 0.1) * _p.nchannels * _p.sampwidth
+with _wave.open(padded_wav, "wb") as _w:
+    _w.setparams(_p)
+    _w.writeframes(_pad + _data)
+# 再 lame 编码 padded_wav
+把那个 vocoder monkey-patch 的代码块删掉，那个方向行不通（12Hz vocoder 是自回归的，强插静音 codes 会扰乱整段输出）。
+
+
+--- comment by github-actions[bot] (NONE) 2026-04-05T08:19:28Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.

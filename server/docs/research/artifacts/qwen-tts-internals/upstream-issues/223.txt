@@ -1,0 +1,38 @@
+#223 [closed] chunked_decode issue, loss of samples between chunks
+URL https://github.com/QwenLM/Qwen3-TTS/issues/223
+created 2026-02-23T15:04:16Z by Codes4Fun
+
+### Description
+
+Qwen3TTSTokenizerV2Decoder chunked_decode function is remove more samples than it should, which can produce popping sounds and shorter audio files.
+
+The issue is that the decoder returns less than expected samples and so when attempting to remove the context samples it removes more than it should. see the line here:
+https://github.com/QwenLM/Qwen3-TTS/blob/6cafe5582caea83df269c36b1ce62d953a9cc66b/qwen_tts/core/tokenizer_12hz/modeling_qwen3_tts_tokenizer_v2.py#L894
+
+So the fix that seems to work is that instead of removing the context, extract out the expected number of samples.
+```
+sample_count = min( (end_index - start_index) * self.total_upsample, wav_chunk.shape[-1] )
+wavs.append(wav_chunk[..., -sample_count :])
+```
+
+### Reproduction
+
+The easiest way to reproduce the issue is to change chunk_size to 1 in the function and run the tokenizer encode and decode example from the [README.md](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#tokenizer-encode-and-decode).
+The file produced will be 8 seconds instead of 11 seconds and it will have obvious popping sounds. Without that change the only other way to reproduce is to use an audio file longer than 24 seconds and hope there is sound at the start of the next chunk so you can hear a pop around 24 seconds in the output.
+
+### Logs
+
+```shell
+
+```
+
+### Environment Information
+
+ubuntu, rtx 4090, cuda 13, driver 580
+
+### Known Issue
+
+- [x] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by github-actions[bot] (NONE) 2026-04-10T08:40:36Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.

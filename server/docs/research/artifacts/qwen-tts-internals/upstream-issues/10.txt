@@ -1,0 +1,62 @@
+#10 [closed] Streaming audio
+URL https://github.com/QwenLM/Qwen3-TTS/issues/10
+created 2026-01-23T05:32:01Z by jverkoey
+
+### Description
+
+From the blog post:
+
+> Extreme Low-Latency Streaming Generation：Based on the innovative Dual-Track hybrid streaming generation architecture, a single model supports both streaming and non-streaming generation. It can output the first audio packet immediately after a single character is input, with end-to-end synthesis latency as low as 97ms, meeting the rigorous demands of real-time interactive scenarios.
+
+but the model appears to only support text token streaming (not audio streaming). Do the models support audio streaming in the example code?
+
+### Reproduction
+
+Attempting to test audio streaming latency of the models.
+
+### Logs
+
+```shell
+
+```
+
+### Environment Information
+
+MacOS
+
+### Known Issue
+
+- [x] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by wangxiongts (COLLABORATOR) 2026-01-23T05:36:58Z
+Streaming inference is supported at the model architecture level. Currently, our `qwen-tts` package primarily focuses on enabling quick demos, rapid prototyping, and batch offline inference. For text-level and speech-level streaming capabilities, ongoing development and contributions will be mainly driven by the **vLLM-Omni** community.  
+
+If you have such requirements, we encourage you to closely follow the progress and updates from the **vLLM-Omni** community. We will also make official announcements whenever significant advancements are made.
+
+--- comment by jverkoey (NONE) 2026-01-23T05:42:13Z
+Thank you; I'll keep an eye on those efforts. In the meantime I will see if I can get it working locally. I've been eagerly awaiting a solid on-device TTS that I can use for [Sidecar's](https://sidecar.clutch.engineering) voice navigation system.
+
+--- comment by farzanehnakhaee70 (NONE) 2026-01-28T07:02:06Z
+Thanks a lot for the implemetation of Qwen3 model. I am also very eager to test the model in the real streaming mode.
+
+--- comment by matevosashot (NONE) 2026-02-10T16:31:32Z
+I am trying to run the model in inference mode. I have noticed that the text is padded with tts_pad token while speech is generated.
+
+How should two chunks of text be connected in the input? Say I provide text (10 tokens), the model generates audio in 20 tokens. Then I provide another text in 15 tokens, and I want the model to generate audio for this text (or finish the generation of the first text, then continue with the second text). 
+
+How can these two texts be separated in the input because there are 10 frames in between where text is not available? 
+
+Thanks in advance.
+
+
+--- comment by HaujetZhao (NONE) 2026-03-03T14:08:27Z
+我已经实现了真正的、无损的、流式的、极速的推理，通过 onnx 和 gguf 实现，在 RTX5050 上可以做到 RTF0.3，首音延迟约 300ms，详细效果见下面的视频
+
+I have achieved true, lossless, streaming, and ultra-fast inference, utilizing ONNX and GGUF, achieving an RTF0.3 on RTX5050 with an audio latency of approximately 300ms. Detailed effects can be seen in the video below.
+
+https://github.com/HaujetZhao/Qwen3-TTS-GGUF
+
+https://github.com/user-attachments/assets/98f3b34d-3760-4014-814c-a1a62554f8a9
+
+--- comment by github-actions[bot] (NONE) 2026-05-03T08:42:21Z
+This issue has been automatically locked since there has not been any recent activity after it was closed. Please open a new issue for related bugs.

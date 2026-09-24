@@ -1,0 +1,143 @@
+#239 [closed] Inconsistent speaking rate in long text generation with Qwen3-TTS-12Hz-1.7B-Base
+URL https://github.com/QwenLM/Qwen3-TTS/issues/239
+created 2026-02-28T03:50:14Z by bugs-maker-richard
+
+### Description
+
+When using default parameters for voice cloning, I noticed that for long texts (exceeding 100 characters), the speaking rate gradually increases toward the end. It fails to maintain a consistent speed throughout the audio.
+
+[audio (1).wav](https://github.com/user-attachments/files/25618507/audio.1.wav)
+
+### Reproduction
+
+.
+
+### Logs
+
+```shell
+
+```
+
+### Environment Information
+
+RTX 5060，CUDA12.8，Ubuntu22.04
+
+### Known Issue
+
+- [x] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by michael551209 (NONE) 2026-03-20T09:36:08Z
+Facing same issue, please share if you find any solution.
+
+--- comment by bugs-maker-richard (NONE) 2026-03-21T06:36:22Z
+> 我也遇到同样的问题，如果你找到解决办法，请分享。
+
+I haven't found a solution either. This issue makes the model almost unusable, and I have to complain that its speed is really slow.
+
+--- comment by jdc4429 (NONE) 2026-03-21T18:14:51Z
+You may not be using the best settings or creating good training audio. Also doing whole pages of text contributes to the issue.  What I did is install GPT-SoVITS and use the splicing and faster whisper to generate the created audio files and text labeling to the *.list file (I call mine Train.list) from my training audio sources.
+
+The GPT-SoVITS package may be difficult to install.  I had to edit several files to get it working for me.
+I have provided my fixes and install scripts below.
+I created some usage instructions that may help as well.
+
+I should also mention this version that I am referencing has V4, V2Pro, and V2ProPlus models whereas the Windows
+release only has models v1, v2, v3.  Must install from PowerShell script to download version with these better models.
+V2ProPlus is the best model. V2Pro is second best.
+
+To install GPT-SoVits, create an environment with conda:
+conda create -n SoVITS python=3.10
+conda activate SoVITS
+
+Rename the install-FINAL-FIXES.txt to install-FINAL-FIXES.ps1
+Run command: powershell -File install-FINAL-FIXES.ps1 -Device CU126 -Source HF   (Can select from CU124, CU126, CU128)
+
+If you get this error:
+ffmpeg.exe - Entry Point Not Found - The procedure entry point libintl_bind_textdomain_codeset could not be located in the dynamic link library C:\Users\jeffc\anaconda3\envs\SoVITS\Library\bin\gdk_pixbuf-2.0-0.dll.
+
+This is a DLL version conflict — ffmpeg.exe is trying to load gdk_pixbuf-2.0-0.dll from your conda environment, but that DLL was compiled against a newer version of libglib that exports libintl_bind_textdomain_codeset differently. Here's how to fix it:
+
+WORKING FIX - conda install libglib=2.78.4=*_0 gdk-pixbuf -c conda-forge --force-reinstall
+
+If you get this error:
+RuntimeError: makeDeviceForHostname(): unsupported gloo device
+
+Replace s2_train.py, s1_train.py, and bucket_sampler.py with my FIXED versions below.
+
+All the fixes may not be required for your setup. I had issues with 'gloo' and had to bypass parallel GPU support. 
+
+Also included a fix for Qwen3-TTS for issue with check_model_inputs which causes issues changing Transformers version.
+See: https://github.com/QwenLM/Qwen3-TTS/issues/237
+
+I also see a bunch of people training huge amounts of data, you only need 1-2 minutes of good audio for good results.
+The example wav file I posted below this message only used 125 seconds of audio spliced into 13 .wav files.
+
+It may also help using 32K audio files (At 16 or 24 bit) for your audio training data.
+
+
+[install-FINAL-FIXES.txt](https://github.com/user-attachments/files/26160929/install-FINAL-FIXES.txt)
+
+[slicer_opt.list example of format.txt](https://github.com/user-attachments/files/26160899/slicer_opt.list.example.of.format.txt)
+
+[requirements.txt](https://github.com/user-attachments/files/26160904/requirements.txt)
+
+[Usage Instructions.txt](https://github.com/user-attachments/files/26160853/Usage.Instructions.txt)
+
+[create_voice_clone_slicer.py](https://github.com/user-attachments/files/26160892/create_voice_clone_slicer.py)
+
+[modeling_qwen3_tts_tokenizer_v2-FIXED.py](https://github.com/user-attachments/files/26160937/modeling_qwen3_tts_tokenizer_v2-FIXED.py)
+
+[s1_train-FIXED.py](https://github.com/user-attachments/files/26160938/s1_train-FIXED.py)
+
+[bucket_sampler-FIXED.py](https://github.com/user-attachments/files/26160939/bucket_sampler-FIXED.py)
+
+[s2_train-FIXED.py](https://github.com/user-attachments/files/26160940/s2_train-FIXED.py)
+
+
+
+--- comment by jdc4429 (NONE) 2026-03-21T18:16:53Z
+Example of good quality voice cloning with my method...
+
+[DS9 Odo_output_voice_clone.wav](https://github.com/user-attachments/files/26160952/DS9.Odo_output_voice_clone.wav)
+
+--- comment by jdc4429 (NONE) 2026-03-21T23:56:30Z
+I actually decided to put my two repos with my changes up on GitHub for the Qwen3-TTS and GPT-SoVITS packages.
+These can both work under the same conda environment, I made a change to allow them to work together.
+
+Link for Qwen3-TTS: https://github.com/jdc4429/Qwen3-TTS-Windows/tree/main
+Link for GPT-SoVITS: https://github.com/jdc4429/GPT-SoVITS-V2ProPlus-Windows/tree/main
+
+--- comment by github-actions[bot] (NONE) 2026-05-06T08:59:15Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.
+
+--- comment by sherifhanna700 (NONE) 2026-08-28T18:40:58Z
+We hit this while narrating long-form audiobooks with 1.7B-Base voice cloning and traced the mechanism through the code. Summary of what we found, measured (articulation = syllable nuclei per second of speech, first vs last third of each generation; seed pinned; identical text and sampling parameters across comparisons):
+
+**Mechanism.** In simulated-streaming mode the target text is fed one token per codec frame (12.5 tok/s, `modeling_qwen3_tts.py`, trailing-text feed in `Qwen3TTSTalkerForConditionalGeneration.forward`), several times faster than speech consumes it (~4–5 tok/s). Early in generation the model can't speak ahead of the text it has received — an implicit pacing brake. The feed outruns consumption, the backlog grows, the brake vanishes, and the rate climbs toward the model's prior (~195 wpm in our runs, regardless of the reference's own pace across five references spanning 112–182 wpm).
+
+**Long references remove the brake entirely.** `generate_icl_prompt` (streaming branch) feeds the concatenated ref+target text across the *reference's* codec frames — so a 12.9s reference (161 frames) delivers ~160 target-text tokens during the prefill, before the first generated frame. Rushing then starts at word one.
+
+| configuration | drift within one ~25s generation |
+|---|---|
+| streaming, 12.9s ref | **+16.7%** |
+| streaming, 4s slice of the same ref | **−2.3%** |
+| non-streaming, same 12.9s ref | **0.0%** |
+
+Additional structure we measured on raw output: the rate resets at sentence starts and climbs clause-by-clause within long sentences (+17% first-to-last clause across a 145-word sentence), with inter-clause pauses shrinking ~20% alongside — so listeners hear "starts composed, ends rushed" repeatedly.
+
+**Inference-side repairs we tried and falsified** (all with the 12.9s reference, streaming):
+
+1. Reference transcript only across the reference frames, pad after → instant EOS (~0.2s output). Pad-after-text at the generation boundary is the trained end-of-utterance signal.
+2. Non-streaming-style block layout for the reference, then streaming the target text from generation start → instant EOS, same reason.
+3. Reference transcript right-aligned against the reference audio's end (leading pad) → runaway generation: 655s of mostly silence for a 25s utterance.
+4. Slowed feed (1 token per N frames, token injected once, pad frames between) → long silences and bursts; N=2 halves the rate but injecting on consecutive frames doubles words; fractional N destabilizes pacing (+124% drift).
+
+Conclusion: the talker tolerates exactly one streaming prompt shape — contiguous text, left-aligned from frame 0 — so this doesn't appear fixable at inference time with current weights. A training-side change (randomized/pace-matched text-feed schedules, or reference-aligned ICL prompt layouts) seems required for rate-stable streaming.
+
+**Practical workarounds** until then, in order of effectiveness:
+- `non_streaming_mode=True` (flat pacing; this is already the default for CustomVoice/VoiceDesign) — PR #362 proposes making it the clone default too;
+- if you need streaming, keep the reference under ~5 seconds;
+- keep individual generation calls short (≤ ~30s of audio).
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+

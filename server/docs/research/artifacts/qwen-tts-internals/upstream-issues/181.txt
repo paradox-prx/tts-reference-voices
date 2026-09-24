@@ -1,0 +1,53 @@
+#181 [closed] The last few words of the audio generated from long text will be swallowed.
+URL https://github.com/QwenLM/Qwen3-TTS/issues/181
+created 2026-02-05T08:09:47Z by Deadikun
+
+### Description
+
+I used 10 seconds of ref_audio to clone the voice and generate a 300-word audio. There were no misreadings or overreadings, but in the end, two words would be swallowed up.
+inference_audio:
+[case1_promptSingle_synSingle_direct_xvec_only_0.wav](https://github.com/user-attachments/files/25089748/case1_promptSingle_synSingle_direct_xvec_only_0.wav)
+
+### Reproduction
+
+None
+
+### Logs
+
+```shell
+
+```
+
+### Environment Information
+
+cuda12.8
+torch2.9
+python3.12
+
+### Known Issue
+
+- [ ] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by wincing2 (NONE) 2026-02-06T08:54:59Z
+Is it one of the official models or the model that you finetuned?
+
+
+
+--- comment by Deadikun (NONE) 2026-02-06T09:26:34Z
+> Is it one of the official models or the model that you finetuned?
+
+Qwen3-TTS-12Hz-1.7B-Base
+
+--- comment by hwk06023 (NONE) 2026-02-10T06:41:37Z
+Similar problem here. In my case, this only happens in specific cases, and for those it occurs with a frequency of around 70%. This image below is an example case:
+
+<img width="1333" height="849" alt="Image" src="https://github.com/user-attachments/assets/cdf91d42-1296-4f1c-8ac9-305606854edd" />
+
+---
+
+Qwen3-TTS-12Hz-1.7B-Base, x-vector only.
+
+Similar issue : https://github.com/QwenLM/Qwen3-TTS/issues/55
+
+--- comment by github-actions[bot] (NONE) 2026-03-28T08:18:49Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.

@@ -1,0 +1,5 @@
+#259 [open] fix: prevent sample loss in chunked_decode
+URL https://github.com/QwenLM/Qwen3-TTS/pull/259
+created 2026-03-07T13:20:51Z by zhuxiaoxuhit
+
+Take last N samples instead of slicing from a fixed offset, to avoid over-removing samples when the causal decoder output is shorter than expected.

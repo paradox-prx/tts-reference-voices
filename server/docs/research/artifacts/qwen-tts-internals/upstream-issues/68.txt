@@ -1,0 +1,85 @@
+#68 [closed] 测试发现的几个问题，避免大家踩坑，距离生产可用还有一段距离
+URL https://github.com/QwenLM/Qwen3-TTS/issues/68
+created 2026-01-25T00:28:20Z by hp027
+
+### Description
+
+** 我测试的都是声音克隆场景 **    
+1. 对于短文本，会出现无限延长的情况，需要自己手动 max_new_tokens
+2. 对于多人场景会出现中文和英文混出的情况
+3. 合成英文文本中如果存在数字会出现单词是英语发音，但数字是中文发音
+
+### Reproduction
+
+1. 对于短文本，会出现无限延长的情况，需要自己手动 max_new_tokens
+* 参考文本: 
+嗯？
+* 参考语音: 
+[嗯](https://github.com/user-attachments/files/24840990/12.wav)
+* 合成文本:
+Huh?
+* 合成语音:
+[Huh](https://github.com/user-attachments/files/24840992/12.1.wav)
+
+2. 对于多人场景会出现中文和英文混出的情况
+* 参考文本
+啊啊啊，好帅啊！
+* 参考语音
+[啊啊啊，好帅啊！](https://github.com/user-attachments/files/24840999/1.1.wav)
+* 合成文本: 
+Ah! So handsome!
+* 合成语音:
+[Ah! So handsome](https://github.com/user-attachments/files/24841005/1.wav)
+
+3.合成英文文本中如果存在数字会出现单词是英语发音，但数字是中文发音
+* 参考文本
+当年我因意外去世，穿越到了70年后同名同姓的18岁少女身上，重新遇见了我的儿子和重孙子。
+* 参考语音
+[当年我因意外去世，穿越到了70年后同名同姓的18岁少女身上，重新遇见了我的儿子和重孙子。](https://github.com/user-attachments/files/24841054/23.1.wav)
+* 合成文本: 
+I died in an accident back then, traveled 70 years later into an 18-year-old girl with the same name, and met my son and great-grandson again.
+* 合成语音:
+[I died in an accident back then, traveled 70 years later into an 18-year-old girl with the same name, and met my son and great-grandson again.](https://github.com/user-attachments/files/24841055/23.wav)
+
+
+
+### Environment Information
+
+GPU: 4090
+model: qwen/Qwen3-TTS-12Hz-0.6B-Base
+
+
+--- comment by tarjintor (NONE) 2026-01-25T04:12:07Z
+我用1.7B也复现了,另外似乎不用克隆音色,就让模型读复杂一点的数字,都会遇到读不清楚的感觉
+
+--- comment by fsdnotavai (NONE) 2026-01-26T03:48:06Z
+我说怎么给我一个2分半的乱音，我还以为是我自己依赖包装得有问题！
+
+--- comment by JohnLoveMm (NONE) 2026-01-27T06:22:28Z
+还遇到个问题，一句话最后一个字读不全的感觉；
+
+[000001.wav](https://github.com/user-attachments/files/24874984/000001.wav)
+
+--- comment by Leawind (NONE) 2026-02-06T07:08:13Z
+我用1.7B Base模型通过说话人向量克隆声音也遇到两个问题：
+
+1. 连续输出约4分钟（音频时长）后大概率会抽风，会变成语无伦次和杂音。
+2. 结尾有概率吞字
+
+我目前的解决办法是：
+
+1. 把过长的文本划分成足够小的片段，解决问题1
+2. 在每个片段末尾加上`…嗯~`，勉强解决问题2
+
+--- comment by baodong-openmart (NONE) 2026-03-04T07:16:18Z
+对于很短的文本, 有时候会生成重复的, 乍一听是自然的, 但是确实不想要重复.
+大家有遇到过吗? 可以通过参数避免吗
+
+--- comment by github-actions[bot] (NONE) 2026-04-18T08:21:47Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.
+
+--- comment by cacard (NONE) 2026-05-07T02:19:15Z
+so 这个 max_new_tokens 该如何设置？ 通过 transformer 库提前计算 tokens 数量然后指定？
+
+--- comment by github-actions[bot] (NONE) 2026-06-21T09:25:13Z
+This issue has been automatically marked as inactive  due to lack of recent activity.  Should you believe it remains unresolved and warrants attention,  kindly leave a comment on this thread.

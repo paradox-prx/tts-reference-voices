@@ -1,0 +1,10 @@
+#316 [closed] Add compile_codec option to Qwen3TTSModel.from_pretrained()
+URL https://github.com/QwenLM/Qwen3-TTS/pull/316
+created 2026-05-12T22:44:01Z by hasadata
+
+The speech tokenizer codec decoder contains 100+ attention modules whose Python dispatch overhead dominates decoding time (~47% single, ~85% batch). Applying torch.compile with mode="max-autotune" and dynamic=True fuses these into optimized kernels, improving batch throughput by 3-4x.
+
+This adds:
+- compile_codec parameter to from_pretrained() (False/True/mode string)
+- _compile_codec() method for post-construction compilation
+- Performance Tips section in README with usage examples and benchmarks

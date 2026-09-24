@@ -1,0 +1,150 @@
+#132 [closed] Inefficient On Blackwell GPU
+URL https://github.com/QwenLM/Qwen3-TTS/issues/132
+created 2026-01-29T15:48:19Z by The-Autonomous
+
+### Description
+
+I recently transitioned from using F5-TTS to this and the comparison is absolutely night and day for voice cloning! Unfortunately, however, I've had troubles getting the CUDA utilization above 15% on my RTX5050, leaving generation times at a 6xRTF.
+
+I pre-compiled my own flash-attention-2 and used quantized and unquantized weights on the 1.7B model. I've tried compiling the model with torch.compile. I've tried torch inference mode. I've tried tf32 to speed up inference to no avail.
+
+I'm unsure really what's going on. I send everything to the gpu. Nothing is being transferred. It literally sits on the gpu the whole time yet is somehow so slow. I should be seeing a 1.3xRTF at worst. Does anyone have any idea what might be the issue?
+
+### Reproduction
+
+```py
+import torch
+import time
+from transformers import AutoModelForCausalLM, AutoTokenizer # type: ignore
+from transformers.generation import GenerationConfig # type: ignore
+from typing import Optional, Any
+
+# --- CONFIGURATION ---
+modelId: str = "Qwen/Qwen3-TTS-1.7B-Base"
+useFlashAttn: bool = True
+useTorchCompile: bool = True
+useTf32: bool = True
+promptText: str = "This is a test sentence to benchmark the inference speed on the RTX 5050."
+# ---------------------
+
+def printSystemInfo() -> None:
+    print(f"--- System Info ---")
+    print(f"PyTorch Version: {torch.__version__}")
+    print(f"CUDA Version: {torch.version.cuda}")
+    
+    if torch.cuda.is_available():
+        gpuName: str = torch.cuda.get_device_name(0)
+        gpuCapability: tuple[int, int] = torch.cuda.get_device_capability(0)
+        print(f"GPU: {gpuName}")
+        print(f"Capability: {gpuCapability}")
+        
+        try:
+            import flash_attn # type: ignore
+            flashVersion: str = flash_attn.__version__
+            print(f"Flash Attention 2 Installed: Yes ({flashVersion})")
+        except ImportError:
+            print("Flash Attention 2 Installed: NO")
+    else:
+        print("GPU: None detected")
+    print("-" * 20)
+
+def main() -> None:
+    printSystemInfo()
+
+    # 1. Enable TF32
+    if useTf32:
+        torch.backends.cuda.matmul.allow_tf32 = True
+        torch.backends.cudnn.allow_tf32 = True
+        print("[INFO] TF32 Enabled")
+
+    # 2. Load Model
+    print(f"[INFO] Loading model: {modelId}...")
+    try:
+        tokenizer: Any = AutoTokenizer.from_pretrained(modelId, trust_remote_code=True)
+        
+        attnImplementation: str = "flash_attention_2" if useFlashAttn else "sdpa"
+        
+        model: Any = AutoModelForCausalLM.from_pretrained(
+            modelId, 
+            device_map="cuda", 
+            torch_dtype=torch.bfloat16, 
+            attn_implementation=attnImplementation,
+            trust_remote_code=True
+        )
+    except Exception as error:
+        print(f"[ERROR] Failed to load model. Check modelId. \n{error}")
+        return
+
+    # 3. Apply torch.compile
+    if useTorchCompile:
+        print("[INFO] Compiling model with torch.compile (mode='reduce-overhead')...")
+        model = torch.compile(model, mode="reduce-overhead", fullgraph=True)
+
+    # 4. Prepare Inputs
+    inputs: dict[str, torch.Tensor] = tokenizer(promptText, return_tensors="pt").to("cuda")
+    
+    # Warmup run
+    print("[INFO] Warming up (ignoring timings)...")
+    with torch.inference_mode():
+        _: Any = model.generate(**inputs, max_new_tokens=20)
+    torch.cuda.synchronize()
+
+    # 5. Benchmark Run
+    print(f"[INFO] Starting Benchmark for input: '{promptText}'")
+    startEvent: torch.cuda.Event = torch.cuda.Event(enable_timing=True)
+    endEvent: torch.cuda.Event = torch.cuda.Event(enable_timing=True)
+    
+    startEvent.record()
+    with torch.inference_mode():
+        # Adjust max_new_tokens to match roughly 1-2 seconds of audio
+        outputs: Any = model.generate(**inputs, max_new_tokens=150, use_cache=True)
+    endEvent.record()
+    torch.cuda.synchronize()
+    
+    elapsedTimeMs: float = startEvent.elapsed_time(endEvent)
+    elapsedTimeSec: float = elapsedTimeMs / 1000.0
+    
+    # Calculate Metrics
+    # Assuming 1 token ~= 0.02s of audio, then 150 tokens = 3.0s audio
+    estimatedAudioSeconds: float = 150 * 0.02 
+    rtf: float = elapsedTimeSec / estimatedAudioSeconds
+
+    print(f"\n--- RESULTS ---")
+    print(f"Generation Time: {elapsedTimeSec:.4f}s")
+    print(f"Est. Audio Duration: {estimatedAudioSeconds:.2f}s")
+    print(f"Real-Time Factor (RTF): {rtf:.2f}x (Lower is better)")
+    print(f"Optimization Flags: Compile={useTorchCompile}, FA2={useFlashAttn}, TF32={useTf32}")
+    
+    if rtf > 1.0:
+        print("\n[CONCLUSION] Model is slower than real-time.")
+    else:
+        print("\n[CONCLUSION] Model is running faster than real-time.")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Logs
+
+```shell
+
+```
+
+### Environment Information
+
+CUDA 13.1
+PyTorch 2.11.0 (nightly)
+Pre compiled flash_attn_2 to work on my installations of pytorch and cuda.
+
+### Known Issue
+
+- [x] The issue hasn't been already addressed in Documentation, Issues, and Discussions.
+
+--- comment by The-Autonomous (NONE) 2026-01-29T15:51:07Z
+Pardon me being new to github and accidentally closing this. Im sorry about that. Also as I said in the now deleted comment, the reproduction code was written with AI however my main version was not and is simply a translation of it so it can be run easily.
+
+--- comment by The-Autonomous (NONE) 2026-01-29T16:11:04Z
+I just noticed Issue #89. I will be using the fork "dffdeeq" provided.
+
+--- comment by github-actions[bot] (NONE) 2026-03-31T08:33:55Z
+This issue has been automatically locked since there has not been any recent activity after it was closed. Please open a new issue for related bugs.

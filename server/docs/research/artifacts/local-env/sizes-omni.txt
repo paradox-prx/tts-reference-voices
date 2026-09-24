@@ -1,0 +1,54 @@
+report-omni-0.28.0+vllm.json: 239 pkgs, total download 4.14 GB; failed HEAD: 0
+      526.6 MB  torch==2.13.0  torch-2.13.0-cp312-cp312-manylinux_2_28_x86_64.whl
+      423.1 MB  nvidia-cublas==13.1.1.3  nvidia_cublas-13.1.1.3-py3-none-manylinux_2_27_x86_64.whl
+      366.2 MB  nvidia-cudnn-cu13==9.20.0.48  nvidia_cudnn_cu13-9.20.0.48-py3-none-manylinux_2_27_x86_64.whl
+      314.5 MB  vllm==0.28.0  vllm-0.28.0-cp38-abi3-manylinux_2_28_x86_64.whl
+      214.1 MB  nvidia-cufft==12.0.0.61  nvidia_cufft-12.0.0.61-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+      206.0 MB  nvidia-nccl-cu13==2.29.7  nvidia_nccl_cu13-2.29.7-py3-none-manylinux_2_18_x86_64.whl
+      200.9 MB  nvidia-cusolver==12.0.4.66  nvidia_cusolver-12.0.4.66-py3-none-manylinux_2_27_x86_64.whl
+      197.7 MB  triton==3.7.1  triton-3.7.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+      170.1 MB  nvidia-cusparselt-cu13==0.8.1  nvidia_cusparselt_cu13-0.8.1-py3-none-manylinux2014_x86_64.whl
+      145.9 MB  nvidia-cusparse==12.6.3.3  nvidia_cusparse-12.6.3.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+       99.9 MB  tokenspeed-triton==3.8.10.post20260920  tokenspeed_triton-3.8.10.post20260920-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+       90.2 MB  nvidia-cuda-nvrtc==13.0.88  nvidia_cuda_nvrtc-13.0.88-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl
+       88.5 MB  nvidia-cutlass-dsl-libs-cu12==4.6.2  nvidia_cutlass_dsl_libs_cu12-4.6.2-cp312-cp312-manylinux_2_28_x86_64.whl
+       88.0 MB  nvidia-cutlass-dsl-libs-cu13==4.6.2  nvidia_cutlass_dsl_libs_cu13-4.6.2-cp312-cp312-manylinux_2_28_x86_64.whl
+       73.8 MB  opencv-python==5.0.0.93  opencv_python-5.0.0.93-cp37-abi3-manylinux_2_28_x86_64.whl
+       72.6 MB  nvidia-nvvm==13.4.92  nvidia_nvvm-13.4.92-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl
+       61.2 MB  opencv-python-headless==5.0.0.93  opencv_python_headless-5.0.0.93-cp37-abi3-manylinux_2_28_x86_64.whl
+       60.4 MB  nvidia-nvshmem-cu13==3.4.5  nvidia_nvshmem_cu13-3.4.5-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+       59.5 MB  nvidia-curand==10.4.0.35  nvidia_curand-10.4.0.35-py3-none-manylinux_2_27_x86_64.whl
+       56.3 MB  llvmlite==0.47.0  llvmlite-0.47.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+       50.5 MB  tilelang==0.1.12  tilelang-0.1.12-cp38-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+       47.7 MB  nvidia-cuda-nvcc==13.4.92  nvidia_cuda_nvcc-13.4.92-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+       43.2 MB  pynvvideocodec==2.0.4  pynvvideocodec-2.0.4-cp312-cp312-manylinux_2_28_x86_64.whl
+       42.5 MB  nvidia-nvjitlink==13.4.92  nvidia_nvjitlink-13.4.92-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl
+       35.8 MB  av==18.1.0  av-18.1.0-cp311-abi3-manylinux_2_28_x86_64.whl
+
+report-omni-0.30.0rc1+vllm-0.30.0.json: 260 pkgs, total download 4.17 GB; failed HEAD: 0
+      526.6 MB  torch==2.13.0  torch-2.13.0-cp312-cp312-manylinux_2_28_x86_64.whl
+      423.1 MB  nvidia-cublas==13.1.1.3  nvidia_cublas-13.1.1.3-py3-none-manylinux_2_27_x86_64.whl
+      366.2 MB  nvidia-cudnn-cu13==9.20.0.48  nvidia_cudnn_cu13-9.20.0.48-py3-none-manylinux_2_27_x86_64.whl
+      314.9 MB  vllm==0.30.0  vllm-0.30.0-cp38-abi3-manylinux_2_28_x86_64.whl
+      214.1 MB  nvidia-cufft==12.0.0.61  nvidia_cufft-12.0.0.61-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+      206.0 MB  nvidia-nccl-cu13==2.29.7  nvidia_nccl_cu13-2.29.7-py3-none-manylinux_2_18_x86_64.whl
+      200.9 MB  nvidia-cusolver==12.0.4.66  nvidia_cusolver-12.0.4.66-py3-none-manylinux_2_27_x86_64.whl
+      197.7 MB  triton==3.7.1  triton-3.7.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+      170.1 MB  nvidia-cusparselt-cu13==0.8.1  nvidia_cusparselt_cu13-0.8.1-py3-none-manylinux2014_x86_64.whl
+      145.9 MB  nvidia-cusparse==12.6.3.3  nvidia_cusparse-12.6.3.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+       99.9 MB  tokenspeed-triton==3.8.10.post20260920  tokenspeed_triton-3.8.10.post20260920-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+       90.2 MB  nvidia-cuda-nvrtc==13.0.88  nvidia_cuda_nvrtc-13.0.88-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl
+       88.7 MB  nvidia-cutlass-dsl-libs-cu12==4.7.1  nvidia_cutlass_dsl_libs_cu12-4.7.1-cp312-cp312-manylinux_2_28_x86_64.whl
+       88.3 MB  nvidia-cutlass-dsl-libs-cu13==4.7.1  nvidia_cutlass_dsl_libs_cu13-4.7.1-cp312-cp312-manylinux_2_28_x86_64.whl
+       73.8 MB  opencv-python==5.0.0.93  opencv_python-5.0.0.93-cp37-abi3-manylinux_2_28_x86_64.whl
+       72.6 MB  nvidia-nvvm==13.4.92  nvidia_nvvm-13.4.92-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl
+       61.2 MB  opencv-python-headless==5.0.0.93  opencv_python_headless-5.0.0.93-cp37-abi3-manylinux_2_28_x86_64.whl
+       60.4 MB  nvidia-nvshmem-cu13==3.4.5  nvidia_nvshmem_cu13-3.4.5-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+       59.5 MB  nvidia-curand==10.4.0.35  nvidia_curand-10.4.0.35-py3-none-manylinux_2_27_x86_64.whl
+       56.3 MB  llvmlite==0.47.0  llvmlite-0.47.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+       50.5 MB  tilelang==0.1.12  tilelang-0.1.12-cp38-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+       47.7 MB  nvidia-cuda-nvcc==13.4.92  nvidia_cuda_nvcc-13.4.92-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+       43.2 MB  pynvvideocodec==2.0.4  pynvvideocodec-2.0.4-cp312-cp312-manylinux_2_28_x86_64.whl
+       42.5 MB  nvidia-nvjitlink==13.4.92  nvidia_nvjitlink-13.4.92-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl
+       35.8 MB  av==18.1.0  av-18.1.0-cp311-abi3-manylinux_2_28_x86_64.whl
+
