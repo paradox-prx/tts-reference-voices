@@ -18,9 +18,14 @@ bench/
   bench_tts.py                  concurrency / text-length / streaming-latency benchmark for a /v1/audio/speech server
   pools/{en,ur}.json            de-duplicated short / medium / long / xlong text pools
 NOTES.md                        everything learned so far: settings, measured numbers, failure modes, vLLM-Omni API
+server/                         the Qwen3-TTS server, its benchmark plan, quality eval and REPORT.md
 ```
 
 **Setting up a server? Read `NOTES.md` first, then `bench/README.md`.**
+
+**A production Qwen3-TTS voice-clone server built on these voices lives in [`server/`](server/README.md)** (vLLM-Omni
+engine + OpenAI-compatible gateway + quality checks + systemd units), with its benchmark report in
+[`server/REPORT.md`](server/REPORT.md) and an experiment log in [`server/docs/EXPERIMENTS.md`](server/docs/EXPERIMENTS.md).
 
 ## Which reference to use
 
