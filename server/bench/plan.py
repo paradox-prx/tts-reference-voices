@@ -138,7 +138,10 @@ PHASES: list[dict] = [
 # ---- P1: engine-variant screen. Both voices, medium (~7.5 s), c=1,8,32 with n=8,16,32. Every variant is generated
 # from the prod YAML (engine/make_variant.py); "default" is the prod YAML itself, the reference arm ------------------
 SCREEN = [("default", "engine"), ("no_async_chunk", "engine"), ("eager", "engine"), ("fp16_talker", "engine"),
-          ("fp32_talker", "engine"), ("seqs32", "engine"), ("seqs128", "engine"), ("decode8", "engine")]
+          ("fp32_talker", "engine"), ("seqs32", "engine"), ("seqs128", "engine"), ("decode8", "engine"),
+          # decode8 at stage-0 0.60 OOMs capturing stage 1's batch-8 decoder graphs: screen it at 0.45 next to the
+          # prod YAML at 0.45 (KV 58k tokens: no preemption at c<=32 medium)
+          ("decode8_m045", "engine"), ("default_m045", "engine"), ("decode4g_m045", "engine")]
 SCREEN_OPTIONAL = [("default", "engine30"), ("mrv2", "engine30")]     # 0.30.0rc1: needs venvs/engine30
 SCREEN_STREAM: set = set()      # streaming is measured on the chosen config in P3; add (variant, venv) to screen it
 SCREEN_CELL = ["--voice", *VOICES, "--size", "medium", "--sweep", "1,8,32", "--n-rule", "8:2:32"]

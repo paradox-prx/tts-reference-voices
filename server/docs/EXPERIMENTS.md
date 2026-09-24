@@ -168,3 +168,20 @@ Mean audio duration over 8 takes (trump, one 18-word sentence): default 5.19 s (
 temperature 0.05 5.25 (0.30), temperature 1.5 4.98 (0.37), non_streaming_mode true 4.99 (0.47), language Auto 5.13
 (0.17). Duration barely moves, so the effect of these knobs is measured with ASR / speaker similarity (quality eval),
 not with duration.
+
+### E05: eval / QC stack on the GPU: `results/05_eval_gpu_check/gpu_check_cuda.json`
+`eval/gpu_check.py` (one process: faster-whisper large-v3 fp16 via CTranslate2 4.8.2 + cuBLAS 12.9.2, and WavLM
+base-plus-sv + WavLM-Large/ECAPA via torch 2.13 cu130 + cuBLAS 13.1.1), engine stopped. Both cuBLAS libraries load
+side by side. Models load in 4.2 s; the process holds **6.2 GB** of VRAM (ASR with 2 workers + both SIM models).
+One 10.2 s Urdu reference clip: cold 0.76 s (ASR 685 ms, SIM 63 ms), **warm 0.54 s (ASR 474 ms, SIM 56 ms, audio
+checks 8 ms) = 19x realtime**, 2 clips in parallel 25x; WER 0.056, CER-nospace 0.015, SIM-prompt base 0.984 /
+large 0.901. On CPU the same call takes ~5.6 s (int8), too slow for online QC. Consequence: online QC must run on
+the GPU, and 6 GB does not fit next to the engine at stage-0 0.60 (~4.4 GB free) → with QC the engine runs stage 0
+at 0.45 (KV 58k tokens, still preemption-free at c<=32 for 60 s takes).
+
+### P1 notes (benchmark phases are indexed in `results/INDEX.md`)
+- `fp16_talker` and `fp32_talker` crash on the first request (`index_copy_(): ... Half/Float and BFloat16`): the
+  speaker encoder / codec encoder are hard-coded bf16 in vllm-omni 0.28 (`logs/engine_P1_screen_fp{16,32}_talker.log`).
+  bf16 is the only working talker precision on 0.28; Code2Wav is fixed at fp32 in 0.28.
+- `decode8` (Code2Wav batch 8 + graph buckets 1/2/4/8) OOMs at start at stage-0 0.60 (stage 1 capturing its graphs
+  finds 43 MB free); re-screened as `decode8_m045` next to `default_m045` (both stage-0 0.45).
