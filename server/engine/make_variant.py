@@ -223,7 +223,8 @@ def validate(doc: Any) -> tuple[list[str], list[str]]:
         errors.append("decode_cudagraph_batch_sizes must be a list of positive integers")
 
     stages = doc.get("stages")
-    if not isinstance(stages, list) or sorted(s.get("stage_id") for s in stages if isinstance(s, dict)) != [0, 1]:
+    if not isinstance(stages, list) or not all(isinstance(s, dict) for s in stages) \
+            or [s.get("stage_id") for s in stages] not in ([0, 1], [1, 0]):
         errors.append("stages must list exactly stage_id 0 (talker) and 1 (code2wav)")
         return errors, warnings
     memory: dict[str, float] = {}
@@ -238,7 +239,8 @@ def validate(doc: Any) -> tuple[list[str], list[str]]:
         if not isinstance(util, (int, float)) or not 0.0 < util <= 1.0:
             errors.append(f"{where}: gpu_memory_utilization must be in (0, 1]")
         else:
-            memory[str(s.get("devices", "0"))] = memory.get(str(s.get("devices", "0")), 0.0) + float(util)
+            device = str(s.get("devices", "0"))
+            memory[device] = memory.get(device, 0.0) + float(util)
         if not isinstance(s.get("devices"), str):
             errors.append(f"{where}: devices must be a quoted string such as \"0\"")
         for key in ("max_num_seqs", "max_num_batched_tokens", "max_model_len"):

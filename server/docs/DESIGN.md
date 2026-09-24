@@ -99,6 +99,7 @@ auth), `GET /metrics` (Prometheus; no auth, bind-local recommended), `GET /v1/au
 | `TTS_BACKEND` | `vllm_omni` | `vllm_omni` or `stub` |
 | `TTS_ENGINE_URL` | `http://127.0.0.1:8091` | engine base URL |
 | `TTS_ENGINE_API_KEY` | – | key the engine expects (`--api-key`), if any |
+| `TTS_ENGINE_PER_REQUEST_RP` | `0` | the engine has the `rep_penalty` patch (engine/patches): send `extra_params.repetition_penalty` and accept `repetition_penalty` per request |
 | `TTS_VOICES_DIR` | `/home/vector/tts-reference-voices/voices` | voice-server/v1 folders |
 | `TTS_VOICE_MODE` | `registered` | `registered` (upload once, send `voice`) or `inline` (send ref_audio every time) |
 | `TTS_MAX_INFLIGHT` | 32 | requests sent to the engine at once |
