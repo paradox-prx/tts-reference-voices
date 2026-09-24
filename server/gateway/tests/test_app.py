@@ -12,7 +12,8 @@ import soundfile as sf
 from conftest import Start, make_wav, raw_speech, wait_for, wait_ready
 from tts_gateway import audio
 from tts_gateway.backends.stub import StubBackend
-from tts_gateway.textproc import max_new_tokens_for
+from tts_gateway.config import Settings
+from tts_gateway.textproc import max_new_tokens_for, pace_cap, voice_band
 
 TEXT = "The quick brown fox jumps over the lazy dog."  # 9 words
 WORDS = 9
@@ -120,7 +121,9 @@ async def test_wav_output_labelled_and_headers(start: Start) -> None:
         assert float(hd["x-tts-queue-ms"]) >= 0 and float(hd["x-tts-engine-ms"]) >= 0
         req = h.stub.requests[-1]
         assert req.language == "English" and req.response_format == "pcm" and req.request_id == "abc-123"
-        assert req.max_new_tokens == max_new_tokens_for(WORDS) and req.temperature is None and req.seed is None
+        band = voice_band(0.09, Settings(auth_disabled=True))  # conftest's pace for alice
+        assert req.max_new_tokens == min(max_new_tokens_for(WORDS), pace_cap(band, WORDS, 35, 1.2)) == 111
+        assert req.temperature is None and req.seed is None
         # an unusable client id is replaced
         r = await h.client.post("/v1/audio/speech", json={"input": TEXT, "voice": "alice"},
                                 headers={"X-Request-Id": "has spaces"})

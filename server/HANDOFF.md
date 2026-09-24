@@ -1,4 +1,54 @@
-# HANDOFF: Qwen3-TTS voice-clone server + benchmark (state as of 2026-09-24 ~19:00 PKT)
+# HANDOFF: Qwen3-TTS voice-clone server + benchmark
+
+> ## Session 2 update (2026-09-25, machine `vector`): READ THIS FIRST
+>
+> The work moved from pb-ai-pc1 to a different machine. §0-§12 below describe session 1 on pb-ai-pc1 and stay as
+> the research record; where they conflict with this box, this block wins.
+>
+> **Machine `vector`:** 1x RTX 3090 24 GB (GPU **0**, also drives the desktop: Xorg/GNOME/VS Code hold ~0.35 GB),
+> driver 580.95.05 (CUDA 13.0), i9-14900K (32 threads; governor powersave, EPP balance_performance), 30 GB RAM,
+> Ubuntu 25.04, Python 3.12 via pyenv (`/home/vector/.pyenv/versions/3.12.6/bin/python3.12`), uv 0.9.13. Internet is
+> fast (~12 MB/s from HF), so everything was downloaded directly (no bundles). **Disk is tight (~17 GB free).** No
+> translation-layer co-tenant, no Whisper servers here.
+>
+> **Layout:** the repo checkout `/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices` (branch
+> `qwen3-omni-bench`) IS the working tree; `server/` is the project root (there is no separate
+> `/home/vector/qwen3-tts-server` repo on this box; commits go straight to the branch). Gitignored assets under
+> `server/`: `venvs/{engine,gateway,eval,qwentts,tools}`, `models/eval/` (4.8 GB, sha-verified), `results/`, `logs/`,
+> `state/`. The Qwen weights are in `~/.cache/huggingface/hub` (snapshot fd4b2543…). Pushes use the `paradox-prx`
+> GitHub account already signed in to `gh` on this box, without switching the active account:
+> `TOKEN=$(gh auth token --user paradox-prx); git -c credential.helper= -c "credential.helper=!f() { echo
+> username=x-access-token; echo password=$TOKEN; }; f" push origin qwen3-omni-bench`.
+>
+> **Engine:** `venvs/engine` = vllm 0.28.0 + vllm-omni 0.28.0 + torch 2.13.0 cu130 (flashinfer 0.6.16.post3,
+> transformers 5.14.1), installed with `uv pip install -p venvs/engine/bin/python -c engine/constraints-omni28.txt
+> vllm==0.28.0 vllm-omni==0.28.0`. **It must run with `VLLM_USE_FLASHINFER_SAMPLER=0`:** with FlashInfer's sampler,
+> stage-0 init JIT-compiles it and fails (`CUDA compiler and CUDA toolkit headers are incompatible`: pip resolved
+> nvcc 13.4.92 against 13.0 runtime headers; `logs/engine_smoke_default.log`). Start (GPU 0):
+> `CUDA_VISIBLE_DEVICES=0 VLLM_USE_FLASHINFER_SAMPLER=0 bash engine/run_engine.sh engine/deploy/qwen3_tts_prod.yaml
+> 8091 venvs/engine`. Measured with the prod YAML (0.45/0.18): stage 0 weights 4.15 GiB, activation peak 1.5 GiB, KV
+> 6.2 GiB = **58,032 tokens** ("maximum concurrency for 4,096 tokens: 14.17x"); stage 1 ≈ 4.2 GiB; whole engine
+> 15.2 GB on the card; stage-0 init 74 s (torch.compile 17 s).
+>
+> **First results (all saved with their numbers under `server/results/`):**
+> - `00_first_engine_smoke/`: engine direct, c=1, both voices × inline/registered × stream/non-stream: RTF 0.19-0.21
+>   (~5x realtime), streaming TTFA 110-117 ms; Whisper (CPU int8) transcribes English exactly and Urdu with minor
+>   accent errors.
+> - `00_first_gateway_smoke/`: through the gateway (registered voices, warmup 0.6-0.8 s): c=8 short texts 14.8x
+>   realtime non-stream, 16.4x stream (TTFA ~0.63 s at c=8), 0 errors, 0 suspects.
+>
+> **Gateway changes (session 2):** voice-relative pace guardrail (s/letter vs `calibration/pace.json`, band
+> 0.6-1.8x; the shehbaz reference clip is a slow address at 0.183 s/letter, so shehbaz uses a prior of 0.088 until
+> recalibrated from real takes); QC sidecar client (`TTS_QC_URL`, retry reason `qc`, fail-open); local-time logs
+> (Asia/Karachi); `GET /v1/voices`; `TTS_VOICE_MODE=precomputed` for engine custom voices (averaged embedding).
+>
+> **In progress:** engine-ops review + precomputed averaged-embedding voices (`engine/precompute_voices.py`); bench
+> tooling + full plan (`bench/bench_tts.py`, `server/bench/`); eval stack + QC sidecar (`server/eval`, `server/qc`,
+> `venvs/eval`); plain qwen-tts baseline (`server/baseline`, `venvs/qwentts`). Then: benchmark phases → quality eval →
+> production units → README.md + REPORT.md. The user also asked that every run's audio and numbers be saved under a
+> folder named for that experiment, with an index (`server/results/INDEX.md`).
+
+# Session 1 record (pb-ai-pc1, state as of 2026-09-24 ~19:00 PKT)
 
 **Where this lives:** on the box, `/home/vector/qwen3-tts-server` (its own git repo, branch `main`). On GitHub, the
 same tree is the `server/` folder of branch **`qwen3-omni-bench`** of `paradox-prx/tts-reference-voices` (public;

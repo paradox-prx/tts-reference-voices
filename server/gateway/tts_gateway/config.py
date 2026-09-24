@@ -45,7 +45,8 @@ class Settings(BaseSettings):
 
     retry_max: int = Field(1, ge=0, le=5)
     retry_on: NameSet = RETRY_REASONS
-    length_cap: bool = True
+    length_cap: bool = True  # send max_new_tokens: min(words formula, pace cap), see textproc.pace_cap
+    length_cap_headroom: float = Field(1.2, ge=1.0)  # pace cap = headroom x suspect band's upper edge x expected
     # a take is suspect when its seconds per letter fall outside this multiple of the voice's expected pace
     suspect_band: Band = (0.6, 1.8)
     # expected output pace per voice (s/letter): calibration file, then TTS_PACE="voice=0.088,..." overrides;

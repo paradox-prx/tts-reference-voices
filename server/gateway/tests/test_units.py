@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import io
 import json
+import math
 import struct
 from pathlib import Path
 
@@ -25,6 +26,7 @@ from tts_gateway.textproc import (
     detect_lang,
     language_band,
     max_new_tokens_for,
+    pace_cap,
     split_for_ceiling,
     split_sentences,
     voice_band,
@@ -53,6 +55,15 @@ def test_detect_lang() -> None:
     assert detect_lang("Hello there") == "en"
     assert detect_lang("السلام علیکم") == "ur"
     assert detect_lang("你好") == "und"
+
+
+def test_pace_cap_is_tighter_than_the_words_formula_for_urdu() -> None:
+    band = voice_band(0.088, Settings(auth_disabled=True))
+    words, letters = 60, 197  # a 'long' Urdu pool text: expected ~17.3 s
+    cap = pace_cap(band, words, letters, 1.2)
+    assert cap == math.ceil(12.5 * (1.2 * 1.8 * 0.088 * 197 + 2.0))  # ~40 s of audio
+    assert cap < max_new_tokens_for(words) == 780
+    assert pace_cap(band, 1, 1, 1.2) == 96  # the floor
 
 
 def test_max_new_tokens_formula_and_clamp() -> None:

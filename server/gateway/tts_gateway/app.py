@@ -46,6 +46,7 @@ from .textproc import (
     detect_lang,
     language_band,
     max_new_tokens_for,
+    pace_cap,
     split_for_ceiling,
     voice_band,
 )
@@ -467,9 +468,16 @@ class Gateway:
         """(what to check, engine request) per part, each with its own length cap."""
         for i, text in enumerate(plan.parts):
             check = plan.check(text, self.qc)
-            cap = plan.base.max_new_tokens or (max_new_tokens_for(check.words) if plan.length_cap else None)
+            cap = plan.base.max_new_tokens or (self._length_cap(check) if plan.length_cap else None)
             rid = plan.base.request_id if len(plan.parts) == 1 else f"{plan.base.request_id}.{i + 1}"
             yield check, replace(plan.base, text=text, max_new_tokens=cap, request_id=rid)
+
+    def _length_cap(self, check: Check) -> int:
+        """The NOTES words formula, tightened to the voice's expected pace when there is a band."""
+        cap = max_new_tokens_for(check.words)
+        if check.band is not None:
+            cap = min(cap, pace_cap(check.band, check.words, check.letters, self.settings.length_cap_headroom))
+        return cap
 
     async def _acquire(self, log: RequestLog) -> Slot:
         try:

@@ -79,8 +79,9 @@ Extensions: `language` (default from the voice: `English` for en, `Auto` otherwi
 cloning, only when `TTS_ALLOW_INLINE_REF=1`), `retries` (0..TTS_RETRY_MAX, per request override).
 
 Response: audio bytes with `Content-Type` per format, and headers `X-Request-Id`, `X-AI-Generated: true`,
-`X-TTS-Voice`, `X-TTS-Audio-Seconds`, `X-TTS-Retries`, `X-TTS-Suspect` (0/1, final take), `X-TTS-Queue-Ms`,
-`X-TTS-Engine-Ms`. WAV output carries a LIST/INFO `ICMT` comment "AI-generated speech (Qwen3-TTS voice clone)...".
+`X-TTS-Voice`, `X-TTS-Audio-Seconds`, `X-TTS-Retries`, `X-TTS-Suspect` (0/1, final take), `X-TTS-Suspect-Reason`
+(`too_short`/`too_long`/`qc`), `X-TTS-Pace-Ratio` (the delivered take's pace / the voice's expected pace),
+`X-TTS-QC` (`pass`/`fail`/`error`/`off`), `X-TTS-QC-Reasons`, `X-TTS-Queue-Ms`, `X-TTS-Engine-Ms`. WAV output carries a LIST/INFO `ICMT` comment "AI-generated speech (Qwen3-TTS voice clone)...".
 Streaming responses send a WAV header with streaming sizes, then PCM (headers limited to those known up front).
 
 Errors: JSON `{"error": {"message", "type", "code"}}` (OpenAI shape). 400 validation, 401 missing/bad key,
@@ -88,8 +89,9 @@ Errors: JSON `{"error": {"message", "type", "code"}}` (OpenAI shape). 400 valida
 504 engine timeout, 502 engine error after retries.
 
 Other routes: `GET /health` (liveness, no auth), `GET /ready` (engine healthy + voices registered + warmup done; no
-auth), `GET /metrics` (Prometheus; no auth, bind-local recommended), `GET /v1/audio/voices` and `GET /v1/models`
-(auth).
+auth), `GET /metrics` (Prometheus; no auth, bind-local recommended), `GET /v1/voices` (alias `GET /v1/audio/voices`)
+and `GET /v1/models` (auth). `/ready` also reports the QC sidecar's health when one is configured, but never turns
+red because of it (QC is advisory).
 
 ## Config (env, prefix `TTS_`)
 
@@ -100,17 +102,25 @@ auth), `GET /metrics` (Prometheus; no auth, bind-local recommended), `GET /v1/au
 | `TTS_ENGINE_URL` | `http://127.0.0.1:8091` | engine base URL |
 | `TTS_ENGINE_API_KEY` | – | key the engine expects (`--api-key`), if any |
 | `TTS_ENGINE_PER_REQUEST_RP` | `0` | the engine has the `rep_penalty` patch (engine/patches): send `extra_params.repetition_penalty` and accept `repetition_penalty` per request |
-| `TTS_VOICES_DIR` | `/home/vector/tts-reference-voices/voices` | voice-server/v1 folders |
-| `TTS_VOICE_MODE` | `registered` | `registered` (upload once, send `voice`) or `inline` (send ref_audio every time) |
+| `TTS_VOICES_DIR` | `<checkout>/voices` | voice-server/v1 folders |
+| `TTS_VOICE_MODE` | `registered` | `registered` (upload once, send `voice`), `inline` (send ref_audio every time) or `precomputed` (the engine loaded the voice at startup from `custom_voice_dir`, e.g. with an averaged speaker embedding; the gateway sends `TTS_PRECOMPUTED_VOICE_NAME`) |
+| `TTS_PRECOMPUTED_VOICE_NAME` | `{id}-avg` | engine voice name per repo voice id in `precomputed` mode |
 | `TTS_MAX_INFLIGHT` | 32 | requests sent to the engine at once |
 | `TTS_MAX_QUEUE` | 128 | waiting requests beyond in-flight; more -> 429 |
 | `TTS_QUEUE_TIMEOUT_S` | 60 | max wait for an in-flight slot -> 503 |
 | `TTS_REQUEST_TIMEOUT_S` | 300 | per engine call |
 | `TTS_MAX_INPUT_CHARS` | 3000 | -> 413 |
 | `TTS_RETRY_MAX` | 1 | extra takes when a take is suspect or the engine fails (non-streaming only) |
-| `TTS_RETRY_ON` | `suspect,engine_error` | which failures trigger a retry |
+| `TTS_RETRY_ON` | `suspect,engine_error,qc` | which failures trigger a retry |
 | `TTS_LENGTH_CAP` | `1` | send `max_new_tokens = words/2.5*12.5*2.4 + 60` (bounded 96..4096) |
-| `TTS_SPW_EN` / `TTS_SPW_UR` | `0.18,0.9` / `0.18,1.1` | seconds-per-word band; outside = suspect |
+| `TTS_SUSPECT_BAND` | `0.6,1.8` | a take is suspect when its seconds per letter fall outside this multiple of the voice's expected pace |
+| `TTS_PACE_FILE` | `<checkout>/server/calibration/pace.json` | expected output pace per voice (s/letter); a voice missing there uses its reference clip's pace |
+| `TTS_PACE` | – | overrides, `voice=s_per_letter,...` |
+| `TTS_SPW_EN` / `TTS_SPW_UR` | `0.18,0.9` / `0.18,1.1` | fallback seconds-per-word bands for text in a language other than the voice's |
+| `TTS_QC_URL` | – | QC sidecar (server/qc) base URL, e.g. `http://127.0.0.1:8092`; unset = no ASR/SIM checks |
+| `TTS_QC_CHECKS` | `asr,sim,audio` | checks requested per take (SIM is skipped for inline references) |
+| `TTS_QC_TIMEOUT_S` | 30 | per QC call; on timeout or error the take is kept (fail open) |
+| `TTS_LOG_TZ` | `Asia/Karachi` | JSON log timestamps are local time in this zone, with the UTC offset |
 | `TTS_DEFAULT_TEMPERATURE` / `TTS_DEFAULT_TOP_K` | 0.9 / 50 | sent as `extra_params` unless the request overrides |
 | `TTS_WARMUP` | `1` | one short request per voice before `/ready` turns green |
 | `TTS_ALLOW_INLINE_REF` | `0` | accept `ref_audio`/`ref_text` in requests |
@@ -120,11 +130,22 @@ auth), `GET /metrics` (Prometheus; no auth, bind-local recommended), `GET /v1/au
 ## Retry and quality policy (non-streaming)
 
 1. Generate a take (no seed on the first attempt).
-2. It is **suspect** if seconds-per-word falls outside the language band (skipped text, cut short, loop, padding), or
-   the engine returns a codec-limit/5xx error.
-3. While suspect and retries remain: generate again (a new take; the engine samples fresh). Keep the best take
-   (non-suspect preferred; among suspects, the one whose seconds-per-word is closest to the language median).
-4. Streaming requests cannot be retried after the first byte; they rely on the length cap to bound runaways.
+2. **Pace check:** letters = characters for which `str.isalnum()` holds (any script; spaces, punctuation and combining
+   marks don't count). The take is suspect (`too_short`: skipped or cut-off text; `too_long`: a loop, filler or
+   padding) when its seconds per letter fall outside `TTS_SUSPECT_BAND` × the voice's expected pace. Letters rather
+   than words because Urdu word segmentation varies (صورتحال vs صورت حال). The expected pace comes from
+   `calibration/pace.json`, not blindly from the reference clip: the shehbaz clip is a slow, pause-heavy address
+   (0.183 s/letter) while Qwen's Urdu runs ~2x faster. The old fixed seconds-per-word band (0.18-1.1 for Urdu) missed
+   all four known Kaggle Urdu failures (0.22, 0.25, 1.01, 1.01 s/word).
+3. **QC check** (only when `TTS_QC_URL` is set and the pace check passed): the sidecar transcribes the take (stock
+   Whisper large-v3; Urdu gated on CER without spaces, not WER), measures speaker similarity to the voice's reference
+   clips, and runs loop/skip/silence detectors. A failed verdict makes the take suspect (`qc`). The sidecar being
+   down or slow never fails a request: the take is kept and `X-TTS-QC: error` is sent.
+4. The engine returning a codec-limit/5xx error counts as a retryable failure (`engine_error`).
+5. While the take is suspect and retries remain: generate again (a new take; the engine samples fresh). Keep the best
+   take: clean first, then QC-only failures, then pace failures, ties broken by the pace closest to the expected one.
+6. Streaming requests cannot be retried after the first byte; they rely on the length cap to bound runaways. Their
+   pace is still logged and counted.
 
 The benchmark measures how often each failure happens, what retries fix, and what they cost, so the defaults above
 are provisional until REPORT.md.
