@@ -160,7 +160,9 @@ async def test_request_log_line(start: Start, caplog: pytest.LogCaptureFixture) 
     lines = {r.fields["request_id"]: r.fields for r in caplog.records if r.getMessage() == "request"}
     ok, missing = lines["log-1"], lines["log-2"]
     assert set(ok) == {"request_id", "voice", "lang", "chars", "words", "stream", "format", "status", "http_status",
-                       "queue_ms", "engine_ms", "total_ms", "audio_s", "rtf", "retries", "suspect", "error"}
+                       "queue_ms", "engine_ms", "total_ms", "audio_s", "rtf", "retries", "suspect", "suspect_reason",
+                       "pace_ratio", "qc", "qc_reasons", "qc_ms", "error"}
+    assert ok["pace_ratio"] == pytest.approx(1.0, abs=0.01) and ok["qc"] is None
     assert (ok["voice"], ok["lang"], ok["words"], ok["status"], ok["http_status"]) == ("alice", "en", WORDS, "ok", 200)
     assert ok["audio_s"] == pytest.approx(pcm_seconds(0.35), abs=1e-3) and ok["rtf"] is not None
     assert (missing["voice"], missing["status"], missing["http_status"]) == ("ghost", "voice_not_found", 404)
@@ -277,7 +279,7 @@ async def test_retry_on_suspect_picks_good_take(start: Start) -> None:
         assert len(r.content) == 2 * round(WORDS * 0.35 * SR)  # the second, good take
         metrics = (await h.client.get("/metrics")).text
         assert 'tts_retries_total{reason="too_short"} 1.0' in metrics
-        assert 'tts_suspect_total{voice="alice"}' in metrics
+        assert 'tts_suspect_total{reason="too_short",voice="alice"} 1.0' in metrics
 
 
 async def test_retries_exhausted_return_best_suspect_take(start: Start) -> None:

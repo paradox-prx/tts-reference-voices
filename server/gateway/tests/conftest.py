@@ -91,6 +91,8 @@ def start(voices_dir: Path) -> Start:
     @asynccontextmanager
     async def _start(*, stub: StubBackend | None = None, ready: bool = True, **settings: Any) -> AsyncIterator[Harness]:
         settings.setdefault("api_key", API_KEY)
+        # the stub speaks 0.35 s/word; TEXT in test_app.py has 3.89 letters/word, so 0.09 s/letter = pace ratio 1.0
+        settings.setdefault("pace", {"alice": 0.09, "bilal": 0.09})
         stub = stub or StubBackend()
         app = create_app(Settings(voices_dir=voices_dir, **settings), backend=stub)
         async with app.router.lifespan_context(app):

@@ -1,0 +1,11 @@
+{
+  "_doc": "Expected Qwen3-TTS output pace per voice, in seconds of audio per letter (letters = characters for which str.isalnum() is True). The gateway (TTS_PACE_FILE) and bench/bench_tts.py (--pace-file) both read this file; a voice missing here falls back to its reference clip's pace. Recalibrate from real takes (median s/letter of good takes) after the P2 matrix.",
+  "trump": {
+    "s_per_letter": 0.0795,
+    "source": "reference clip references/qwen3-tts.wav: 23.21 s / 292 letters; Kaggle trump pace 3.3-3.9 words/s gives a ratio of 0.81-0.95 against it"
+  },
+  "shehbaz": {
+    "s_per_letter": 0.088,
+    "source": "prior: Kaggle good Urdu takes 0.25-0.33 s/word x 3.29 letters/word in benchmarks/shehbaz_ur.json = 0.076-0.100 s/letter; the reference clip (0.183 s/letter) is a slow, pause-heavy address and is NOT used"
+  }
+}

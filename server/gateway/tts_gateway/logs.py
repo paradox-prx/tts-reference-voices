@@ -8,21 +8,24 @@ import sys
 import time
 import uuid
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime, tzinfo
 from typing import Any
+from zoneinfo import ZoneInfo
 
 import orjson
 
 logger = logging.getLogger("tts_gateway")
+_tz: tzinfo = ZoneInfo("Asia/Karachi")  # set from TTS_LOG_TZ by setup()
 
 _REQUEST_ID = re.compile(r"[A-Za-z0-9._:/+=-]{1,128}")
+_QC_SEVERITY = ("pass", "error", "fail")
 
 
 class JsonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         fields: dict[str, Any] | None = getattr(record, "fields", None)
         entry: dict[str, Any] = {
-            "ts": datetime.fromtimestamp(record.created, UTC).isoformat(timespec="milliseconds"),
+            "ts": datetime.fromtimestamp(record.created, _tz).isoformat(timespec="milliseconds"),
             "level": record.levelname.lower(),
         }
         if fields is None:  # a foreign record (uvicorn)
@@ -34,8 +37,11 @@ class JsonFormatter(logging.Formatter):
         return orjson.dumps(entry, default=str).decode()
 
 
-def setup(level: str = "INFO") -> None:
-    """Route our logger and uvicorn's to stdout as JSON lines."""
+def setup(level: str = "INFO", tz: str | None = None) -> None:
+    """Route our logger and uvicorn's to stdout as JSON lines, timestamped in local time of `tz` (with its offset)."""
+    global _tz
+    if tz:
+        _tz = ZoneInfo(tz)
     handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter(JsonFormatter())
     for name in ("tts_gateway", "uvicorn", "uvicorn.error"):
@@ -74,11 +80,29 @@ class RequestLog:
     rtf: float | None = None
     retries: int = 0
     suspect: bool = False
+    suspect_reason: str | None = None  # of the delivered take: too_short / too_long (pace band) or qc
+    pace_ratio: float | None = None  # delivered take's pace / the voice's expected pace
+    qc: str | None = None  # QC sidecar verdict on the delivered take: pass / fail / error (None: not checked)
+    qc_reasons: list[str] | None = None
+    qc_ms: float | None = None  # QC time over all takes
     error: str | None = None
     started: float = field(default_factory=time.perf_counter, repr=False)
 
     def fail(self, status: str, http_status: int, error: str) -> None:
         self.status, self.http_status, self.error = status, http_status, error
+
+    def take(self, take: Any, qc_ms: float = 0.0) -> None:
+        """Record the delivered take of one part (a quality.Take) and the QC time spent on all of that part's takes;
+        a multi-part request keeps the worst part."""
+        self.suspect |= take.suspect
+        self.suspect_reason = self.suspect_reason or take.reason
+        if take.ratio is not None and (self.pace_ratio is None or abs(take.ratio - 1) > abs(self.pace_ratio - 1)):
+            self.pace_ratio = round(take.ratio, 3)
+        if take.qc is not None:
+            self.qc = max(self.qc or "pass", take.qc.status, key=_QC_SEVERITY.index)
+            self.qc_reasons = (self.qc_reasons or []) + list(take.qc.reasons)
+        if qc_ms:
+            self.qc_ms = round((self.qc_ms or 0.0) + qc_ms, 1)
 
     def emit(self) -> None:
         total_s = time.perf_counter() - self.started

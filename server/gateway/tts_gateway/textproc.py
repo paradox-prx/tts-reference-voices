@@ -1,10 +1,11 @@
-"""Text helpers for English and Urdu: word count, sentence split, length cap, seconds-per-word band."""
+"""Text helpers for English and Urdu: word and letter counts, sentence split, length cap, pace bands."""
 
 from __future__ import annotations
 
 import math
 import re
 from dataclasses import dataclass
+from typing import Literal
 
 from .config import Settings
 
@@ -22,6 +23,12 @@ _LATIN = re.compile(r"[A-Za-z]")
 def count_words(text: str) -> int:
     """Whitespace-separated tokens that contain a letter or digit (Urdu separates words with spaces too)."""
     return sum(1 for token in text.split() if _HAS_WORD.search(token))
+
+
+def count_letters(text: str) -> int:
+    """Letters and digits in any script (combining marks, spaces and punctuation don't count). Pace is measured per
+    letter because Urdu word segmentation varies (صورتحال vs صورت حال) while its letters don't."""
+    return sum(1 for ch in text if ch.isalnum())
 
 
 def split_sentences(text: str) -> list[str]:
@@ -43,31 +50,46 @@ def max_new_tokens_for(words: int) -> int:
 
 
 @dataclass(frozen=True)
-class SpwBand:
-    """Plausible seconds of audio per word for a language. Outside it the take is suspect: skipped or cut-short
-    text below, a loop or padding above."""
+class PaceBand:
+    """Expected seconds of audio per unit of text, and the multiples of it outside which a take is suspect: skipped
+    or cut-short text below, a loop or padding above. Voice-relative bands measure per letter against the voice's
+    reference clip; the language fallback measures per word. Duration alone cannot see a 15-25% truncation: the QC
+    sidecar's ASR checks cover that."""
 
-    lo: float
+    unit: Literal["letter", "word"]
+    expected: float  # seconds per unit
+    lo: float  # multiples of `expected`
     hi: float
 
-    @property
-    def target(self) -> float:
-        """Geometric centre of the band: the 'median' a take is compared against."""
-        return math.sqrt(self.lo * self.hi)
+    def ratio(self, audio_s: float, words: int, letters: int) -> float:
+        """Observed pace / expected pace (1.0 = the reference's pace)."""
+        units = letters if self.unit == "letter" else words
+        return audio_s / max(1, units) / self.expected
 
-    def reason(self, spw: float) -> str | None:
+    def reason(self, ratio: float) -> str | None:
         """None when inside the band, else 'too_short' or 'too_long'."""
-        if spw < self.lo:
+        if ratio < self.lo:
             return "too_short"
-        return "too_long" if spw > self.hi else None
+        return "too_long" if ratio > self.hi else None
 
-    def distance(self, spw: float) -> float:
-        return abs(math.log(spw / self.target)) if spw > 0 else math.inf
+    @staticmethod
+    def distance(ratio: float) -> float:
+        return abs(math.log(ratio)) if ratio > 0 else math.inf
 
 
-def spw_band(lang: str, settings: Settings) -> SpwBand | None:
+def voice_band(s_per_letter: float, settings: Settings) -> PaceBand:
+    return PaceBand("letter", s_per_letter, *settings.suspect_band)
+
+
+def language_band(lang: str, settings: Settings) -> PaceBand | None:
+    """The absolute seconds-per-word band of a language (TTS_SPW_EN / TTS_SPW_UR), as a band around its geometric
+    centre; None for other languages (no suspect check, no length cap)."""
     bands = {"en": settings.spw_en, "ur": settings.spw_ur}
-    return SpwBand(*bands[lang]) if lang in bands else None
+    if lang not in bands:
+        return None
+    lo, hi = bands[lang]
+    centre = math.sqrt(lo * hi)
+    return PaceBand("word", centre, lo / centre, hi / centre)
 
 
 def split_for_ceiling(text: str, max_words: int) -> list[str]:

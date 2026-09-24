@@ -20,7 +20,7 @@ def main() -> None:
         logs.setup()
         logs.event("config_error", logging.ERROR, error=str(exc))
         sys.exit(2)
-    logs.setup(settings.log_level)
+    logs.setup(settings.log_level, settings.log_tz)
     try:
         app = create_app(settings)
     except Exception as exc:  # noqa: BLE001 - no voices, unknown backend, ...: exit with one clear log line

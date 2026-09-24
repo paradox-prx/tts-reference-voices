@@ -37,8 +37,19 @@ from .backends.base import (
 from .config import Settings
 from .logs import RequestLog
 from .metrics import CONTENT_TYPE, Metrics
-from .textproc import SpwBand, count_words, detect_lang, max_new_tokens_for, split_for_ceiling, spw_band
-from .voices import REF_SECONDS, Voice, VoiceRegistry, engine_language, normalize_language
+from .qc import QCClient
+from .quality import Check
+from .textproc import (
+    PaceBand,
+    count_letters,
+    count_words,
+    detect_lang,
+    language_band,
+    max_new_tokens_for,
+    split_for_ceiling,
+    voice_band,
+)
+from .voices import REF_SECONDS, Voice, VoiceRegistry, engine_language, load_pace, normalize_language
 
 MAX_BODY_BYTES = 16 << 20  # JSON body: the input text plus, at most, an inline reference clip in base64
 MAX_REF_AUDIO_BYTES = 10 << 20
@@ -173,9 +184,9 @@ class AudioStream(StreamingResponse):
                 await self._on_close(error)
 
 
-def decode_ref_audio(value: str) -> bytes:
-    """Inline reference audio: plain base64 or a data:audio/...;base64 URL. Never a URL: the engine would fetch
-    http(s) URLs (SSRF) and read file:// paths (local file disclosure)."""
+def decode_ref_audio(value: str) -> tuple[bytes, float]:
+    """Inline reference audio (bytes, seconds): plain base64 or a data:audio/...;base64 URL. Never a URL: the engine
+    would fetch http(s) URLs (SSRF) and read file:// paths (local file disclosure)."""
     payload = value
     if value[:5].lower() == "data:":
         header, sep, payload = value.partition(",")
@@ -198,7 +209,7 @@ def decode_ref_audio(value: str) -> bytes:
     if not REF_SECONDS[0] <= seconds <= REF_SECONDS[1]:
         raise APIError(400, "invalid_ref_audio",
                        f"ref_audio lasts {seconds:.1f} s; it must last {REF_SECONDS[0]:g}-{REF_SECONDS[1]:g} s")
-    return data
+    return data, seconds
 
 
 async def read_body(request: Request) -> bytes:
@@ -229,17 +240,23 @@ class Plan:
 
     base: SynthesisRequest
     parts: list[str]  # the text, split only for a backend with a per-call ceiling
-    band: SpwBand | None
+    band: PaceBand | None
+    lang: str  # the text's language: "en", "ur" or "und"
     fmt: str
     stream: bool
     retries: int
     voice_label: str  # voice id, or "inline"
     length_cap: bool
 
+    def check(self, text: str, qc: QCClient | None) -> Check:
+        voice = self.base.voice.id if self.base.voice else None
+        return Check(count_words(text), count_letters(text), self.band, self.lang, voice, qc)
+
 
 class Gateway:
     def __init__(self, settings: Settings, voices: VoiceRegistry, backend: TTSBackend) -> None:
         self.settings, self.voices, self.backend = settings, voices, backend
+        self.qc = QCClient(settings) if settings.qc_url else None
         self.metrics = Metrics()
         self.admission = Admission(settings.max_inflight, settings.max_queue, settings.queue_timeout_s)
         self.metrics.track(self.admission)
@@ -255,7 +272,9 @@ class Gateway:
         s = self.settings
         logs.event("startup", version=__version__, backend=self.backend.name, voices=[v.id for v in self.voices],
                    invalid_voices=self.voices.errors, voice_mode=s.voice_mode, max_inflight=s.max_inflight,
-                   max_queue=s.max_queue, retry_max=s.retry_max, length_cap=s.length_cap, warmup=s.warmup,
+                   max_queue=s.max_queue, retry_max=s.retry_max, retry_on=sorted(s.retry_on), length_cap=s.length_cap,
+                   suspect_band=s.suspect_band, pace={v.id: [round(v.pace, 4), v.pace_source] for v in self.voices},
+                   qc=s.qc_url and {"url": s.qc_url, "checks": sorted(s.qc_checks)}, warmup=s.warmup,
                    inline_ref=s.allow_inline_ref, auth="disabled" if s.auth_disabled else f"{len(self._keys)} key(s)")
         await self.backend.start()
         self._bringup = asyncio.create_task(self._bring_up())
@@ -267,6 +286,8 @@ class Gateway:
             with suppress(asyncio.CancelledError):
                 await self._bringup
             await self.backend.close()
+            if self.qc:
+                await self.qc.close()
             logs.event("shutdown", inflight=self.admission.inflight)
 
     async def _bring_up(self) -> None:
@@ -331,8 +352,11 @@ class Gateway:
             health = {"ok": False, "error": f"{type(exc).__name__}: {exc}"}
         if not health.get("ok"):
             return JSONResponse({"ready": False, "reason": f"engine unhealthy: {health}"}, 503)
-        return JSONResponse({"ready": True, "backend": self.backend.name, "voices": [v.id for v in self.voices],
-                             "inflight": self.admission.inflight, "queued": self.admission.waiting})
+        body = {"ready": True, "backend": self.backend.name, "voices": [v.id for v in self.voices],
+                "inflight": self.admission.inflight, "queued": self.admission.waiting}
+        if self.qc:  # advisory: takes are kept when the sidecar is down, so it never makes the gateway unready
+            body["qc"] = await self.qc.health()
+        return JSONResponse(body)
 
     # ------------------------------------------------------------------------------------------ speech
 
@@ -392,28 +416,36 @@ class Gateway:
         if body.repetition_penalty is not None and not caps.per_request_repetition_penalty:
             raise APIError(400, "unsupported_parameter",
                            f"repetition_penalty cannot be set per request on the {self.backend.name} backend")
-        voice, ref_audio, ref_text = await self._voice(body)
+        voice, ref_audio, ref_text, ref_seconds = await self._voice(body)
         label = voice.id if voice else "inline"
-        lang = voice.lang if voice else detect_lang(text)
+        lang = detect_lang(text)
         log.voice, log.lang = label, lang
-        band = spw_band(lang, s)
+        # The pace band is voice-relative only when the text is in the reference's language: a pace measured on
+        # English letters says nothing about Urdu ones. Otherwise fall back to the language's seconds-per-word band.
+        if voice is not None and lang == voice.lang:
+            band: PaceBand | None = voice_band(voice.pace, s)
+        elif voice is None and ref_text and lang == detect_lang(ref_text):
+            band = voice_band(ref_seconds / max(1, count_letters(ref_text)), s)
+        else:
+            band = language_band(lang, s)
         if body.language:
             language = normalize_language(body.language)
-        else:
+        else:  # the voice's language (English for trump, Auto for shehbaz); inline: the text's
             language = voice.language if voice else engine_language(lang)
         parts = [text]
-        if caps.max_seconds_per_call:
-            seconds_per_word = 1.5 * (band or SpwBand(*s.spw_en)).target
-            parts = split_for_ceiling(text, max(1, int(caps.max_seconds_per_call / seconds_per_word)))
+        if caps.max_seconds_per_call:  # a conservative words-per-part estimate from the language's centre pace
+            est = language_band(lang, s) or language_band("en", s)
+            assert est is not None
+            parts = split_for_ceiling(text, max(1, int(caps.max_seconds_per_call / (1.5 * est.expected))))
         retries = 0 if body.stream else min(s.retry_max, s.retry_max if body.retries is None else body.retries)
         base = SynthesisRequest(text=text, voice=voice, language=language, temperature=body.temperature,
                                 top_k=body.top_k, top_p=body.top_p, repetition_penalty=body.repetition_penalty,
                                 seed=body.seed, max_new_tokens=body.max_new_tokens, speed=body.speed,
                                 ref_audio=ref_audio, ref_text=ref_text, request_id=log.request_id)
-        return Plan(base, parts, band, body.response_format, body.stream, retries, label,
+        return Plan(base, parts, band, lang, body.response_format, body.stream, retries, label,
                     length_cap=s.length_cap and band is not None)
 
-    async def _voice(self, body: SpeechRequest) -> tuple[Voice | None, bytes | None, str | None]:
+    async def _voice(self, body: SpeechRequest) -> tuple[Voice | None, bytes | None, str | None, float]:
         if body.ref_audio is not None or body.ref_text is not None:
             if not self.settings.allow_inline_ref:
                 raise APIError(400, "inline_ref_disabled",
@@ -422,22 +454,22 @@ class Gateway:
                 raise APIError(400, "invalid_request", "send either voice or ref_audio + ref_text, not both")
             if not body.ref_audio or not (body.ref_text or "").strip():
                 raise APIError(400, "invalid_request", "inline cloning needs ref_audio and a non-empty ref_text")
-            ref_audio = await asyncio.to_thread(decode_ref_audio, body.ref_audio)
-            return None, ref_audio, (body.ref_text or "").strip()
+            ref_audio, seconds = await asyncio.to_thread(decode_ref_audio, body.ref_audio)
+            return None, ref_audio, (body.ref_text or "").strip(), seconds
         if not body.voice:
             raise APIError(400, "missing_voice", "voice is required")
         voice = self.voices.get(body.voice)
         if voice is None:
-            raise APIError(404, "voice_not_found", f"voice {body.voice[:64]!r} not found; see GET /v1/audio/voices")
-        return voice, None, None
+            raise APIError(404, "voice_not_found", f"voice {body.voice[:64]!r} not found; see GET /v1/voices")
+        return voice, None, None, voice.ref_seconds
 
-    def _part_requests(self, plan: Plan) -> Iterator[tuple[int, SynthesisRequest]]:
-        """(words, engine request) per part, each with its own length cap."""
+    def _part_requests(self, plan: Plan) -> Iterator[tuple[Check, SynthesisRequest]]:
+        """(what to check, engine request) per part, each with its own length cap."""
         for i, text in enumerate(plan.parts):
-            words = count_words(text)
-            cap = plan.base.max_new_tokens or (max_new_tokens_for(words) if plan.length_cap else None)
+            check = plan.check(text, self.qc)
+            cap = plan.base.max_new_tokens or (max_new_tokens_for(check.words) if plan.length_cap else None)
             rid = plan.base.request_id if len(plan.parts) == 1 else f"{plan.base.request_id}.{i + 1}"
-            yield words, replace(plan.base, text=text, max_new_tokens=cap, request_id=rid)
+            yield check, replace(plan.base, text=text, max_new_tokens=cap, request_id=rid)
 
     async def _acquire(self, log: RequestLog) -> Slot:
         try:
@@ -464,13 +496,12 @@ class Gateway:
         sample_rate = self.backend.capabilities.sample_rate
         start = time.perf_counter()
         try:
-            for words, req in self._part_requests(plan):
+            for check, req in self._part_requests(plan):
                 outcome = await quality.synthesize(
-                    self.backend, req, words=words, band=plan.band, retries=plan.retries,
-                    retry_on=self.settings.retry_on, timeout_s=self.settings.request_timeout_s,
-                    metrics=self.metrics, voice=plan.voice_label)
+                    self.backend, req, check=check, retries=plan.retries, retry_on=self.settings.retry_on,
+                    timeout_s=self.settings.request_timeout_s, metrics=self.metrics, voice=plan.voice_label)
                 log.retries += outcome.retries
-                log.suspect |= outcome.take.suspect
+                log.take(outcome.take, outcome.qc_ms)
                 sample_rate = outcome.take.result.sample_rate
                 if pcm:
                     pcm.append(audio.silence(PART_GAP_S, sample_rate))
@@ -490,7 +521,14 @@ class Gateway:
             data = audio.encode(joined, sample_rate, plan.fmt)
         headers = self._headers(plan, log) | {
             "X-TTS-Sample-Rate": str(sample_rate), "X-TTS-Audio-Seconds": f"{log.audio_s:.3f}",
-            "X-TTS-Suspect": str(int(log.suspect)), "X-TTS-Engine-Ms": f"{log.engine_ms:.0f}"}
+            "X-TTS-Suspect": str(int(log.suspect)), "X-TTS-Engine-Ms": f"{log.engine_ms:.0f}",
+            "X-TTS-QC": log.qc or "off"}
+        if log.suspect_reason:
+            headers["X-TTS-Suspect-Reason"] = log.suspect_reason
+        if log.pace_ratio is not None:
+            headers["X-TTS-Pace-Ratio"] = f"{log.pace_ratio:.3f}"
+        if log.qc_reasons:
+            headers["X-TTS-QC-Reasons"] = ",".join(log.qc_reasons)[:512]
         return Response(data, media_type=audio.MEDIA_TYPES[plan.fmt], headers=headers)
 
     async def start_stream(self, plan: Plan, log: RequestLog) -> Response:
@@ -551,10 +589,11 @@ class Gateway:
     def _close_stream(self, plan: Plan, log: RequestLog, error: BaseException | None) -> None:
         """Log a finished stream. It could not be retried, but a suspect one is still flagged and counted."""
         if error is None:
-            spw = (log.audio_s or 0.0) / max(1, log.words or 0)
-            if plan.band and plan.band.reason(spw):
-                log.suspect, log.status = True, "suspect"
-                self.metrics.suspect.labels(plan.voice_label).inc()
+            if plan.band:
+                log.pace_ratio = plan.band.ratio(log.audio_s or 0.0, log.words or 0, count_letters(plan.base.text))
+                if reason := plan.band.reason(log.pace_ratio):
+                    log.suspect, log.status, log.suspect_reason = True, "suspect", reason
+                    self.metrics.suspect.labels(plan.voice_label, reason).inc()
         elif isinstance(error, BackendError):
             api = engine_error(error)
             log.fail(api.code, 200, f"after the first byte: {api.detail}")  # the client already has a 200
@@ -575,7 +614,8 @@ class Gateway:
 def create_app(settings: Settings | None = None, *, voices: VoiceRegistry | None = None,
                backend: TTSBackend | None = None) -> FastAPI:
     settings = settings or Settings()
-    voices = VoiceRegistry.load(settings.voices_dir) if voices is None else voices
+    if voices is None:
+        voices = VoiceRegistry.load(settings.voices_dir, load_pace(settings.pace_file, settings.pace))
     if not len(voices) and not settings.allow_inline_ref:
         raise RuntimeError(f"no valid voices under {settings.voices_dir} and inline cloning is disabled")
     gw = Gateway(settings, voices, backend or create_backend(settings, voices))
@@ -588,6 +628,7 @@ def create_app(settings: Settings | None = None, *, voices: VoiceRegistry | None
     async def speech(request: Request) -> Response:
         return await gw.speech(request)
 
+    @app.get("/v1/voices", dependencies=auth)
     @app.get("/v1/audio/voices", dependencies=auth)
     async def list_voices() -> dict[str, Any]:
         return {"object": "list", "data": [

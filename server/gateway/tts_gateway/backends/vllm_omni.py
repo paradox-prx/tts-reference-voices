@@ -155,8 +155,10 @@ class _PcmReader:
 
 class VllmOmniBackend:
     """Registered mode (default) uploads each voice once under a content-addressed name and sends `voice`; inline
-    mode sends the reference clip as a data URL with every request. Either way, per-request inline cloning
-    (SynthesisRequest.voice None) sends ref_audio + ref_text."""
+    mode sends the reference clip as a data URL with every request; precomputed mode sends the name under which the
+    engine loaded the voice at startup (custom_voice_dir, e.g. with an averaged speaker embedding). Whatever the mode,
+    per-request inline cloning (SynthesisRequest.voice None) sends ref_audio + ref_text, and never `voice` with it:
+    inline ref_audio plus a voice label kills the talker in 0.28-0.30.0rc1 (vllm-omni #6970)."""
 
     name = "vllm_omni"
 
@@ -282,6 +284,8 @@ class VllmOmniBackend:
             payload |= {"ref_audio": _data_url(req.ref_audio), "ref_text": req.ref_text}
         elif self._registered_mode:
             payload["voice"] = await self._voice_name(req.voice)  # ref_text comes from the stored voice
+        elif s.voice_mode == "precomputed":
+            payload["voice"] = s.precomputed_voice_name.format(id=req.voice.id)
         else:
             payload |= {"ref_audio": req.voice.data_url, "ref_text": req.voice.ref_text}
         # Per-request sampling reaches the talker (codebook 0) only through extra_params (serving_speech.py:3089);

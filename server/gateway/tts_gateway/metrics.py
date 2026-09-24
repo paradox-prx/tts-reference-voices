@@ -35,8 +35,14 @@ class Metrics:
         self.queue_depth = Gauge("queue_depth", "Requests waiting for an engine slot", namespace=_NS, registry=r)
         self.retries = Counter("retries", "Extra takes, by the reason of the take they replace", ["reason"],
                                namespace=_NS, registry=r)
-        self.suspect = Counter("suspect", "Takes whose seconds-per-word fell outside the language band", ["voice"],
-                               namespace=_NS, registry=r)
+        self.suspect = Counter("suspect", "Takes flagged suspect: outside the pace band (too_short/too_long) or failed "
+                               "by the QC sidecar (qc)", ["voice", "reason"], namespace=_NS, registry=r)
+        self.qc_seconds = Histogram("qc_seconds", "QC sidecar time per take", namespace=_NS, registry=r,
+                                    buckets=(0.05, 0.1, 0.25, 0.5, 1, 2, 4, 8, 15, 30))
+        self.qc_results = Counter("qc_results", "QC sidecar verdicts per take (error = unreachable/failed; the take is "
+                                  "kept)", ["status", "voice"], namespace=_NS, registry=r)
+        self.qc_reasons = Counter("qc_reasons", "Reasons the QC sidecar gave for failing a take", ["reason"],
+                                  namespace=_NS, registry=r)
         self.audio_seconds = Counter("audio_seconds", "Audio seconds delivered", ["voice"], namespace=_NS, registry=r)
         self.engine_errors = Counter("engine_errors", "Failed engine calls by kind", ["kind"],
                                      namespace=_NS, registry=r)

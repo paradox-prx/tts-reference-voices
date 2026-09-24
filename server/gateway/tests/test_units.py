@@ -17,18 +17,21 @@ from tts_gateway.admission import Admission, QueueFull, QueueTimeout
 from tts_gateway.backends import create_backend
 from tts_gateway.backends.stub import StubBackend
 from tts_gateway.config import Settings
+from tts_gateway.config import REPO_ROOT
 from tts_gateway.textproc import (
-    SpwBand,
+    PaceBand,
+    count_letters,
     count_words,
     detect_lang,
+    language_band,
     max_new_tokens_for,
     split_for_ceiling,
     split_sentences,
-    spw_band,
+    voice_band,
 )
-from tts_gateway.voices import VoiceRegistry, normalize_language
+from tts_gateway.voices import VoiceRegistry, load_pace, normalize_language
 
-REAL_VOICES = Path("/home/vector/tts-reference-voices/voices")
+REAL_VOICES = REPO_ROOT / "voices"
 
 
 # ------------------------------------------------------------------------------------------------ textproc
@@ -58,13 +61,30 @@ def test_max_new_tokens_formula_and_clamp() -> None:
     assert max_new_tokens_for(1000) == 4096
 
 
-def test_spw_band() -> None:
+def test_count_letters() -> None:
+    assert count_letters("Hello, world! 2026") == 14
+    assert count_letters("السلام علیکم۔") == 11  # the Urdu full stop and the space don't count
+    assert count_letters("پُرعزم") == 5  # the damma (a combining mark) doesn't count
+
+
+def test_language_band_keeps_the_absolute_seconds_per_word_limits() -> None:
     settings = Settings(auth_disabled=True)
-    en, ur = spw_band("en", settings), spw_band("ur", settings)
-    assert en == SpwBand(0.18, 0.9) and ur == SpwBand(0.18, 1.1)
-    assert spw_band("und", settings) is None
-    assert en.reason(0.4) is None and en.reason(0.1) == "too_short" and en.reason(1.5) == "too_long"
-    assert en.distance(0.15) < en.distance(0.05)
+    en = language_band("en", settings)
+    assert en is not None and en.unit == "word" and language_band("und", settings) is None
+    assert en.reason(en.ratio(0.4 * 10, 10, 50)) is None
+    assert en.reason(en.ratio(0.1 * 10, 10, 50)) == "too_short" and en.reason(en.ratio(1.5 * 10, 10, 50)) == "too_long"
+    assert en.ratio(0.18 * 10, 10, 50) * en.expected * 10 == pytest.approx(1.8)  # the band edge maps back exactly
+
+
+def test_voice_band_is_relative_to_the_expected_pace() -> None:
+    band = voice_band(0.088, Settings(auth_disabled=True))  # the shehbaz prior (s/letter)
+    assert band == PaceBand("letter", 0.088, 0.6, 1.8)
+    # the four known Kaggle Urdu failures (s/word 0.22, 0.25, 1.01, 1.01; 3.29 letters/word): the two long ones are
+    # caught; the 15-25% truncations are not (they need the QC sidecar's ASR checks)
+    ratios = [band.ratio(spw * 100, 100, 329) for spw in (0.22, 0.25, 1.01, 1.01)]
+    assert [band.reason(r) for r in ratios] == [None, None, "too_long", "too_long"]
+    assert band.reason(band.ratio(0.29 * 100, 100, 329)) is None  # a good take
+    assert PaceBand.distance(1.1) < PaceBand.distance(0.5)
 
 
 def test_split_for_ceiling() -> None:
@@ -149,6 +169,29 @@ def test_real_voices_load() -> None:
     trump, shehbaz = reg.get("trump"), reg.get("shehbaz")
     assert trump and shehbaz and not reg.errors
     assert trump.language == "English" and shehbaz.language == "Auto"
+    assert trump.pace_source == "reference" and trump.pace == pytest.approx(0.0795, abs=1e-3)
+    calibrated = VoiceRegistry.load(REAL_VOICES, load_pace(REPO_ROOT / "server" / "calibration" / "pace.json"))
+    shehbaz = calibrated.get("shehbaz")
+    assert shehbaz and shehbaz.pace_source == "calibration" and shehbaz.pace < 0.12  # not the slow clip's 0.183
+
+
+def test_pace_file_and_overrides(tmp_path: Path) -> None:
+    pace_file = tmp_path / "pace.json"
+    pace_file.write_text(json.dumps({"_doc": "comment", "alice": {"s_per_letter": 0.07}, "bilal": 0.09}))
+    assert load_pace(pace_file, {"bilal": 0.1}) == {"alice": (0.07, "calibration"), "bilal": (0.1, "override")}
+    assert load_pace(tmp_path / "missing.json") == {}
+    root = tmp_path / "voices"
+    write_voice(root, "alice", "en", "This is a reference sentence.", seconds=2.4)
+    write_voice(root, "carol", "en", "Twelve letters", seconds=1.2)
+    reg = VoiceRegistry.load(root, load_pace(pace_file))
+    alice, carol = reg.get("alice"), reg.get("carol")
+    assert alice and alice.pace == 0.07 and alice.pace_source == "calibration"
+    assert carol and carol.pace == pytest.approx(1.2 / 13) and carol.pace_source == "reference"
+    assert Settings(auth_disabled=True, pace="Alice=0.08, bilal=0.1").pace == {"alice": 0.08, "bilal": 0.1}
+    with pytest.raises(ValidationError):
+        Settings(auth_disabled=True, pace="alice=0")
+    with pytest.raises(ValidationError):
+        Settings(auth_disabled=True, pace="alice")
 
 
 # ------------------------------------------------------------------------------------------------ admission

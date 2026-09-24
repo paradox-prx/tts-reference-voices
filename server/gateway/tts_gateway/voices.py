@@ -10,12 +10,13 @@ import json
 import logging
 import re
 from collections.abc import Iterator
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 import soundfile as sf
 
 from . import logs
+from .textproc import count_letters
 
 REFERENCE_KEY = "qwen3-tts"
 REF_SECONDS = (1.0, 30.0)  # the engine rejects reference clips outside this range
@@ -49,8 +50,10 @@ class Voice:
     ref_text: str
     ref_sha256: str
     ref_seconds: float
+    pace: float  # expected seconds per letter of output: the voice-relative suspect band is centred on it
     ref_audio: bytes = field(repr=False)
     data_url: str = field(repr=False)  # data:audio/...;base64,... of ref_audio
+    pace_source: str = "reference"  # "reference" (the clip's own pace), "calibration" (pace file) or "override"
 
     @property
     def language(self) -> str:
@@ -89,9 +92,29 @@ def load_voice(folder: Path) -> Voice:
         raise VoiceError(f"reference is not decodable audio: {exc}") from None
     if not REF_SECONDS[0] <= seconds <= REF_SECONDS[1]:
         raise VoiceError(f"reference lasts {seconds:.2f} s; the engine accepts {REF_SECONDS[0]:g}-{REF_SECONDS[1]:g} s")
+    text = ref["text"].strip()
+    if not count_letters(text):
+        raise VoiceError("the reference transcript has no letters")
     return Voice(id=folder.name, label=str(meta.get("label") or folder.name), lang=lang, ref_path=path,
-                 ref_text=ref["text"].strip(), ref_sha256=digest, ref_seconds=round(seconds, 3), ref_audio=audio,
+                 ref_text=text, ref_sha256=digest, ref_seconds=round(seconds, 3),
+                 pace=seconds / count_letters(text), ref_audio=audio,
                  data_url=f"data:{mime};base64,{base64.b64encode(audio).decode()}")
+
+
+def load_pace(pace_file: Path | None, overrides: dict[str, float] | None = None) -> dict[str, tuple[float, str]]:
+    """Expected output pace per voice id: {id: (seconds per letter, source)} from the calibration file (keys starting
+    with "_" are comments), then the overrides. A reference clip can be much slower than the model's output (the
+    shehbaz clip is a pause-heavy address at 0.183 s/letter; Qwen's Urdu runs ~0.088), so calibrate from real takes."""
+    pace: dict[str, tuple[float, str]] = {}
+    if pace_file is not None and pace_file.is_file():
+        data = json.loads(pace_file.read_text(encoding="utf-8"))
+        for voice_id, entry in data.items():
+            value = entry.get("s_per_letter") if isinstance(entry, dict) else entry
+            if not voice_id.startswith("_") and isinstance(value, (int, float)) and value > 0:
+                pace[voice_id.lower()] = (float(value), "calibration")
+    for voice_id, value in (overrides or {}).items():
+        pace[voice_id.lower()] = (value, "override")
+    return pace
 
 
 class VoiceRegistry:
@@ -100,16 +123,22 @@ class VoiceRegistry:
         self.errors = errors or {}
 
     @classmethod
-    def load(cls, root: Path) -> VoiceRegistry:
-        """Every valid voice folder under root; invalid ones are logged and skipped."""
+    def load(cls, root: Path, pace: dict[str, tuple[float, str]] | None = None) -> VoiceRegistry:
+        """Every valid voice folder under root, with its calibrated pace when `pace` has one; invalid folders are
+        logged and skipped."""
         voices, errors = [], {}
         folders = sorted(p for p in root.iterdir() if p.is_dir()) if root.is_dir() else []
         for folder in folders:
             try:
-                voices.append(load_voice(folder))
+                voice = load_voice(folder)
             except VoiceError as exc:
                 errors[folder.name] = str(exc)
                 logs.event("voice_invalid", logging.ERROR, voice=folder.name, error=str(exc))
+                continue
+            if voice.id in (pace or {}):
+                value, source = pace[voice.id]
+                voice = replace(voice, pace=value, pace_source=source)
+            voices.append(voice)
         return cls(voices, errors)
 
     def get(self, voice_id: str) -> Voice | None:
