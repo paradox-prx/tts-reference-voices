@@ -1,9 +1,11 @@
+import os
+from pathlib import Path
 import json, sys, unicodedata
-sys.path.insert(0, '.')
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 import jiwer
 from whisper_normalizers import BasicTextNormalizer, EnglishTextNormalizer
 from tts_textnorm import UrduNormalizer, nospace, script_fractions
-R = '/home/vector/tts-reference-voices'
+R = os.environ.get('REPO_DIR', str(Path(__file__).resolve().parents[3]))
 un, b0, b1, en = UrduNormalizer(), BasicTextNormalizer(), BasicTextNormalizer(remove_diacritics=True), EnglishTextNormalizer()
 ref = json.load(open(f'{R}/voices/shehbaz/references/references.json'))['qwen3-tts']['text']
 print('REF      :', ref)

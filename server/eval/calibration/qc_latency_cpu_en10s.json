@@ -1,0 +1,164 @@
+{
+ "measured_at": "2026-09-25T03:54:12+05:00",
+ "url": "http://127.0.0.1:18092",
+ "health": {
+  "status": "ok",
+  "asr": true,
+  "sim": true,
+  "device": "cpu",
+  "sim_model": "base",
+  "voices": [
+   "shehbaz",
+   "trump"
+  ],
+  "version": "0.1.0"
+ },
+ "clip": "trump/trump_01.wav",
+ "audio_s": 10.0,
+ "lang": "en",
+ "checks": [
+  "sim",
+  "audio",
+  "asr"
+ ],
+ "n": 5,
+ "concurrency": 1,
+ "warmup": 1,
+ "wall_ms": {
+  "n": 5,
+  "mean": 7276.2,
+  "median": 7404.7,
+  "p10": 6508.0,
+  "p90": 7789.6,
+  "min": 6508.0,
+  "max": 7789.6
+ },
+ "server_ms": {
+  "audio": {
+   "n": 5,
+   "mean": 4.58,
+   "median": 4.6,
+   "p10": 3.8,
+   "p90": 5.2,
+   "min": 3.8,
+   "max": 5.2
+  },
+  "asr": {
+   "n": 5,
+   "mean": 6794.34,
+   "median": 6936.4,
+   "p10": 6051.5,
+   "p90": 7250.4,
+   "min": 6051.5,
+   "max": 7250.4
+  },
+  "sim": {
+   "n": 5,
+   "mean": 468.9,
+   "median": 455.4,
+   "p10": 442.3,
+   "p90": 527.2,
+   "min": 442.3,
+   "max": 527.2
+  },
+  "total": {
+   "n": 5,
+   "mean": 7267.82,
+   "median": 7396.9,
+   "p10": 6499.1,
+   "p90": 7781.3,
+   "min": 6499.1,
+   "max": 7781.3
+  }
+ },
+ "throughput_x_realtime": 1.37,
+ "passes": 0,
+ "reasons": [
+  "char_ratio<0.85",
+  "del_run>=3",
+  "pace<0.6",
+  "wer>0.2"
+ ],
+ "calls": [
+  {
+   "wall_ms": 7404.7,
+   "ms": {
+    "audio": 5.1,
+    "asr": 6936.4,
+    "sim": 455.4,
+    "total": 7396.9
+   },
+   "pass": false,
+   "reasons": [
+    "pace<0.6",
+    "wer>0.2",
+    "char_ratio<0.85",
+    "del_run>=3"
+   ]
+  },
+  {
+   "wall_ms": 6508.0,
+   "ms": {
+    "audio": 5.2,
+    "asr": 6051.5,
+    "sim": 442.3,
+    "total": 6499.1
+   },
+   "pass": false,
+   "reasons": [
+    "pace<0.6",
+    "wer>0.2",
+    "char_ratio<0.85",
+    "del_run>=3"
+   ]
+  },
+  {
+   "wall_ms": 7789.6,
+   "ms": {
+    "audio": 3.8,
+    "asr": 7250.4,
+    "sim": 527.2,
+    "total": 7781.3
+   },
+   "pass": false,
+   "reasons": [
+    "pace<0.6",
+    "wer>0.2",
+    "char_ratio<0.85",
+    "del_run>=3"
+   ]
+  },
+  {
+   "wall_ms": 7433.2,
+   "ms": {
+    "audio": 4.6,
+    "asr": 6973.6,
+    "sim": 447.9,
+    "total": 7426.1
+   },
+   "pass": false,
+   "reasons": [
+    "pace<0.6",
+    "wer>0.2",
+    "char_ratio<0.85",
+    "del_run>=3"
+   ]
+  },
+  {
+   "wall_ms": 7245.5,
+   "ms": {
+    "audio": 4.2,
+    "asr": 6759.8,
+    "sim": 471.7,
+    "total": 7235.7
+   },
+   "pass": false,
+   "reasons": [
+    "pace<0.6",
+    "wer>0.2",
+    "char_ratio<0.85",
+    "del_run>=3"
+   ]
+  }
+ ]
+}

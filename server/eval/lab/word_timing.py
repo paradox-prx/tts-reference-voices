@@ -1,8 +1,11 @@
+import os
+from pathlib import Path
 import sys, json
 from faster_whisper import WhisperModel
-m = WhisperModel('../models/faster-whisper-large-v3', device='cpu', compute_type='int8', cpu_threads=8)
-V = '/home/vector/tts-reference-voices/voices'
-for f, lang in [(f'{V}/shehbaz/shehbaz_02.wav', 'ur'), ('synth/ur_syllable_loop12.wav', 'ur'), ('synth/ur_phrase_loop3.wav', 'ur'), ('synth/ur_gap4s.wav', 'ur')]:
+HERE = Path(__file__).resolve().parent
+m = WhisperModel(os.environ.get('ASR_MODEL', str(HERE.parents[1] / 'models' / 'eval' / 'faster-whisper-large-v3')), device='cpu', compute_type='int8', cpu_threads=8)
+V = os.environ.get('VOICES_DIR', str(HERE.parents[2] / 'voices'))
+for f, lang in [(f'{V}/shehbaz/shehbaz_02.wav', 'ur'), (f'{HERE}/synth/ur_syllable_loop12.wav', 'ur'), (f'{HERE}/synth/ur_phrase_loop3.wav', 'ur'), (f'{HERE}/synth/ur_gap4s.wav', 'ur')]:
     segs, _ = m.transcribe(f, language=lang, beam_size=5, condition_on_previous_text=False, word_timestamps=True)
     words = [w for s in segs for w in s.words]
     durs = [(round(w.end - w.start, 2), w.word.strip()) for w in words]

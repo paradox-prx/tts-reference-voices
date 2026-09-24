@@ -1,0 +1,134 @@
+{
+ "measured_at": "2026-09-25T03:53:28+05:00",
+ "url": "http://127.0.0.1:18092",
+ "health": {
+  "status": "ok",
+  "asr": true,
+  "sim": true,
+  "device": "cpu",
+  "sim_model": "base",
+  "voices": [
+   "shehbaz",
+   "trump"
+  ],
+  "version": "0.1.0"
+ },
+ "clip": "shehbaz/shehbaz_02.wav",
+ "audio_s": 10.21,
+ "lang": "ur",
+ "checks": [
+  "asr",
+  "sim",
+  "audio"
+ ],
+ "n": 5,
+ "concurrency": 1,
+ "warmup": 1,
+ "wall_ms": {
+  "n": 5,
+  "mean": 5372.38,
+  "median": 5607.6,
+  "p10": 4188.5,
+  "p90": 6356.8,
+  "min": 4188.5,
+  "max": 6356.8
+ },
+ "server_ms": {
+  "audio": {
+   "n": 5,
+   "mean": 4.36,
+   "median": 4.4,
+   "p10": 3.9,
+   "p90": 4.8,
+   "min": 3.9,
+   "max": 4.8
+  },
+  "asr": {
+   "n": 5,
+   "mean": 5020.64,
+   "median": 5292.8,
+   "p10": 3811.8,
+   "p90": 5930.2,
+   "min": 3811.8,
+   "max": 5930.2
+  },
+  "sim": {
+   "n": 5,
+   "mean": 338.42,
+   "median": 353.3,
+   "p10": 260.1,
+   "p90": 413.2,
+   "min": 260.1,
+   "max": 413.2
+  },
+  "total": {
+   "n": 5,
+   "mean": 5363.42,
+   "median": 5598.0,
+   "p10": 4180.6,
+   "p90": 6347.7,
+   "min": 4180.6,
+   "max": 6347.7
+  }
+ },
+ "throughput_x_realtime": 1.9,
+ "passes": 5,
+ "reasons": [],
+ "calls": [
+  {
+   "wall_ms": 5607.6,
+   "ms": {
+    "audio": 4.5,
+    "asr": 5292.8,
+    "sim": 300.6,
+    "total": 5598.0
+   },
+   "pass": true,
+   "reasons": []
+  },
+  {
+   "wall_ms": 6356.8,
+   "ms": {
+    "audio": 4.4,
+    "asr": 5930.2,
+    "sim": 413.2,
+    "total": 6347.7
+   },
+   "pass": true,
+   "reasons": []
+  },
+  {
+   "wall_ms": 6118.4,
+   "ms": {
+    "audio": 4.8,
+    "asr": 5751.2,
+    "sim": 353.3,
+    "total": 6109.3
+   },
+   "pass": true,
+   "reasons": []
+  },
+  {
+   "wall_ms": 4590.6,
+   "ms": {
+    "audio": 4.2,
+    "asr": 4317.2,
+    "sim": 260.1,
+    "total": 4581.5
+   },
+   "pass": true,
+   "reasons": []
+  },
+  {
+   "wall_ms": 4188.5,
+   "ms": {
+    "audio": 3.9,
+    "asr": 3811.8,
+    "sim": 364.9,
+    "total": 4180.6
+   },
+   "pass": true,
+   "reasons": []
+  }
+ ]
+}

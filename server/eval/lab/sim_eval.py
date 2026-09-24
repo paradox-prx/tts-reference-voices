@@ -24,7 +24,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
-VOICES = Path(os.environ.get("VOICES_DIR", "/home/vector/tts-reference-voices/voices"))
+VOICES = Path(os.environ.get("VOICES_DIR", Path(__file__).resolve().parents[3] / "voices"))
 MODELS = Path(os.environ.get("SIM_MODELS", Path(__file__).resolve().parents[1] / "models"))
 
 

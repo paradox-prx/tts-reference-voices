@@ -8,9 +8,12 @@ sys.path.insert(0, str(Path(__file__).parent))
 from faster_whisper import WhisperModel, decode_audio  # noqa: E402
 from tts_textnorm import script_fractions               # noqa: E402
 
+REPO = Path(__file__).resolve().parents[3]
+
 model = WhisperModel(sys.argv[1], device="cpu", compute_type="int8", cpu_threads=int(sys.argv[2]) if len(sys.argv) > 2 else 8)
 for line in open(Path(__file__).parent / "refs_manifest.jsonl", encoding="utf-8"):
     r = json.loads(line)
+    r["file"] = str(REPO / r["file"])
     audio = decode_audio(r["file"], sampling_rate=16000)
     lang, prob, allp = model.detect_language(audio=audio[: 30 * 16000])
     top = sorted(allp, key=lambda x: -x[1])[:5]

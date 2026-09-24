@@ -1,9 +1,11 @@
+import os
+from pathlib import Path
 import sys, wave, glob
 import numpy as np
-sys.path.insert(0, '.')
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from tts_checks import audio_checks, text_checks
 from tts_textnorm import UrduNormalizer
-R = '/home/vector/tts-reference-voices/voices'
+R = os.environ.get('VOICES_DIR', str(Path(__file__).resolve().parents[3] / 'voices'))
 def load(p):
     with wave.open(p) as w:
         sr, ch, sw, n = w.getframerate(), w.getnchannels(), w.getsampwidth(), w.getnframes()

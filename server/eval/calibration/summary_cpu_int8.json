@@ -1,0 +1,1558 @@
+{
+ "tag": "cpu_int8",
+ "about": "Compare this stack's calibration with the eval research's recorded numbers and check the synthetic failures.",
+ "real_clips": {
+  "shehbaz/shehbaz_01.wav": {
+   "wer": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "cer": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "cer_nospace": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "char_ratio": {
+    "ours": 1.0,
+    "research": 1.0
+   },
+   "max_internal_sil_s": {
+    "ours": 0.02,
+    "research": 0.02
+   },
+   "trail_sil_s": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "speech_ratio": {
+    "ours": 0.991,
+    "research": 0.991
+   },
+   "max_word_s": {
+    "ours": 1.08,
+    "research": 1.08
+   },
+   "max_word_voiced": {
+    "ours": 0.98,
+    "research": 0.98
+   },
+   "unaligned_tail_s": {
+    "ours": 0.36,
+    "research": 0.36
+   },
+   "seg_max_cr": {
+    "ours": 1.17,
+    "research": 1.17
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 4.62,
+    "research": 4.62
+   },
+   "asr_text": "بسم اللہ الرحمن الرحیم عزیز اہل وطن السلام علیکم",
+   "gate_reasons": [],
+   "bad_reasons": [],
+   "lid_ur": 0.899,
+   "sim_prompt_large": 0.8687,
+   "sim_prompt_base": 0.9749
+  },
+  "shehbaz/shehbaz_02.wav": {
+   "wer": {
+    "ours": 0.0,
+    "research": 0.0556
+   },
+   "cer": {
+    "ours": 0.0,
+    "research": 0.0122
+   },
+   "cer_nospace": {
+    "ours": 0.0,
+    "research": 0.0154
+   },
+   "char_ratio": {
+    "ours": 1.0,
+    "research": 1.015
+   },
+   "max_internal_sil_s": {
+    "ours": 0.1,
+    "research": 0.1
+   },
+   "trail_sil_s": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "speech_ratio": {
+    "ours": 0.961,
+    "research": 0.961
+   },
+   "max_word_s": {
+    "ours": 1.3,
+    "research": 1.3
+   },
+   "max_word_voiced": {
+    "ours": 0.91,
+    "research": 0.91
+   },
+   "unaligned_tail_s": {
+    "ours": 0.43,
+    "research": 0.43
+   },
+   "seg_max_cr": {
+    "ours": 1.28,
+    "research": 1.26
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 10.21,
+    "research": 10.21
+   },
+   "asr_text": "آج میں خطے کو درپیش ایک نہایت سنجیدہ اور پرخطر صورتحال کے بارے میں آپ سے مخاطب ہوں",
+   "gate_reasons": [],
+   "bad_reasons": [],
+   "lid_ur": 0.984,
+   "sim_prompt_large": 0.9013,
+   "sim_prompt_base": 0.9842
+  },
+  "shehbaz/shehbaz_03.wav": {
+   "wer": {
+    "ours": 0.0556,
+    "research": 0.0556
+   },
+   "cer": {
+    "ours": 0.0235,
+    "research": 0.0235
+   },
+   "cer_nospace": {
+    "ours": 0.0294,
+    "research": 0.0294
+   },
+   "char_ratio": {
+    "ours": 1.0,
+    "research": 1.0
+   },
+   "max_internal_sil_s": {
+    "ours": 0.28,
+    "research": 0.28
+   },
+   "trail_sil_s": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "speech_ratio": {
+    "ours": 0.939,
+    "research": 0.939
+   },
+   "max_word_s": {
+    "ours": 1.36,
+    "research": 1.36
+   },
+   "max_word_voiced": {
+    "ours": 0.79,
+    "research": 0.79
+   },
+   "unaligned_tail_s": {
+    "ours": 0.44,
+    "research": 0.44
+   },
+   "seg_max_cr": {
+    "ours": 1.26,
+    "research": 1.26
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 12.5,
+    "research": 12.5
+   },
+   "asr_text": "بدقسمتی سے پورا خطہ بشمول ایران اور مشرق وستہ اس وقت شدید جنگی صورتحال کی لپیٹ میں ہے",
+   "gate_reasons": [],
+   "bad_reasons": [],
+   "lid_ur": 0.944,
+   "sim_prompt_large": 0.9278,
+   "sim_prompt_base": 0.9899
+  },
+  "shehbaz/shehbaz_04.wav": {
+   "wer": {
+    "ours": 0.0769,
+    "research": 0.0769
+   },
+   "cer": {
+    "ours": 0.0336,
+    "research": 0.0336
+   },
+   "cer_nospace": {
+    "ours": 0.0426,
+    "research": 0.0426
+   },
+   "char_ratio": {
+    "ours": 0.989,
+    "research": 0.989
+   },
+   "max_internal_sil_s": {
+    "ours": 0.2,
+    "research": 0.2
+   },
+   "trail_sil_s": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "speech_ratio": {
+    "ours": 0.935,
+    "research": 0.935
+   },
+   "max_word_s": {
+    "ours": 1.26,
+    "research": 1.26
+   },
+   "max_word_voiced": {
+    "ours": 0.67,
+    "research": 0.67
+   },
+   "unaligned_tail_s": {
+    "ours": 0.4,
+    "research": 0.4
+   },
+   "seg_max_cr": {
+    "ours": 1.45,
+    "research": 1.45
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 13.84,
+    "research": 13.84
+   },
+   "asr_text": "معصوم انسانی جانوں کا زیاہ بے گھر ہونے والے خاندانوں کی تکلیف اور امن کو لاحق خطرات ہم سب کے لیے گہری تشویش کا باعث ہے",
+   "gate_reasons": [],
+   "bad_reasons": [],
+   "lid_ur": 0.996,
+   "sim_prompt_large": 0.8963,
+   "sim_prompt_base": 0.9771
+  },
+  "shehbaz/shehbaz_05.wav": {
+   "wer": {
+    "ours": 0.2,
+    "research": 0.2
+   },
+   "cer": {
+    "ours": 0.0495,
+    "research": 0.0495
+   },
+   "cer_nospace": {
+    "ours": 0.0488,
+    "research": 0.0488
+   },
+   "char_ratio": {
+    "ours": 0.988,
+    "research": 0.988
+   },
+   "max_internal_sil_s": {
+    "ours": 0.22,
+    "research": 0.22
+   },
+   "trail_sil_s": {
+    "ours": 0.02,
+    "research": 0.02
+   },
+   "speech_ratio": {
+    "ours": 0.927,
+    "research": 0.927
+   },
+   "max_word_s": {
+    "ours": 1.36,
+    "research": 1.36
+   },
+   "max_word_voiced": {
+    "ours": 0.74,
+    "research": 0.74
+   },
+   "unaligned_tail_s": {
+    "ours": 0.12,
+    "research": 0.12
+   },
+   "seg_max_cr": {
+    "ours": 1.39,
+    "research": 1.39
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 1,
+    "research": 1
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 12.06,
+    "research": 12.06
+   },
+   "asr_text": "پاکستان اس کشیدہ صورتحال میں حد تل مقدور کوشش کر رہا ہے کہ معاملات تدبر اور سفارتکاری کی ذریعے حل ہوں",
+   "gate_reasons": [],
+   "bad_reasons": [],
+   "lid_ur": 0.992,
+   "sim_prompt_large": 0.9397,
+   "sim_prompt_base": 0.9909
+  },
+  "shehbaz/shehbaz_06.wav": {
+   "wer": {
+    "ours": 0.28,
+    "research": 0.28
+   },
+   "cer": {
+    "ours": 0.0588,
+    "research": 0.0588
+   },
+   "cer_nospace": {
+    "ours": 0.0536,
+    "research": 0.0536
+   },
+   "char_ratio": {
+    "ours": 0.982,
+    "research": 0.982
+   },
+   "max_internal_sil_s": {
+    "ours": 0.08,
+    "research": 0.08
+   },
+   "trail_sil_s": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "speech_ratio": {
+    "ours": 0.976,
+    "research": 0.976
+   },
+   "max_word_s": {
+    "ours": 1.54,
+    "research": 1.54
+   },
+   "max_word_voiced": {
+    "ours": 0.97,
+    "research": 0.97
+   },
+   "unaligned_tail_s": {
+    "ours": 0.38,
+    "research": 0.38
+   },
+   "seg_max_cr": {
+    "ours": 1.65,
+    "research": 1.65
+   },
+   "del_run": {
+    "ours": 1,
+    "research": 1
+   },
+   "ins_run": {
+    "ours": 1,
+    "research": 1
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 14.04,
+    "research": 14.04
+   },
+   "asr_text": "دوسری جانب ہمیں اپنی مغرب سردوں پر بھی دہشتگردی کا سامنا ہے اغوانستان میں موجود دہشتگردوں کے سہلوتکاروں کی جانب سے ہونے والی در اندازی",
+   "gate_reasons": [],
+   "bad_reasons": [],
+   "lid_ur": 0.91,
+   "sim_prompt_large": 0.9055,
+   "sim_prompt_base": 0.9856
+  },
+  "shehbaz/shehbaz_07.wav": {
+   "wer": {
+    "ours": 0.2857,
+    "research": 0.2857
+   },
+   "cer": {
+    "ours": 0.0704,
+    "research": 0.0704
+   },
+   "cer_nospace": {
+    "ours": 0.0862,
+    "research": 0.0862
+   },
+   "char_ratio": {
+    "ours": 0.966,
+    "research": 0.966
+   },
+   "max_internal_sil_s": {
+    "ours": 0.78,
+    "research": 0.78
+   },
+   "trail_sil_s": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "speech_ratio": {
+    "ours": 0.849,
+    "research": 0.849
+   },
+   "max_word_s": {
+    "ours": 1.66,
+    "research": 1.66
+   },
+   "max_word_voiced": {
+    "ours": 0.42,
+    "research": 0.42
+   },
+   "unaligned_tail_s": {
+    "ours": 0.39,
+    "research": 0.39
+   },
+   "seg_max_cr": {
+    "ours": 1.34,
+    "research": 1.34
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 10.31,
+    "research": 10.31
+   },
+   "asr_text": "اور حملوں کے جواب میں ہماری بہادر فاج ہمارے پرعظم اور بہادر سپاہ سلار",
+   "gate_reasons": [],
+   "bad_reasons": [],
+   "lid_ur": 0.745,
+   "sim_prompt_large": 0.9289,
+   "sim_prompt_base": 0.9932
+  },
+  "shehbaz/shehbaz_08.wav": {
+   "wer": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "cer": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "cer_nospace": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "char_ratio": {
+    "ours": 1.0,
+    "research": 1.0
+   },
+   "max_internal_sil_s": {
+    "ours": 1.48,
+    "research": 1.48
+   },
+   "trail_sil_s": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "speech_ratio": {
+    "ours": 0.71,
+    "research": 0.71
+   },
+   "max_word_s": {
+    "ours": 2.22,
+    "research": 2.22
+   },
+   "max_word_voiced": {
+    "ours": 0.44,
+    "research": 0.44
+   },
+   "unaligned_tail_s": {
+    "ours": 0.09,
+    "research": 0.09
+   },
+   "seg_max_cr": {
+    "ours": 1.22,
+    "research": 1.22
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 12.414,
+    "research": 12.414
+   },
+   "asr_text": "سید عاصم منیر کی لیڈرشپ میں وطن عزیز کی سلامتی اور خود مختاری کے تحفظ",
+   "gate_reasons": [],
+   "bad_reasons": [],
+   "lid_ur": 0.98,
+   "sim_prompt_large": 0.9484,
+   "sim_prompt_base": 0.9879
+  },
+  "shehbaz/qwen3-tts.wav": {
+   "wer": {
+    "ours": 0.1316,
+    "research": 0.1316
+   },
+   "cer": {
+    "ours": 0.0421,
+    "research": 0.0421
+   },
+   "cer_nospace": {
+    "ours": 0.0523,
+    "research": 0.0523
+   },
+   "char_ratio": {
+    "ours": 0.98,
+    "research": 0.98
+   },
+   "max_internal_sil_s": {
+    "ours": 1.5,
+    "research": 1.5
+   },
+   "trail_sil_s": {
+    "ours": 0.02,
+    "research": 0.02
+   },
+   "speech_ratio": {
+    "ours": 0.785,
+    "research": 0.785
+   },
+   "max_word_s": {
+    "ours": 1.7,
+    "research": 1.7
+   },
+   "max_word_voiced": {
+    "ours": 0.44,
+    "research": 0.44
+   },
+   "unaligned_tail_s": {
+    "ours": 0.42,
+    "research": 0.42
+   },
+   "seg_max_cr": {
+    "ours": 1.79,
+    "research": 1.79
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 28.044,
+    "research": 28.044
+   },
+   "asr_text": "اور حملوں کے جواب میں ہماری بہادر فاج ہمارے پرعظم اور بہادر سپاہ سلار سید آسم منیر کی لیڈرشپ میں وطن عزیز کی سلامتی اور خود مختاری کے تحفظ بسم اللہ الرحمن الرحیم عزیز اہل وطن السلام علیکم",
+   "gate_reasons": [],
+   "bad_reasons": [],
+   "lid_ur": 0.983,
+   "sim_prompt_large": 1.0,
+   "sim_prompt_base": 1.0
+  },
+  "trump/trump_01.wav": {
+   "wer": {
+    "ours": 0.0167,
+    "research": 0.0167
+   },
+   "cer": {
+    "ours": 0.0058,
+    "research": 0.0058
+   },
+   "cer_nospace": {
+    "ours": 0.0035,
+    "research": 0.0035
+   },
+   "char_ratio": {
+    "ours": 1.004,
+    "research": 1.004
+   },
+   "max_internal_sil_s": {
+    "ours": 0.24,
+    "research": 0.24
+   },
+   "trail_sil_s": {
+    "ours": 0.08,
+    "research": 0.08
+   },
+   "speech_ratio": {
+    "ours": 0.937,
+    "research": 0.937
+   },
+   "max_word_s": {
+    "ours": 1.0,
+    "research": 1.0
+   },
+   "max_word_voiced": {
+    "ours": 0.7,
+    "research": 0.7
+   },
+   "unaligned_tail_s": {
+    "ours": 0.49,
+    "research": 0.49
+   },
+   "seg_max_cr": {
+    "ours": 1.53,
+    "research": 1.54
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 1,
+    "research": 1
+   },
+   "repeat_excess": {
+    "ours": 1,
+    "research": 1
+   },
+   "duration_s": {
+    "ours": 23.211,
+    "research": 23.211
+   },
+   "asr_text": "Almost every one of these countries wrote me a letter of thank you. The Prime Minister of Pakistan, a terrific man, said that Donald Trump was responsible for saving 30 million lives and probably many more than that. The President of Azerbaijan said President Trump in six months did a miracle. It was an absolute miracle that nobody thought could be done.",
+   "gate_reasons": [],
+   "bad_reasons": [],
+   "lid_ur": 0.0,
+   "sim_prompt_large": 0.9999,
+   "sim_prompt_base": 0.9997
+  },
+  "trump/qwen3-tts.wav": {
+   "wer": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "cer": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "cer_nospace": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "char_ratio": {
+    "ours": 1.0,
+    "research": 1.0
+   },
+   "max_internal_sil_s": {
+    "ours": 0.2,
+    "research": 0.2
+   },
+   "trail_sil_s": {
+    "ours": 0.08,
+    "research": 0.08
+   },
+   "speech_ratio": {
+    "ours": 0.945,
+    "research": 0.945
+   },
+   "max_word_s": {
+    "ours": 1.0,
+    "research": 1.0
+   },
+   "max_word_voiced": {
+    "ours": 0.78,
+    "research": 0.78
+   },
+   "unaligned_tail_s": {
+    "ours": 0.49,
+    "research": 0.49
+   },
+   "seg_max_cr": {
+    "ours": 1.54,
+    "research": 1.54
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 23.211,
+    "research": 23.211
+   },
+   "asr_text": "Almost every one of these countries wrote me a letter of thank you. The prime minister of Pakistan, terrific man, said that Donald Trump was responsible for saving 30 million lives and probably many more than that. The president of Azerbaijan said President Trump in six months did a miracle. It was an absolute miracle that nobody thought could be done.",
+   "gate_reasons": [],
+   "bad_reasons": [],
+   "lid_ur": 0.0,
+   "sim_prompt_large": 1.0,
+   "sim_prompt_base": 1.0
+  }
+ },
+ "urdu_corpus_8_clips": {
+  "ours": {
+   "n": 8,
+   "wer": 0.1241,
+   "cer": 0.0338,
+   "cer_nospace": 0.0366
+  },
+  "research": {
+   "n": 8,
+   "wer": 0.131,
+   "cer": 0.0352,
+   "cer_nospace": 0.0383,
+   "reported": {
+    "wer": 0.131,
+    "cer": 0.035,
+    "cer_nospace": 0.038,
+    "per_clip_wer": [
+     0,
+     0.286
+    ],
+    "per_clip_cer_nospace": [
+     0,
+     0.086
+    ]
+   }
+  }
+ },
+ "real_clip_ranges": {
+  "max_internal_sil_s": [
+   0.02,
+   1.5
+  ],
+  "lead_sil_s": [
+   0.0,
+   0.04
+  ],
+  "trail_sil_s": [
+   0.0,
+   0.08
+  ],
+  "speech_ratio": [
+   0.71,
+   0.991
+  ],
+  "max_word_s": [
+   1.0,
+   2.22
+  ],
+  "unaligned_tail_s": [
+   0.09,
+   0.49
+  ],
+  "seg_max_cr": [
+   1.17,
+   1.79
+  ],
+  "char_ratio": [
+   0.966,
+   1.004
+  ],
+  "del_run": [
+   0,
+   1
+  ],
+  "ins_run": [
+   0,
+   1
+  ],
+  "repeat_excess": [
+   0,
+   1
+  ],
+  "lid_ur": [
+   0.0,
+   0.996
+  ],
+  "sim_prompt_large": [
+   0.8687,
+   0.9999
+  ],
+  "sim_prompt_base": [
+   0.9749,
+   0.9997
+  ],
+  "sim_heldout_large": [
+   0.8758,
+   0.9686
+  ],
+  "sim_heldout_base": [
+   0.9757,
+   0.996
+  ]
+ },
+ "real_clips_gate_pass": "11/11",
+ "real_clips_bad": {},
+ "synthetic": {
+  "ur_trail_silence6s": {
+   "expected": [
+    "trail_sil",
+    "unaligned_tail"
+   ],
+   "gate_reasons": [
+    "trail_sil>1.5",
+    "unaligned_tail>3"
+   ],
+   "bad_reasons": [
+    "trail_sil>1.5",
+    "unaligned_tail>2"
+   ],
+   "missing": [],
+   "detected": true,
+   "wer": {
+    "ours": 0.0556,
+    "research": 0.0556
+   },
+   "cer": {
+    "ours": 0.0122,
+    "research": 0.0122
+   },
+   "cer_nospace": {
+    "ours": 0.0154,
+    "research": 0.0154
+   },
+   "char_ratio": {
+    "ours": 1.015,
+    "research": 1.015
+   },
+   "max_internal_sil_s": {
+    "ours": 0.1,
+    "research": 0.1
+   },
+   "trail_sil_s": {
+    "ours": 6.0,
+    "research": 6.0
+   },
+   "speech_ratio": {
+    "ours": 0.612,
+    "research": 0.612
+   },
+   "max_word_s": {
+    "ours": 1.28,
+    "research": 1.28
+   },
+   "max_word_voiced": {
+    "ours": 0.95,
+    "research": 0.95
+   },
+   "unaligned_tail_s": {
+    "ours": 6.42,
+    "research": 6.43
+   },
+   "seg_max_cr": {
+    "ours": 1.26,
+    "research": 1.26
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 16.205,
+    "research": 16.21
+   },
+   "asr_text": "آج میں خطے کو درپیش ایک نہائیت سنجیدہ اور پرخطر صورتحال کے بارے میں آپ سے مخاطب ہوں"
+  },
+  "ur_trail_noise6s": {
+   "expected": [
+    "unaligned_tail"
+   ],
+   "gate_reasons": [
+    "unaligned_tail>3"
+   ],
+   "bad_reasons": [
+    "unaligned_tail>2"
+   ],
+   "missing": [],
+   "detected": true,
+   "wer": {
+    "ours": 0.0556,
+    "research": 0.0556
+   },
+   "cer": {
+    "ours": 0.0122,
+    "research": 0.0122
+   },
+   "cer_nospace": {
+    "ours": 0.0154,
+    "research": 0.0154
+   },
+   "char_ratio": {
+    "ours": 1.015,
+    "research": 1.015
+   },
+   "max_internal_sil_s": {
+    "ours": 0.1,
+    "research": 0.1
+   },
+   "trail_sil_s": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "speech_ratio": {
+    "ours": 0.983,
+    "research": 0.983
+   },
+   "max_word_s": {
+    "ours": 1.28,
+    "research": 1.28
+   },
+   "max_word_voiced": {
+    "ours": 0.95,
+    "research": 0.95
+   },
+   "unaligned_tail_s": {
+    "ours": 6.42,
+    "research": 6.43
+   },
+   "seg_max_cr": {
+    "ours": 1.26,
+    "research": 1.26
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 16.205,
+    "research": 16.21
+   },
+   "asr_text": "آج میں خطے کو درپیش ایک نہائیت سنجیدہ اور پرخطر صورتحال کے بارے میں آپ سے مخاطب ہوں"
+  },
+  "ur_syllable_loop12": {
+   "expected": [
+    "long_word"
+   ],
+   "gate_reasons": [
+    "long_word>2.5"
+   ],
+   "bad_reasons": [
+    "long_word>2"
+   ],
+   "missing": [],
+   "detected": true,
+   "wer": {
+    "ours": 0.0556,
+    "research": 0.0556
+   },
+   "cer": {
+    "ours": 0.0122,
+    "research": 0.0122
+   },
+   "cer_nospace": {
+    "ours": 0.0154,
+    "research": 0.0154
+   },
+   "char_ratio": {
+    "ours": 1.015,
+    "research": 1.015
+   },
+   "max_internal_sil_s": {
+    "ours": 0.1,
+    "research": 0.1
+   },
+   "trail_sil_s": {
+    "ours": 0.04,
+    "research": 0.0
+   },
+   "speech_ratio": {
+    "ours": 0.968,
+    "research": 0.972
+   },
+   "max_word_s": {
+    "ours": 4.64,
+    "research": 5.52
+   },
+   "max_word_voiced": {
+    "ours": 1.0,
+    "research": 0.99
+   },
+   "unaligned_tail_s": {
+    "ours": 0.43,
+    "research": 0.43
+   },
+   "seg_max_cr": {
+    "ours": 1.26,
+    "research": 1.26
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 14.345,
+    "research": 14.41
+   },
+   "asr_text": "آج میں خطے کو درپیش ایک نہائیت سنجیدہ اور پرخطر صورتحال کے بارے میں آپ سے مخاطب ہوں"
+  },
+  "ur_phrase_loop3": {
+   "expected": [
+    "long_word"
+   ],
+   "gate_reasons": [
+    "long_word>2.5"
+   ],
+   "bad_reasons": [
+    "long_word>2"
+   ],
+   "missing": [],
+   "detected": true,
+   "wer": {
+    "ours": 0.0556,
+    "research": 0.0556
+   },
+   "cer": {
+    "ours": 0.0122,
+    "research": 0.0122
+   },
+   "cer_nospace": {
+    "ours": 0.0154,
+    "research": 0.0154
+   },
+   "char_ratio": {
+    "ours": 1.015,
+    "research": 1.015
+   },
+   "max_internal_sil_s": {
+    "ours": 0.1,
+    "research": 0.1
+   },
+   "trail_sil_s": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "speech_ratio": {
+    "ours": 0.968,
+    "research": 0.964
+   },
+   "max_word_s": {
+    "ours": 4.86,
+    "research": 4.9
+   },
+   "max_word_voiced": {
+    "ours": 0.99,
+    "research": 0.98
+   },
+   "unaligned_tail_s": {
+    "ours": 0.43,
+    "research": 0.43
+   },
+   "seg_max_cr": {
+    "ours": 1.26,
+    "research": 1.26
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 17.69,
+    "research": 17.71
+   },
+   "asr_text": "آج میں خطے کو درپیش ایک نہائیت سنجیدہ اور پرخطر صورتحال کے بارے میں آپ سے مخاطب ہوں"
+  },
+  "ur_truncated60": {
+   "expected": [
+    "cer_nospace",
+    "char_ratio",
+    "del_run"
+   ],
+   "gate_reasons": [
+    "cer_nospace>0.15",
+    "char_ratio<0.85",
+    "del_run>=4"
+   ],
+   "bad_reasons": [
+    "cer_nospace>0.1",
+    "char_ratio<0.9",
+    "del_run>=3"
+   ],
+   "missing": [],
+   "detected": true,
+   "wer": {
+    "ours": 0.5,
+    "research": 0.5
+   },
+   "cer": {
+    "ours": 0.3902,
+    "research": 0.3902
+   },
+   "cer_nospace": {
+    "ours": 0.3846,
+    "research": 0.3846
+   },
+   "char_ratio": {
+    "ours": 0.646,
+    "research": 0.646
+   },
+   "max_internal_sil_s": {
+    "ours": 0.1,
+    "research": 0.1
+   },
+   "trail_sil_s": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "speech_ratio": {
+    "ours": 0.961,
+    "research": 0.961
+   },
+   "max_word_s": {
+    "ours": 1.08,
+    "research": 1.08
+   },
+   "max_word_voiced": {
+    "ours": 0.96,
+    "research": 0.96
+   },
+   "unaligned_tail_s": {
+    "ours": 0.03,
+    "research": 0.03
+   },
+   "seg_max_cr": {
+    "ours": 1.06,
+    "research": 1.06
+   },
+   "del_run": {
+    "ours": 7,
+    "research": 7
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 6.126,
+    "research": 6.126
+   },
+   "asr_text": "آج میں خطے کو درپیش ایک نہائیت سنجیدہ اور پرخطر صورت"
+  },
+  "ur_gap4s": {
+   "expected": [
+    "pause"
+   ],
+   "gate_reasons": [
+    "pause>2"
+   ],
+   "bad_reasons": [
+    "pause>2"
+   ],
+   "missing": [],
+   "detected": true,
+   "wer": {
+    "ours": 0.0556,
+    "research": 0.0556
+   },
+   "cer": {
+    "ours": 0.0122,
+    "research": 0.0122
+   },
+   "cer_nospace": {
+    "ours": 0.0154,
+    "research": 0.0154
+   },
+   "char_ratio": {
+    "ours": 1.015,
+    "research": 1.015
+   },
+   "max_internal_sil_s": {
+    "ours": 4.06,
+    "research": 3.98
+   },
+   "trail_sil_s": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "speech_ratio": {
+    "ours": 0.694,
+    "research": 0.696
+   },
+   "max_word_s": {
+    "ours": 5.24,
+    "research": 5.24
+   },
+   "max_word_voiced": {
+    "ours": 0.23,
+    "research": 0.26
+   },
+   "unaligned_tail_s": {
+    "ours": 0.42,
+    "research": 0.43
+   },
+   "seg_max_cr": {
+    "ours": 1.26,
+    "research": 1.26
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 14.2,
+    "research": 14.21
+   },
+   "asr_text": "آج میں خطے کو درپیش ایک نہائیت سنجیدہ اور پرخطر صورتحال کے بارے میں آپ سے مخاطب ہوں"
+  },
+  "en_phrase_loop3": {
+   "expected": [
+    "word_gap"
+   ],
+   "gate_reasons": [
+    "word_gap>2"
+   ],
+   "bad_reasons": [
+    "word_gap>1.5"
+   ],
+   "missing": [],
+   "detected": true,
+   "wer": {
+    "ours": 0.0,
+    "research": 0.35
+   },
+   "cer": {
+    "ours": 0.0,
+    "research": 0.3576
+   },
+   "cer_nospace": {
+    "ours": 0.0,
+    "research": 0.3579
+   },
+   "char_ratio": {
+    "ours": 1.0,
+    "research": 1.358
+   },
+   "max_internal_sil_s": {
+    "ours": 0.24,
+    "research": 0.24
+   },
+   "trail_sil_s": {
+    "ours": 0.08,
+    "research": 0.08
+   },
+   "speech_ratio": {
+    "ours": 0.947,
+    "research": 0.921
+   },
+   "max_word_s": {
+    "ours": 0.8,
+    "research": 1.0
+   },
+   "max_word_voiced": {
+    "ours": 0.9,
+    "research": 0.7
+   },
+   "unaligned_tail_s": {
+    "ours": 0.51,
+    "research": 0.51
+   },
+   "seg_max_cr": {
+    "ours": 1.48,
+    "research": 2.08
+   },
+   "del_run": {
+    "ours": 0,
+    "research": 0
+   },
+   "ins_run": {
+    "ours": 0,
+    "research": 21
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 12
+   },
+   "duration_s": {
+    "ours": 32.191,
+    "research": 32.211
+   },
+   "asr_text": "Almost every one of these countries wrote me a letter of thank you. The Prime Minister of Pakistan, terrific man, said that Donald Trump was responsible for saving 30 million lives and probably many more than that. The President of Azerbaijan said President Trump in six months did a miracle. It was an absolute miracle that nobody thought could be done."
+  },
+  "en_truncated70": {
+   "expected": [
+    "wer",
+    "char_ratio",
+    "del_run"
+   ],
+   "gate_reasons": [
+    "wer>0.2",
+    "char_ratio<0.85",
+    "del_run>=3"
+   ],
+   "bad_reasons": [
+    "wer>0.1",
+    "char_ratio<0.9",
+    "del_run>=3"
+   ],
+   "missing": [],
+   "detected": true,
+   "wer": {
+    "ours": 0.3667,
+    "research": 0.3667
+   },
+   "cer": {
+    "ours": 0.3517,
+    "research": 0.3517
+   },
+   "cer_nospace": {
+    "ours": 0.3474,
+    "research": 0.3474
+   },
+   "char_ratio": {
+    "ours": 0.66,
+    "research": 0.66
+   },
+   "max_internal_sil_s": {
+    "ours": 0.24,
+    "research": 0.24
+   },
+   "trail_sil_s": {
+    "ours": 0.0,
+    "research": 0.0
+   },
+   "speech_ratio": {
+    "ours": 0.915,
+    "research": 0.915
+   },
+   "max_word_s": {
+    "ours": 1.22,
+    "research": 1.22
+   },
+   "max_word_voiced": {
+    "ours": 0.51,
+    "research": 0.51
+   },
+   "unaligned_tail_s": {
+    "ours": 0.17,
+    "research": 0.17
+   },
+   "seg_max_cr": {
+    "ours": 1.36,
+    "research": 1.36
+   },
+   "del_run": {
+    "ours": 21,
+    "research": 21
+   },
+   "ins_run": {
+    "ours": 1,
+    "research": 1
+   },
+   "repeat_excess": {
+    "ours": 0,
+    "research": 0
+   },
+   "duration_s": {
+    "ours": 16.247,
+    "research": 16.247
+   },
+   "asr_text": "Almost every one of these countries wrote me a letter of thank you. The Prime Minister of Pakistan, a terrific man, said that Donald Trump was responsible for saving 30 million lives and probably many more than that. the president of"
+  }
+ },
+ "synthetic_detected": "8/8",
+ "synthetic_all_expected_reasons": "8/8",
+ "sim": {
+  "large": {
+   "summary": {
+    "same_speaker_vs_prompt": [
+     0.869,
+     0.948
+    ],
+    "heldout_vs_prompt": [
+     0.896,
+     0.94
+    ],
+    "leave1out_vs_centroid": [
+     0.926,
+     0.951
+    ],
+    "cross_speaker": [
+     0.102,
+     0.175
+    ],
+    "margin_same_min_minus_cross_max": 0.694
+   },
+   "shehbaz_prompt_vs_heldout_centroid": 0.952,
+   "trump_half1_vs_half2": 0.907,
+   "short_crop_shehbaz02_vs_prompt": {
+    "2s": 0.674,
+    "3s": 0.73,
+    "5s": 0.804,
+    "full": 0.901
+   },
+   "x_realtime": 7.2,
+   "research": {
+    "shehbaz_heldout_clip_vs_prompt": [
+     0.896,
+     0.939
+    ],
+    "shehbaz_heldout_leave1out_vs_centroid": [
+     0.927,
+     0.951
+    ],
+    "shehbaz_prompt_vs_heldout_centroid": 0.952,
+    "trump_half1_vs_half2": 0.908,
+    "cross_speaker": [
+     0.106,
+     0.182
+    ],
+    "short_crop_shehbaz02_vs_prompt": {
+     "2s": 0.676,
+     "3s": 0.733,
+     "5s": 0.807
+    },
+    "full_shehbaz02_vs_prompt": 0.903,
+    "x_realtime_cpu8": 15
+   }
+  },
+  "base": {
+   "summary": {
+    "same_speaker_vs_prompt": [
+     0.975,
+     0.993
+    ],
+    "heldout_vs_prompt": [
+     0.977,
+     0.991
+    ],
+    "leave1out_vs_centroid": [
+     0.986,
+     0.994
+    ],
+    "cross_speaker": [
+     0.746,
+     0.798
+    ],
+    "margin_same_min_minus_cross_max": 0.177
+   },
+   "shehbaz_prompt_vs_heldout_centroid": 0.992,
+   "trump_half1_vs_half2": 0.993,
+   "short_crop_shehbaz02_vs_prompt": {
+    "2s": 0.95,
+    "3s": 0.951,
+    "5s": 0.97,
+    "full": 0.984
+   },
+   "x_realtime": 21.4,
+   "research": {
+    "same_speaker": [
+     0.975,
+     0.994
+    ],
+    "cross_speaker": [
+     0.746,
+     0.799
+    ],
+    "short_crop_2s": 0.951,
+    "trump_half1_vs_half2": 0.994,
+    "x_realtime_cpu8": 37.8
+   }
+  }
+ }
+}

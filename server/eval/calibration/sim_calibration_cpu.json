@@ -1,0 +1,201 @@
+{
+ "about": "Speaker-similarity calibration on the real reference clips, for both SIM models, and the comparison with the eval\nresearch's numbers (eval-tooling.md findings 18 and 21, measured there on CPU with torchaudio resampling).",
+ "threads": 8,
+ "torch": "2.13.0+cu130",
+ "models": {
+  "large": {
+   "model": "large",
+   "device": "cpu",
+   "load_s": 1.4,
+   "embed_s": 27.5,
+   "audio_s": 197.7,
+   "x_realtime": 7.2,
+   "heldout_clips": [
+    "shehbaz_02.wav",
+    "shehbaz_03.wav",
+    "shehbaz_04.wav",
+    "shehbaz_05.wav",
+    "shehbaz_06.wav"
+   ],
+   "prompt_clips": [
+    "shehbaz_07.wav",
+    "shehbaz_08.wav",
+    "shehbaz_01.wav"
+   ],
+   "shehbaz_heldout_clip_vs_prompt": {
+    "shehbaz_02.wav": 0.901,
+    "shehbaz_03.wav": 0.928,
+    "shehbaz_04.wav": 0.896,
+    "shehbaz_05.wav": 0.94,
+    "shehbaz_06.wav": 0.906
+   },
+   "shehbaz_inprompt_clip_vs_prompt": {
+    "shehbaz_01.wav": 0.869,
+    "shehbaz_07.wav": 0.929,
+    "shehbaz_08.wav": 0.948
+   },
+   "shehbaz_heldout_leave1out_vs_centroid": {
+    "shehbaz_02.wav": 0.926,
+    "shehbaz_03.wav": 0.951,
+    "shehbaz_04.wav": 0.929,
+    "shehbaz_05.wav": 0.949,
+    "shehbaz_06.wav": 0.93
+   },
+   "shehbaz_prompt_vs_heldout_centroid": 0.952,
+   "trump_half1_vs_half2": 0.907,
+   "trump_clip_vs_prompt": 1.0,
+   "cross_trump_vs_shehbaz_prompt": 0.102,
+   "cross_trump_prompt_vs_shehbaz_prompt": 0.102,
+   "cross_trump_vs_shehbaz_clips": {
+    "shehbaz_01.wav": 0.118,
+    "shehbaz_02.wav": 0.103,
+    "shehbaz_03.wav": 0.113,
+    "shehbaz_04.wav": 0.175,
+    "shehbaz_05.wav": 0.102,
+    "shehbaz_06.wav": 0.121,
+    "shehbaz_07.wav": 0.102,
+    "shehbaz_08.wav": 0.104
+   },
+   "short_crop_shehbaz02_vs_prompt": {
+    "2s": 0.674,
+    "3s": 0.73,
+    "5s": 0.804,
+    "full": 0.901
+   },
+   "summary": {
+    "same_speaker_vs_prompt": [
+     0.869,
+     0.948
+    ],
+    "heldout_vs_prompt": [
+     0.896,
+     0.94
+    ],
+    "leave1out_vs_centroid": [
+     0.926,
+     0.951
+    ],
+    "cross_speaker": [
+     0.102,
+     0.175
+    ],
+    "margin_same_min_minus_cross_max": 0.694
+   },
+   "research": {
+    "shehbaz_heldout_clip_vs_prompt": [
+     0.896,
+     0.939
+    ],
+    "shehbaz_heldout_leave1out_vs_centroid": [
+     0.927,
+     0.951
+    ],
+    "shehbaz_prompt_vs_heldout_centroid": 0.952,
+    "trump_half1_vs_half2": 0.908,
+    "cross_speaker": [
+     0.106,
+     0.182
+    ],
+    "short_crop_shehbaz02_vs_prompt": {
+     "2s": 0.676,
+     "3s": 0.733,
+     "5s": 0.807
+    },
+    "full_shehbaz02_vs_prompt": 0.903,
+    "x_realtime_cpu8": 15
+   }
+  },
+  "base": {
+   "model": "base",
+   "device": "cpu",
+   "load_s": 0.1,
+   "embed_s": 9.2,
+   "audio_s": 197.7,
+   "x_realtime": 21.4,
+   "heldout_clips": [
+    "shehbaz_02.wav",
+    "shehbaz_03.wav",
+    "shehbaz_04.wav",
+    "shehbaz_05.wav",
+    "shehbaz_06.wav"
+   ],
+   "prompt_clips": [
+    "shehbaz_07.wav",
+    "shehbaz_08.wav",
+    "shehbaz_01.wav"
+   ],
+   "shehbaz_heldout_clip_vs_prompt": {
+    "shehbaz_02.wav": 0.984,
+    "shehbaz_03.wav": 0.99,
+    "shehbaz_04.wav": 0.977,
+    "shehbaz_05.wav": 0.991,
+    "shehbaz_06.wav": 0.986
+   },
+   "shehbaz_inprompt_clip_vs_prompt": {
+    "shehbaz_01.wav": 0.975,
+    "shehbaz_07.wav": 0.993,
+    "shehbaz_08.wav": 0.988
+   },
+   "shehbaz_heldout_leave1out_vs_centroid": {
+    "shehbaz_02.wav": 0.986,
+    "shehbaz_03.wav": 0.994,
+    "shehbaz_04.wav": 0.987,
+    "shehbaz_05.wav": 0.989,
+    "shehbaz_06.wav": 0.993
+   },
+   "shehbaz_prompt_vs_heldout_centroid": 0.992,
+   "trump_half1_vs_half2": 0.993,
+   "trump_clip_vs_prompt": 1.0,
+   "cross_trump_vs_shehbaz_prompt": 0.775,
+   "cross_trump_prompt_vs_shehbaz_prompt": 0.776,
+   "cross_trump_vs_shehbaz_clips": {
+    "shehbaz_01.wav": 0.784,
+    "shehbaz_02.wav": 0.78,
+    "shehbaz_03.wav": 0.746,
+    "shehbaz_04.wav": 0.749,
+    "shehbaz_05.wav": 0.787,
+    "shehbaz_06.wav": 0.746,
+    "shehbaz_07.wav": 0.798,
+    "shehbaz_08.wav": 0.787
+   },
+   "short_crop_shehbaz02_vs_prompt": {
+    "2s": 0.95,
+    "3s": 0.951,
+    "5s": 0.97,
+    "full": 0.984
+   },
+   "summary": {
+    "same_speaker_vs_prompt": [
+     0.975,
+     0.993
+    ],
+    "heldout_vs_prompt": [
+     0.977,
+     0.991
+    ],
+    "leave1out_vs_centroid": [
+     0.986,
+     0.994
+    ],
+    "cross_speaker": [
+     0.746,
+     0.798
+    ],
+    "margin_same_min_minus_cross_max": 0.177
+   },
+   "research": {
+    "same_speaker": [
+     0.975,
+     0.994
+    ],
+    "cross_speaker": [
+     0.746,
+     0.799
+    ],
+    "short_crop_2s": 0.951,
+    "trump_half1_vs_half2": 0.994,
+    "x_realtime_cpu8": 37.8
+   }
+  }
+ }
+}
