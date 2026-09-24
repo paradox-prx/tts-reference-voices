@@ -42,11 +42,28 @@
 > recalibrated from real takes); QC sidecar client (`TTS_QC_URL`, retry reason `qc`, fail-open); local-time logs
 > (Asia/Karachi); `GET /v1/voices`; `TTS_VOICE_MODE=precomputed` for engine custom voices (averaged embedding).
 >
-> **In progress:** engine-ops review + precomputed averaged-embedding voices (`engine/precompute_voices.py`); bench
-> tooling + full plan (`bench/bench_tts.py`, `server/bench/`); eval stack + QC sidecar (`server/eval`, `server/qc`,
-> `venvs/eval`); plain qwen-tts baseline (`server/baseline`, `venvs/qwentts`). Then: benchmark phases → quality eval →
-> production units → README.md + REPORT.md. The user also asked that every run's audio and numbers be saved under a
-> folder named for that experiment, with an index (`server/results/INDEX.md`).
+> **Built and verified (session 2, all committed):** gateway (pace guardrail, pace-based length cap, QC client,
+> mp3/opus, OpenAI SDK verified, 119 tests); engine ops (`engine/`, `deploy/`: GPU 0 default, sampler fix, prod YAML
+> stage 0 at 0.60 = KV 91,120 tokens, precomputed voices `<id>-avg`/`<id>-prompt` via
+> `engine/precompute_voices.py` + `variants/custom_voices.yaml`, per-request repetition_penalty patch applied,
+> systemd templates + /health watchdog + optional QC unit); bench tooling (`bench/bench_tts.py`, `server/bench/`:
+> run_plan/plan/collect/verify_knobs; per-run result folders); eval + QC sidecar (`server/eval`, `server/qc`,
+> `venvs/eval`, models in `models/eval`; GPU self-check passed: 0.54 s per 10 s clip, 6.2 GB VRAM); qwen-tts
+> baseline (`server/baseline`, `venvs/qwentts`; GPU smoke passed). README.md written; DESIGN.md and
+> docs/EXPERIMENTS.md (E00-E06 + P1 conclusion) current.
+>
+> **Key findings so far:** FlashInfer sampler must be off; async_chunk ON wins; fp16/fp32 talker crash on 0.28
+> (bf16 only); decode8 does not fit; seeds do not reproduce on 0.28 (no seeds anywhere; takes are unseeded, paired
+> by prompt); ~1% Urdu runaways engine-direct, handled by the gateway's cap + retry; throughput ~35x realtime at c=32.
+>
+> **Running now:** `bench/run_plan.py --only P2_matrix,...,P9_baseline_nocache` (log `logs/run_plan_main.log`; every
+> non-optional pending phase). A finished phase has `results/<phase>/DONE`; rerun anything unfinished with
+> `venvs/gateway/bin/python bench/run_plan.py --only <phase>` (unfinished dirs move to `results/_attic`).
+>
+> **Next:** after the load tests: `eval/run.sh eval/score_run.py results/<phase> --device cuda` for P5, X1-X3, P8
+> (and a sample of P2), `eval/run.sh eval/retry_sim.py …`, recalibrate `calibration/pace.json` from P2, then
+> `bench/collect.py`, REPORT.md, production units (`deploy/install_units.sh --enable`), final push. The user asked
+> that all audio and numbers stay under per-experiment folders in `results/` (local, gitignored).
 
 # Session 1 record (pb-ai-pc1, state as of 2026-09-24 ~19:00 PKT)
 
