@@ -554,7 +554,21 @@ multi-step scheduling, GPU repetition penalty, voice-key registry, micro-batched
 
 ---
 
-## 7. Build workflow (was running at hand-off time)
+## 7. Build workflow (STOPPED at the user's request, ~19:40)
+**Final status:** `build:gateway-core` DONE, `build:engine-ops` DONE, `build:bench-orchestration` DONE (their reports
+are in `docs/build-reports.md`). **`build:vllm-omni-backend` was stopped mid-run.** `backends/vllm_omni.py`,
+`tests/fake_vllm_omni.py` and `tests/test_vllm_omni_backend.py` exist but may be incomplete: run the tests and finish
+them. **`review:engine-ops` and `review:bench` were stopped mid-run** (their partial fixes are unreviewed).
+`review:gateway` and `integrate:cpu-smoke` never ran, so do those checks yourself (the prompts in §7 below list what
+they cover).
+
+**Wheels:** the background fetch **completed: all 158 wheels (2.8 GB) in `wheels-extra/`**, i.e. everything bundle 1
+lacks for vllm 0.28.0 + vllm-omni 0.28.0 and for vllm 0.30.0 + vllm-omni 0.30.0rc1 (per `fetch28.txt`/`fetch30.txt`).
+Together with bundle 1's wheels that should be a complete offline set; verify with
+`pip install --dry-run --no-index --find-links <bundle1>/wheels --find-links wheels-extra vllm==0.28.0 vllm-omni==0.28.0`.
+Bundle 2 (`ops/get_bundle2.py`) is then only needed if that dry-run fails.
+
+### Original plan of the workflow
 Workflow run `wf_d349d909-b7a` ("qwen3-tts-build"). Its journal (one line per agent result):
 `/home/vector/.claude/projects/-home-vector/60c91189-44d6-4cdb-b0f5-2bf4adb23fb3/subagents/workflows/wf_d349d909-b7a/journal.jsonl`.
 Branches:
