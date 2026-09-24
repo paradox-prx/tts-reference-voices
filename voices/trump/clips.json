@@ -1,0 +1,13 @@
+{
+ "source": "https://www.youtube.com/shorts/YhWqn51t5gs",
+ "source_title": "Trump At UNGA: Pakistan PM Says US President Saved 30 Million Lives (CNBC-TV18, 2026-09-22)",
+ "note": "Audio track, mono 48 kHz PCM16, not trimmed or processed. Transcript: Whisper large-v3, numerals spelled out.",
+ "clips": [
+  {
+   "file": "trump_01.wav",
+   "start": 0.0,
+   "end": 23.21,
+   "text": "Almost every one of these countries wrote me a letter of thank you. The Prime Minister of Pakistan, terrific man, said that Donald Trump was responsible for saving thirty million lives and probably many more than that. The President of Azerbaijan said President Trump in six months did a miracle. It was an absolute miracle that nobody thought could be done."
+  }
+ ]
+}

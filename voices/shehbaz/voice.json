@@ -1,0 +1,11 @@
+{
+ "kind": "custom",
+ "label": "Shehbaz Sharif",
+ "gender": "male",
+ "language": "ur",
+ "pace": "slow",
+ "wpm": 97,
+ "description": "Formal televised address to the nation: 90 s over 8 clips, calm and deliberate, clean, no music.",
+ "source": "Geo News YouTube sMfOmyTxjNc",
+ "license": "Short excerpt of a public broadcast, included for research and benchmarking of speech synthesis. Rights stay with the broadcaster. Do not use it to impersonate the speaker or to make audio presented as a real statement; label anything generated from it as AI-generated."
+}
