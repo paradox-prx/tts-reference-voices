@@ -9,19 +9,21 @@ swappable backend interface, so Higgs Audio v3 (SGLang-Omni) or another engine c
 client ──HTTP──▶ gateway (FastAPI, :8090, auth, queue, retries, labels)
                    │  backend = vllm_omni | stub | (qwen_native | higgs_sglang later)
                    ▼
-                 engine (vLLM-Omni `vllm serve ... --omni`, 127.0.0.1:8091, CUDA_VISIBLE_DEVICES=1)
+                 engine (vLLM-Omni `vllm serve ... --omni`, 127.0.0.1:8091, GPU from TTS_ENGINE_GPU, default 0)
                    stage 0: talker (codebook 0, continuous batching) + code predictor (codebooks 1-15)
                    stage 1: code2wav (12 Hz speech-tokenizer decoder, 24 kHz PCM)
+                 qc sidecar (optional, server/qc, 127.0.0.1:8092): Whisper large-v3 + WavLM checks per take
 ```
 
 ## Layout
 
 ```
-/home/vector/qwen3-tts-server/
+<checkout>/server/               (the repo's server/ folder; paths are derived from the checkout, never hard-coded)
   gateway/tts_gateway/        the gateway package (python -m tts_gateway)
     config.py                 Settings from env (prefix TTS_), see below
     voices.py                 VoiceRegistry over VOICES_DIR/<id>/ (voice-server/v1 layout)
-    textproc.py               word count, sentence split (en + ur), length cap, duration band
+    textproc.py               word/letter count, sentence split (en + ur), length cap, pace bands
+    qc.py                     client of the QC sidecar
     audio.py                  WAV/PCM helpers, LIST/INFO "AI-generated" label, duration
     admission.py              bounded in-flight + bounded queue with timeout -> 429 / 503
     quality.py                suspect detection + retry policy + best-take selection
@@ -35,19 +37,22 @@ client ──HTTP──▶ gateway (FastAPI, :8090, auth, queue, retries, labels
     __main__.py               uvicorn entry point
   gateway/tests/              pytest (stub backend; no GPU)
   engine/
-    deploy/                   vLLM-Omni deploy YAMLs (production + benchmark variants)
-    patches/                  small, verified patches to vLLM-Omni (e.g. per-request repetition_penalty)
-    run_engine.sh             starts the engine with a clean CUDA environment
-  deploy/systemd/             qwen3-tts-engine.service, qwen3-tts-gateway.service, env.example
-  bench/                      run plan, quality evaluation, retry simulation, report builder
-  results/                    benchmark outputs (AI-generated audio: never publish)
-  docs/                       this file, auralis_baseline.md, research notes
-  ops/                        operational notes (e.g. STOPPED_WHISPER_SERVERS.md)
-  venvs/                      gateway, engine (vllm-omni 0.28), engine30 (0.30.0rc1), eval, tools
+    deploy/                   vLLM-Omni deploy YAMLs (production + benchmark variants, variants/custom_voices.yaml)
+    patches/                  small, verified patches to vLLM-Omni (per-request repetition_penalty)
+    precompute_voices.py      averaged-embedding (+ prompt-embedding) custom voices for custom_voice_dir
+    install_engine.sh, run_engine.sh, wait_ready.py, make_variant.py, constraints-omni28.txt
+  deploy/                     systemd unit templates, install_units.sh, env.example, health_watchdog.py
+  qc/                         QC sidecar (tts_qc): Whisper large-v3 + WavLM + detectors, POST /v1/qc
+  eval/                       offline scoring (score_run.py), retry simulation, calibration, GPU self-check
+  baseline/                   plain qwen-tts 0.1.1 server with the same request shape (benchmark baseline)
+  bench/                      run_plan.py / plan.py (phases), collect.py (tables), verify_knobs.py
+  calibration/pace.json       expected output pace per voice (s/letter), shared by gateway, bench and QC
+  results/                    benchmark outputs (AI-generated audio: never publish; gitignored)
+  docs/                       this file, EXPERIMENTS.md, auralis_baseline.md, research notes
+  venvs/                      gateway, engine (vllm-omni 0.28), eval (ASR + SIM), qwentts (baseline), tools
 ```
 
-The load generator is `/home/vector/tts-reference-voices/bench/bench_tts.py` (already extended: per-GPU memory,
-TTFA past the WAV header, `--api-key`, `--takes/--seed`, `--tag`, response-header capture, labelled audio).
+The load generator is `<checkout>/bench/bench_tts.py` (see `bench/README.md`).
 
 ## Engine facts that shape the gateway (vLLM-Omni 0.28.0 source, verified)
 
@@ -71,9 +76,9 @@ TTFA past the WAV header, `--api-key`, `--takes/--seed`, `--tag`, response-heade
 
 ## Gateway API
 
-`POST /v1/audio/speech` (JSON). OpenAI fields: `model` (ignored or must match), `input` (required), `voice` (a
+`POST /v1/audio/speech` (JSON; works with the official `openai` SDK). OpenAI fields: `model` (ignored), `input` (required), `voice` (a
 registered voice id, required unless inline cloning is enabled and `ref_audio` is given), `response_format`
-(`wav` default, `pcm`, `flac`), `speed` (non-streaming only, passed through), `stream` (bool; raw audio chunks).
+(`wav` default, `pcm`, `flac`, `mp3`, `opus`; streaming: `wav` or `pcm`; every format carries the AI-generated label: WAV LIST/INFO ICMT, FLAC/Opus Vorbis comment, MP3 ID3 comment), `speed` (non-streaming only, passed through), `stream` (bool; raw audio chunks).
 Extensions: `language` (default from the voice: `English` for en, `Auto` otherwise), `temperature`, `top_k`, `top_p`,
 `repetition_penalty` (only if the backend advertises it), `seed`, `max_new_tokens`, `ref_audio` + `ref_text` (inline
 cloning, only when `TTS_ALLOW_INLINE_REF=1`), `retries` (0..TTS_RETRY_MAX, per request override).
@@ -179,7 +184,10 @@ joined with short silences; Qwen3-TTS has no such ceiling.
 
 ## Deployment
 
-systemd **user** units (linger is on; no docker access): `qwen3-tts-engine.service` runs `engine/run_engine.sh`
-(`CUDA_VISIBLE_DEVICES=1`, clean `PATH`/`CUDA_HOME` so FlashInfer JIT uses the pip CUDA 13 toolchain), and
-`qwen3-tts-gateway.service` (`After=`/`Wants=` the engine; waits for `/ready`). Secrets live in
-`~/.config/qwen3-tts/env` (mode 600). Use `XDG_RUNTIME_DIR=/run/user/$(id -u) systemctl --user ...`.
+systemd **user** units rendered by `deploy/install_units.sh` with this checkout's paths: `qwen3-tts-engine.service`
+runs `engine/run_engine.sh` (GPU `TTS_ENGINE_GPU`, `VLLM_USE_FLASHINFER_SAMPLER=0`, clean `PATH`/`CUDA_HOME`) and is
+active once `engine/wait_ready.py` got audio back; `qwen3-tts-engine-watchdog.service` restarts the engine when
+`/health` keeps failing (a dead stage leaves the API answering 503, so `Restart=on-failure` alone never fires);
+`qwen3-tts-gateway.service` (`After=`/`Wants=` the engine); optional `qwen3-tts-qc.service`. Secrets live in
+`~/.config/qwen3-tts/env` (mode 600). User units stop at logout unless lingering is enabled
+(`loginctl enable-linger $USER`). See README.md.

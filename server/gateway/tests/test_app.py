@@ -68,7 +68,8 @@ async def test_unknown_route_uses_error_shape(start: Start) -> None:
     ({"input": "... !!", "voice": "alice"}, 400, "empty_input"),
     ({"input": "word " * 700, "voice": "alice"}, 413, "input_too_long"),
     ({"input": TEXT}, 400, "missing_voice"),
-    ({"input": TEXT, "voice": "alice", "response_format": "mp3"}, 400, "invalid_request"),
+    ({"input": TEXT, "voice": "alice", "response_format": "aac"}, 400, "invalid_request"),
+    ({"input": TEXT, "voice": "alice", "stream": True, "response_format": "mp3"}, 400, "unsupported_parameter"),
     ({"input": TEXT, "voice": "alice", "instructions": "cheerful"}, 400, "invalid_request"),
     ({"input": TEXT, "voice": "alice", "retries": -1}, 400, "invalid_request"),
     ({"input": TEXT, "voice": "alice", "stream": True, "response_format": "flac"}, 400, "unsupported_parameter"),
@@ -128,6 +129,16 @@ async def test_wav_output_labelled_and_headers(start: Start) -> None:
         r = await h.client.post("/v1/audio/speech", json={"input": TEXT, "voice": "alice"},
                                 headers={"X-Request-Id": "has spaces"})
         assert r.headers["x-request-id"] != "has spaces" and len(r.headers["x-request-id"]) == 32
+
+
+async def test_mp3_and_opus_outputs(start: Start) -> None:
+    async with start() as h:
+        for fmt, media, container in (("mp3", "audio/mpeg", "MP3"), ("opus", "audio/ogg", "OGG")):
+            r = await h.client.post("/v1/audio/speech", json={"input": TEXT, "voice": "alice", "response_format": fmt})
+            assert r.status_code == 200 and r.headers["content-type"] == media
+            with sf.SoundFile(io.BytesIO(r.content)) as f:
+                assert f.format == container and f.comment == audio.AI_LABEL
+                assert f.frames / f.samplerate == pytest.approx(WORDS * 0.35, abs=0.1)
 
 
 async def test_pcm_and_flac_outputs(start: Start) -> None:

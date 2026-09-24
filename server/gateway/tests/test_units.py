@@ -137,6 +137,15 @@ def test_streaming_wav_header() -> None:
     assert audio.wav_to_pcm(header + pcm) == (pcm, 24000)
 
 
+@pytest.mark.parametrize(("fmt", "container"), [("mp3", "MP3"), ("opus", "OGG")])
+def test_compressed_formats_label_and_duration(fmt: str, container: str) -> None:
+    pcm = (0.2 * 32767 * np.sin(2 * np.pi * 200 * np.arange(24000) / 24000)).astype("<i2").tobytes()
+    data = audio.encode(pcm, 24000, fmt)
+    with sf.SoundFile(io.BytesIO(data)) as f:
+        assert f.format == container and f.samplerate == 24000 and f.frames == pytest.approx(24000, abs=1200)
+        assert f.comment == audio.AI_LABEL
+
+
 def test_flac_label_and_duration() -> None:
     pcm = np.zeros(12000, dtype="<i2").tobytes()
     flac = audio.encode(pcm, 24000, "flac")

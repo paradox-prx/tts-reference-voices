@@ -68,7 +68,7 @@ class SpeechRequest(BaseModel):
     model: str | None = None  # accepted and ignored: one model per server
     input: str
     voice: str | None = Field(None, max_length=128)
-    response_format: Literal["wav", "pcm", "flac"] = "wav"
+    response_format: Literal["wav", "pcm", "flac", "mp3", "opus"] = "wav"
     speed: float | None = Field(None, ge=0.25, le=4.0)
     stream: bool = False
     stream_format: Literal["audio"] | None = None  # vLLM-Omni clients send it; only raw audio streams exist here
@@ -410,7 +410,7 @@ class Gateway:
         if body.stream:
             if not caps.streaming:
                 raise APIError(400, "unsupported_parameter", f"the {self.backend.name} backend cannot stream")
-            if body.response_format == "flac":
+            if body.response_format not in ("wav", "pcm"):
                 raise APIError(400, "unsupported_parameter", "streaming supports response_format wav or pcm")
             if body.speed is not None:
                 raise APIError(400, "unsupported_parameter", "speed is not supported when streaming")
@@ -523,7 +523,7 @@ class Gateway:
         log.audio_s = audio.duration_s(len(joined), sample_rate)
         if log.suspect:
             log.status = "suspect"
-        if plan.fmt == "flac" or (plan.fmt == "wav" and len(joined) > OFFLOAD_BYTES):
+        if plan.fmt in ("flac", "mp3", "opus") or (plan.fmt == "wav" and len(joined) > OFFLOAD_BYTES):
             data = await asyncio.to_thread(audio.encode, joined, sample_rate, plan.fmt)
         else:
             data = audio.encode(joined, sample_rate, plan.fmt)

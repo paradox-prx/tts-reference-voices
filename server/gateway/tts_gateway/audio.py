@@ -11,7 +11,9 @@ import soundfile as sf
 AI_LABEL = "AI-generated speech (Qwen3-TTS voice clone). Not a real recording."
 SAMPLE_WIDTH = 2  # PCM16
 STREAM_SIZE = 0xFFFFFFFF  # RIFF/data size of a WAV whose length is unknown up front
-MEDIA_TYPES = {"wav": "audio/wav", "pcm": "audio/pcm", "flac": "audio/flac"}
+MEDIA_TYPES = {"wav": "audio/wav", "pcm": "audio/pcm", "flac": "audio/flac", "mp3": "audio/mpeg", "opus": "audio/ogg"}
+# formats encoded with libsndfile (soundfile): (container, subtype); the AI label goes in the file's comment tag
+_SF_FORMATS = {"flac": ("FLAC", "PCM_16"), "mp3": ("MP3", "MPEG_LAYER_III"), "opus": ("OGG", "OPUS")}
 
 
 def _info_chunk(comment: str) -> bytes:
@@ -38,19 +40,25 @@ def pcm_to_wav(pcm: bytes, sample_rate: int, comment: str = AI_LABEL) -> bytes:
     return b"".join((wav_header(sample_rate, len(pcm), comment), pcm, b"\0" * (len(pcm) & 1)))
 
 
-def pcm_to_flac(pcm: bytes, sample_rate: int, comment: str = AI_LABEL) -> bytes:
+def pcm_to_sf(pcm: bytes, sample_rate: int, fmt: str, comment: str = AI_LABEL) -> bytes:
+    """FLAC (Vorbis comment), MP3 (ID3 comment) or Ogg Opus (Vorbis comment), labelled AI-generated."""
+    container, subtype = _SF_FORMATS[fmt]
     buf = io.BytesIO()
-    with sf.SoundFile(buf, "w", samplerate=sample_rate, channels=1, format="FLAC", subtype="PCM_16") as f:
-        f.comment = comment  # Vorbis comment
+    with sf.SoundFile(buf, "w", samplerate=sample_rate, channels=1, format=container, subtype=subtype) as f:
+        f.comment = comment
         f.write(np.frombuffer(pcm, dtype="<i2"))
     return buf.getvalue()
+
+
+def pcm_to_flac(pcm: bytes, sample_rate: int, comment: str = AI_LABEL) -> bytes:
+    return pcm_to_sf(pcm, sample_rate, "flac", comment)
 
 
 def encode(pcm: bytes, sample_rate: int, fmt: str) -> bytes:
     if fmt == "wav":
         return pcm_to_wav(pcm, sample_rate)
-    if fmt == "flac":
-        return pcm_to_flac(pcm, sample_rate)
+    if fmt in _SF_FORMATS:
+        return pcm_to_sf(pcm, sample_rate, fmt)
     if fmt == "pcm":
         return pcm
     raise ValueError(f"unsupported format {fmt!r}")

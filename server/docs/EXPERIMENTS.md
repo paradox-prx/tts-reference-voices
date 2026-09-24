@@ -185,3 +185,22 @@ at 0.45 (KV 58k tokens, still preemption-free at c<=32 for 60 s takes).
   bf16 is the only working talker precision on 0.28; Code2Wav is fixed at fp32 in 0.28.
 - `decode8` (Code2Wav batch 8 + graph buckets 1/2/4/8) OOMs at start at stage-0 0.60 (stage 1 capturing its graphs
   finds 43 MB free); re-screened as `decode8_m045` next to `default_m045` (both stage-0 0.45).
+
+### E06: qwen-tts baseline GPU smoke: `results/06_baseline_gpu_smoke/`
+`server/baseline/qwen_tts_server.py` (qwen-tts 0.1.1, transformers 4.57.3, torch 2.13 cu130, bf16 + sdpa, max batch
+8, prompt cache on), alone on GPU 0. VRAM 5.8 GB idle, 9.8 GB after a batch of 4.
+
+| request | latency s | audio s | RTF | batch |
+|---|---|---|---|---|
+| trump English | 2.44 | 3.84 | 0.64 | 1 |
+| shehbaz Urdu (Auto) | 3.49 | 5.60 | 0.62 | 1 |
+| trump inline ref_audio | 2.66 | 4.16 | 0.64 | 1 |
+| 4 concurrent (2+2 voices) | 3.35 each | 14.56 total | 4.35x realtime aggregate | 4 |
+
+For comparison, vLLM-Omni at c=1: RTF ~0.19 (5.2-5.5x realtime), i.e. ~3.3x faster per request.
+
+### P1 conclusion (engine variant screen, medium texts, c = 1/8/32; `results/P1_screen_*`)
+The prod config (bf16 talker, fp32 Code2Wav, CUDA graphs, async_chunk on, max_num_seqs 64, default decoder
+batching) is chosen: eager is 2.4-2.7x slower at c=1; seqs32/seqs128 are identical at c<=32; decode4g (graph buckets
+1/2/4) gives the same throughput for +4.7 GB; decode8 does not fit; fp16/fp32 talkers crash; async_chunk off loses
+5-21%. Stage-0 memory 0.45 vs 0.60 changes nothing at c<=32 (only KV headroom), which frees ~3.5 GB for the QC sidecar.
