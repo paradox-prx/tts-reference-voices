@@ -14,7 +14,13 @@ benchmarks/
   trump_en.json                 43 English test prompts
   shehbaz_ur.json               43 Urdu test prompts
   shehbaz_ur_expressive.json    the same Urdu prompts, re-tagged for livelier Higgs delivery
+bench/
+  bench_tts.py                  concurrency / text-length / streaming-latency benchmark for a /v1/audio/speech server
+  pools/{en,ur}.json            de-duplicated short / medium / long / xlong text pools
+NOTES.md                        everything learned so far: settings, measured numbers, failure modes, vLLM-Omni API
 ```
+
+**Setting up a server? Read `NOTES.md` first, then `bench/README.md`.**
 
 ## Which reference to use
 
