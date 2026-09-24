@@ -56,6 +56,9 @@ class Settings(BaseSettings):
     # fallback seconds-per-word bands, for text whose language differs from the reference's
     spw_en: Band = (0.18, 0.9)
     spw_ur: Band = (0.18, 1.1)
+    # text languages ("en", "ur") for which non_streaming_mode=true is sent unless the request sets it: the whole text
+    # goes into the prefill instead of being fed one token per frame (see docs/EXPERIMENTS.md, X6)
+    non_streaming_mode_langs: NameSet = frozenset()
     default_temperature: float | None = 0.9  # applied by the backend when a request leaves it unset
     default_top_k: int | None = 50
 
@@ -107,6 +110,13 @@ class Settings(BaseSettings):
         if any(not v > 0 for v in value.values()):
             raise ValueError("every pace must be > 0")
         return value
+
+    @field_validator("non_streaming_mode_langs", mode="before")
+    @classmethod
+    def _parse_langs(cls, value: Any) -> Any:
+        if isinstance(value, str):
+            value = {x.strip().lower() for x in value.split(",") if x.strip()}
+        return frozenset(value)
 
     @field_validator("retry_on", "qc_checks", mode="before")
     @classmethod

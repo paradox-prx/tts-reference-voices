@@ -235,6 +235,9 @@ async def test_payload_overrides(engine: Engine, make: Make, voices_dir: Path) -
     assert engine.fake.calls[-1].sampling == {"temperature": 0.7, "top_k": 20, "top_p": 0.8,
                                                    "repetition_penalty": 1.05, "seed": 7, "max_tokens": 300}
     assert len(result.pcm) == round(39 * 1920 / 1.25) * 2
+    assert "non_streaming_mode" not in payload  # left to the engine unless asked for
+    await make().synthesize(speech(alice, non_streaming_mode=True))
+    assert engine.last["non_streaming_mode"] is True
 
 
 async def test_repetition_penalty_needs_the_patched_engine(engine: Engine, make: Make, voices_dir: Path) -> None:

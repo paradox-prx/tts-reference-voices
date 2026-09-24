@@ -22,6 +22,9 @@ class SynthesisRequest:
     seed: int | None = None
     max_new_tokens: int | None = None  # codec frames (12.5/s for Qwen3-TTS)
     speed: float | None = None
+    # Qwen3-TTS prompt layout: True puts the whole text in the prefill instead of feeding it one token per codec
+    # frame (the Base default, False); None leaves it to the engine
+    non_streaming_mode: bool | None = None
     ref_audio: bytes | None = None
     ref_text: str | None = None
     request_id: str

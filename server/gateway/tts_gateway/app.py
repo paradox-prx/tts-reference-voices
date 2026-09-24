@@ -80,6 +80,7 @@ class SpeechRequest(BaseModel):
     repetition_penalty: float | None = Field(None, gt=0, le=2)
     seed: int | None = Field(None, ge=0, lt=2**31)
     max_new_tokens: int | None = Field(None, ge=1, le=4096)
+    non_streaming_mode: bool | None = None  # Qwen3-TTS prompt layout (see SynthesisRequest)
     ref_audio: str | None = None
     ref_text: str | None = Field(None, max_length=4000)
     retries: int | None = Field(None, ge=0)
@@ -442,6 +443,8 @@ class Gateway:
         base = SynthesisRequest(text=text, voice=voice, language=language, temperature=body.temperature,
                                 top_k=body.top_k, top_p=body.top_p, repetition_penalty=body.repetition_penalty,
                                 seed=body.seed, max_new_tokens=body.max_new_tokens, speed=body.speed,
+                                non_streaming_mode=(body.non_streaming_mode if body.non_streaming_mode is not None
+                                                    else True if lang in s.non_streaming_mode_langs else None),
                                 ref_audio=ref_audio, ref_text=ref_text, request_id=log.request_id)
         return Plan(base, parts, band, lang, body.response_format, body.stream, retries, label,
                     length_cap=s.length_cap and band is not None)

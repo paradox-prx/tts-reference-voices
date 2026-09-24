@@ -164,6 +164,20 @@ async def test_request_overrides_reach_backend(start: Start) -> None:
         assert req.max_new_tokens is None  # length cap off
         await h.client.post("/v1/audio/speech", json={"input": TEXT, "voice": "alice", "max_new_tokens": 500})
         assert h.stub.requests[-1].max_new_tokens == 500
+        assert h.stub.requests[-1].non_streaming_mode is None  # left to the engine by default
+        await h.client.post("/v1/audio/speech", json={"input": TEXT, "voice": "alice", "non_streaming_mode": True})
+        assert h.stub.requests[-1].non_streaming_mode is True
+
+
+async def test_non_streaming_mode_per_text_language(start: Start) -> None:
+    urdu = "یہ ایک مختصر آزمائشی جملہ ہے جو اردو میں لکھا گیا ہے۔"
+    async with start(non_streaming_mode_langs="ur") as h:
+        await h.client.post("/v1/audio/speech", json={"input": urdu, "voice": "bilal"})
+        assert h.stub.requests[-1].non_streaming_mode is True
+        await h.client.post("/v1/audio/speech", json={"input": TEXT, "voice": "alice"})
+        assert h.stub.requests[-1].non_streaming_mode is None
+        await h.client.post("/v1/audio/speech", json={"input": urdu, "voice": "bilal", "non_streaming_mode": False})
+        assert h.stub.requests[-1].non_streaming_mode is False  # the request wins
 
 
 async def test_request_log_line(start: Start, caplog: pytest.LogCaptureFixture) -> None:

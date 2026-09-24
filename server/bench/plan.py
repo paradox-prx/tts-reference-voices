@@ -250,6 +250,20 @@ PHASES += [
      "note": "non_streaming_mode=true for trump: 43 prompts x 1, vs P5_urdu_rp105's trump control",
      "bench": [direct("--voice", "trump", "--size", "prompts", "-c", "16", "--extra-param", "repetition_penalty=1.05",
                       "--param", "non_streaming_mode=true", "--timeout", QUALITY_TIMEOUT, tag="nsm_true")]},
+    {"name": "X6_nsm_long_urdu", "engine": engine(), "kind": "quality",
+     "checks": [{"name": "non_streaming_mode", "via": "engine", "voice": "shehbaz",
+                 "fails": {"nsm_invalid": {"non_streaming_mode": "x"}},
+                 "succeeds": {"nsm_true": {"non_streaming_mode": True}}}],
+     "note": "P2 found 31/68 shehbaz xxlong (~200 words, ~55 s) takes without EOS (hit the cap) vs 1/38 at xlong and "
+             "0 for English. Hypothesis: with non_streaming_mode=false the text beyond the reference is fed one token "
+             "per frame (12.5/s) and Urdu needs ~3.2 tokens/word, so the feed barely stays ahead of the speech. "
+             "Paired arms, same 43 xxlong texts, c=16: non_streaming_mode false (default) vs true; plus xlong true",
+     "bench": [direct("--voice", "shehbaz", "--size", "xxlong", "-n", "43", "-c", "16", "--timeout", QUALITY_TIMEOUT,
+                      tag="nsm_false"),
+               direct("--voice", "shehbaz", "--size", "xxlong", "-n", "43", "-c", "16", "--param",
+                      "non_streaming_mode=true", "--timeout", QUALITY_TIMEOUT, tag="nsm_true"),
+               direct("--voice", "trump", "--size", "xxlong", "-n", "43", "-c", "16", "--param",
+                      "non_streaming_mode=true", "--timeout", QUALITY_TIMEOUT, tag="nsm_true")]},
     {"name": "X2_language", "engine": engine(), "kind": "quality",
      "checks": [{"name": "language", "via": "engine", "voice": "trump", "fails": {"urdu": {"language": "Urdu"}},
                  "succeeds": {"auto": {"language": "Auto"}}}],

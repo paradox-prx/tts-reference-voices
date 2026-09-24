@@ -300,6 +300,8 @@ class VllmOmniBackend:
             payload["extra_params"] = extra
         if req.max_new_tokens is not None:  # also turns off the engine's own retry-once (serving_speech.py:3621)
             payload["max_new_tokens"] = req.max_new_tokens
+        if req.non_streaming_mode is not None:  # read by the ICL prompt builder (serving_speech.py:2577)
+            payload["non_streaming_mode"] = req.non_streaming_mode
         if req.seed is not None:  # 0.28 then runs the code predictor row by row in a batch: never by default
             payload["seed"] = req.seed
         if stream:
