@@ -434,7 +434,8 @@ class Runner:
         else:
             cmd, env, cwd, ready = self.engine_launch(ph.engine)
             yaml = ph.engine.yaml
-            missing = [str(p) for p in (yaml, RUN_ENGINE, ph.engine.venv_path) if yaml and not p.exists()]
+            needed = (yaml, RUN_ENGINE, ph.engine.venv_path / "bin" / "vllm") if yaml else ()
+            missing = [str(p) for p in needed if not p.exists()]
             print(f"  engine: {ph.engine.describe()}" + (f"  yaml {yaml}" if yaml else "")
                   + (f"  MISSING: {', '.join(missing)}" if missing else ""))
             print(f"    $ cd {cwd} && {env_prefix(env)} {shlex.join(cmd)} >> {self.logs / f'engine_{ph.name}.log'}")
@@ -513,7 +514,7 @@ class Runner:
             if http_get(self.engine_url + "/health")[0] != 200:
                 raise PhaseError(f"engine 'none' but nothing healthy at {self.engine_url}")
             return {"reused_from": "external", "url": self.engine_url}
-        if spec.kind == "vllm" and (missing := [str(p) for p in (spec.yaml, RUN_ENGINE, spec.venv_path / "bin")
+        if spec.kind == "vllm" and (missing := [str(p) for p in (spec.yaml, RUN_ENGINE, spec.venv_path / "bin" / "vllm")
                                                  if p and not p.exists()]):
             raise PhaseError(f"missing {', '.join(missing)}")
         if port_in_use(self.args.engine_port):
@@ -543,10 +544,11 @@ class Runner:
         return rec
 
     def run_wait_ready(self, budget_s: float) -> dict:
-        """The engine's own readiness probe (engine/wait_ready.py), after /health is green."""
-        cmd = [str(PYTHON), str(WAIT_READY), self.engine_url]
+        """engine/wait_ready.py after /health is green: one short synthesis must return real audio."""
+        budget_s = max(budget_s, 120.0)
+        cmd = [str(PYTHON), str(WAIT_READY), self.engine_url, "--timeout", f"{budget_s:.0f}"]
         try:
-            r = subprocess.run(cmd, capture_output=True, text=True, timeout=max(budget_s, 60.0))
+            r = subprocess.run(cmd, capture_output=True, text=True, timeout=budget_s + 60)
         except subprocess.TimeoutExpired as exc:
             raise PhaseError(f"{WAIT_READY.name} timed out after {exc.timeout:.0f} s") from exc
         if r.returncode != 0:

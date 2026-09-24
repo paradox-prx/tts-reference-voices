@@ -71,7 +71,8 @@ def find_package(venv: Path) -> Path:
     python = venv / "bin" / "python"
     if not python.exists():
         raise PatchError(f"{python} not found")
-    code = "import importlib.util as u; s = u.find_spec('vllm_omni'); print(s.submodule_search_locations[0] if s else '')"
+    code = ("import importlib.util as u; s = u.find_spec('vllm_omni'); "
+            "print(s.submodule_search_locations[0] if s else '')")
     r = subprocess.run([str(python), "-c", code], capture_output=True, text=True, timeout=60,
                        env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
     if r.returncode != 0 or not r.stdout.strip():

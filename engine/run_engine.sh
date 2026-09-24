@@ -22,7 +22,7 @@ die() { echo "run_engine: $*" >&2; exit 1; }
 
 positional=()
 while [[ $# -gt 0 && $1 != -- ]]; do positional+=("$1"); shift; done
-[[ $# -gt 0 ]] && shift
+if [[ $# -gt 0 ]]; then shift; fi
 ((${#positional[@]} <= 3)) || die "usage: $0 [<deploy-yaml> [port] [venv]] [-- extra vllm serve args]"
 yaml=$(realpath "${positional[0]:-${TTS_ENGINE_DEPLOY:-$root/engine/deploy/qwen3_tts_prod.yaml}}")
 port=${positional[1]:-${TTS_ENGINE_PORT:-8091}}
@@ -54,9 +54,11 @@ export FLASHINFER_EXTRA_LDFLAGS="-L$venv/cuda13-link"
 # --- GPU placement and runtime
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
 export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-1}
-export HF_HUB_OFFLINE=${HF_HUB_OFFLINE:-1} TRANSFORMERS_OFFLINE=${TRANSFORMERS_OFFLINE:-${HF_HUB_OFFLINE:-1}}
+export HF_HUB_OFFLINE=${HF_HUB_OFFLINE:-1}
+export TRANSFORMERS_OFFLINE=${TRANSFORMERS_OFFLINE:-$HF_HUB_OFFLINE}
 export SPEAKER_SAMPLES_DIR=${SPEAKER_SAMPLES_DIR:-$root/state/speakers}
-mkdir -p -m 700 "$SPEAKER_SAMPLES_DIR"
+mkdir -p "$SPEAKER_SAMPLES_DIR"
+chmod 700 "$SPEAKER_SAMPLES_DIR"
 export VLLM_NO_USAGE_STATS=1 DO_NOT_TRACK=1 PYTHONUNBUFFERED=1
 export VLLM_ENGINE_READY_TIMEOUT_S=${VLLM_ENGINE_READY_TIMEOUT_S:-1200}
 if [[ -n ${TTS_ENGINE_API_KEY:-} ]]; then
@@ -64,29 +66,34 @@ if [[ -n ${TTS_ENGINE_API_KEY:-} ]]; then
 fi
 unset TTS_API_KEY TTS_ENGINE_API_KEY
 
-# --- model: a local path when offline, so no code path tries the Hub
+# --- model: a local snapshot path when offline, so no code path tries the Hub; clients see the repo id
 model=${TTS_ENGINE_MODEL:-Qwen/Qwen3-TTS-12Hz-1.7B-Base}
-served=${model%/}
 if [[ -d $model ]]; then
-    served=$(basename "$served")
-elif [[ $HF_HUB_OFFLINE == 1 ]]; then
-    repo=${HF_HUB_CACHE:-${HF_HOME:-$HOME/.cache/huggingface}/hub}/models--${model//\//--}
-    [[ -f $repo/refs/main ]] || die "$model is not in the HF cache ($repo)"
-    model=$repo/snapshots/$(<"$repo/refs/main")
+    served=${TTS_ENGINE_SERVED_NAME:-$(basename "$(realpath "$model")")}
+else
+    served=${TTS_ENGINE_SERVED_NAME:-$model}
+    if [[ $HF_HUB_OFFLINE == 1 ]]; then
+        repo=${HF_HUB_CACHE:-${HF_HOME:-$HOME/.cache/huggingface}/hub}/models--${model//\//--}
+        [[ -f $repo/refs/main ]] || die "$model is not in the HF cache ($repo)"
+        model=$repo/snapshots/$(<"$repo/refs/main")
+    fi
 fi
-for f in config.json model.safetensors speech_tokenizer/config.json speech_tokenizer/model.safetensors; do
-    [[ -d $model && ! -e $model/$f ]] && die "model directory $model lacks $f (incomplete download?)"
-done
+if [[ -d $model ]]; then
+    for f in config.json model.safetensors speech_tokenizer/config.json speech_tokenizer/model.safetensors; do
+        [[ -s $model/$f ]] || die "model directory $model lacks $f (incomplete download?)"
+    done
+fi
 
 args=(serve "$model" --omni --deploy-config "$yaml" --host "${TTS_ENGINE_HOST:-127.0.0.1}" --port "$port"
       --trust-remote-code --served-model-name "$served"
       --stage-init-timeout "${TTS_ENGINE_STAGE_INIT_TIMEOUT:-900}" --init-timeout "${TTS_ENGINE_INIT_TIMEOUT:-1200}"
-      --disable-access-log-for-endpoints /health,/metrics)
+      --disable-access-log-for-endpoints "/health,/metrics")
 if [[ -n ${TTS_ENGINE_ALLOWED_MEDIA_PATH:-} ]]; then
     args+=(--allowed-local-media-path "$TTS_ENGINE_ALLOWED_MEDIA_PATH")
 fi
 args+=("${extra[@]}")
 
-echo "run_engine: GPU $CUDA_VISIBLE_DEVICES, $yaml, port $port, venv $venv, model $model," \
-     "nvcc $("$FLASHINFER_NVCC" --version | sed -n 's/.*release \([0-9.]*\),.*/\1/p'), auth $([[ -n ${VLLM_API_KEY:-} ]] && echo on || echo off)" >&2
+nvcc_release=$("$FLASHINFER_NVCC" --version | sed -n 's/.*release \([0-9.]*\),.*/\1/p')
+echo "run_engine: GPU $CUDA_VISIBLE_DEVICES, port $port, $yaml, venv $venv, model $model, nvcc $nvcc_release," \
+     "auth $([[ -n ${VLLM_API_KEY:-} ]] && echo on || echo off)" >&2
 exec "$venv/bin/vllm" "${args[@]}"
