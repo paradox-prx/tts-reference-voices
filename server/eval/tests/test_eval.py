@@ -82,22 +82,22 @@ def test_score_run_rejudge_and_summary(tmp_path: Path) -> None:
             "bad_reasons": []}
     rows = [base | {"run": "r", "prompt_id": f"p{i}", "take": 0, "file": f"f{i}.wav", "cer_nospace": c,
                     "hyp_norm": "a b c d e" if c < 0.1 else "a b"}
-            for i, c in enumerate([0.02, 0.05, 0.12, 0.30])]
+            for i, c in enumerate([0.02, 0.05, 0.31, 0.45])]
     (tmp_path / "requests.jsonl").write_text("")
     (tmp_path / "scores.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
     thresholds = tmp_path / "t.json"
-    thresholds.write_text(json.dumps({"gate": {"cer_nospace_ur": 0.2}}))
+    thresholds.write_text(json.dumps({"gate": {"cer_nospace_ur": 0.4}}))
     subprocess.run([sys.executable, str(EVAL / "score_run.py"), str(tmp_path), "--rejudge", "--thresholds",
                     str(thresholds)], check=True, capture_output=True)
     scored = [json.loads(x) for x in (tmp_path / "scores.jsonl").read_text().splitlines()]
-    assert [r["gate_pass"] for r in scored] == [True, True, True, False]      # gate at 0.2 (overridden)
-    assert [r["bad"] for r in scored] == [False, False, True, True]           # bad at 0.10 (default)
+    assert [r["gate_pass"] for r in scored] == [True, True, True, False]      # gate at 0.4 (overridden)
+    assert [r["bad"] for r in scored] == [False, False, True, True]           # bad at 0.30 (default)
     s = json.loads((tmp_path / "scores_summary.json").read_text())
     g = s["runs"]["r [shehbaz]"]
     assert g["gate_fail"]["k"] == 1 and g["bad"]["k"] == 2 and g["bad_first_take"]["n"] == 4
     assert g["gate_vs_bad"] == {"recall": 0.5, "precision": 1.0, "false_reject_rate": 0.0}
     assert g["corpus"]["wer"] == pytest.approx(6 / 20)
-    assert s["thresholds"]["gate"]["cer_nospace_ur"] == 0.2 and s["rejudged"] is True
+    assert s["thresholds"]["gate"]["cer_nospace_ur"] == 0.4 and s["rejudged"] is True
     assert (tmp_path / "scores_summary.md").exists()
 
 

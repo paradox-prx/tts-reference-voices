@@ -28,15 +28,17 @@ def test_good_take_passes_gate_and_is_not_bad(lang: str) -> None:
 
 
 @pytest.mark.parametrize("changes, lang, reason", [
-    ({"cer_nospace": 0.2}, "ur", "cer_nospace>0.15"),
+    ({"cer_nospace": 0.4}, "ur", "cer_nospace>0.35"),
     ({"wer": 0.25}, "en", "wer>0.2"),
     ({"char_ratio": 0.8}, "ur", "char_ratio<0.85"),
     ({"char_ratio": 1.2}, "en", "char_ratio>1.15"),
-    ({"del_run": 4}, "ur", "del_run>=4"),
+    ({"del_run": 8}, "ur", "del_run>=8"),
     ({"del_run": 3}, "en", "del_run>=3"),
     ({"ins_run": 4}, "en", "ins_run>=4"),
-    ({"repeat_excess": 4}, "ur", "repeat_excess>=4"),
-    ({"token_run": 3}, "ur", "token_run>=3"),
+    ({"repeat_excess": 6}, "ur", "repeat_excess>=6"),
+    ({"repeat_excess": 4}, "en", "repeat_excess>=4"),
+    ({"token_run": 4}, "ur", "token_run>=4"),
+    ({"token_run": 3}, "en", "token_run>=3"),
     ({"char_runs": 1}, "ur", "char_run>=1"),
     ({"max_word_s": 5.5, "max_word_voiced": 0.99}, "ur", "long_word>2.5"),
     ({"max_gap_s": 9.0, "max_gap_voiced": 0.97}, "en", "word_gap>2"),
@@ -108,7 +110,15 @@ def test_bad_only_detectors() -> None:
 
 def test_several_reasons_are_all_reported() -> None:
     reasons = policy.gate(take(cer_nospace=0.4, char_ratio=0.6, del_run=9, trail_sil_s=3.0), "ur")
-    assert reasons == ["trail_sil>1.5", "cer_nospace>0.15", "char_ratio<0.85", "del_run>=4"]
+    assert reasons == ["trail_sil>1.5", "cer_nospace>0.35", "char_ratio<0.85", "del_run>=8"]
+
+
+def test_accent_level_urdu_errors_pass_the_gate() -> None:
+    """Accented but complete Qwen Urdu (the P5 median take) is not a failure; the stricter offline label is also
+    calibrated on it (docs/EXPERIMENTS.md, quality thresholds)."""
+    accent = take(cer_nospace=0.16, wer=0.37, char_ratio=0.96, del_run=3, ins_run=3, repeat_excess=4, token_run=3)
+    assert policy.gate(accent, "ur") == [] and policy.bad(accent, "ur") == []
+    assert policy.gate(accent, "en") != []  # the same numbers are a failure in English
 
 
 def test_reason_codes_parse_into_metric_names_like_the_gateway() -> None:

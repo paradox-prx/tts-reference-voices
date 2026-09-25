@@ -64,6 +64,10 @@ def _torchaudio_stub():
                 del sys.modules[name]
 
 
+MAX_WINDOW_S = float(os.environ.get("TTS_QC_SIM_MAX_WINDOW_S", "40"))  # longer clips are embedded in windows
+WINDOW_S = 30.0
+
+
 class Embedder:
     """One speaker-embedding model. Thread-safe: calls are serialized with a lock (one forward at a time)."""
 
@@ -111,7 +115,20 @@ class Embedder:
         self.load_s = time.perf_counter() - t0
 
     def __call__(self, wav16: np.ndarray) -> np.ndarray:
-        """float32 mono 16 kHz -> unit-norm embedding (float32 numpy)."""
+        """float32 mono 16 kHz -> unit-norm embedding (float32 numpy). Clips longer than MAX_WINDOW_S are embedded in
+        equal windows of about WINDOW_S and the unit embeddings averaged (duration-weighted): WavLM's self-attention
+        is quadratic in length, and a 60-120 s take needed 4+ GB for one forward pass (OOM next to Whisper). Clips up
+        to MAX_WINDOW_S (every take of the short..xlong sizes) are embedded whole, as before."""
+        n = len(wav16)
+        if n > MAX_WINDOW_S * 16000:
+            k = int(np.ceil(n / (WINDOW_S * 16000)))
+            edges = np.linspace(0, n, k + 1).astype(int)
+            parts = [(self._embed(wav16[a:b]), b - a) for a, b in zip(edges[:-1], edges[1:])]
+            e = sum(w * emb for emb, w in parts)
+            return (e / (np.linalg.norm(e) + 1e-12)).astype(np.float32)
+        return self._embed(wav16)
+
+    def _embed(self, wav16: np.ndarray) -> np.ndarray:
         torch = self._torch
         with self._lock, torch.inference_mode():
             if self.backend == "base":

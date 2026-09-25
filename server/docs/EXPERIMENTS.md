@@ -254,3 +254,52 @@ Load-test findings in short (quality scores follow once `eval/score_run.py` has 
     Urdu throughput 3.7x, p50 126 s. English: 43/43 pass, 12x.
   Conclusion: ASR-based QC inline on the one GPU costs 2-7x throughput under load; online guardrails should be the
   cheap ones (pace band, length cap, non_streaming_mode/splitting), with ASR QC offline or on a second GPU.
+
+### Quality evaluation (`eval/score_run.py`, stock Whisper large-v3 fp16 beam 5 on GPU, WavLM-Large/ECAPA + wavlm-base-plus-sv)
+Scored every take of P2-P9 and X1-X7 (`<phase>/scores.jsonl`, `scores_summary.{json,md}`). Two scoring problems were
+found and fixed on the way: (1) with 4 CTranslate2 workers and both SIM models the scorer ran the card out of memory on
+60-120 s takes (WavLM attention is quadratic in length: 3.8-4.4 GB per forward) and CTranslate2 then failed every later
+take ("invalid device ordinal"); fixed by embedding clips over 40 s in ~30 s windows (`qc/tts_qc/sim.py`) and running 2
+workers; the failed takes were rescored. (2) The research's Urdu gate thresholds were calibrated on human broadcast
+speech and failed 69% of Qwen's Urdu takes (P5 rp1.05: WER 0.38, CER-nospace median 0.16, p10-p90 0.10-0.27, while
+the speaker's real clips score CER-nospace <= 0.09 with deletion runs <= 1): they measured Whisper-vs-accent, not
+failures. Reading transcripts of flagged takes showed the structural detectors are real (a take with 84 of its words
+unrecognisable at normal duration; a 25-word passage missing at normal pace; the phrase after the repetition
+"گڑھے ہی گڑھے" skipped), while deletion runs <= 3 and CER-nospace up to ~0.3 are accent noise. **Recalibrated Urdu
+gate** (`qc/tts_qc/policy.py`): CER-nospace > 0.35, deletion run >= 8, insertion run >= 6, repeat excess >= 6, token run
+>= 4 (English unchanged); the offline `bad` label 0.30 / 6 / 5 / 5 / 4. English flags are partly false positives from
+onomatopoeia in the prompts ("haha" → "ha ha").
+
+**Failure tiers** (`eval/failure_classes.py`, which also counts runaways/failed requests, which have no audio):
+severe = unusable (runaway, pace outside 0.6-1.8x, skipped passage >= 12 words Urdu / 5 English or char ratio < 0.80,
+garbled CER-nospace > 0.45 / WER > 0.30, a swallowed loop, a voiced gap > 3 s, wrong speaker); moderate = local
+(skipped phrase 6-11 words, repeats, char ratio 0.80-0.88); clean = the rest (Urdu: accent-level errors).
+
+| setting (43 benchmark prompts unless noted) | takes | severe [95% CI] | moderate | runaways |
+|---|---|---|---|---|
+| P5 Urdu rp 1.05 (K=6) | 258 | 15.5% [12-20] | 16.7% | 7 |
+| P5 Urdu rp 1.10 | 258 | 16.3% [12-21] | 15.9% | 8 |
+| P5 Urdu rp 1.15 | 258 | 15.9% [12-21] | 12.4% | 13 |
+| P5 Urdu rp 1.20 | 258 | 14.7% [11-20] | 16.3% | 12 |
+| X1 Urdu non_streaming_mode=true (K=1) | 43 | 7.0% [2-19] | 14.0% | 0 |
+| P8 Urdu raw via gateway (K=1) | 43 | 11.6% [5-24] | 14.0% | 2 |
+| X3 Urdu shehbaz-avg / shehbaz-prompt | 43 / 43 | 16.3% / 11.6% | 11.6% / 14.0% | 2 / 1 |
+| X4 Urdu cap on / off | 43 / 43 | 9.3% / 11.6% | 16.3% / 16.3% | 1 / 0 (engine retried 5) |
+| X6 Urdu xxlong nsm false / true | 43 / 43 | 93.0% / 16.3% | 4.6% / 30.2% | 16 / 0 |
+| X7 Urdu xxlong via gateway split off / 60 | 43 / 43 | 80%* / 23.3% | 8% / 20.9% | 18 / 0 |
+| trump (P5 controls, X2 Auto, X6/X7 xxlong) | 43 each | 0-2.3% | 0-4.6% | 0 |
+
+\* 25 scored + 18 failed requests. Corpus quality of the non-severe takes: Urdu WER ~0.37, CER-nospace ~0.17, SIM
+WavLM-Large 0.77 (prompt) / 0.81 (held-out), SIM base-plus-sv 0.98; English WER 1.1-1.5%, SIM-Large 0.83-0.87,
+base 0.98-0.99 (the Kaggle notes' ~0.97 was on the base-plus-sv scale). repetition_penalty 1.05-1.20 changes neither
+the severe rate nor WER/SIM measurably (paired differences cross 0). Averaging the speaker embedding changes nothing
+measurable (cosine(avg, prompt) = 0.995; identical SIM).
+
+**Retry policy** (`eval/retry_sim.py` over P5's 6 takes per prompt, outcome = severe, bootstrap CIs over prompts;
+`results/P5_retry_study/`): with the **full online gate** (pace + Whisper ASR + SIM + audio detectors; recall 1.0,
+precision 0.51-0.57): R=0 15.5% → R=1 8.8% [3.6-15.2] (+31% compute) → R=2 7.2% (+48%) → R=3 6.7% at rp 1.05;
+3.4-3.5% at R=2 for rp 1.10/1.15 (paired CI of the difference crosses 0). With a **pace + runaway gate only** (what the
+gateway does without the QC sidecar; recall 0.20-0.34): R=1 13.5% (+3.5% compute), R=2-3 no further gain; adding the
+cheap audio + SIM checks (QC with ASR off) changes nothing (13.3%). Most Urdu failures are skips/garbles at a normal
+duration that only ASR sees; and ASR online on the same GPU does not keep up under load (P8). Follow-up: P5_urdu_nsm
+and X8_split_nsm (non_streaming_mode at scale, and combined with splitting).

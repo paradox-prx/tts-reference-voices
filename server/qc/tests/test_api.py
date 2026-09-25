@@ -103,11 +103,11 @@ def test_pass_response_shape() -> None:
 
 
 def test_fail_response_carries_reason_codes() -> None:
-    with client(FakeScorer({"cer_nospace": 0.4, "del_run": 6, "trail_sil_s": 3.0, "sim_prompt_base": 0.5,
+    with client(FakeScorer({"cer_nospace": 0.4, "del_run": 9, "trail_sil_s": 3.0, "sim_prompt_base": 0.5,
                             "sim_speech_s": 8.0})) as c:
         out = c.post("/v1/qc", json=body(voice="shehbaz", lang="ur")).json()
     assert out["pass"] is False
-    assert out["reasons"] == ["trail_sil>1.5", "cer_nospace>0.15", "del_run>=4", "sim<0.88"]
+    assert out["reasons"] == ["trail_sil>1.5", "cer_nospace>0.35", "del_run>=8", "sim<0.88"]
 
 
 def test_checks_subset_default_and_inline_voice() -> None:

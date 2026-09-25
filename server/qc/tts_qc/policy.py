@@ -45,15 +45,22 @@ CHECKS = ("asr", "sim", "audio")
 @dataclass(frozen=True)
 class Thresholds:
     # ASR (text) checks; language-specific where the language matters
-    cer_nospace_ur: float = 0.15    # Urdu gates on CER-nospace: Whisper's own Urdu WER is 13-26 % on real speech
+    # Urdu values recalibrated 2026-09-25 on 251 Qwen Urdu takes (results/P5_urdu_rp105, docs/EXPERIMENTS.md "Quality
+    # thresholds"): accented TTS Urdu scores CER-nospace p10-p90 0.10-0.27 and deletion runs <= 3 even when it is
+    # fine (human clips: CER-nospace <= 0.09, del_run <= 1), so the research's human-speech values (0.15 / 4 / 4 / 4 / 3)
+    # failed 69 % of takes. The Urdu gate now targets audible failures: garbled speech, skipped phrases, loops.
+    cer_nospace_ur: float = 0.35    # ~p95 of Qwen Urdu takes; Whisper's own Urdu WER is 13-26 % on real speech
     wer_en: float = 0.20            # English: Kaggle good takes < 1 % WER; 0.22 was the NOTES re-roll rule
     char_ratio_lo: float = 0.85
     char_ratio_hi: float = 1.15
-    del_run_ur: int = 4
+    del_run_ur: int = 8             # >= 8 consecutive reference words with nothing heard: a skipped / garbled phrase
     del_run_en: int = 3
-    ins_run: int = 4
+    ins_run: int = 4                # English (and other non-Urdu text)
     repeat_excess: int = 4
     token_run: int = 3
+    ins_run_ur: int = 6             # Urdu: ASR accent noise alone reaches 3-5
+    repeat_excess_ur: int = 6
+    token_run_ur: int = 4
     char_run: int = 1
     long_word_s: float = 2.5        # real clips: longest word 1.0-2.2 s
     long_word_voiced: float = 0.8
@@ -107,8 +114,9 @@ class Thresholds:
 
 
 GATE = Thresholds()
-BAD = Thresholds(cer_nospace_ur=0.10, wer_en=0.10, char_ratio_lo=0.90, char_ratio_hi=1.10, del_run_ur=3, del_run_en=3,
-                 ins_run=3, repeat_excess=3, long_word_s=2.0, word_gap_s=1.5, unaligned_tail_s=2.0, pace_lo=0.7,
+BAD = Thresholds(cer_nospace_ur=0.30, wer_en=0.10, char_ratio_lo=0.88, char_ratio_hi=1.12, del_run_ur=6, del_run_en=3,
+                 ins_run=3, repeat_excess=3, ins_run_ur=5, repeat_excess_ur=5, token_run_ur=4,
+                 long_word_s=2.0, word_gap_s=1.5, unaligned_tail_s=2.0, pace_lo=0.7,
                  pace_hi=1.5, sim_heldout=True, max_cr=2.4, script_drift=0.1)
 GATE_SIM_MODEL = "base"    # the sidecar default (TTS_QC_SIM_MODEL)
 BAD_SIM_MODEL = "large"
@@ -155,12 +163,14 @@ def judge(m: dict, lang: str, t: Thresholds, sim_model: str | None, checks: Iter
         dr = t.del_run_ur if lang == "ur" else t.del_run_en
         if m["del_run"] >= dr:
             add(f"del_run>={dr}")
-        if m["ins_run"] >= t.ins_run:
-            add(f"ins_run>={t.ins_run}")
-        if m["repeat_excess"] >= t.repeat_excess:
-            add(f"repeat_excess>={t.repeat_excess}")
-        if m["token_run"] >= t.token_run and m["token_run"] > m.get("token_run_ref", 1):
-            add(f"token_run>={t.token_run}")
+        ir, rx, tr = ((t.ins_run_ur, t.repeat_excess_ur, t.token_run_ur) if lang == "ur"
+                      else (t.ins_run, t.repeat_excess, t.token_run))
+        if m["ins_run"] >= ir:
+            add(f"ins_run>={ir}")
+        if m["repeat_excess"] >= rx:
+            add(f"repeat_excess>={rx}")
+        if m["token_run"] >= tr and m["token_run"] > m.get("token_run_ref", 1):
+            add(f"token_run>={tr}")
         if m["char_runs"] - m.get("char_runs_ref", 0) >= t.char_run:
             add(f"char_run>={t.char_run}")
         if (m.get("max_word_s") or 0) > t.long_word_s and (m.get("max_word_voiced") or 0) > t.long_word_voiced:

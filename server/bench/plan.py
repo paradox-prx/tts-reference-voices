@@ -277,6 +277,23 @@ PHASES += [
        "bench": [via_gateway("--voice", v, "--size", "xxlong", "-n", "43", "-c", "8", "--timeout", QUALITY_TIMEOUT,
                              tag=f"split_{label}") for v in ("shehbaz", "trump")]}
       for label, words in (("off", "0"), ("60", "60"))],
+    {"name": "P5_urdu_nsm", "engine": engine(), "kind": "quality",
+     "checks": [{"name": "non_streaming_mode", "via": "engine", "voice": "shehbaz",
+                 "fails": {"nsm_invalid": {"non_streaming_mode": "x"}},
+                 "succeeds": {"nsm_true": {"non_streaming_mode": True}}}],
+     "note": "non_streaming_mode=true at scale: shehbaz 43 prompts x 6 unseeded takes (c=16), rp 1.05, paired by prompt "
+             "with P5_urdu_rp105 (X1 had 7.0% severe vs 15.5% in one take per prompt; this measures it with K=6 and "
+             "feeds the retry simulation)",
+     "bench": [direct("--voice", "shehbaz", "--size", "prompts", "--takes", "6", "-c", "16",
+                      "--extra-param", "repetition_penalty=1.05", "--param", "non_streaming_mode=true",
+                      "--timeout", QUALITY_TIMEOUT, tag="nsm_rp1.05")]},
+    {"name": "X8_split_nsm", "engine": engine(), "kind": "quality",
+     "gateway": GW_PERF | {"TTS_RETRY_MAX": "0", "TTS_SPLIT_WORDS": "60", "TTS_NON_STREAMING_MODE_LANGS": "ur"},
+     "checks": [gateway_headers_check("split_nsm", {"x-tts-retries": ["0"]})],
+     "note": "long Urdu (shehbaz xxlong, 43 texts, c=8) through the gateway with BOTH sentence splitting (60 words) and "
+             "non_streaming_mode=true for Urdu; compare X6 nsm_true (16% severe) and X7 split_60 (23% severe)",
+     "bench": [via_gateway("--voice", "shehbaz", "--size", "xxlong", "-n", "43", "-c", "8", "--timeout",
+                           QUALITY_TIMEOUT, tag="split60_nsm")]},
     {"name": "X2_language", "engine": engine(), "kind": "quality",
      "checks": [{"name": "language", "via": "engine", "voice": "trump", "fails": {"urdu": {"language": "Urdu"}},
                  "succeeds": {"auto": {"language": "Auto"}}}],
