@@ -294,6 +294,12 @@ PHASES += [
              "non_streaming_mode=true for Urdu; compare X6 nsm_true (16% severe) and X7 split_60 (23% severe)",
      "bench": [via_gateway("--voice", "shehbaz", "--size", "xxlong", "-n", "43", "-c", "8", "--timeout",
                            QUALITY_TIMEOUT, tag="split60_nsm")]},
+    {"name": "X9_nsm_stream", "engine": engine(),
+     "note": "does non_streaming_mode=true (whole text in the prefill) cost streaming TTFA? shehbaz short + xlong, "
+             "streaming, c=1,8 (n=8), nsm true vs the default",
+     "bench": [direct("--voice", "shehbaz", "--size", "short", "xlong", "--sweep", "1,8", "-n", "8", "--stream",
+                      *extra, tag=tag)
+               for tag, extra in (("nsm_default", ()), ("nsm_true", ("--param", "non_streaming_mode=true")))]},
     {"name": "X2_language", "engine": engine(), "kind": "quality",
      "checks": [{"name": "language", "via": "engine", "voice": "trump", "fails": {"urdu": {"language": "Urdu"}},
                  "succeeds": {"auto": {"language": "Auto"}}}],
