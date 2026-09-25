@@ -56,14 +56,30 @@
 > (bf16 only); decode8 does not fit; seeds do not reproduce on 0.28 (no seeds anywhere; takes are unseeded, paired
 > by prompt); ~1% Urdu runaways engine-direct, handled by the gateway's cap + retry; throughput ~35x realtime at c=32.
 >
-> **Running now:** `bench/run_plan.py --only P2_matrix,...,P9_baseline_nocache` (log `logs/run_plan_main.log`; every
-> non-optional pending phase). A finished phase has `results/<phase>/DONE`; rerun anything unfinished with
-> `venvs/gateway/bin/python bench/run_plan.py --only <phase>` (unfinished dirs move to `results/_attic`).
+> **Benchmark: DONE** (2026-09-25 04:20-11:30 PKT). Every phase of `bench/plan.py` ran (P0-P9, X1-X9, P2_high_c,
+> P5_urdu_nsm, P8 reruns); every take is scored (`<phase>/scores.jsonl`, `failure_classes.json`, `takes_all.jsonl`);
+> retry study in `results/P5_retry_study/`; tables via `bench/collect.py` → `results/INDEX.md`, `REPORT_tables.md`,
+> and `bench/report_extract.py`. **REPORT.md is written** (results + recommended config); `docs/EXPERIMENTS.md` logs
+> every experiment (E00-E06, P1-P9, X1-X9, quality, retry study).
 >
-> **Next:** after the load tests: `eval/run.sh eval/score_run.py results/<phase> --device cuda` for P5, X1-X3, P8
-> (and a sample of P2), `eval/run.sh eval/retry_sim.py …`, recalibrate `calibration/pace.json` from P2, then
-> `bench/collect.py`, REPORT.md, production units (`deploy/install_units.sh --enable`), final push. The user asked
-> that all audio and numbers stay under per-experiment folders in `results/` (local, gitignored).
+> **Headline findings:** 31-35x realtime at 32 in flight (38-40x at 64), TTFA 0.12 s at c=1; ~3x the plain qwen-tts
+> baseline. English WER ~1%, severe failures 0-2%. Urdu (accented, WER ~0.37): severe failures 15.5% per take on the
+> ~95-word prompts, **7.7% with non_streaming_mode=true**, 93% on ~200-word texts unless non_streaming_mode (16%) or
+> split + non_streaming_mode (12%); repetition_penalty 1.10-1.20 and the averaged speaker embedding change nothing;
+> full ASR-gate retries take Urdu to 1.9% (R=1) / 0.5% (R=2) but the QC sidecar inline on the same GPU cuts
+> throughput 2-7x under load. Urdu QC thresholds were recalibrated on Qwen takes (`qc/tts_qc/policy.py`).
+>
+> **Production: RUNNING** as systemd user units since 2026-09-25 12:04 PKT (`deploy/install_units.sh --enable`, then
+> `qwen3-tts-qc.service`): engine (custom_voices), /health watchdog, gateway on 0.0.0.0:8090, QC sidecar in its cheap
+> mode (SIM + audio, Whisper off) on 127.0.0.1:8092; secrets in `~/.config/qwen3-tts/env` (mode 600; the original
+> file before the QC lines were added is not kept in the repo). Verified: auth, formats, 202-word Urdu in 5.4 s
+> (4 parallel parts), streaming 0.13 s first byte, watchdog recovery 111 s, crash recovery 65 s (REPORT.md §9).
+> Late finding: 0.87% of trump takes come out in another speaker's voice; the cheap SIM guard catches and retries them.
+> Lingering is off: the units run while the user is logged in (`loginctl enable-linger $USER` to start at boot).
+> Operate: `XDG_RUNTIME_DIR=/run/user/$(id -u) systemctl --user status qwen3-tts-gateway`, logs via
+> `journalctl _SYSTEMD_USER_UNIT=qwen3-tts-gateway.service` (the user journal is not persistent here).
+>
+> **Tests (all green):** gateway 124, engine 30 (+4 skipped: no ops/upstream here), QC 71, eval 8, baseline 86.
 
 # Session 1 record (pb-ai-pc1, state as of 2026-09-24 ~19:00 PKT)
 

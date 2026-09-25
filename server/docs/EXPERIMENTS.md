@@ -303,3 +303,39 @@ gateway does without the QC sidecar; recall 0.20-0.34): R=1 13.5% (+3.5% compute
 cheap audio + SIM checks (QC with ASR off) changes nothing (13.3%). Most Urdu failures are skips/garbles at a normal
 duration that only ASR sees; and ASR online on the same GPU does not keep up under load (P8). Follow-up: P5_urdu_nsm
 and X8_split_nsm (non_streaming_mode at scale, and combined with splitting).
+
+### P5_urdu_nsm, X8, X9 (non_streaming_mode confirmation)
+- **P5_urdu_nsm** (43 prompts x 6 takes, non_streaming_mode=true, rp 1.05): severe **7.7% [5-12]** vs 15.5% default
+  (paired by prompt: -7.7 points [0.0, 15.1] at R=0, -7.0 [1.4, 13.5] at R=1); 26.9x vs 28.2x realtime. Retry
+  simulation: full ASR gate R=1 1.9% [0.6-3.3] (+15% compute), R=2 0.5%; pace-only gate R=1 5.8% (+2%).
+- **X8** (shehbaz xxlong via the gateway, split 60 + non_streaming_mode for Urdu): severe 11.6% (X6 nsm alone 16.3%,
+  X7 split alone 23.3%), 30.3x realtime, p50 18.9 s.
+- **X9** streaming TTFA with non_streaming_mode=true (shehbaz): short c=1 0.118 → 0.125 s, c=8 0.683 → 0.732 s;
+  xlong c=1 0.117 → 0.153 s, c=8 0.676 → 0.858 s.
+
+### E10: production service (systemd user units, `deploy/install_units.sh --enable`): `results/10_production_verification/`
+Engine `variants/custom_voices.yaml` + gateway with `deploy/env.example` values (TTS_NON_STREAMING_MODE_LANGS=ur,
+TTS_SPLIT_WORDS=60, retries 1). Engine active after ~2 min (wait_ready), gateway ready ~1 s later. No key → 401;
+trump 9 words 0.65 s for 3.0 s of audio; **shehbaz 202 words → 4 parts in parallel, 74.7 s of audio in 5.4 s**
+(CPU Whisper check: CER-nospace 0.143, char ratio 0.97, longest deletion run 1, SIM-L 0.86: complete); streaming
+first byte 0.13 s; mp3 labelled.
+
+**Wrong-voice takes found:** the production trump take above had SIM 0.27 (base) / 0.14 (Large) against trump and
+0.45 / 0.02 against shehbaz: a different speaker, with a perfect transcript. Across all vLLM-Omni phases, **0.87% of
+trump takes (17 of 1,944 with >= 1.5 s of speech) and 0.03% of shehbaz takes (1 of 3,866)** have SIM-base < 0.85,
+16 of them also SIM-Large < 0.4 (mostly short sentences, some 6-33 s takes at c=64). The severe tier (SIM only on
+>= 5 s) under-counted them.
+
+### E11: cheap QC guard in production: `results/11_production_sim_guard/`
+QC sidecar with Whisper off (`TTS_QC_ASR=0`, SIM base-plus-sv + audio checks, `TTS_QC_CHECKS=sim,audio`,
+`TTS_RETRY_ON=suspect,engine_error,qc`): 1.36 GB VRAM next to the engine (card 20.8-21.8 GB under load). Through the
+production gateway: c=1 short p50 0.67 s (trump) / 0.95 s (shehbaz); c=16 short trump 17.0x realtime (P7 without QC
+15.9x), shehbaz 18.3x; c=16 xlong 26.5x / 27.5x (P2 26.6x / 26.1x): **no measurable cost**. Over ~470 requests the QC
+failed 2 takes on speaker similarity (both retried and passed) and the pace band triggered 8 retries (one request
+shipped its better over-long take as suspect after both takes failed); 0 errors.
+
+### E12: failure recovery: `results/12_failure_recovery/`
+- Stage-0 engine process killed (API stays up, /health 503): the /health watchdog restarted the engine after 4 failed
+  checks (15 s apart); gateway ready again **111 s** after the kill.
+- Engine main process killed: systemd `Restart=on-failure` restarted it; gateway ready again **65 s** after the kill;
+  no orphaned GPU processes; voices restored from `state/speakers`; the next request passed QC in the right voice.

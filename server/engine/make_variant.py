@@ -68,6 +68,12 @@ STANDARD: dict[str, tuple[list[str], str]] = {
                 "Code2Wav decodes up to 8 streams per group, with CUDA graphs for batch 1/2/4/8"),
     "mrv2": (["--model-runner", "v2", "--max-num-batched-tokens", "512", "--code2wav-dtype", "bfloat16"],
              "0.30.0rc1 upstream defaults (MRV2 runner, 512-token steps, bf16 Code2Wav); 0.28 ignores model_runner"),
+    "decode8_m045": (["--decode-batch-max-size", "8", "--decode-graph-batch-sizes", "1,2,4,8", "--mem0", "0.45"],
+                     "decode8 at stage-0 0.45: at 0.60 stage 1 OOMed capturing batch-8 decoder graphs (P1_screen_decode8)"),
+    "default_m045": (["--mem0", "0.45"], "reference for decode8_m045: the prod YAML at stage-0 0.45"),
+    "decode4g_m045": (["--decode-batch-max-size", "4", "--decode-graph-batch-sizes", "1,2,4", "--mem0", "0.45"],
+                      "Code2Wav CUDA graph buckets 1/2/4 (default: 1 only) at stage-0 0.45; decode8's batch-8 graphs "
+                      "need ~12 GB"),
     "custom_voices": (["--custom-voice-dir", "state/custom_voices"],
                       "production + the precomputed voices of engine/precompute_voices.py (<id>-avg: averaged speaker "
                       "embedding + ICL, <id>-prompt: prompt-clip embedding + ICL)"),

@@ -94,8 +94,8 @@ cd qc && ../eval/run.sh -m tts_qc
 deploy/install_units.sh              # renders the units with this checkout's paths, creates ~/.config/qwen3-tts/env
                                      # (mode 600, fresh random keys) from deploy/env.example; starts nothing
 $EDITOR ~/.config/qwen3-tts/env      # e.g. TTS_ENGINE_DEPLOY, TTS_VOICE_MODE, TTS_QC_URL (see REPORT.md)
-deploy/install_units.sh --enable     # enable + start engine, its /health watchdog and the gateway
-deploy/install_units.sh --enable --with-qc   # ... and the QC sidecar
+deploy/install_units.sh --enable --with-qc   # enable + start engine, its /health watchdog, the gateway and the QC
+                                             # sidecar (cheap mode: speaker similarity + audio checks, REPORT.md §8)
 loginctl enable-linger "$USER"       # optional: keep the units running without a login session and start at boot
 ```
 
@@ -181,18 +181,21 @@ retried; they are still capped and their pace is logged. Measured effect: REPORT
 
 ## Configuration
 
-Everything is environment variables; the full list with defaults and explanations is `deploy/env.example` (gateway
+`deploy/env.example` carries the recommended production values from [REPORT.md](REPORT.md) §8. Everything is
+environment variables; the full list with defaults and explanations is `deploy/env.example` (gateway
 `TTS_*`, engine `TTS_ENGINE_*`, watchdog) and `qc/README.md` (`TTS_QC_*`). The most important ones:
 
 | variable | default | |
 |---|---|---|
 | `TTS_API_KEY` | required | client bearer key(s) |
-| `TTS_ENGINE_DEPLOY` | `engine/deploy/qwen3_tts_prod.yaml` | engine deploy YAML; `engine/deploy/variants/custom_voices.yaml` adds the precomputed voices |
+| `TTS_ENGINE_DEPLOY` | `engine/deploy/variants/custom_voices.yaml` (env.example) | engine deploy YAML: the prod YAML plus the precomputed voices |
 | `TTS_ENGINE_GPU` | `0` | physical GPU |
 | `TTS_VOICE_MODE` | `registered` | `registered` (upload the reference clip once), `precomputed` (engine custom voices, e.g. `{id}-avg`), `inline` |
 | `TTS_MAX_INFLIGHT` / `TTS_MAX_QUEUE` / `TTS_QUEUE_TIMEOUT_S` | 32 / 128 / 60 | admission control |
-| `TTS_RETRY_MAX` / `TTS_RETRY_ON` | 1 / `suspect,engine_error,qc` | retry policy |
-| `TTS_QC_URL` | unset | QC sidecar |
+| `TTS_RETRY_MAX` / `TTS_RETRY_ON` | 1 / `suspect,engine_error` (env.example) | retry policy (add `qc` with the QC sidecar) |
+| `TTS_NON_STREAMING_MODE_LANGS` | `ur` (env.example) | send `non_streaming_mode=true` for Urdu text: halves severe Urdu failures and fixes long Urdu (REPORT.md §5.2) |
+| `TTS_SPLIT_WORDS` | `60` (env.example) | split longer texts at sentence ends; parts of a non-streaming request run in parallel on free slots |
+| `TTS_QC_URL` / `TTS_QC_CHECKS` / `TTS_QC_ASR` | `http://127.0.0.1:8092` / `sim,audio` / `0` (env.example) | QC sidecar in its cheap mode: catches wrong-voice takes (~1% of trump takes) at no measurable cost; `TTS_QC_ASR=1` adds Whisper (low load or a second GPU only) |
 | `TTS_HOST` / `TTS_PORT` | `0.0.0.0` / `8090` | bind |
 
 Voices are folders under `voices/<id>/` in the repo (`voice.json` with the language,

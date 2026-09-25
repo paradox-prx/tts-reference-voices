@@ -18,8 +18,9 @@ gateway (`server/gateway`). Measured 2026-09-24/25 on the machine `vector`. Ever
 | **Capacity** | 32 requests in flight: long texts (~16-33 s of audio) p50 14-26 s; short sentences p50 3.6-4.4 s, 5.5-7 req/s; roughly 30 simultaneous real-time streams |
 | **English quality** | WER 0.6-1.5%, severe failures 0-2% per take, speaker similarity 0.98 (WavLM base-plus-sv; the Kaggle "0.97" scale) / 0.82-0.87 (WavLM-Large) |
 | **Urdu quality** | Accented but intelligible (WER ~0.37, CER ~0.17, by stock Whisper large-v3); **severe failures** (skipped passage, garble, loop, runaway) **15.5% per take** on the 43 ~95-word prompts with default settings, **7.7% with `non_streaming_mode=true`**, and up to 93% on ~200-word texts unless mitigated (16% with `non_streaming_mode`, 12% with it plus sentence splitting) |
-| **Guardrails** | `non_streaming_mode` for Urdu (free), length cap (3x throughput on runaways), sentence splitting (60 words), pace + runaway retry (cheap: severe 7.7% → 5.8%); with the ASR QC sidecar and 1-2 retries Urdu severe failures fall to **1.9% / 0.5%**, but ASR-QC inline on the same GPU cuts throughput 2-7x under load |
-| **Recommendation** | Section 8: engine as above with the precomputed voices; gateway with 32 in flight, length cap, `non_streaming_mode` for Urdu, 60-word splitting, 1 retry on pace/engine errors; streaming for interactive use; ASR QC only at low load or on a second GPU |
+| **Wrong voice** | 0.87% of trump takes (0.03% Urdu) come out in another speaker's voice; a speaker-similarity check (QC sidecar without Whisper, 1.4 GB, no measurable cost) catches them and the gateway retries |
+| **Guardrails** | `non_streaming_mode` for Urdu (free), length cap (3x throughput on runaways), sentence splitting (60 words), pace + runaway + similarity retry (cheap: Urdu severe 7.7% → 5.8%, wrong-voice takes retried); with Whisper-based QC and 1-2 retries Urdu severe failures fall to **1.9% / 0.5%**, but Whisper inline on the same GPU cuts throughput 2-7x under load |
+| **Recommendation** | Section 8: engine as above with the precomputed voices; gateway with 32 in flight, length cap, `non_streaming_mode` for Urdu, 60-word splitting, 1 retry on pace / engine / similarity failures via the QC sidecar in its cheap mode; streaming for interactive use; Whisper QC only at low load or on a second GPU. **Deployed and running** as systemd user units (section 9) |
 
 ## 2. Setup and method
 
@@ -239,6 +240,17 @@ so calls timed out and throughput fell from ~25x to 10x (English) / 4-9x (Urdu);
 float16 next to the engine at stage-0 0.45 ran the card out of memory. The QC sidecar is therefore an option for low
 load (a few concurrent requests) or a second GPU, not for peak load on one card.
 
+### 5.5 Wrong-voice takes and the cheap QC guard (E10, E11)
+
+Across all vLLM-Omni phases, **0.87% of trump takes** (17 of 1,944 with >= 1.5 s of speech) and 0.03% of shehbaz takes
+(1 of 3,866) came out in a different speaker's voice: speaker similarity at cross-speaker level (WavLM base-plus-sv
+< 0.85, 16 of them also WavLM-Large < 0.4) with a correct transcript. Mostly short sentences, a few 6-33 s takes at
+c=64; the first production request hit one. No length or ASR check sees this; a speaker-similarity check does, and it
+is cheap: the QC sidecar with Whisper off (`TTS_QC_ASR=0`: WavLM base-plus-sv + audio checks) holds 1.36 GB next to the
+engine and adds no measurable latency or throughput cost (production at c=16: short trump 17.0x vs 15.9x without QC,
+xlong 26.5-27.5x vs 26.1-26.6x; c=1 p50 0.67 s). Over ~470 production requests it rejected 2 takes on similarity, the
+gateway retried both, and both retries passed.
+
 ## 6. vLLM-Omni vs the plain qwen-tts baseline (P9)
 
 qwen-tts 0.1.1 (transformers 4.57.3, bf16, sdpa) behind the same request shape, one GPU worker, dynamic batching up to
@@ -293,14 +305,36 @@ guardrails above.
 | length cap | on (pace-based, `TTS_LENGTH_CAP_HEADROOM=1.2`) | keeps runaways from holding slots (3x throughput, 5x lower p99 in X4) |
 | Urdu layout | `TTS_NON_STREAMING_MODE_LANGS=ur` | halves severe Urdu failures, fixes long Urdu; -5% throughput |
 | long texts | `TTS_SPLIT_WORDS=60` | long Urdu 93% → 12% severe with the above; parts run in parallel (lower latency for long English too: p50 23 → 14 s) |
-| retries | `TTS_RETRY_MAX=1`, `TTS_RETRY_ON=suspect,engine_error` | catches runaways and pace outliers for +2-4% compute (Urdu severe 7.7% → 5.8%) |
-| QC sidecar | off at peak load on one GPU; for low-load or quality-critical Urdu (or on a second GPU): `TTS_QC_URL`, `TTS_RETRY_MAX=2`, `TTS_RETRY_ON=suspect,engine_error,qc` | full-gate retries take Urdu to 1.9% (R=1) / 0.5% (R=2) severe, but Whisper inline costs 2-7x throughput under load on the same card |
+| retries | `TTS_RETRY_MAX=1`, `TTS_RETRY_ON=suspect,engine_error,qc` | runaways, pace outliers and wrong-voice takes for +2-4% compute (Urdu severe 7.7% → 5.8%) |
+| QC sidecar | **on in its cheap mode**: `TTS_QC_URL=http://127.0.0.1:8092`, `TTS_QC_CHECKS=sim,audio`, `TTS_QC_ASR=0` | catches the ~1% wrong-voice trump takes for 1.4 GB and no measurable cost |
+| Whisper QC | off at peak load on one GPU; for low load or quality-critical Urdu, or on a second GPU: `TTS_QC_ASR=1`, `TTS_QC_CHECKS=asr,sim,audio`, `TTS_RETRY_MAX=2` | full-gate retries take Urdu to 1.9% (R=1) / 0.5% (R=2) severe, but Whisper inline costs 2-7x throughput under load on the same card |
 | streaming | for interactive use (TTFA 0.12 s at c=1, < 0.7 s at c <= 8, 1.3 s at c=16); non-streaming where Urdu quality matters most (only non-streaming takes can be retried) | |
 | capacity planning | ~30 simultaneous real-time streams, or 5-7 short sentences/s, per 3090 | P2/P3 |
 
 These are the values in `deploy/env.example` and the installed units (`~/.config/qwen3-tts/env`).
 
-## 9. Caveats
+## 9. The production service (E10-E12)
+
+Installed with `deploy/install_units.sh --enable --with-qc` as systemd user units (`qwen3-tts-engine`, `-engine-watchdog`,
+`-gateway`, `-qc`), secrets in `~/.config/qwen3-tts/env` (mode 600). The gateway listens on `0.0.0.0:8090`; the engine
+(`127.0.0.1:8091`) and the QC sidecar (`127.0.0.1:8092`) are local only. Verified on the running service:
+
+| check | result |
+|---|---|
+| startup | engine healthy and warmed (wait_ready) in ~2 min, gateway ready ~1 s later; voices registered, warmed up (0.5-0.8 s each) |
+| auth | no key → 401 |
+| English, 9 words | 3.0 s of audio in 0.65 s |
+| Urdu, 202 words | split into 4 parts run in parallel: 74.7 s of audio in 5.4 s; complete (CER-nospace 0.14, char ratio 0.97) |
+| streaming | first byte 0.13 s |
+| formats | wav, pcm, flac, mp3, opus, all labelled; `X-AI-Generated: true`; works with the official `openai` SDK |
+| a stage process dies (API up, /health 503) | the watchdog restarts the engine; ready again 111 s after the failure |
+| the engine process dies | systemd `Restart=on-failure`; ready again 65 s after the failure; voices restored; no orphaned GPU processes |
+| GPU memory | 20.8 GB idle, up to 21.8 GB under load (engine + QC sidecar + desktop) |
+
+The units run while the user is logged in (lingering is off on this machine); `loginctl enable-linger $USER` makes
+them start at boot and survive logout.
+
+## 10. Caveats
 
 - **Shared GPU:** the 3090 also drives the desktop (0.34 GB and some GPU time during every measurement). The CPU ran
   with the `powersave` governor (EPP balance_performance); the talker step is partly host-bound, so a performance
@@ -323,7 +357,7 @@ These are the values in `deploy/env.example` and the installed units (`~/.config
 - The Whisper STT servers on pb-ai-pc1 (`:8000`, `:8012`) that session 1 stopped are still down there
   (`ops/STOPPED_WHISPER_SERVERS.md`); nothing on this machine depends on them.
 
-## 10. Reproduce
+## 11. Reproduce
 
 ```bash
 cd server
