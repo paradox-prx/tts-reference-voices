@@ -66,7 +66,11 @@ GW_PERF = {"TTS_RETRY_MAX": "0"}                # gateway with retries off: fail
 GUARD = {"TTS_RETRY_MAX": "2", "TTS_RETRY_ON": "suspect,engine_error,qc"}
 QUALITY_TIMEOUT = "900"
 # QC_CMD = ["{root}/venvs/eval/bin/python", "-m", "tts_qc"]   # override how the QC sidecar starts (cwd server/qc)
-QC_ENV: dict = {}              # extra TTS_QC_* settings for the sidecar; {"TTS_QC_DEVICE": "cpu"} if the GPU is too full
+# extra TTS_QC_* settings for the sidecar. The first P8_quality_guard run (engine stage 0 at 0.45, QC float16) ran the
+# card out of memory under 16 concurrent takes (engine ~15.9 GB + QC ~6 GB + ASR activations + desktop): 77 of 86 QC
+# calls failed (CUDA OOM) and the gateway failed open. So the QC runs Whisper in int8_float16 (~1.5 GB less) with
+# expandable segments, next to an engine at stage-0 0.40 (see P8_ENGINE)
+QC_ENV: dict = {"TTS_QC_ASR_COMPUTE": "int8_float16", "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"}
 
 
 def engine(variant: str = CHOSEN, venv: str = CHOSEN_VENV, *args: str) -> dict:
@@ -308,7 +312,7 @@ PHASES += [
 # config/config_factory.py L443-472 -> config/stage_config.py L47-89 and "CLI overrides take precedence over YAML
 # defaults" ~L1085); phase.json's engine log findings show the resulting KV line. If the QC still does not fit, set
 # QC_ENV = {"TTS_QC_DEVICE": "cpu"} above (slower checks; the gateway fails open on QC timeouts).
-P8_ENGINE = engine(CHOSEN, CHOSEN_VENV, "--stage-overrides", '{"0": {"gpu_memory_utilization": 0.45}}')
+P8_ENGINE = engine(CHOSEN, CHOSEN_VENV, "--stage-overrides", '{"0": {"gpu_memory_utilization": 0.40}}')
 P8_BENCH = ["--voice", *VOICES, "--size", "prompts", "-c", "16", "--timeout", QUALITY_TIMEOUT]
 PHASES += [
     {"name": "P8_quality_raw", "engine": P8_ENGINE, "gateway": GW_PERF, "kind": "quality",
@@ -320,6 +324,14 @@ PHASES += [
      "note": "quality after guardrails: the same prompts with retries (max 2 on suspect, engine error, QC fail) and "
              "the QC sidecar (ASR + SIM + audio checks) on the same GPU",
      "bench": [via_gateway(*P8_BENCH, tag="guard")]},
+    {"name": "P8_quality_guard_fast", "engine": P8_ENGINE, "kind": "quality",
+     "gateway": GUARD | {"TTS_QC_TIMEOUT_S": "120"},
+     "qc": {"TTS_QC_BEAM": "1", "TTS_QC_WORKERS": "4"},
+     "checks": [gateway_headers_check("qc_consulted", {"x-tts-qc": ["pass", "fail"]})],
+     "note": "P8_quality_guard with a lighter online check: greedy Whisper (beam 1), 4 CTranslate2 workers, QC timeout "
+             "120 s. The beam-5 sidecar needed p50 24 s (en) / 58 s (ur) per take next to the engine at c=16 and most "
+             "calls hit the 30 s gateway timeout",
+     "bench": [via_gateway(*P8_BENCH, tag="guardfast")]},
     {"name": "P8_quality_retry", "engine": P8_ENGINE, "gateway": {"TTS_RETRY_MAX": "2",
                                                                  "TTS_RETRY_ON": "suspect,engine_error"},
      "kind": "quality", "optional": True, "note": "ablation: retries on pace/engine errors only, no QC sidecar",

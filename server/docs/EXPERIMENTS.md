@@ -219,3 +219,38 @@ Engine direct, custom_voices engine (prod YAML), inline references, gateway samp
 - **Pace recalibrated** (`calibration/pace.json`, used by phases started after 04:45): trump 0.070 s/letter (was
   0.0795), shehbaz 0.111 (was the 0.088 prior). Suspect flags in P0-P3 rows used the old values; the report recomputes
   them from the stored durations with the calibrated pace.
+
+### Main plan run (2026-09-25 04:20-08:09 PKT; `logs/run_plan_main.log`), then extras (08:10-10:10)
+All 19 default phases finished (P2-P9, X1-X5), then X6, X7, P2_high_c, a corrected P8_quality_guard and
+P8_quality_guard_fast. Per-run tables: `results/INDEX.md`, `results/REPORT_tables.md`; the report picks the headlines.
+Load-test findings in short (quality scores follow once `eval/score_run.py` has run):
+- **P3 streaming TTFA** (first audio past the WAV header): 0.12 s at c=1, 0.14-0.2 s at c=2, 0.35 s at c=4,
+  0.4-0.7 s at c=8, 0.8-1.3 s at c=16, 1.8-2.5 s at c=32; throughput equal to non-streaming.
+- **P4 voice-prompt cache:** registered (upload) and inline references perform the same (both hit the engine's
+  reference caches). Defeating the caches (`nocache`: a new reference per request) costs 37% of throughput at c=32
+  (13-14x vs 20-22x on short texts), TTFA 0.27-0.31 s instead of 0.12 at c=1 and 6-7 s instead of 2.4 s at c=32.
+- **P2_high_c:** c=64 medium 32-34x, xlong 38-40x realtime (p90-wall), no errors except 2 Urdu xlong cap hits.
+- **X4 length cap:** shehbaz 43 prompts at c=16: with the gateway's cap 26.7x realtime, p99 28 s; without it (the
+  engine's 12-frames-per-token cap + built-in retry) 8.5x, p99 147 s: 5 of 43 Urdu takes ran away.
+- **X5 mixed voices (leak guard #4355):** 0 duplicate outputs across 96 mixed-batch takes (SIM check pending).
+- **X6 non_streaming_mode on long Urdu** (shehbaz xxlong, 43 texts, c=16): false (default) 16 errors (cap hit) + 14
+  too-short takes of 43, pace ratio p50 0.59, 9.8x; **true: 0 errors, 0 suspects, pace ratio p50 0.97, 27.1x**.
+  trump xxlong with true: 0 errors, pace ratio 1.00. Hypothesis confirmed.
+- **X7 gateway sentence splitting** (xxlong, c=8, retries 0): off: shehbaz 18 errors + 16 too-short of 43, 6.1x;
+  **60 words: shehbaz 0 errors, 0 suspects, 31.9x, p50 16.8 s / p99 21.1 s**; trump p50 23.0 → 14.3 s (parts in parallel).
+- **P9 qwen-tts baseline:** c=1 RTF 0.58-0.64 (1.6-1.7x realtime vs 5.5x on vLLM-Omni), best aggregate ~11-12x at
+  batch 8 (vLLM-Omni 18-20x at c=8, 34-40x at c=32-64), VRAM 5.8-18.7 GB; one Urdu runaway row holds its whole static
+  batch (shehbaz xxlong c=8: 153 s latency). Prompt cache off costs ~no throughput there (it re-decodes the
+  reference on every call anyway).
+- **P8 online QC sidecar on the same GPU (not viable at c=16):**
+  - first run (engine stage 0 at 0.45, QC Whisper float16): the card ran out of memory (24.08 GB peak): 66 of 86 QC
+    calls failed with CUDA OOM (+ follow-on "invalid device ordinal"); the gateway failed open. Kept in
+    `results/_attic`.
+  - rerun (stage 0 at 0.40, Whisper int8_float16, expandable segments): no OOM, but the sidecar's ASR took p50
+    24 s (en) / 58 s (ur) per take next to the saturated engine (0.5 s on an idle GPU), so most calls hit the gateway's
+    30 s QC timeout; 10.3x / 8.9x realtime vs 26x / 24x without QC.
+  - `P8_quality_guard_fast` (greedy Whisper, 4 workers, 120 s timeout): QC p50 17.5 s (en) / 41 s (ur) per take; the
+    gate failed 20 of 43 Urdu first takes (threshold calibrated on human speech; see the quality eval), 50 retries,
+    Urdu throughput 3.7x, p50 126 s. English: 43/43 pass, 12x.
+  Conclusion: ASR-based QC inline on the one GPU costs 2-7x throughput under load; online guardrails should be the
+  cheap ones (pace band, length cap, non_streaming_mode/splitting), with ASR QC offline or on a second GPU.

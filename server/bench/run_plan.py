@@ -173,6 +173,7 @@ class Phase:
     fresh_engine: bool = False         # never reuse the previous phase's engine
     ready_timeout_s: float = 1800.0
     requires: tuple[str, ...] = ()     # paths (relative to server/) that must exist, e.g. precomputed voices
+    qc_env: tuple[tuple[str, str], ...] = ()  # TTS_QC_* overrides of this phase's QC sidecar (on top of plan QC_ENV)
 
 
 PHASE_KEYS = {"name", "engine", "gateway", "qc", "bench", "checks", "note", "kind", "optional", "fresh_engine",
@@ -207,7 +208,9 @@ def parse_phase(raw: dict) -> Phase:
     engine = parse_engine(name, raw.get("engine", "none"))
     gw = raw.get("gateway", False)
     gateway = None if gw in (False, None) else {} if gw is True else {str(k): str(v) for k, v in dict(gw).items()}
-    qc = bool(raw.get("qc", False))
+    qc_raw = raw.get("qc", False)
+    qc = bool(qc_raw)
+    qc_env = tuple((str(k), str(v)) for k, v in qc_raw.items()) if isinstance(qc_raw, dict) else ()
     if qc and gateway is None:
         raise PlanError(f"{name}: qc needs the gateway on")
     kind = raw.get("kind", "perf")
@@ -253,7 +256,7 @@ def parse_phase(raw: dict) -> Phase:
         checks.append(chk)
     return Phase(name, engine, gateway, qc, tuple(bench), tuple(checks), str(raw.get("note", "")), kind,
                  bool(raw.get("optional", False)), bool(raw.get("fresh_engine", False)),
-                 float(raw.get("ready_timeout_s", 1800.0)), tuple(str(r) for r in raw.get("requires", ())))
+                 float(raw.get("ready_timeout_s", 1800.0)), tuple(str(r) for r in raw.get("requires", ())), qc_env)
 
 
 def load_module(path: Path, name: str):
@@ -709,9 +712,9 @@ class Runner:
                **(ph.gateway or {})}
         return [str(PYTHON), "-m", "tts_gateway"], env
 
-    def qc_launch(self) -> tuple[list[str], dict[str, str], Path]:
+    def qc_launch(self, ph: Phase | None = None) -> tuple[list[str], dict[str, str], Path]:
         env = {"TTS_QC_HOST": "127.0.0.1", "TTS_QC_PORT": str(self.args.qc_port), "CUDA_VISIBLE_DEVICES": self.gpu,
-               **self.qc_env}
+               **self.qc_env, **dict(ph.qc_env if ph else ())}
         if self.args.stub:
             return [str(PYTHON), str(Path(__file__).resolve()), "--fake-qc", str(self.args.qc_port)], {}, ROOT
         if self.qc_cmd:
@@ -774,7 +777,7 @@ class Runner:
             print(f"    ready: GET {self.engine_url}{ready} within {ph.ready_timeout_s:.0f} s"
                   + (f", then {WAIT_READY.name}" if ph.engine.kind == "vllm" else ""))
         if ph.qc:
-            cmd, env, cwd = self.qc_launch()
+            cmd, env, cwd = self.qc_launch(ph)
             print(f"  qc: $ cd {cwd} && {env_prefix(env)} {shlex.join(cmd)}; ready: GET {self.qc_url}/health")
         if ph.gateway is None:
             print("  gateway: off")
@@ -846,7 +849,7 @@ class Runner:
             rec["engine"] = self.ensure_engine(ctx)
             rec["versions"] = self.versions(ctx)
             if ph.qc:
-                rec["qc"] = self.start_child(ctx, "qc", *self.qc_launch(), f"{self.qc_url}/health", QC_READY_S)
+                rec["qc"] = self.start_child(ctx, "qc", *self.qc_launch(ph), f"{self.qc_url}/health", QC_READY_S)
             if ph.gateway is not None:
                 cmd, env = self.gateway_launch(ph, self.effective_engine(ph))
                 rec["gateway"] = self.start_child(ctx, "gateway", cmd, env, ROOT / "gateway",
