@@ -243,9 +243,9 @@ Load-test findings in short (quality scores follow once `eval/score_run.py` has 
   batch (shehbaz xxlong c=8: 153 s latency). Prompt cache off costs ~no throughput there (it re-decodes the
   reference on every call anyway).
 - **P8 online QC sidecar on the same GPU (not viable at c=16):**
-  - first run (engine stage 0 at 0.45, QC Whisper float16): the card ran out of memory (24.08 GB peak): 66 of 86 QC
-    calls failed with CUDA OOM (+ follow-on "invalid device ordinal"); the gateway failed open. Kept in
-    `results/_attic`.
+  - first run (engine stage 0 at 0.45, QC Whisper float16): the card ran out of memory (24.08 GB peak): 77 of 86
+    takes got a QC error (66 sidecar exceptions: 33 CUDA OOM + 33 follow-on "invalid device ordinal"; the rest gateway
+    timeouts); the gateway failed open. Kept in `results/_attic`.
   - rerun (stage 0 at 0.40, Whisper int8_float16, expandable segments): no OOM, but the sidecar's ASR took p50
     24 s (en) / 58 s (ur) per take next to the saturated engine (0.5 s on an idle GPU), so most calls hit the gateway's
     30 s QC timeout; 10.3x / 8.9x realtime vs 26x / 24x without QC.
