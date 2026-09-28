@@ -370,3 +370,47 @@ WavLM-Large + base-plus-sv; the service units were stopped for the ~8 min of GPU
   - this run's FLACs are in git (691 takes; 143 withheld: political or official texts);
   - every other phase's audio is in the release `bench-audio-2026-09-28` (6,682 takes, 28.5 h; 2,202 withheld);
   - `bench/export_audio.py` writes these, and `results/README.md` describes them.
+
+### E14 (T0-T8): streaming start latency for calling agents: `results/T*/`, `results/T_summary.md` (2026-09-28)
+Why: a calling agent needs audio that starts fast and then plays without gaps. How: `bench_tts.py` now records
+every chunk's arrival:
+- `play_start`: the earliest playback start that never runs dry.
+- `stall_s` = play_start − TTFA: the total silence a player that starts at the first byte has to insert.
+
+Each phase is the production engine (`custom_voices`) with one change, behind the gateway with the production
+settings. Urdu short (~4.7 s) and medium (~10 s) sentences, streamed, closed loop at c = 1 / 8 / 16 / 32 with
+n = max(8, 6c), so most requests start while others are mid-stream. `bench/plan.py` TTFA_VARIANTS,
+`engine/make_variant.py --connector-extra`.
+
+**Finding:** production's 0.12 s TTFA is followed by a gap. The engine sends 1 codec frame (80 ms), then nothing
+until the next 25 frames (2 s) are generated and decoded. Smooth playback is only possible from 0.37 s at c=1,
+~1.0 s at c=8, 1.4-1.7 s at c=16 and 2.5-3.1 s at c=32. Every stream stalls, typically for 0.7 s at c=8 and
+1.1-1.2 s at c=16.
+
+Gapless start p50 (short / medium), TTFA p90 and typical stall (p50) per config; full table in
+`results/T_summary.md`:
+
+| config | c=1 | c=8 | c=16 | c=32 | TTFA p90 at c=16 / 32 | x realtime at c=16 / 32 vs prod |
+|---|---|---|---|---|---|---|
+| T0 prod | 0.37 / 0.38 | 1.06 / 0.95 (stall 0.7) | 1.67 / 1.43 (stall 1.1-1.2) | 3.09 / 2.47 | 1.40 / 2.65-2.75 | – |
+| T1 512-token prefill steps | 0.37 / 0.38 | 1.08 / 0.99 | 1.69 / 1.48 | 3.10 / 2.54 | **0.66-0.74 / 1.21-1.23** | -1 to -2% |
+| T2 chunk ramp 1,2,4,8,16,25 | **0.12 / 0.13** | 0.35 / 0.25 | 1.20 / 0.74 | 3.51 / 2.81 | 1.43-1.58 / 2.86-2.88 | -5 to -13% |
+| T3 adaptive chunks | 0.15 / 0.16 | 0.42 / 0.35 | 0.95 / 0.62 | 3.63 / 2.73 | 1.83-1.90 / 3.33-3.40 | -6 to -13% |
+| T4 code-predictor prefix graphs | = prod | = prod | = prod | = prod | = prod | 0 (NVIDIA: disabled in 0.28, `use_cuda_graphs=is_npu()`) |
+| T5 Code2Wav 1 stream per decode | = prod | = prod | = prod | = prod | = prod | 0 |
+| T6 Code2Wav left context 25 | = prod | = prod | = prod | = prod | = prod | 0 (not the bottleneck) |
+| **T7 = T1 + T2** | **0.12 / 0.13** | 0.37 / **0.31** (stall 0) | 1.26 / 0.77 (stall 0.3-0.8) | 3.32 / 2.87 | 0.70-0.79 / 1.39-1.41 | -7 to -13% |
+| **T8 = T1 + T3** | 0.15 / 0.16 | 0.39 / 0.44 (stall 0) | **0.98 / 0.62** (stall 0-0.2) | 3.16 / 2.87 | 0.91-1.02 / 1.58-1.91 | -6 to -11% |
+
+- **Up to 8 calls speaking at once:** the ramp (T7) or adaptive chunks (T8) cut the real start 3×. The typical
+  stall goes from 0.7 s to none.
+- **At 16:** T8 is best (0.6-1.0 s, most streams gapless), T7 next. Both have about half production's TTFA tail.
+- **At 32 the card is saturated.** Per-stream generation is slower than playback, so no chunking can avoid gaps,
+  and every variant is at or slightly worse than production. Only a second GPU helps.
+- T1 alone halves the TTFA tail under load for ~1-2% throughput. T4/T5/T6 change nothing.
+- **Quality unchanged** (all 688 takes per config scored, stock Whisper large-v3 fp16 + WavLM; production units stopped
+  ~15 min for the GPU scoring):
+  - T0: WER 34.3%, CER-nospace 14.2%, SIM-L 0.747, severe 2.8% [2-4].
+  - T7: 35.1%, 14.5%, 0.752, 1.7% [1-3].
+  - T8: 34.9%, 14.1%, 0.753, 2.0% [1-3].
+- **Recommendation for voice agents: T8.** It is not deployed; the user decides.

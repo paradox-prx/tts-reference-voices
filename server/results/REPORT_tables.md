@@ -1,6 +1,6 @@
 # Tables for REPORT.md
 
-Generated 2026-09-28T13:16:32+05:00 from `/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results` by `server/bench/collect.py`. Latency and TTFA in seconds (p50 / p90 / p99); TTFA is the first audio byte past the WAV header (streaming runs only); x realtime = audio seconds per wall second over the run (aggregate); x realtime p90-wall = audio finished by the time 90% of the requests had finished over that time (one runaway cannot dominate it); stragglers = requests slower than 3x the run's median latency; RTF = latency / audio seconds per request; GPU peak is nvidia-smi memory.used of the benchmark GPU during the run, in brackets minus the idle baseline before the engine started (desktop and other tenants). Suspects: takes whose pace is outside 0.6-1.8x the voice's expected s/letter (s = too short, l = too long).
+Generated 2026-09-28T17:20:19+05:00 from `/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results` by `server/bench/collect.py`. Latency and TTFA in seconds (p50 / p90 / p99); TTFA is the first audio byte past the WAV header (streaming runs only); x realtime = audio seconds per wall second over the run (aggregate); x realtime p90-wall = audio finished by the time 90% of the requests had finished over that time (one runaway cannot dominate it); stragglers = requests slower than 3x the run's median latency; RTF = latency / audio seconds per request; GPU peak is nvidia-smi memory.used of the benchmark GPU during the run, in brackets minus the idle baseline before the engine started (desktop and other tenants). Suspects: takes whose pace is outside 0.6-1.8x the voice's expected s/letter (s = too short, l = too long).
 
 ## P0_smoke
 
@@ -1616,6 +1616,708 @@ Config: qwen-tts baseline --max-batch 8 --no-prompt-cache
 | shehbaz xlong | 18573 | 18808 |
 | trump short | 5506 | 14592 |
 | trump xlong | 14655 | 18570 |
+
+## T0_prod
+
+Config: vllm-omni custom_voices (engine); gateway {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error", "TTS_SPLIT_WORDS": "60"}
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ttfa_shehbaz_short_c1_n8_stream_server | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 0.96 / 1.22 / 1.54 | 0.12 / 0.12 / 0.12 | 5.02 | 5.25 | 5.25 | 0 | 0.191 | 1.05 | 19389 (19105) |
+| ttfa_shehbaz_short_c8_n48_stream_server | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 2 / 3.37 / 4.37 | 0.27 / 0.71 / 0.71 | 4.6 | 15.74 | 15.15 | 0 | 0.495 | 3.42 | 19444 (19160) |
+| ttfa_shehbaz_short_c16_n96_stream_server | shehbaz | short | 16 | 96 | y | server | 0 | 3 (0s/3l) | 3.09 / 4.84 / 6.23 | 0.41 / 1.4 / 1.4 | 4.33 | 20 | 19.04 | 0 | 0.777 | 4.62 | 19490 (19206) |
+| ttfa_shehbaz_short_c32_n192_stream_server | shehbaz | short | 32 | 192 | y | server | 0 | 0 | 4.9 / 8.05 / 10.2 | 0.74 / 2.65 / 2.65 | 4.22 | 24.2 | 22.72 | 0 | 1.272 | 5.74 | 19928 (19644) |
+| ttfa_shehbaz_medium_c1_n8_stream_server | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.25 / 2.39 / 2.65 | 0.12 / 0.12 / 0.12 | 10.65 | 5.46 | 5.46 | 0 | 0.185 | 0.51 | 19922 (19638) |
+| ttfa_shehbaz_medium_c8_n48_stream_server | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.17 / 5.08 / 6.76 | 0.25 / 0.74 / 0.74 | 10.19 | 18.61 | 17.85 | 0 | 0.423 | 1.83 | 19924 (19640) |
+| ttfa_shehbaz_medium_c16_n96_stream_server | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.32 / 8.22 / 10.31 | 0.34 / 1.41 / 1.41 | 10.68 | 25.02 | 23.82 | 0 | 0.616 | 2.34 | 19920 (19636) |
+| ttfa_shehbaz_medium_c32_n192_stream_server | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 9.91 / 12.76 / 16.65 | 0.6 / 2.75 / 2.75 | 10.51 | 31.45 | 29.89 | 0 | 0.986 | 2.99 | 19927 (19643) |
+
+**aggregate x realtime** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.46 | 18.61 | 25.02 | 31.45 |
+| ttfa shehbaz short stream server | 5.25 | 15.74 | 20 | 24.2 |
+
+**x realtime over the first 90% of finished requests (straggler-robust)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.46 | 17.85 | 23.82 | 29.89 |
+| ttfa shehbaz short stream server | 5.25 | 15.15 | 19.04 | 22.72 |
+
+**req/s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.51 | 1.83 | 2.34 | 2.99 |
+| ttfa shehbaz short stream server | 1.05 | 3.42 | 4.62 | 5.74 |
+
+**latency p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.25 | 4.17 | 6.32 | 9.91 |
+| ttfa shehbaz short stream server | 0.96 | 2 | 3.09 | 4.9 |
+
+**latency p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.39 | 5.08 | 8.22 | 12.76 |
+| ttfa shehbaz short stream server | 1.22 | 3.37 | 4.84 | 8.05 |
+
+**per-request RTF p50** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.185 | 0.423 | 0.616 | 0.986 |
+| ttfa shehbaz short stream server | 0.191 | 0.495 | 0.777 | 1.272 |
+
+**TTFA p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.12 | 0.25 | 0.34 | 0.6 |
+| ttfa shehbaz short stream server | 0.12 | 0.27 | 0.41 | 0.74 |
+
+**TTFA p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.12 | 0.74 | 1.41 | 2.75 |
+| ttfa shehbaz short stream server | 0.12 | 0.71 | 1.4 | 2.65 |
+
+**engine GPU MiB (peak - idle baseline)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 19638 | 19640 | 19636 | 19643 |
+| ttfa shehbaz short stream server | 19105 | 19160 | 19206 | 19644 |
+
+## T1_mnbt512
+
+Config: vllm-omni T1_mnbt512 (engine); gateway {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error", "TTS_SPLIT_WORDS": "60"}
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ttfa_shehbaz_short_c1_n8_stream_server | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 1.05 / 1.27 / 1.37 | 0.12 / 0.12 / 0.12 | 5.23 | 5.27 | 5.27 | 0 | 0.193 | 1.01 | 19431 (19150) |
+| ttfa_shehbaz_short_c8_n48_stream_server | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 2.25 / 3.35 / 4.14 | 0.28 / 0.45 / 1.04 | 4.54 | 14.93 | 14.26 | 0 | 0.498 | 3.29 | 19478 (19197) |
+| ttfa_shehbaz_short_c16_n96_stream_server | shehbaz | short | 16 | 96 | y | server | 0 | 0 | 3.06 / 5.01 / 6.37 | 0.41 / 0.74 / 1.78 | 4.21 | 19.63 | 18.4 | 0 | 0.787 | 4.67 | 19524 (19243) |
+| ttfa_shehbaz_short_c32_n192_stream_server | shehbaz | short | 32 | 192 | y | server | 0 | 1 (0s/1l) | 5.12 / 8.14 / 10.48 | 0.71 / 1.21 / 2.89 | 4.2 | 23.73 | 22.2 | 0 | 1.295 | 5.65 | 19612 (19331) |
+| ttfa_shehbaz_medium_c1_n8_stream_server | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.32 / 2.57 / 2.75 | 0.13 / 0.13 / 0.13 | 11.18 | 5.44 | 5.44 | 0 | 0.183 | 0.49 | 19615 (19334) |
+| ttfa_shehbaz_medium_c8_n48_stream_server | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.37 / 5.33 / 6.59 | 0.3 / 0.4 / 0.7 | 10.19 | 18.4 | 17.47 | 0 | 0.428 | 1.81 | 19620 (19339) |
+| ttfa_shehbaz_medium_c16_n96_stream_server | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.55 / 8.51 / 10.2 | 0.37 / 0.66 / 1.45 | 10.92 | 24.81 | 23.98 | 0 | 0.616 | 2.27 | 19621 (19340) |
+| ttfa_shehbaz_medium_c32_n192_stream_server | shehbaz | medium | 32 | 192 | y | server | 0 | 1 (0s/1l) | 10.16 / 13.23 / 15.79 | 0.57 / 1.23 / 3.13 | 10.53 | 30.95 | 29.51 | 0 | 0.997 | 2.94 | 19624 (19343) |
+
+**aggregate x realtime** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.44 | 18.4 | 24.81 | 30.95 |
+| ttfa shehbaz short stream server | 5.27 | 14.93 | 19.63 | 23.73 |
+
+**x realtime over the first 90% of finished requests (straggler-robust)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.44 | 17.47 | 23.98 | 29.51 |
+| ttfa shehbaz short stream server | 5.27 | 14.26 | 18.4 | 22.2 |
+
+**req/s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.49 | 1.81 | 2.27 | 2.94 |
+| ttfa shehbaz short stream server | 1.01 | 3.29 | 4.67 | 5.65 |
+
+**latency p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.32 | 4.37 | 6.55 | 10.16 |
+| ttfa shehbaz short stream server | 1.05 | 2.25 | 3.06 | 5.12 |
+
+**latency p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.57 | 5.33 | 8.51 | 13.23 |
+| ttfa shehbaz short stream server | 1.27 | 3.35 | 5.01 | 8.14 |
+
+**per-request RTF p50** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.183 | 0.428 | 0.616 | 0.997 |
+| ttfa shehbaz short stream server | 0.193 | 0.498 | 0.787 | 1.295 |
+
+**TTFA p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.13 | 0.3 | 0.37 | 0.57 |
+| ttfa shehbaz short stream server | 0.12 | 0.28 | 0.41 | 0.71 |
+
+**TTFA p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.13 | 0.4 | 0.66 | 1.23 |
+| ttfa shehbaz short stream server | 0.12 | 0.45 | 0.74 | 1.21 |
+
+**engine GPU MiB (peak - idle baseline)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 19334 | 19339 | 19340 | 19343 |
+| ttfa shehbaz short stream server | 19150 | 19197 | 19243 | 19331 |
+
+## T2_ramp
+
+Config: vllm-omni T2_ramp (engine); gateway {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error", "TTS_SPLIT_WORDS": "60"}
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ttfa_shehbaz_short_c1_n8_stream_server | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 0.89 / 1.21 / 1.78 | 0.12 / 0.12 / 0.14 | 4.97 | 5.09 | 5.09 | 0 | 0.204 | 1.02 | 20289 (20011) |
+| ttfa_shehbaz_short_c8_n48_stream_server | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 2.18 / 3.42 / 4.51 | 0.31 / 0.99 / 0.99 | 4.48 | 14.1 | 13.47 | 0 | 0.546 | 3.15 | 20337 (20059) |
+| ttfa_shehbaz_short_c16_n96_stream_server | shehbaz | short | 16 | 96 | y | server | 0 | 0 | 3.61 / 5.76 / 7.85 | 0.44 / 1.58 / 1.58 | 4.31 | 17.85 | 16.54 | 0 | 0.868 | 4.14 | 20533 (20255) |
+| ttfa_shehbaz_short_c32_n192_stream_server | shehbaz | short | 32 | 192 | y | server | 0 | 0 | 5.55 / 8.96 / 11.78 | 1.04 / 2.88 / 2.89 | 4.22 | 21.14 | 19.53 | 0 | 1.484 | 5.01 | 20973 (20695) |
+| ttfa_shehbaz_medium_c1_n8_stream_server | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.21 / 2.74 / 2.78 | 0.13 / 0.13 / 0.14 | 11.14 | 5.38 | 5.38 | 0 | 0.186 | 0.48 | 20977 (20699) |
+| ttfa_shehbaz_medium_c8_n48_stream_server | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.46 / 5.44 / 6.06 | 0.24 / 0.78 / 0.78 | 10.22 | 17.55 | 16.73 | 0 | 0.445 | 1.72 | 20975 (20697) |
+| ttfa_shehbaz_medium_c16_n96_stream_server | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.78 / 8.89 / 9.94 | 0.35 / 1.43 / 1.53 | 10.84 | 23.8 | 22.64 | 0 | 0.648 | 2.2 | 20973 (20695) |
+| ttfa_shehbaz_medium_c32_n192_stream_server | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 10.79 / 13.95 / 15.89 | 0.68 / 2.86 / 3.23 | 10.32 | 29.44 | 27.53 | 0 | 1.064 | 2.85 | 21303 (21025) |
+
+**aggregate x realtime** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.38 | 17.55 | 23.8 | 29.44 |
+| ttfa shehbaz short stream server | 5.09 | 14.1 | 17.85 | 21.14 |
+
+**x realtime over the first 90% of finished requests (straggler-robust)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.38 | 16.73 | 22.64 | 27.53 |
+| ttfa shehbaz short stream server | 5.09 | 13.47 | 16.54 | 19.53 |
+
+**req/s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.48 | 1.72 | 2.2 | 2.85 |
+| ttfa shehbaz short stream server | 1.02 | 3.15 | 4.14 | 5.01 |
+
+**latency p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.21 | 4.46 | 6.78 | 10.79 |
+| ttfa shehbaz short stream server | 0.89 | 2.18 | 3.61 | 5.55 |
+
+**latency p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.74 | 5.44 | 8.89 | 13.95 |
+| ttfa shehbaz short stream server | 1.21 | 3.42 | 5.76 | 8.96 |
+
+**per-request RTF p50** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.186 | 0.445 | 0.648 | 1.064 |
+| ttfa shehbaz short stream server | 0.204 | 0.546 | 0.868 | 1.484 |
+
+**TTFA p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.13 | 0.24 | 0.35 | 0.68 |
+| ttfa shehbaz short stream server | 0.12 | 0.31 | 0.44 | 1.04 |
+
+**TTFA p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.13 | 0.78 | 1.43 | 2.86 |
+| ttfa shehbaz short stream server | 0.12 | 0.99 | 1.58 | 2.88 |
+
+**engine GPU MiB (peak - idle baseline)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 20699 | 20697 | 20695 | 21025 |
+| ttfa shehbaz short stream server | 20011 | 20059 | 20255 | 20695 |
+
+## T3_adaptive
+
+Config: vllm-omni T3_adaptive (engine); gateway {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error", "TTS_SPLIT_WORDS": "60"}
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ttfa_shehbaz_short_c1_n8_stream_server | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 1.04 / 1.1 / 1.45 | 0.15 / 0.15 / 0.15 | 4.9 | 5.12 | 5.12 | 0 | 0.197 | 1.05 | 19866 (19587) |
+| ttfa_shehbaz_short_c8_n48_stream_server | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 2.51 / 3.48 / 4.98 | 0.38 / 1.13 / 1.13 | 4.55 | 14.13 | 13.14 | 0 | 0.538 | 3.1 | 19908 (19629) |
+| ttfa_shehbaz_short_c16_n96_stream_server | shehbaz | short | 16 | 96 | y | server | 0 | 0 | 3.43 / 5.64 / 6.69 | 0.89 / 1.9 / 2.01 | 4.3 | 17.81 | 16.49 | 0 | 0.873 | 4.14 | 20041 (19762) |
+| ttfa_shehbaz_short_c32_n192_stream_server | shehbaz | short | 32 | 192 | y | server | 1 | 1 (0s/1l) | 5.76 / 8.4 / 11.3 | 2.11 / 3.33 / 3.57 | 4.23 | 21.03 | 19.32 | 1 | 1.427 | 4.97 | 20467 (20188) |
+| ttfa_shehbaz_medium_c1_n8_stream_server | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.3 / 2.7 / 3.09 | 0.16 / 0.16 / 0.16 | 11.32 | 5.4 | 5.4 | 0 | 0.187 | 0.48 | 20470 (20191) |
+| ttfa_shehbaz_medium_c8_n48_stream_server | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.39 / 5.64 / 6.45 | 0.35 / 0.92 / 0.92 | 10.11 | 17.25 | 16.33 | 0 | 0.451 | 1.71 | 20466 (20187) |
+| ttfa_shehbaz_medium_c16_n96_stream_server | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.87 / 9.13 / 10.37 | 0.58 / 1.83 / 1.83 | 10.78 | 23.48 | 22.58 | 0 | 0.652 | 2.18 | 20469 (20190) |
+| ttfa_shehbaz_medium_c32_n192_stream_server | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 10.73 / 14.07 / 16.88 | 0.99 / 3.4 / 3.72 | 10.5 | 29.32 | 27.87 | 0 | 1.058 | 2.79 | 20722 (20443) |
+
+**aggregate x realtime** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.4 | 17.25 | 23.48 | 29.32 |
+| ttfa shehbaz short stream server | 5.12 | 14.13 | 17.81 | 21.03 |
+
+**x realtime over the first 90% of finished requests (straggler-robust)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.4 | 16.33 | 22.58 | 27.87 |
+| ttfa shehbaz short stream server | 5.12 | 13.14 | 16.49 | 19.32 |
+
+**req/s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.48 | 1.71 | 2.18 | 2.79 |
+| ttfa shehbaz short stream server | 1.05 | 3.1 | 4.14 | 4.97 |
+
+**latency p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.3 | 4.39 | 6.87 | 10.73 |
+| ttfa shehbaz short stream server | 1.04 | 2.51 | 3.43 | 5.76 |
+
+**latency p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.7 | 5.64 | 9.13 | 14.07 |
+| ttfa shehbaz short stream server | 1.1 | 3.48 | 5.64 | 8.4 |
+
+**per-request RTF p50** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.187 | 0.451 | 0.652 | 1.058 |
+| ttfa shehbaz short stream server | 0.197 | 0.538 | 0.873 | 1.427 |
+
+**TTFA p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.16 | 0.35 | 0.58 | 0.99 |
+| ttfa shehbaz short stream server | 0.15 | 0.38 | 0.89 | 2.11 |
+
+**TTFA p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.16 | 0.92 | 1.83 | 3.4 |
+| ttfa shehbaz short stream server | 0.15 | 1.13 | 1.9 | 3.33 |
+
+**engine GPU MiB (peak - idle baseline)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 20191 | 20187 | 20190 | 20443 |
+| ttfa shehbaz short stream server | 19587 | 19629 | 19762 | 20188 |
+
+## T4_predgraphs
+
+Config: vllm-omni T4_predgraphs (engine); gateway {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error", "TTS_SPLIT_WORDS": "60"}
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ttfa_shehbaz_short_c1_n8_stream_server | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 1 / 1.27 / 1.42 | 0.12 / 0.12 / 0.12 | 5.12 | 5.24 | 5.24 | 0 | 0.193 | 1.02 | 19394 (19117) |
+| ttfa_shehbaz_short_c8_n48_stream_server | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 1.93 / 3.33 / 5.35 | 0.26 / 0.95 / 0.96 | 4.67 | 15.49 | 14.2 | 0 | 0.5 | 3.31 | 19442 (19165) |
+| ttfa_shehbaz_short_c16_n96_stream_server | shehbaz | short | 16 | 96 | y | server | 0 | 1 (0s/1l) | 3 / 5.07 / 6.23 | 0.43 / 1.61 / 1.61 | 4.24 | 20.12 | 18.42 | 0 | 0.791 | 4.74 | 19491 (19214) |
+| ttfa_shehbaz_short_c32_n192_stream_server | shehbaz | short | 32 | 192 | y | server | 0 | 4 (0s/4l) | 4.93 / 7.93 / 10.18 | 0.76 / 2.66 / 2.66 | 4.23 | 24.16 | 22.7 | 0 | 1.295 | 5.72 | 19926 (19649) |
+| ttfa_shehbaz_medium_c1_n8_stream_server | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.07 / 2.73 / 2.8 | 0.12 / 0.12 / 0.13 | 11.33 | 5.44 | 5.44 | 0 | 0.184 | 0.48 | 19926 (19649) |
+| ttfa_shehbaz_medium_c8_n48_stream_server | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.26 / 5.3 / 6.12 | 0.29 / 0.72 / 0.72 | 10.2 | 18.2 | 17.55 | 0 | 0.428 | 1.78 | 19924 (19647) |
+| ttfa_shehbaz_medium_c16_n96_stream_server | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.37 / 8.47 / 9.38 | 0.33 / 1.4 / 1.41 | 10.82 | 24.98 | 23.9 | 0 | 0.614 | 2.31 | 20121 (19844) |
+| ttfa_shehbaz_medium_c32_n192_stream_server | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 10.16 / 12.86 / 15.77 | 0.57 / 2.76 / 2.76 | 10.57 | 31.45 | 29.67 | 0 | 0.988 | 2.98 | 20326 (20049) |
+
+**aggregate x realtime** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.44 | 18.2 | 24.98 | 31.45 |
+| ttfa shehbaz short stream server | 5.24 | 15.49 | 20.12 | 24.16 |
+
+**x realtime over the first 90% of finished requests (straggler-robust)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.44 | 17.55 | 23.9 | 29.67 |
+| ttfa shehbaz short stream server | 5.24 | 14.2 | 18.42 | 22.7 |
+
+**req/s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.48 | 1.78 | 2.31 | 2.98 |
+| ttfa shehbaz short stream server | 1.02 | 3.31 | 4.74 | 5.72 |
+
+**latency p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.07 | 4.26 | 6.37 | 10.16 |
+| ttfa shehbaz short stream server | 1 | 1.93 | 3 | 4.93 |
+
+**latency p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.73 | 5.3 | 8.47 | 12.86 |
+| ttfa shehbaz short stream server | 1.27 | 3.33 | 5.07 | 7.93 |
+
+**per-request RTF p50** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.184 | 0.428 | 0.614 | 0.988 |
+| ttfa shehbaz short stream server | 0.193 | 0.5 | 0.791 | 1.295 |
+
+**TTFA p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.12 | 0.29 | 0.33 | 0.57 |
+| ttfa shehbaz short stream server | 0.12 | 0.26 | 0.43 | 0.76 |
+
+**TTFA p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.12 | 0.72 | 1.4 | 2.76 |
+| ttfa shehbaz short stream server | 0.12 | 0.95 | 1.61 | 2.66 |
+
+**engine GPU MiB (peak - idle baseline)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 19649 | 19647 | 19844 | 20049 |
+| ttfa shehbaz short stream server | 19117 | 19165 | 19214 | 19649 |
+
+## T5_decode1
+
+Config: vllm-omni T5_decode1 (engine); gateway {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error", "TTS_SPLIT_WORDS": "60"}
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ttfa_shehbaz_short_c1_n8_stream_server | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 0.92 / 1.54 / 1.59 | 0.12 / 0.12 / 0.12 | 5.49 | 5.25 | 5.25 | 0 | 0.194 | 0.96 | 19396 (19118) |
+| ttfa_shehbaz_short_c8_n48_stream_server | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 2.21 / 3.22 / 4.16 | 0.27 / 0.96 / 0.96 | 4.67 | 15.42 | 15.04 | 0 | 0.483 | 3.3 | 19443 (19165) |
+| ttfa_shehbaz_short_c16_n96_stream_server | shehbaz | short | 16 | 96 | y | server | 0 | 1 (0s/1l) | 3.01 / 5.04 / 5.97 | 0.37 / 1.61 / 1.61 | 4.32 | 19.99 | 18.34 | 0 | 0.787 | 4.62 | 19493 (19215) |
+| ttfa_shehbaz_short_c32_n192_stream_server | shehbaz | short | 32 | 192 | y | server | 0 | 2 (0s/2l) | 5.08 / 8.31 / 11.46 | 0.74 / 2.69 / 2.69 | 4.31 | 24.08 | 22.6 | 0 | 1.284 | 5.59 | 19937 (19659) |
+| ttfa_shehbaz_medium_c1_n8_stream_server | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.18 / 2.62 / 2.88 | 0.12 / 0.13 / 0.13 | 10.98 | 5.42 | 5.42 | 0 | 0.186 | 0.49 | 19939 (19661) |
+| ttfa_shehbaz_medium_c8_n48_stream_server | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.23 / 4.88 / 6.43 | 0.26 / 0.71 / 0.71 | 10.15 | 18.3 | 17.69 | 0 | 0.424 | 1.8 | 19928 (19650) |
+| ttfa_shehbaz_medium_c16_n96_stream_server | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.24 / 8.29 / 9.96 | 0.35 / 1.42 / 1.42 | 10.67 | 24.87 | 23.95 | 0 | 0.615 | 2.33 | 19940 (19662) |
+| ttfa_shehbaz_medium_c32_n192_stream_server | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 10.14 / 13.06 / 15.52 | 0.59 / 2.74 / 2.75 | 10.56 | 31.29 | 29.88 | 0 | 0.995 | 2.96 | 20251 (19973) |
+
+**aggregate x realtime** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.42 | 18.3 | 24.87 | 31.29 |
+| ttfa shehbaz short stream server | 5.25 | 15.42 | 19.99 | 24.08 |
+
+**x realtime over the first 90% of finished requests (straggler-robust)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.42 | 17.69 | 23.95 | 29.88 |
+| ttfa shehbaz short stream server | 5.25 | 15.04 | 18.34 | 22.6 |
+
+**req/s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.49 | 1.8 | 2.33 | 2.96 |
+| ttfa shehbaz short stream server | 0.96 | 3.3 | 4.62 | 5.59 |
+
+**latency p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.18 | 4.23 | 6.24 | 10.14 |
+| ttfa shehbaz short stream server | 0.92 | 2.21 | 3.01 | 5.08 |
+
+**latency p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.62 | 4.88 | 8.29 | 13.06 |
+| ttfa shehbaz short stream server | 1.54 | 3.22 | 5.04 | 8.31 |
+
+**per-request RTF p50** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.186 | 0.424 | 0.615 | 0.995 |
+| ttfa shehbaz short stream server | 0.194 | 0.483 | 0.787 | 1.284 |
+
+**TTFA p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.12 | 0.26 | 0.35 | 0.59 |
+| ttfa shehbaz short stream server | 0.12 | 0.27 | 0.37 | 0.74 |
+
+**TTFA p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.13 | 0.71 | 1.42 | 2.74 |
+| ttfa shehbaz short stream server | 0.12 | 0.96 | 1.61 | 2.69 |
+
+**engine GPU MiB (peak - idle baseline)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 19661 | 19650 | 19662 | 19973 |
+| ttfa shehbaz short stream server | 19118 | 19165 | 19215 | 19659 |
+
+## T6_ctx25
+
+Config: vllm-omni T6_ctx25 (engine); gateway {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error", "TTS_SPLIT_WORDS": "60"}
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ttfa_shehbaz_short_c1_n8_stream_server | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 1.01 / 1.26 / 1.43 | 0.12 / 0.12 / 0.12 | 5.12 | 5.22 | 5.22 | 0 | 0.193 | 1.02 | 19395 (19113) |
+| ttfa_shehbaz_short_c8_n48_stream_server | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 2.18 / 3.29 / 4.98 | 0.29 / 0.96 / 0.96 | 4.74 | 15.65 | 14.59 | 0 | 0.492 | 3.3 | 19438 (19156) |
+| ttfa_shehbaz_short_c16_n96_stream_server | shehbaz | short | 16 | 96 | y | server | 0 | 1 (0s/1l) | 3.06 / 4.89 / 6.56 | 0.39 / 1.64 / 1.64 | 4.29 | 20.04 | 18.53 | 0 | 0.777 | 4.67 | 19488 (19206) |
+| ttfa_shehbaz_short_c32_n192_stream_server | shehbaz | short | 32 | 192 | y | server | 0 | 0 | 4.83 / 8.19 / 11 | 0.73 / 2.62 / 2.63 | 4.28 | 24.27 | 22.51 | 0 | 1.277 | 5.67 | 19901 (19619) |
+| ttfa_shehbaz_medium_c1_n8_stream_server | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.23 / 2.55 / 2.65 | 0.12 / 0.12 / 0.13 | 10.82 | 5.43 | 5.43 | 0 | 0.186 | 0.5 | 19906 (19624) |
+| ttfa_shehbaz_medium_c8_n48_stream_server | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.24 / 5.39 / 5.79 | 0.25 / 0.74 / 0.74 | 10.31 | 18.38 | 17.48 | 0 | 0.425 | 1.78 | 19899 (19617) |
+| ttfa_shehbaz_medium_c16_n96_stream_server | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.38 / 8.31 / 10.06 | 0.34 / 1.42 / 1.42 | 10.76 | 25.01 | 24.01 | 0 | 0.614 | 2.32 | 19905 (19623) |
+| ttfa_shehbaz_medium_c32_n192_stream_server | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 10.05 / 12.9 / 16.06 | 0.56 / 2.78 / 2.79 | 10.4 | 31.24 | 30.02 | 0 | 0.987 | 3 | 20131 (19849) |
+
+**aggregate x realtime** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.43 | 18.38 | 25.01 | 31.24 |
+| ttfa shehbaz short stream server | 5.22 | 15.65 | 20.04 | 24.27 |
+
+**x realtime over the first 90% of finished requests (straggler-robust)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.43 | 17.48 | 24.01 | 30.02 |
+| ttfa shehbaz short stream server | 5.22 | 14.59 | 18.53 | 22.51 |
+
+**req/s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.5 | 1.78 | 2.32 | 3 |
+| ttfa shehbaz short stream server | 1.02 | 3.3 | 4.67 | 5.67 |
+
+**latency p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.23 | 4.24 | 6.38 | 10.05 |
+| ttfa shehbaz short stream server | 1.01 | 2.18 | 3.06 | 4.83 |
+
+**latency p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.55 | 5.39 | 8.31 | 12.9 |
+| ttfa shehbaz short stream server | 1.26 | 3.29 | 4.89 | 8.19 |
+
+**per-request RTF p50** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.186 | 0.425 | 0.614 | 0.987 |
+| ttfa shehbaz short stream server | 0.193 | 0.492 | 0.777 | 1.277 |
+
+**TTFA p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.12 | 0.25 | 0.34 | 0.56 |
+| ttfa shehbaz short stream server | 0.12 | 0.29 | 0.39 | 0.73 |
+
+**TTFA p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.12 | 0.74 | 1.42 | 2.78 |
+| ttfa shehbaz short stream server | 0.12 | 0.96 | 1.64 | 2.62 |
+
+**engine GPU MiB (peak - idle baseline)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 19624 | 19617 | 19623 | 19849 |
+| ttfa shehbaz short stream server | 19113 | 19156 | 19206 | 19619 |
+
+## T7_mnbt512_ramp
+
+Config: vllm-omni T7_mnbt512_ramp (engine); gateway {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error", "TTS_SPLIT_WORDS": "60"}
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ttfa_shehbaz_short_c1_n8_stream_server | shehbaz | short | 1 | 8 | y | server | 0 | 1 (0s/1l) | 1.15 / 1.29 / 1.56 | 0.12 / 0.12 / 0.13 | 5.37 | 5.15 | 5.15 | 0 | 0.196 | 0.96 | 20330 (20046) |
+| ttfa_shehbaz_short_c8_n48_stream_server | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 2.24 / 3.62 / 5.21 | 0.31 / 0.51 / 1.19 | 4.6 | 14.07 | 13.32 | 0 | 0.542 | 3.06 | 20378 (20094) |
+| ttfa_shehbaz_short_c16_n96_stream_server | shehbaz | short | 16 | 96 | y | server | 0 | 0 | 3.52 / 5.54 / 6.7 | 0.46 / 0.79 / 2.16 | 4.22 | 17.6 | 16.31 | 0 | 0.877 | 4.17 | 20433 (20149) |
+| ttfa_shehbaz_short_c32_n192_stream_server | shehbaz | short | 32 | 192 | y | server | 0 | 1 (0s/1l) | 5.69 / 9.31 / 12.7 | 0.83 / 1.39 / 3.62 | 4.29 | 21.17 | 19.32 | 0 | 1.462 | 4.94 | 20523 (20239) |
+| ttfa_shehbaz_medium_c1_n8_stream_server | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.33 / 2.53 / 2.58 | 0.13 / 0.13 / 0.13 | 10.77 | 5.38 | 5.38 | 0 | 0.185 | 0.5 | 20529 (20245) |
+| ttfa_shehbaz_medium_c8_n48_stream_server | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.39 / 5.6 / 6.17 | 0.29 / 0.4 / 0.85 | 10.25 | 17.57 | 16.81 | 0 | 0.447 | 1.71 | 20525 (20241) |
+| ttfa_shehbaz_medium_c16_n96_stream_server | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.82 / 8.65 / 10.15 | 0.4 / 0.7 / 1.75 | 10.65 | 23.31 | 22.39 | 0 | 0.657 | 2.19 | 20525 (20241) |
+| ttfa_shehbaz_medium_c32_n192_stream_server | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 11 / 14.85 / 16.75 | 0.63 / 1.41 / 3.87 | 10.47 | 28.96 | 27.49 | 0 | 1.071 | 2.76 | 20522 (20238) |
+
+**aggregate x realtime** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.38 | 17.57 | 23.31 | 28.96 |
+| ttfa shehbaz short stream server | 5.15 | 14.07 | 17.6 | 21.17 |
+
+**x realtime over the first 90% of finished requests (straggler-robust)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.38 | 16.81 | 22.39 | 27.49 |
+| ttfa shehbaz short stream server | 5.15 | 13.32 | 16.31 | 19.32 |
+
+**req/s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.5 | 1.71 | 2.19 | 2.76 |
+| ttfa shehbaz short stream server | 0.96 | 3.06 | 4.17 | 4.94 |
+
+**latency p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.33 | 4.39 | 6.82 | 11 |
+| ttfa shehbaz short stream server | 1.15 | 2.24 | 3.52 | 5.69 |
+
+**latency p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.53 | 5.6 | 8.65 | 14.85 |
+| ttfa shehbaz short stream server | 1.29 | 3.62 | 5.54 | 9.31 |
+
+**per-request RTF p50** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.185 | 0.447 | 0.657 | 1.071 |
+| ttfa shehbaz short stream server | 0.196 | 0.542 | 0.877 | 1.462 |
+
+**TTFA p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.13 | 0.29 | 0.4 | 0.63 |
+| ttfa shehbaz short stream server | 0.12 | 0.31 | 0.46 | 0.83 |
+
+**TTFA p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.13 | 0.4 | 0.7 | 1.41 |
+| ttfa shehbaz short stream server | 0.12 | 0.51 | 0.79 | 1.39 |
+
+**engine GPU MiB (peak - idle baseline)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 20245 | 20241 | 20241 | 20238 |
+| ttfa shehbaz short stream server | 20046 | 20094 | 20149 | 20239 |
+
+## T8_mnbt512_adaptive
+
+Config: vllm-omni T8_mnbt512_adaptive (engine); gateway {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error", "TTS_SPLIT_WORDS": "60"}
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ttfa_shehbaz_short_c1_n8_stream_server | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 0.92 / 1.16 / 1.3 | 0.15 / 0.15 / 0.15 | 4.95 | 5.15 | 5.15 | 0 | 0.194 | 1.04 | 19929 (19651) |
+| ttfa_shehbaz_short_c8_n48_stream_server | shehbaz | short | 8 | 48 | y | server | 0 | 1 (0s/1l) | 2.54 / 3.58 / 4.36 | 0.37 / 0.59 / 1.21 | 4.75 | 14.03 | 13.49 | 0 | 0.535 | 2.96 | 19979 (19701) |
+| ttfa_shehbaz_short_c16_n96_stream_server | shehbaz | short | 16 | 96 | y | server | 0 | 3 (0s/3l) | 3.64 / 5.64 / 7.21 | 0.73 / 1.02 / 2.22 | 4.35 | 17.9 | 16.46 | 0 | 0.878 | 4.12 | 20090 (19812) |
+| ttfa_shehbaz_short_c32_n192_stream_server | shehbaz | short | 32 | 192 | y | server | 0 | 0 | 5.62 / 8.75 / 12.07 | 1.24 / 1.91 / 3.84 | 4.28 | 21.78 | 20.18 | 0 | 1.419 | 5.09 | 20179 (19901) |
+| ttfa_shehbaz_medium_c1_n8_stream_server | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.49 / 2.75 / 2.88 | 0.16 / 0.16 / 0.16 | 11.76 | 5.34 | 5.34 | 0 | 0.189 | 0.45 | 20200 (19922) |
+| ttfa_shehbaz_medium_c8_n48_stream_server | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.55 / 5.67 / 6.37 | 0.4 / 0.54 / 0.9 | 10.3 | 17.32 | 16.35 | 0 | 0.454 | 1.68 | 20200 (19922) |
+| ttfa_shehbaz_medium_c16_n96_stream_server | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.99 / 9.03 / 11.22 | 0.59 / 0.91 / 1.99 | 11.09 | 23.43 | 22.75 | 0 | 0.656 | 2.11 | 20203 (19925) |
+| ttfa_shehbaz_medium_c32_n192_stream_server | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 10.83 / 14.59 / 17.45 | 0.99 / 1.58 / 4.32 | 10.5 | 28.8 | 27.32 | 0 | 1.071 | 2.74 | 20186 (19908) |
+
+**aggregate x realtime** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.34 | 17.32 | 23.43 | 28.8 |
+| ttfa shehbaz short stream server | 5.15 | 14.03 | 17.9 | 21.78 |
+
+**x realtime over the first 90% of finished requests (straggler-robust)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 5.34 | 16.35 | 22.75 | 27.32 |
+| ttfa shehbaz short stream server | 5.15 | 13.49 | 16.46 | 20.18 |
+
+**req/s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.45 | 1.68 | 2.11 | 2.74 |
+| ttfa shehbaz short stream server | 1.04 | 2.96 | 4.12 | 5.09 |
+
+**latency p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.49 | 4.55 | 6.99 | 10.83 |
+| ttfa shehbaz short stream server | 0.92 | 2.54 | 3.64 | 5.62 |
+
+**latency p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 2.75 | 5.67 | 9.03 | 14.59 |
+| ttfa shehbaz short stream server | 1.16 | 3.58 | 5.64 | 8.75 |
+
+**per-request RTF p50** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.189 | 0.454 | 0.656 | 1.071 |
+| ttfa shehbaz short stream server | 0.194 | 0.535 | 0.878 | 1.419 |
+
+**TTFA p50 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.16 | 0.4 | 0.59 | 0.99 |
+| ttfa shehbaz short stream server | 0.15 | 0.37 | 0.73 | 1.24 |
+
+**TTFA p90 s** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 0.16 | 0.54 | 0.91 | 1.58 |
+| ttfa shehbaz short stream server | 0.15 | 0.59 | 1.02 | 1.91 |
+
+**engine GPU MiB (peak - idle baseline)** by concurrency
+
+| series | c=1 | c=8 | c=16 | c=32 |
+|---|---|---|---|---|
+| ttfa shehbaz medium stream server | 19922 | 19922 | 19925 | 19908 |
+| ttfa shehbaz short stream server | 19651 | 19701 | 19812 | 19901 |
 
 ## 01_probe_scaling_engine_direct
 

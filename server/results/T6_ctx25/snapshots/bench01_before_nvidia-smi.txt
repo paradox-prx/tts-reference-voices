@@ -1,0 +1,33 @@
+# 2026-09-28T16:45:39+05:00
+Mon Sep 28 16:45:39 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.95.05              Driver Version: 580.95.05      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 3090        Off |   00000000:01:00.0 Off |                  N/A |
+| 39%   61C    P2            228W /  370W |   19392MiB /  24576MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A            3248      G   /usr/lib/xorg/Xorg                      132MiB |
+|    0   N/A  N/A            3500      G   /usr/bin/gnome-shell                     26MiB |
+|    0   N/A  N/A            5123      G   /usr/share/code/code                     47MiB |
+|    0   N/A  N/A           67156      G   ...rack-uuid=3190708988185955192         29MiB |
+|    0   N/A  N/A          120173      C   ...eCoreProc_stage0_replica0_DP0      15630MiB |
+|    0   N/A  N/A          120826      C   ...eCoreProc_stage1_replica0_DP0       3474MiB |
++-----------------------------------------------------------------------------------------+
+
+timestamp, memory.used [MiB], memory.total [MiB], utilization.gpu [%], temperature.gpu, power.draw [W], clocks.current.sm [MHz], clocks.current.memory [MHz], pstate
+2026/09/28 16:45:39.508, 19392 MiB, 24576 MiB, 0 %, 61, 228.95 W, 1950 MHz, 9501 MHz, P2
+
+pid, process_name, used_gpu_memory [MiB]
+120173, VLLM::StageEngineCoreProc_stage0_replica0_DP0, 15630 MiB
+120826, VLLM::StageEngineCoreProc_stage1_replica0_DP0, 3474 MiB

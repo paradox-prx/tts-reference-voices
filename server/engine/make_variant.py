@@ -74,6 +74,33 @@ STANDARD: dict[str, tuple[list[str], str]] = {
     "decode4g_m045": (["--decode-batch-max-size", "4", "--decode-graph-batch-sizes", "1,2,4", "--mem0", "0.45"],
                       "Code2Wav CUDA graph buckets 1/2/4 (default: 1 only) at stage-0 0.45; decode8's batch-8 graphs "
                       "need ~12 GB"),
+    # streaming start latency (E14, bench/plan.py TTFA_VARIANTS): custom_voices with one change each
+    "T1_mnbt512": (["--custom-voice-dir", "state/custom_voices", "--max-num-batched-tokens", "512"],
+                   "custom_voices + stage-0 max_num_batched_tokens 512 (upstream 0.30 / high-concurrency value)"),
+    "T2_ramp": (["--custom-voice-dir", "state/custom_voices", "--connector-extra", "codec_chunk_ramp=[1,2,4,8,16,25]"],
+                "custom_voices + chunk ramp 1,2,4,8,16,25 frames instead of 1 then 25"),
+    "T3_adaptive": (["--custom-voice-dir", "state/custom_voices", "--connector-extra", "codec_chunk_adaptive=true",
+                     "--connector-extra", "codec_chunk_min_frames=2", "--connector-extra",
+                     "codec_chunk_safety_margin_ms=50"],
+                    "custom_voices + adaptive chunk sizes from buffer feedback (min 2 frames, 50 ms margin)"),
+    "T4_predgraphs": (["--custom-voice-dir", "state/custom_voices", "--connector-extra",
+                       "code_predictor_prefix_graphs=true", "--connector-extra",
+                       "code_predictor_prefix_graph_buckets=[8,16,32,64]", "--connector-extra",
+                       "code_predictor_prefix_graph_seq_lens=[2,3,4,5,6,7,8]"],
+                      "custom_voices + code-predictor prefix CUDA graphs (0.28 enables them on NPU only: no effect here)"),
+    "T5_decode1": (["--custom-voice-dir", "state/custom_voices", "--decode-batch-max-size", "1",
+                    "--decode-graph-batch-sizes", "1"],
+                   "custom_voices + Code2Wav one stream per decode (upstream high-concurrency profile)"),
+    "T6_ctx25": (["--custom-voice-dir", "state/custom_voices", "--connector-extra", "codec_left_context_frames=25"],
+                 "custom_voices + Code2Wav left context 25 frames instead of 72"),
+    "T7_mnbt512_ramp": (["--custom-voice-dir", "state/custom_voices", "--max-num-batched-tokens", "512",
+                         "--connector-extra", "codec_chunk_ramp=[1,2,4,8,16,25]"],
+                        "custom_voices + 512-token prefill steps + chunk ramp 1,2,4,8,16,25"),
+    "T8_mnbt512_adaptive": (["--custom-voice-dir", "state/custom_voices", "--max-num-batched-tokens", "512",
+                             "--connector-extra", "codec_chunk_adaptive=true", "--connector-extra",
+                             "codec_chunk_min_frames=2", "--connector-extra", "codec_chunk_safety_margin_ms=50"],
+                            "custom_voices + 512-token prefill steps + adaptive chunks: recommended for voice agents "
+                            "(REPORT §4.6)"),
     "custom_voices": (["--custom-voice-dir", "state/custom_voices"],
                       "production + the precomputed voices of engine/precompute_voices.py (<id>-avg: averaged speaker "
                       "embedding + ICL, <id>-prompt: prompt-clip embedding + ICL)"),
@@ -158,6 +185,9 @@ def add_override_args(parser: argparse.ArgumentParser) -> list[argparse.Action]:
                        help="stage 0 max_num_batched_tokens (stage 1 keeps 65536, a correctness floor)"),
         g.add_argument("--initial-chunk-frames", type=int,
                        help="initial_codec_chunk_frames: frames in the first streamed chunk (0 = load-based dynamic)"),
+        g.add_argument("--connector-extra", action="append", default=[], metavar="KEY=JSON",
+                       help="set connector extra KEY to a JSON value, e.g. codec_chunk_ramp=[1,2,4,8,16,25], "
+                            "codec_chunk_adaptive=true, code_predictor_prefix_graphs=true (repeatable)"),
         g.add_argument("--model-runner", choices=("v1", "v2"),
                        help="top-level model_runner. 0.30.0rc1 only; 0.28.0 ignores the key"),
         g.add_argument("--custom-voice-dir", metavar="DIR",
@@ -205,6 +235,11 @@ def apply_overrides(doc: dict[str, Any], a: argparse.Namespace) -> dict[str, Any
         talker["max_num_batched_tokens"] = a.max_num_batched_tokens
     if a.initial_chunk_frames is not None:
         extra["initial_codec_chunk_frames"] = a.initial_chunk_frames
+    for item in getattr(a, "connector_extra", None) or []:
+        key, _, value = item.partition("=")
+        if not key or not value:
+            raise SystemExit(f"--connector-extra needs KEY=JSON, got {item!r}")
+        extra[key] = json.loads(value)
     if a.model_runner:
         doc["model_runner"] = a.model_runner
     if a.custom_voice_dir:
@@ -388,6 +423,10 @@ def override_tokens(actions: list[argparse.Action], ns: argparse.Namespace) -> l
     for action in actions:
         value = getattr(ns, action.dest)
         if value is None:
+            continue
+        if isinstance(action, argparse._AppendAction):  # repeatable: one flag per item
+            for item in value:
+                tokens += [action.option_strings[0], str(item)]
             continue
         if isinstance(value, bool):
             value = str(value).lower()

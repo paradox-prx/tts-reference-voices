@@ -1,6 +1,6 @@
 # Benchmark results index
 
-Generated 2026-09-28T13:16:32+05:00 by `server/bench/collect.py` from `/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results`.
+Generated 2026-09-28T17:20:19+05:00 by `server/bench/collect.py` from `/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results`.
 **All audio under these folders is AI-generated (Qwen3-TTS voice clones). Only 13_final_server/ keeps its FLACs in git; every other phase's audio is in the GitHub release as labelled FLAC (political / official texts left out), see [README.md](README.md).**
 
 Each phase folder holds `phase.json` (config, versions, host, git, engine YAML, GPU baseline/release, commands and exit codes), `commands.sh`, `summary.{csv,md,json}` and `requests.jsonl` (every run), `logs/`, `snapshots/` (nvidia-smi and /metrics around every bench command), `versions/` (every package of every venv used), `knobs/` (knob verification takes) and one folder per run with its `audio/`, `requests.jsonl` and `summary.json`.
@@ -49,6 +49,15 @@ Each phase folder holds `phase.json` (config, versions, host, git, engine YAML, 
 | [P9_baseline_b8](P9_baseline_b8/) | DONE | 24 | 236 | 1 | 10 | 0 | 0 | 1.14 | 17.6 | qwen-tts baseline --max-batch 8 | off | 311 / 5498 |
 | [P9_baseline_b1](P9_baseline_b1/) | DONE | 8 | 48 | 0 | 1 | 0 | 0 | 0.19 | 6.9 | qwen-tts baseline --max-batch 1 | off | 311 / 5498 |
 | [P9_baseline_nocache](P9_baseline_nocache/) | DONE | 8 | 72 | 1 | 1 | 0 | 0 | 0.25 | 5.6 | qwen-tts baseline --max-batch 8 --no-prompt-cache | off | 311 / 5498 |
+| [T0_prod](T0_prod/) | DONE | 8 | 688 | 0 | 3 | 0 | 0 | 1.42 | 4.6 | vllm-omni custom_voices (engine) | {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"} | 284 / 18800 |
+| [T1_mnbt512](T1_mnbt512/) | DONE | 8 | 688 | 0 | 2 | 0 | 0 | 1.42 | 5.5 | vllm-omni T1_mnbt512 (engine) | {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"} | 281 / 18844 |
+| [T2_ramp](T2_ramp/) | DONE | 8 | 688 | 0 | 0 | 0 | 0 | 1.41 | 5.7 | vllm-omni T2_ramp (engine) | {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"} | 278 / 19706 |
+| [T3_adaptive](T3_adaptive/) | DONE | 8 | 688 | 1 | 1 | 0 | 0 | 1.42 | 5.8 | vllm-omni T3_adaptive (engine) | {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"} | 279 / 19270 |
+| [T4_predgraphs](T4_predgraphs/) | DONE | 8 | 688 | 0 | 5 | 0 | 0 | 1.43 | 5.5 | vllm-omni T4_predgraphs (engine) | {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"} | 277 / 18810 |
+| [T5_decode1](T5_decode1/) | DONE | 8 | 688 | 0 | 3 | 0 | 0 | 1.43 | 5.5 | vllm-omni T5_decode1 (engine) | {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"} | 278 / 18811 |
+| [T6_ctx25](T6_ctx25/) | DONE | 8 | 688 | 0 | 1 | 0 | 0 | 1.42 | 5.5 | vllm-omni T6_ctx25 (engine) | {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"} | 282 / 18806 |
+| [T7_mnbt512_ramp](T7_mnbt512_ramp/) | DONE | 8 | 688 | 0 | 2 | 0 | 0 | 1.42 | 5.8 | vllm-omni T7_mnbt512_ramp (engine) | {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"} | 284 / 19739 |
+| [T8_mnbt512_adaptive](T8_mnbt512_adaptive/) | DONE | 8 | 688 | 0 | 4 | 0 | 0 | 1.44 | 5.9 | vllm-omni T8_mnbt512_adaptive (engine) | {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"} | 278 / 19311 |
 | [00_first_engine_smoke](00_first_engine_smoke/) | no phase.json | 0 | 0 | 0 | 0 | – | – | 0.00 | 0 | – | off | – / – |
 | [00_first_gateway_smoke](00_first_gateway_smoke/) | no phase.json | 0 | 0 | 0 | 0 | – | – | 0.00 | 0 | – | off | – / – |
 | [01_probe_scaling_engine_direct](01_probe_scaling_engine_direct/) | no phase.json | 14 | 704 | 0 | 0 | – | – | 3.75 | 0 | – | off | – / – |
@@ -879,6 +888,195 @@ qwen-tts baseline, prompt cache off (reference re-encoded per request): short + 
 | [trump_xlong_c8_n8_nonstream_inline](P9_baseline_nocache/trump_xlong_c8_n8_nonstream_inline/) | trump | xlong | 8 | 8 |  | inline | 0 | 0 | 21.4 / 21.41 / 21.41 | – | 31.13 | 11.63 | 11.63 | 0 | 0.688 | 0.37 | 18881 (18570) |
 | [shehbaz_xlong_c1_n4_nonstream_inline](P9_baseline_nocache/shehbaz_xlong_c1_n4_nonstream_inline/) | shehbaz | xlong | 1 | 4 |  | inline | 0 | 0 | 17.87 / 17.88 / 17.88 | – | 28.98 | 1.68 | 1.68 | 0 | 0.597 | 0.06 | 18884 (18573) |
 | [shehbaz_xlong_c8_n8_nonstream_inline](P9_baseline_nocache/shehbaz_xlong_c8_n8_nonstream_inline/) | shehbaz | xlong | 8 | 8 |  | inline | 1 | 0 | 53.57 / 74.25 / 74.25 | – | 32.15 | 3.03 | 3.03 | 0 | 1.849 | 0.09 | 19119 (18808) |
+
+## T0_prod: DONE
+
+TTFA / gapless start, Urdu streaming via the gateway: production engine (initial chunk 1 frame, then 25-frame chunks)  
+- engine: vllm-omni custom_voices (engine), YAML sha256 d9ac9b2ef1a6d2b0
+- versions: vllm 0.28.0, vllm_omni 0.28.0, torch 2.13.0, transformers 5.14.1 (all packages: `T0_prod/versions/`)
+- gateway: {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"}
+- engine log: built-in runaway retries 0, preemption lines 0, error lines 0; KV: (StageEngineCoreProc_stage0_replica0 pid=75136) INFO 09-28 16:11:36 [kv_cache_utils.py:1869] GPU KV cache size: 91,120 tokens, Maximum concurrency for 4,096 tokens per request: 22.25x
+- GPU 0: baseline 284 MiB, engine idle 19084 MiB, released after: True
+- bench commands: 1 (exit codes 0); `T0_prod/commands.sh`; duration 4.6 min
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| [ttfa_shehbaz_short_c1_n8_stream_server](T0_prod/ttfa_shehbaz_short_c1_n8_stream_server/) | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 0.96 / 1.22 / 1.54 | 0.12 / 0.12 / 0.12 | 5.02 | 5.25 | 5.25 | 0 | 0.191 | 1.05 | 19389 (19105) |
+| [ttfa_shehbaz_short_c8_n48_stream_server](T0_prod/ttfa_shehbaz_short_c8_n48_stream_server/) | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 2 / 3.37 / 4.37 | 0.27 / 0.71 / 0.71 | 4.6 | 15.74 | 15.15 | 0 | 0.495 | 3.42 | 19444 (19160) |
+| [ttfa_shehbaz_short_c16_n96_stream_server](T0_prod/ttfa_shehbaz_short_c16_n96_stream_server/) | shehbaz | short | 16 | 96 | y | server | 0 | 3 (0s/3l) | 3.09 / 4.84 / 6.23 | 0.41 / 1.4 / 1.4 | 4.33 | 20 | 19.04 | 0 | 0.777 | 4.62 | 19490 (19206) |
+| [ttfa_shehbaz_short_c32_n192_stream_server](T0_prod/ttfa_shehbaz_short_c32_n192_stream_server/) | shehbaz | short | 32 | 192 | y | server | 0 | 0 | 4.9 / 8.05 / 10.2 | 0.74 / 2.65 / 2.65 | 4.22 | 24.2 | 22.72 | 0 | 1.272 | 5.74 | 19928 (19644) |
+| [ttfa_shehbaz_medium_c1_n8_stream_server](T0_prod/ttfa_shehbaz_medium_c1_n8_stream_server/) | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.25 / 2.39 / 2.65 | 0.12 / 0.12 / 0.12 | 10.65 | 5.46 | 5.46 | 0 | 0.185 | 0.51 | 19922 (19638) |
+| [ttfa_shehbaz_medium_c8_n48_stream_server](T0_prod/ttfa_shehbaz_medium_c8_n48_stream_server/) | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.17 / 5.08 / 6.76 | 0.25 / 0.74 / 0.74 | 10.19 | 18.61 | 17.85 | 0 | 0.423 | 1.83 | 19924 (19640) |
+| [ttfa_shehbaz_medium_c16_n96_stream_server](T0_prod/ttfa_shehbaz_medium_c16_n96_stream_server/) | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.32 / 8.22 / 10.31 | 0.34 / 1.41 / 1.41 | 10.68 | 25.02 | 23.82 | 0 | 0.616 | 2.34 | 19920 (19636) |
+| [ttfa_shehbaz_medium_c32_n192_stream_server](T0_prod/ttfa_shehbaz_medium_c32_n192_stream_server/) | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 9.91 / 12.76 / 16.65 | 0.6 / 2.75 / 2.75 | 10.51 | 31.45 | 29.89 | 0 | 0.986 | 2.99 | 19927 (19643) |
+
+## T1_mnbt512: DONE
+
+TTFA / gapless start, Urdu streaming via the gateway: stage-0 max_num_batched_tokens 512 (upstream 0.30 / high-concurrency value)  
+- engine: vllm-omni T1_mnbt512 (engine), YAML sha256 f1c24797677456a4
+- versions: vllm 0.28.0, vllm_omni 0.28.0, torch 2.13.0, transformers 5.14.1 (all packages: `T1_mnbt512/versions/`)
+- gateway: {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"}
+- engine log: built-in runaway retries 0, preemption lines 0, error lines 0; KV: (StageEngineCoreProc_stage0_replica0 pid=82299) INFO 09-28 16:16:28 [kv_cache_utils.py:1869] GPU KV cache size: 92,272 tokens, Maximum concurrency for 4,096 tokens per request: 22.53x
+- GPU 0: baseline 281 MiB, engine idle 19125 MiB, released after: True
+- bench commands: 1 (exit codes 0); `T1_mnbt512/commands.sh`; duration 5.5 min
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| [ttfa_shehbaz_short_c1_n8_stream_server](T1_mnbt512/ttfa_shehbaz_short_c1_n8_stream_server/) | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 1.05 / 1.27 / 1.37 | 0.12 / 0.12 / 0.12 | 5.23 | 5.27 | 5.27 | 0 | 0.193 | 1.01 | 19431 (19150) |
+| [ttfa_shehbaz_short_c8_n48_stream_server](T1_mnbt512/ttfa_shehbaz_short_c8_n48_stream_server/) | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 2.25 / 3.35 / 4.14 | 0.28 / 0.45 / 1.04 | 4.54 | 14.93 | 14.26 | 0 | 0.498 | 3.29 | 19478 (19197) |
+| [ttfa_shehbaz_short_c16_n96_stream_server](T1_mnbt512/ttfa_shehbaz_short_c16_n96_stream_server/) | shehbaz | short | 16 | 96 | y | server | 0 | 0 | 3.06 / 5.01 / 6.37 | 0.41 / 0.74 / 1.78 | 4.21 | 19.63 | 18.4 | 0 | 0.787 | 4.67 | 19524 (19243) |
+| [ttfa_shehbaz_short_c32_n192_stream_server](T1_mnbt512/ttfa_shehbaz_short_c32_n192_stream_server/) | shehbaz | short | 32 | 192 | y | server | 0 | 1 (0s/1l) | 5.12 / 8.14 / 10.48 | 0.71 / 1.21 / 2.89 | 4.2 | 23.73 | 22.2 | 0 | 1.295 | 5.65 | 19612 (19331) |
+| [ttfa_shehbaz_medium_c1_n8_stream_server](T1_mnbt512/ttfa_shehbaz_medium_c1_n8_stream_server/) | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.32 / 2.57 / 2.75 | 0.13 / 0.13 / 0.13 | 11.18 | 5.44 | 5.44 | 0 | 0.183 | 0.49 | 19615 (19334) |
+| [ttfa_shehbaz_medium_c8_n48_stream_server](T1_mnbt512/ttfa_shehbaz_medium_c8_n48_stream_server/) | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.37 / 5.33 / 6.59 | 0.3 / 0.4 / 0.7 | 10.19 | 18.4 | 17.47 | 0 | 0.428 | 1.81 | 19620 (19339) |
+| [ttfa_shehbaz_medium_c16_n96_stream_server](T1_mnbt512/ttfa_shehbaz_medium_c16_n96_stream_server/) | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.55 / 8.51 / 10.2 | 0.37 / 0.66 / 1.45 | 10.92 | 24.81 | 23.98 | 0 | 0.616 | 2.27 | 19621 (19340) |
+| [ttfa_shehbaz_medium_c32_n192_stream_server](T1_mnbt512/ttfa_shehbaz_medium_c32_n192_stream_server/) | shehbaz | medium | 32 | 192 | y | server | 0 | 1 (0s/1l) | 10.16 / 13.23 / 15.79 | 0.57 / 1.23 / 3.13 | 10.53 | 30.95 | 29.51 | 0 | 0.997 | 2.94 | 19624 (19343) |
+
+## T2_ramp: DONE
+
+TTFA / gapless start, Urdu streaming via the gateway: codec_chunk_ramp 1,2,4,8,16,25 instead of 1 then 25  
+- engine: vllm-omni T2_ramp (engine), YAML sha256 b4676a6c8bb07b53
+- versions: vllm 0.28.0, vllm_omni 0.28.0, torch 2.13.0, transformers 5.14.1 (all packages: `T2_ramp/versions/`)
+- gateway: {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"}
+- engine log: built-in runaway retries 0, preemption lines 0, error lines 0; KV: (StageEngineCoreProc_stage0_replica0 pid=89921) INFO 09-28 16:22:00 [kv_cache_utils.py:1869] GPU KV cache size: 91,120 tokens, Maximum concurrency for 4,096 tokens per request: 22.25x
+- GPU 0: baseline 278 MiB, engine idle 19984 MiB, released after: True
+- bench commands: 1 (exit codes 0); `T2_ramp/commands.sh`; duration 5.7 min
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| [ttfa_shehbaz_short_c1_n8_stream_server](T2_ramp/ttfa_shehbaz_short_c1_n8_stream_server/) | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 0.89 / 1.21 / 1.78 | 0.12 / 0.12 / 0.14 | 4.97 | 5.09 | 5.09 | 0 | 0.204 | 1.02 | 20289 (20011) |
+| [ttfa_shehbaz_short_c8_n48_stream_server](T2_ramp/ttfa_shehbaz_short_c8_n48_stream_server/) | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 2.18 / 3.42 / 4.51 | 0.31 / 0.99 / 0.99 | 4.48 | 14.1 | 13.47 | 0 | 0.546 | 3.15 | 20337 (20059) |
+| [ttfa_shehbaz_short_c16_n96_stream_server](T2_ramp/ttfa_shehbaz_short_c16_n96_stream_server/) | shehbaz | short | 16 | 96 | y | server | 0 | 0 | 3.61 / 5.76 / 7.85 | 0.44 / 1.58 / 1.58 | 4.31 | 17.85 | 16.54 | 0 | 0.868 | 4.14 | 20533 (20255) |
+| [ttfa_shehbaz_short_c32_n192_stream_server](T2_ramp/ttfa_shehbaz_short_c32_n192_stream_server/) | shehbaz | short | 32 | 192 | y | server | 0 | 0 | 5.55 / 8.96 / 11.78 | 1.04 / 2.88 / 2.89 | 4.22 | 21.14 | 19.53 | 0 | 1.484 | 5.01 | 20973 (20695) |
+| [ttfa_shehbaz_medium_c1_n8_stream_server](T2_ramp/ttfa_shehbaz_medium_c1_n8_stream_server/) | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.21 / 2.74 / 2.78 | 0.13 / 0.13 / 0.14 | 11.14 | 5.38 | 5.38 | 0 | 0.186 | 0.48 | 20977 (20699) |
+| [ttfa_shehbaz_medium_c8_n48_stream_server](T2_ramp/ttfa_shehbaz_medium_c8_n48_stream_server/) | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.46 / 5.44 / 6.06 | 0.24 / 0.78 / 0.78 | 10.22 | 17.55 | 16.73 | 0 | 0.445 | 1.72 | 20975 (20697) |
+| [ttfa_shehbaz_medium_c16_n96_stream_server](T2_ramp/ttfa_shehbaz_medium_c16_n96_stream_server/) | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.78 / 8.89 / 9.94 | 0.35 / 1.43 / 1.53 | 10.84 | 23.8 | 22.64 | 0 | 0.648 | 2.2 | 20973 (20695) |
+| [ttfa_shehbaz_medium_c32_n192_stream_server](T2_ramp/ttfa_shehbaz_medium_c32_n192_stream_server/) | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 10.79 / 13.95 / 15.89 | 0.68 / 2.86 / 3.23 | 10.32 | 29.44 | 27.53 | 0 | 1.064 | 2.85 | 21303 (21025) |
+
+## T3_adaptive: DONE
+
+TTFA / gapless start, Urdu streaming via the gateway: adaptive chunk sizes from buffer feedback (min 2 frames, 50 ms margin)  
+- engine: vllm-omni T3_adaptive (engine), YAML sha256 90eed8635b5b0580
+- versions: vllm 0.28.0, vllm_omni 0.28.0, torch 2.13.0, transformers 5.14.1 (all packages: `T3_adaptive/versions/`)
+- gateway: {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"}
+- engine log: built-in runaway retries 0, preemption lines 0, error lines 20; KV: (StageEngineCoreProc_stage0_replica0 pid=97444) INFO 09-28 16:27:44 [kv_cache_utils.py:1869] GPU KV cache size: 91,120 tokens, Maximum concurrency for 4,096 tokens per request: 22.25x
+- GPU 0: baseline 279 MiB, engine idle 19549 MiB, released after: True
+- bench commands: 1 (exit codes 0); `T3_adaptive/commands.sh`; duration 5.8 min
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| [ttfa_shehbaz_short_c1_n8_stream_server](T3_adaptive/ttfa_shehbaz_short_c1_n8_stream_server/) | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 1.04 / 1.1 / 1.45 | 0.15 / 0.15 / 0.15 | 4.9 | 5.12 | 5.12 | 0 | 0.197 | 1.05 | 19866 (19587) |
+| [ttfa_shehbaz_short_c8_n48_stream_server](T3_adaptive/ttfa_shehbaz_short_c8_n48_stream_server/) | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 2.51 / 3.48 / 4.98 | 0.38 / 1.13 / 1.13 | 4.55 | 14.13 | 13.14 | 0 | 0.538 | 3.1 | 19908 (19629) |
+| [ttfa_shehbaz_short_c16_n96_stream_server](T3_adaptive/ttfa_shehbaz_short_c16_n96_stream_server/) | shehbaz | short | 16 | 96 | y | server | 0 | 0 | 3.43 / 5.64 / 6.69 | 0.89 / 1.9 / 2.01 | 4.3 | 17.81 | 16.49 | 0 | 0.873 | 4.14 | 20041 (19762) |
+| [ttfa_shehbaz_short_c32_n192_stream_server](T3_adaptive/ttfa_shehbaz_short_c32_n192_stream_server/) | shehbaz | short | 32 | 192 | y | server | 1 | 1 (0s/1l) | 5.76 / 8.4 / 11.3 | 2.11 / 3.33 / 3.57 | 4.23 | 21.03 | 19.32 | 1 | 1.427 | 4.97 | 20467 (20188) |
+| [ttfa_shehbaz_medium_c1_n8_stream_server](T3_adaptive/ttfa_shehbaz_medium_c1_n8_stream_server/) | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.3 / 2.7 / 3.09 | 0.16 / 0.16 / 0.16 | 11.32 | 5.4 | 5.4 | 0 | 0.187 | 0.48 | 20470 (20191) |
+| [ttfa_shehbaz_medium_c8_n48_stream_server](T3_adaptive/ttfa_shehbaz_medium_c8_n48_stream_server/) | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.39 / 5.64 / 6.45 | 0.35 / 0.92 / 0.92 | 10.11 | 17.25 | 16.33 | 0 | 0.451 | 1.71 | 20466 (20187) |
+| [ttfa_shehbaz_medium_c16_n96_stream_server](T3_adaptive/ttfa_shehbaz_medium_c16_n96_stream_server/) | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.87 / 9.13 / 10.37 | 0.58 / 1.83 / 1.83 | 10.78 | 23.48 | 22.58 | 0 | 0.652 | 2.18 | 20469 (20190) |
+| [ttfa_shehbaz_medium_c32_n192_stream_server](T3_adaptive/ttfa_shehbaz_medium_c32_n192_stream_server/) | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 10.73 / 14.07 / 16.88 | 0.99 / 3.4 / 3.72 | 10.5 | 29.32 | 27.87 | 0 | 1.058 | 2.79 | 20722 (20443) |
+
+## T4_predgraphs: DONE
+
+TTFA / gapless start, Urdu streaming via the gateway: code-predictor prefix CUDA graphs, batch buckets 8/16/32/64  
+- engine: vllm-omni T4_predgraphs (engine), YAML sha256 294d79bab699ccdc
+- versions: vllm 0.28.0, vllm_omni 0.28.0, torch 2.13.0, transformers 5.14.1 (all packages: `T4_predgraphs/versions/`)
+- gateway: {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"}
+- engine log: built-in runaway retries 0, preemption lines 0, error lines 0; KV: (StageEngineCoreProc_stage0_replica0 pid=104998) INFO 09-28 16:33:30 [kv_cache_utils.py:1869] GPU KV cache size: 91,120 tokens, Maximum concurrency for 4,096 tokens per request: 22.25x
+- GPU 0: baseline 277 MiB, engine idle 19087 MiB, released after: True
+- bench commands: 1 (exit codes 0); `T4_predgraphs/commands.sh`; duration 5.5 min
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| [ttfa_shehbaz_short_c1_n8_stream_server](T4_predgraphs/ttfa_shehbaz_short_c1_n8_stream_server/) | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 1 / 1.27 / 1.42 | 0.12 / 0.12 / 0.12 | 5.12 | 5.24 | 5.24 | 0 | 0.193 | 1.02 | 19394 (19117) |
+| [ttfa_shehbaz_short_c8_n48_stream_server](T4_predgraphs/ttfa_shehbaz_short_c8_n48_stream_server/) | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 1.93 / 3.33 / 5.35 | 0.26 / 0.95 / 0.96 | 4.67 | 15.49 | 14.2 | 0 | 0.5 | 3.31 | 19442 (19165) |
+| [ttfa_shehbaz_short_c16_n96_stream_server](T4_predgraphs/ttfa_shehbaz_short_c16_n96_stream_server/) | shehbaz | short | 16 | 96 | y | server | 0 | 1 (0s/1l) | 3 / 5.07 / 6.23 | 0.43 / 1.61 / 1.61 | 4.24 | 20.12 | 18.42 | 0 | 0.791 | 4.74 | 19491 (19214) |
+| [ttfa_shehbaz_short_c32_n192_stream_server](T4_predgraphs/ttfa_shehbaz_short_c32_n192_stream_server/) | shehbaz | short | 32 | 192 | y | server | 0 | 4 (0s/4l) | 4.93 / 7.93 / 10.18 | 0.76 / 2.66 / 2.66 | 4.23 | 24.16 | 22.7 | 0 | 1.295 | 5.72 | 19926 (19649) |
+| [ttfa_shehbaz_medium_c1_n8_stream_server](T4_predgraphs/ttfa_shehbaz_medium_c1_n8_stream_server/) | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.07 / 2.73 / 2.8 | 0.12 / 0.12 / 0.13 | 11.33 | 5.44 | 5.44 | 0 | 0.184 | 0.48 | 19926 (19649) |
+| [ttfa_shehbaz_medium_c8_n48_stream_server](T4_predgraphs/ttfa_shehbaz_medium_c8_n48_stream_server/) | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.26 / 5.3 / 6.12 | 0.29 / 0.72 / 0.72 | 10.2 | 18.2 | 17.55 | 0 | 0.428 | 1.78 | 19924 (19647) |
+| [ttfa_shehbaz_medium_c16_n96_stream_server](T4_predgraphs/ttfa_shehbaz_medium_c16_n96_stream_server/) | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.37 / 8.47 / 9.38 | 0.33 / 1.4 / 1.41 | 10.82 | 24.98 | 23.9 | 0 | 0.614 | 2.31 | 20121 (19844) |
+| [ttfa_shehbaz_medium_c32_n192_stream_server](T4_predgraphs/ttfa_shehbaz_medium_c32_n192_stream_server/) | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 10.16 / 12.86 / 15.77 | 0.57 / 2.76 / 2.76 | 10.57 | 31.45 | 29.67 | 0 | 0.988 | 2.98 | 20326 (20049) |
+
+## T5_decode1: DONE
+
+TTFA / gapless start, Urdu streaming via the gateway: Code2Wav one stream per decode (upstream high-concurrency profile)  
+- engine: vllm-omni T5_decode1 (engine), YAML sha256 1d4e8e0596355743
+- versions: vllm 0.28.0, vllm_omni 0.28.0, torch 2.13.0, transformers 5.14.1 (all packages: `T5_decode1/versions/`)
+- gateway: {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"}
+- engine log: built-in runaway retries 0, preemption lines 0, error lines 0; KV: (StageEngineCoreProc_stage0_replica0 pid=112530) INFO 09-28 16:39:01 [kv_cache_utils.py:1869] GPU KV cache size: 91,120 tokens, Maximum concurrency for 4,096 tokens per request: 22.25x
+- GPU 0: baseline 278 MiB, engine idle 19089 MiB, released after: True
+- bench commands: 1 (exit codes 0); `T5_decode1/commands.sh`; duration 5.5 min
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| [ttfa_shehbaz_short_c1_n8_stream_server](T5_decode1/ttfa_shehbaz_short_c1_n8_stream_server/) | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 0.92 / 1.54 / 1.59 | 0.12 / 0.12 / 0.12 | 5.49 | 5.25 | 5.25 | 0 | 0.194 | 0.96 | 19396 (19118) |
+| [ttfa_shehbaz_short_c8_n48_stream_server](T5_decode1/ttfa_shehbaz_short_c8_n48_stream_server/) | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 2.21 / 3.22 / 4.16 | 0.27 / 0.96 / 0.96 | 4.67 | 15.42 | 15.04 | 0 | 0.483 | 3.3 | 19443 (19165) |
+| [ttfa_shehbaz_short_c16_n96_stream_server](T5_decode1/ttfa_shehbaz_short_c16_n96_stream_server/) | shehbaz | short | 16 | 96 | y | server | 0 | 1 (0s/1l) | 3.01 / 5.04 / 5.97 | 0.37 / 1.61 / 1.61 | 4.32 | 19.99 | 18.34 | 0 | 0.787 | 4.62 | 19493 (19215) |
+| [ttfa_shehbaz_short_c32_n192_stream_server](T5_decode1/ttfa_shehbaz_short_c32_n192_stream_server/) | shehbaz | short | 32 | 192 | y | server | 0 | 2 (0s/2l) | 5.08 / 8.31 / 11.46 | 0.74 / 2.69 / 2.69 | 4.31 | 24.08 | 22.6 | 0 | 1.284 | 5.59 | 19937 (19659) |
+| [ttfa_shehbaz_medium_c1_n8_stream_server](T5_decode1/ttfa_shehbaz_medium_c1_n8_stream_server/) | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.18 / 2.62 / 2.88 | 0.12 / 0.13 / 0.13 | 10.98 | 5.42 | 5.42 | 0 | 0.186 | 0.49 | 19939 (19661) |
+| [ttfa_shehbaz_medium_c8_n48_stream_server](T5_decode1/ttfa_shehbaz_medium_c8_n48_stream_server/) | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.23 / 4.88 / 6.43 | 0.26 / 0.71 / 0.71 | 10.15 | 18.3 | 17.69 | 0 | 0.424 | 1.8 | 19928 (19650) |
+| [ttfa_shehbaz_medium_c16_n96_stream_server](T5_decode1/ttfa_shehbaz_medium_c16_n96_stream_server/) | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.24 / 8.29 / 9.96 | 0.35 / 1.42 / 1.42 | 10.67 | 24.87 | 23.95 | 0 | 0.615 | 2.33 | 19940 (19662) |
+| [ttfa_shehbaz_medium_c32_n192_stream_server](T5_decode1/ttfa_shehbaz_medium_c32_n192_stream_server/) | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 10.14 / 13.06 / 15.52 | 0.59 / 2.74 / 2.75 | 10.56 | 31.29 | 29.88 | 0 | 0.995 | 2.96 | 20251 (19973) |
+
+## T6_ctx25: DONE
+
+TTFA / gapless start, Urdu streaming via the gateway: Code2Wav left context 25 frames instead of 72 (cheaper decode; check quality)  
+- engine: vllm-omni T6_ctx25 (engine), YAML sha256 6c77d5ddb917e043
+- versions: vllm 0.28.0, vllm_omni 0.28.0, torch 2.13.0, transformers 5.14.1 (all packages: `T6_ctx25/versions/`)
+- gateway: {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"}
+- engine log: built-in runaway retries 0, preemption lines 0, error lines 0; KV: (StageEngineCoreProc_stage0_replica0 pid=120173) INFO 09-28 16:44:32 [kv_cache_utils.py:1869] GPU KV cache size: 91,120 tokens, Maximum concurrency for 4,096 tokens per request: 22.25x
+- GPU 0: baseline 282 MiB, engine idle 19088 MiB, released after: True
+- bench commands: 1 (exit codes 0); `T6_ctx25/commands.sh`; duration 5.5 min
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| [ttfa_shehbaz_short_c1_n8_stream_server](T6_ctx25/ttfa_shehbaz_short_c1_n8_stream_server/) | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 1.01 / 1.26 / 1.43 | 0.12 / 0.12 / 0.12 | 5.12 | 5.22 | 5.22 | 0 | 0.193 | 1.02 | 19395 (19113) |
+| [ttfa_shehbaz_short_c8_n48_stream_server](T6_ctx25/ttfa_shehbaz_short_c8_n48_stream_server/) | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 2.18 / 3.29 / 4.98 | 0.29 / 0.96 / 0.96 | 4.74 | 15.65 | 14.59 | 0 | 0.492 | 3.3 | 19438 (19156) |
+| [ttfa_shehbaz_short_c16_n96_stream_server](T6_ctx25/ttfa_shehbaz_short_c16_n96_stream_server/) | shehbaz | short | 16 | 96 | y | server | 0 | 1 (0s/1l) | 3.06 / 4.89 / 6.56 | 0.39 / 1.64 / 1.64 | 4.29 | 20.04 | 18.53 | 0 | 0.777 | 4.67 | 19488 (19206) |
+| [ttfa_shehbaz_short_c32_n192_stream_server](T6_ctx25/ttfa_shehbaz_short_c32_n192_stream_server/) | shehbaz | short | 32 | 192 | y | server | 0 | 0 | 4.83 / 8.19 / 11 | 0.73 / 2.62 / 2.63 | 4.28 | 24.27 | 22.51 | 0 | 1.277 | 5.67 | 19901 (19619) |
+| [ttfa_shehbaz_medium_c1_n8_stream_server](T6_ctx25/ttfa_shehbaz_medium_c1_n8_stream_server/) | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.23 / 2.55 / 2.65 | 0.12 / 0.12 / 0.13 | 10.82 | 5.43 | 5.43 | 0 | 0.186 | 0.5 | 19906 (19624) |
+| [ttfa_shehbaz_medium_c8_n48_stream_server](T6_ctx25/ttfa_shehbaz_medium_c8_n48_stream_server/) | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.24 / 5.39 / 5.79 | 0.25 / 0.74 / 0.74 | 10.31 | 18.38 | 17.48 | 0 | 0.425 | 1.78 | 19899 (19617) |
+| [ttfa_shehbaz_medium_c16_n96_stream_server](T6_ctx25/ttfa_shehbaz_medium_c16_n96_stream_server/) | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.38 / 8.31 / 10.06 | 0.34 / 1.42 / 1.42 | 10.76 | 25.01 | 24.01 | 0 | 0.614 | 2.32 | 19905 (19623) |
+| [ttfa_shehbaz_medium_c32_n192_stream_server](T6_ctx25/ttfa_shehbaz_medium_c32_n192_stream_server/) | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 10.05 / 12.9 / 16.06 | 0.56 / 2.78 / 2.79 | 10.4 | 31.24 | 30.02 | 0 | 0.987 | 3 | 20131 (19849) |
+
+## T7_mnbt512_ramp: DONE
+
+TTFA / gapless start, Urdu streaming via the gateway: combined: 512-token prefill steps + chunk ramp 1,2,4,8,16,25  
+- engine: vllm-omni T7_mnbt512_ramp (engine), YAML sha256 246982275dce38c2
+- versions: vllm 0.28.0, vllm_omni 0.28.0, torch 2.13.0, transformers 5.14.1 (all packages: `T7_mnbt512_ramp/versions/`)
+- gateway: {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"}
+- engine log: built-in runaway retries 0, preemption lines 0, error lines 0; KV: (StageEngineCoreProc_stage0_replica0 pid=128964) INFO 09-28 16:51:07 [kv_cache_utils.py:1869] GPU KV cache size: 92,272 tokens, Maximum concurrency for 4,096 tokens per request: 22.53x
+- GPU 0: baseline 284 MiB, engine idle 20023 MiB, released after: True
+- bench commands: 1 (exit codes 0); `T7_mnbt512_ramp/commands.sh`; duration 5.8 min
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| [ttfa_shehbaz_short_c1_n8_stream_server](T7_mnbt512_ramp/ttfa_shehbaz_short_c1_n8_stream_server/) | shehbaz | short | 1 | 8 | y | server | 0 | 1 (0s/1l) | 1.15 / 1.29 / 1.56 | 0.12 / 0.12 / 0.13 | 5.37 | 5.15 | 5.15 | 0 | 0.196 | 0.96 | 20330 (20046) |
+| [ttfa_shehbaz_short_c8_n48_stream_server](T7_mnbt512_ramp/ttfa_shehbaz_short_c8_n48_stream_server/) | shehbaz | short | 8 | 48 | y | server | 0 | 0 | 2.24 / 3.62 / 5.21 | 0.31 / 0.51 / 1.19 | 4.6 | 14.07 | 13.32 | 0 | 0.542 | 3.06 | 20378 (20094) |
+| [ttfa_shehbaz_short_c16_n96_stream_server](T7_mnbt512_ramp/ttfa_shehbaz_short_c16_n96_stream_server/) | shehbaz | short | 16 | 96 | y | server | 0 | 0 | 3.52 / 5.54 / 6.7 | 0.46 / 0.79 / 2.16 | 4.22 | 17.6 | 16.31 | 0 | 0.877 | 4.17 | 20433 (20149) |
+| [ttfa_shehbaz_short_c32_n192_stream_server](T7_mnbt512_ramp/ttfa_shehbaz_short_c32_n192_stream_server/) | shehbaz | short | 32 | 192 | y | server | 0 | 1 (0s/1l) | 5.69 / 9.31 / 12.7 | 0.83 / 1.39 / 3.62 | 4.29 | 21.17 | 19.32 | 0 | 1.462 | 4.94 | 20523 (20239) |
+| [ttfa_shehbaz_medium_c1_n8_stream_server](T7_mnbt512_ramp/ttfa_shehbaz_medium_c1_n8_stream_server/) | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.33 / 2.53 / 2.58 | 0.13 / 0.13 / 0.13 | 10.77 | 5.38 | 5.38 | 0 | 0.185 | 0.5 | 20529 (20245) |
+| [ttfa_shehbaz_medium_c8_n48_stream_server](T7_mnbt512_ramp/ttfa_shehbaz_medium_c8_n48_stream_server/) | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.39 / 5.6 / 6.17 | 0.29 / 0.4 / 0.85 | 10.25 | 17.57 | 16.81 | 0 | 0.447 | 1.71 | 20525 (20241) |
+| [ttfa_shehbaz_medium_c16_n96_stream_server](T7_mnbt512_ramp/ttfa_shehbaz_medium_c16_n96_stream_server/) | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.82 / 8.65 / 10.15 | 0.4 / 0.7 / 1.75 | 10.65 | 23.31 | 22.39 | 0 | 0.657 | 2.19 | 20525 (20241) |
+| [ttfa_shehbaz_medium_c32_n192_stream_server](T7_mnbt512_ramp/ttfa_shehbaz_medium_c32_n192_stream_server/) | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 11 / 14.85 / 16.75 | 0.63 / 1.41 / 3.87 | 10.47 | 28.96 | 27.49 | 0 | 1.071 | 2.76 | 20522 (20238) |
+
+## T8_mnbt512_adaptive: DONE
+
+TTFA / gapless start, Urdu streaming via the gateway: combined: 512-token prefill steps + adaptive chunks  
+- engine: vllm-omni T8_mnbt512_adaptive (engine), YAML sha256 703cc87e96ba6b4d
+- versions: vllm 0.28.0, vllm_omni 0.28.0, torch 2.13.0, transformers 5.14.1 (all packages: `T8_mnbt512_adaptive/versions/`)
+- gateway: {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error"}
+- engine log: built-in runaway retries 0, preemption lines 0, error lines 0; KV: (StageEngineCoreProc_stage0_replica0 pid=136497) INFO 09-28 16:56:55 [kv_cache_utils.py:1869] GPU KV cache size: 92,272 tokens, Maximum concurrency for 4,096 tokens per request: 22.53x
+- GPU 0: baseline 278 MiB, engine idle 19589 MiB, released after: True
+- bench commands: 1 (exit codes 0); `T8_mnbt512_adaptive/commands.sh`; duration 5.9 min
+
+| run | voice | size | c | n | stream | voice mode | errors | suspects | latency p50/p90/p99 s | TTFA p50/p90/p99 s | audio s/req | x realtime | x realtime p90-wall | stragglers | RTF p50 | req/s | GPU peak MiB (engine) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| [ttfa_shehbaz_short_c1_n8_stream_server](T8_mnbt512_adaptive/ttfa_shehbaz_short_c1_n8_stream_server/) | shehbaz | short | 1 | 8 | y | server | 0 | 0 | 0.92 / 1.16 / 1.3 | 0.15 / 0.15 / 0.15 | 4.95 | 5.15 | 5.15 | 0 | 0.194 | 1.04 | 19929 (19651) |
+| [ttfa_shehbaz_short_c8_n48_stream_server](T8_mnbt512_adaptive/ttfa_shehbaz_short_c8_n48_stream_server/) | shehbaz | short | 8 | 48 | y | server | 0 | 1 (0s/1l) | 2.54 / 3.58 / 4.36 | 0.37 / 0.59 / 1.21 | 4.75 | 14.03 | 13.49 | 0 | 0.535 | 2.96 | 19979 (19701) |
+| [ttfa_shehbaz_short_c16_n96_stream_server](T8_mnbt512_adaptive/ttfa_shehbaz_short_c16_n96_stream_server/) | shehbaz | short | 16 | 96 | y | server | 0 | 3 (0s/3l) | 3.64 / 5.64 / 7.21 | 0.73 / 1.02 / 2.22 | 4.35 | 17.9 | 16.46 | 0 | 0.878 | 4.12 | 20090 (19812) |
+| [ttfa_shehbaz_short_c32_n192_stream_server](T8_mnbt512_adaptive/ttfa_shehbaz_short_c32_n192_stream_server/) | shehbaz | short | 32 | 192 | y | server | 0 | 0 | 5.62 / 8.75 / 12.07 | 1.24 / 1.91 / 3.84 | 4.28 | 21.78 | 20.18 | 0 | 1.419 | 5.09 | 20179 (19901) |
+| [ttfa_shehbaz_medium_c1_n8_stream_server](T8_mnbt512_adaptive/ttfa_shehbaz_medium_c1_n8_stream_server/) | shehbaz | medium | 1 | 8 | y | server | 0 | 0 | 2.49 / 2.75 / 2.88 | 0.16 / 0.16 / 0.16 | 11.76 | 5.34 | 5.34 | 0 | 0.189 | 0.45 | 20200 (19922) |
+| [ttfa_shehbaz_medium_c8_n48_stream_server](T8_mnbt512_adaptive/ttfa_shehbaz_medium_c8_n48_stream_server/) | shehbaz | medium | 8 | 48 | y | server | 0 | 0 | 4.55 / 5.67 / 6.37 | 0.4 / 0.54 / 0.9 | 10.3 | 17.32 | 16.35 | 0 | 0.454 | 1.68 | 20200 (19922) |
+| [ttfa_shehbaz_medium_c16_n96_stream_server](T8_mnbt512_adaptive/ttfa_shehbaz_medium_c16_n96_stream_server/) | shehbaz | medium | 16 | 96 | y | server | 0 | 0 | 6.99 / 9.03 / 11.22 | 0.59 / 0.91 / 1.99 | 11.09 | 23.43 | 22.75 | 0 | 0.656 | 2.11 | 20203 (19925) |
+| [ttfa_shehbaz_medium_c32_n192_stream_server](T8_mnbt512_adaptive/ttfa_shehbaz_medium_c32_n192_stream_server/) | shehbaz | medium | 32 | 192 | y | server | 0 | 0 | 10.83 / 14.59 / 17.45 | 0.99 / 1.58 / 4.32 | 10.5 | 28.8 | 27.32 | 0 | 1.071 | 2.74 | 20186 (19908) |
 
 ## 00_first_engine_smoke: no phase.json
 

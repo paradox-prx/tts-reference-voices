@@ -60,9 +60,11 @@ engine/queue ms; engine token counts), the request fields sent, a PCM hash. `sus
 voice's expected seconds per letter (`too_short`: skipped or cut-off text; `too_long`: loop, filler, padding). It is
 only a first screen: ASR and audio checks (`server/eval`, the gateway's QC sidecar) catch the rest.
 
-Per run: latency p50/p90/p95/p99, TTFA p50/p90/p99, audio seconds per request, aggregate x realtime, per-request RTF,
-req/s, errors (by kind), suspects, duplicate audio, gateway retries and QC verdicts, pace-ratio percentiles, peak GPU
-memory and mean utilisation (`--gpus`, sampled with nvidia-smi every 500 ms; it includes other tenants of that GPU).
+Per run: latency p50/p90/p95/p99, TTFA p50/p90/p99, for streams the gapless playback start (`play_start`: the earliest
+start that never runs dry, from every chunk's arrival) and `stall_s` (play_start - TTFA), audio seconds per request,
+aggregate x realtime, per-request RTF, req/s, errors (by kind), suspects, duplicate audio, gateway retries and QC
+verdicts, pace-ratio percentiles, peak GPU memory and mean utilisation (`--gpus`, sampled with nvidia-smi every 500
+ms; it includes other tenants of that GPU).
 
 ## Output
 

@@ -15,6 +15,7 @@ The analysis is in [`../REPORT.md`](../REPORT.md) and the experiment-by-experime
 |---|---|
 | numbers of every phase: per-request rows (`requests.jsonl`), per-run and per-phase summaries (`summary.{json,csv,md}`), quality scores (`scores.jsonl`, `takes_all.jsonl`, `failure_classes.json`), config and versions (`phase.json`, `versions/`, `commands.sh`), GPU snapshots, engine / gateway / QC logs | this folder, in git |
 | **the final server's outputs** (`13_final_server/`: the production service as deployed, every run with its FLAC audio) | this folder, in git: [13_final_server/](13_final_server/) |
+| **the streaming start-latency series** (`T0_prod` … `T8_mnbt512_adaptive`: nine engine configs, every run with its FLAC audio) | this folder, in git (and in the release) |
 | the audio of every other phase (labelled FLAC, one archive per phase, with `AUDIO_MANIFEST.jsonl`) | GitHub release [`bench-audio-2026-09-28`](https://github.com/paradox-prx/tts-reference-voices/releases/tag/bench-audio-2026-09-28) |
 | 40 hand-sorted samples (best / mid / worst) | [`../../samples/qwen3-tts/`](../../samples/qwen3-tts/README.md) |
 
@@ -33,6 +34,10 @@ is conservative (it also drops some harmless texts) and not perfect.
 832 requests through the production gateway, 0 errors. Streaming time to first audio: 0.11 s (English), 0.12 s (Urdu).
 At 16-32 concurrent: 17-29x realtime. English: WER 0.5%, no severe failures in 417 takes. Urdu: CER-nospace 14%
 (mostly accent), severe failures 3.1% of takes, 16% on ~60 s texts.
+
+## Streaming start latency (T0-T8)
+
+Nine engine configs × Urdu streaming at 1-32 concurrent calls, with every chunk's arrival time: [`T_summary.md`](T_summary.md), analysis in [`../REPORT.md`](../REPORT.md) §4.6.
 
 ## Release archives
 
@@ -85,7 +90,16 @@ At 16-32 concurrent: 17-29x realtime. English: WER 0.5%, no severe failures in 4
 | X7_split_off | 42 | 27 | 0 | 0.70 | 66.0 |
 | X8_split_nsm | 6 | 38 | 0 | 0.10 | 10.0 |
 | X9_nsm_stream | 42 | 21 | 0 | 0.17 | 16.2 |
-| **all** | **6682** | **2202** | **1** | **28.5** | **2698** |
+| T0_prod | 587 | 101 | 0 | 1.17 | 113.2 |
+| T1_mnbt512 | 587 | 101 | 0 | 1.18 | 113.4 |
+| T2_ramp | 587 | 101 | 0 | 1.16 | 112.4 |
+| T3_adaptive | 586 | 101 | 0 | 1.17 | 113.1 |
+| T4_predgraphs | 587 | 101 | 0 | 1.18 | 113.8 |
+| T5_decode1 | 587 | 101 | 0 | 1.18 | 113.8 |
+| T6_ctx25 | 587 | 101 | 0 | 1.18 | 113.0 |
+| T7_mnbt512_ramp | 587 | 101 | 0 | 1.17 | 112.7 |
+| T8_mnbt512_adaptive | 587 | 101 | 0 | 1.19 | 114.3 |
+| **all** | **11964** | **3111** | **1** | **39.1** | **3718** |
 
-13_final_server (in git): 691 published, 143 left out, 2.7 h.
+13_final_server (in git): 691 published, 143 left out, 2.7 h. The T phases are in git and in the release.
 Archives written by `venvs/gateway/bin/python bench/export_audio.py --out <dir>`.

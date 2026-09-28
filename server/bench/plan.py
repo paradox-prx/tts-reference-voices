@@ -383,6 +383,33 @@ PHASES += [
      "bench": [direct("--voice", "shehbaz", "--size", "prompts", "-c", "8", "--timeout", "2400")]},
 ]
 
-for _ph in PHASES:                     # the custom-voices engine needs its precomputed voices
-    if isinstance(_ph.get("engine"), dict) and _ph["engine"].get("variant") == "custom_voices":
+# ---- T: streaming start latency for calling agents (2026-09-28) ------------------------------------------------------
+# Urdu through the gateway (production gateway settings), short + medium sentences streamed, closed loop at
+# c=1/8/16/32 with n = max(8, 6c) so most requests start while others are mid-stream. Besides TTFA (first audio
+# byte) bench_tts records every chunk's arrival: play_start = the earliest playback start that never runs dry,
+# stall = play_start - TTFA. Each variant is the production engine (custom_voices) with ONE change.
+TTFA_GW = {"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_SPLIT_WORDS": "60", "TTS_RETRY_MAX": "1",
+           "TTS_RETRY_ON": "suspect,engine_error"}
+TTFA_VARIANTS = {
+    "T0_prod": ("custom_voices", "production engine (initial chunk 1 frame, then 25-frame chunks)"),
+    "T1_mnbt512": ("T1_mnbt512", "stage-0 max_num_batched_tokens 512 (upstream 0.30 / high-concurrency value)"),
+    "T2_ramp": ("T2_ramp", "codec_chunk_ramp 1,2,4,8,16,25 instead of 1 then 25"),
+    "T3_adaptive": ("T3_adaptive", "adaptive chunk sizes from buffer feedback (min 2 frames, 50 ms margin)"),
+    "T4_predgraphs": ("T4_predgraphs", "code-predictor prefix CUDA graphs, batch buckets 8/16/32/64"),
+    "T5_decode1": ("T5_decode1", "Code2Wav one stream per decode (upstream high-concurrency profile)"),
+    "T6_ctx25": ("T6_ctx25", "Code2Wav left context 25 frames instead of 72 (cheaper decode; check quality)"),
+    "T7_mnbt512_ramp": ("T7_mnbt512_ramp", "combined: 512-token prefill steps + chunk ramp 1,2,4,8,16,25"),
+    "T8_mnbt512_adaptive": ("T8_mnbt512_adaptive", "combined: 512-token prefill steps + adaptive chunks"),
+}
+PHASES += [
+    {"name": name, "engine": engine(variant), "gateway": TTFA_GW, "kind": "perf", "optional": True,
+     "note": f"TTFA / gapless start, Urdu streaming via the gateway: {why}",
+     "bench": [via_gateway("--voice", "shehbaz", "--size", "short", "medium", "--sweep", "1,8,16,32",
+                           "--n-rule", "8:6", "--stream", tag="ttfa")]}
+    for name, (variant, why) in TTFA_VARIANTS.items()
+]
+
+for _ph in PHASES:                     # the custom-voices engines need their precomputed voices
+    if isinstance(_ph.get("engine"), dict) and (_ph["engine"].get("variant") == "custom_voices"
+                                                or str(_ph["engine"].get("variant")).startswith("T")):
         _ph.setdefault("requires", []).append(CUSTOM_VOICE_MANIFEST)

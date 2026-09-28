@@ -1,0 +1,73 @@
+# HELP tts_requests_total Speech requests by final status
+# TYPE tts_requests_total counter
+tts_requests_total{status="ok",voice="shehbaz"} 688.0
+tts_requests_total{status="suspect",voice="shehbaz"} 2.0
+# HELP tts_request_seconds Speech request wall time, admission to last byte
+# TYPE tts_request_seconds histogram
+tts_request_seconds_bucket{le="0.1"} 0.0
+tts_request_seconds_bucket{le="0.25"} 0.0
+tts_request_seconds_bucket{le="0.5"} 0.0
+tts_request_seconds_bucket{le="1.0"} 8.0
+tts_request_seconds_bucket{le="2.0"} 51.0
+tts_request_seconds_bucket{le="4.0"} 200.0
+tts_request_seconds_bucket{le="8.0"} 483.0
+tts_request_seconds_bucket{le="15.0"} 684.0
+tts_request_seconds_bucket{le="30.0"} 690.0
+tts_request_seconds_bucket{le="60.0"} 690.0
+tts_request_seconds_bucket{le="120.0"} 690.0
+tts_request_seconds_bucket{le="300.0"} 690.0
+tts_request_seconds_bucket{le="+Inf"} 690.0
+tts_request_seconds_count 690.0
+tts_request_seconds_sum 4331.082300000001
+# HELP tts_queue_wait_seconds Time spent waiting for an in-flight slot
+# TYPE tts_queue_wait_seconds histogram
+tts_queue_wait_seconds_bucket{le="0.001"} 690.0
+tts_queue_wait_seconds_bucket{le="0.01"} 690.0
+tts_queue_wait_seconds_bucket{le="0.05"} 690.0
+tts_queue_wait_seconds_bucket{le="0.1"} 690.0
+tts_queue_wait_seconds_bucket{le="0.25"} 690.0
+tts_queue_wait_seconds_bucket{le="0.5"} 690.0
+tts_queue_wait_seconds_bucket{le="1.0"} 690.0
+tts_queue_wait_seconds_bucket{le="2.5"} 690.0
+tts_queue_wait_seconds_bucket{le="5.0"} 690.0
+tts_queue_wait_seconds_bucket{le="10.0"} 690.0
+tts_queue_wait_seconds_bucket{le="30.0"} 690.0
+tts_queue_wait_seconds_bucket{le="60.0"} 690.0
+tts_queue_wait_seconds_bucket{le="+Inf"} 690.0
+tts_queue_wait_seconds_count 690.0
+tts_queue_wait_seconds_sum 0.0066931169658346334
+# HELP tts_inflight Requests holding an engine slot
+# TYPE tts_inflight gauge
+tts_inflight 0.0
+# HELP tts_queue_depth Requests waiting for an engine slot
+# TYPE tts_queue_depth gauge
+tts_queue_depth 0.0
+# HELP tts_retries_total Extra takes, by the reason of the take they replace
+# TYPE tts_retries_total counter
+# HELP tts_suspect_total Takes flagged suspect: outside the pace band (too_short/too_long) or failed by the QC sidecar (qc)
+# TYPE tts_suspect_total counter
+tts_suspect_total{reason="too_long",voice="shehbaz"} 2.0
+# HELP tts_qc_seconds QC sidecar time per take
+# TYPE tts_qc_seconds histogram
+tts_qc_seconds_bucket{le="0.05"} 0.0
+tts_qc_seconds_bucket{le="0.1"} 0.0
+tts_qc_seconds_bucket{le="0.25"} 0.0
+tts_qc_seconds_bucket{le="0.5"} 0.0
+tts_qc_seconds_bucket{le="1.0"} 0.0
+tts_qc_seconds_bucket{le="2.0"} 0.0
+tts_qc_seconds_bucket{le="4.0"} 0.0
+tts_qc_seconds_bucket{le="8.0"} 0.0
+tts_qc_seconds_bucket{le="15.0"} 0.0
+tts_qc_seconds_bucket{le="30.0"} 0.0
+tts_qc_seconds_bucket{le="+Inf"} 0.0
+tts_qc_seconds_count 0.0
+tts_qc_seconds_sum 0.0
+# HELP tts_qc_results_total QC sidecar verdicts per take (error = unreachable/failed; the take is kept)
+# TYPE tts_qc_results_total counter
+# HELP tts_qc_reasons_total Reasons the QC sidecar gave for failing a take
+# TYPE tts_qc_reasons_total counter
+# HELP tts_audio_seconds_total Audio seconds delivered
+# TYPE tts_audio_seconds_total counter
+tts_audio_seconds_total{voice="shehbaz"} 5128.479999999999
+# HELP tts_engine_errors_total Failed engine calls by kind
+# TYPE tts_engine_errors_total counter

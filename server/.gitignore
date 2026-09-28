@@ -5,7 +5,7 @@ ops/upstream/
 *.whl
 *.part
 # benchmark output: results/ numbers and logs are in git; its audio is not (AI-generated voice clones). Labelled FLAC
-# copies are in the GitHub release (results/README.md), and the final server run's FLACs are in git.
+# copies are in the GitHub release (results/README.md); the final server run's and the T series' FLACs are in git.
 results/_samples*/
 results/**/*.lock
 *.pcm
@@ -16,6 +16,7 @@ results/**/*.lock
 logs/
 !results/*/logs/
 !results/13_final_server/**/*.flac
+!results/T[0-9]*/**/*.flac
 state/
 # secrets
 .env

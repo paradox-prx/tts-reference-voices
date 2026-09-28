@@ -1,0 +1,458 @@
+{
+ "phase": "T2_ramp",
+ "note": "TTFA / gapless start, Urdu streaming via the gateway: codec_chunk_ramp 1,2,4,8,16,25 instead of 1 then 25",
+ "status": "done",
+ "started": "2026-09-28T16:21:27+05:00",
+ "stub": false,
+ "argv": [
+  "bench/run_plan.py",
+  "--only",
+  "T*",
+  "--optional"
+ ],
+ "plan": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/bench/plan.py",
+ "plan_sha256": "ca9410a81dc39e2284546d985b94ded7beebacf2091320d3130b6ad83eb45906",
+ "spec": {
+  "engine": {
+   "kind": "vllm",
+   "variant": "T2_ramp",
+   "venv": "engine",
+   "args": []
+  },
+  "gateway": {
+   "TTS_NON_STREAMING_MODE_LANGS": "ur",
+   "TTS_SPLIT_WORDS": "60",
+   "TTS_RETRY_MAX": "1",
+   "TTS_RETRY_ON": "suspect,engine_error"
+  },
+  "qc": false,
+  "kind": "perf",
+  "optional": true,
+  "fresh_engine": false,
+  "checks": [],
+  "bench": [
+   {
+    "args": [
+     "--voice",
+     "shehbaz",
+     "--size",
+     "short",
+     "medium",
+     "--sweep",
+     "1,8,16,32",
+     "--n-rule",
+     "8:6",
+     "--stream",
+     "--voice-mode",
+     "server"
+    ],
+    "via": "gateway",
+    "tag": "ttfa",
+    "timeout_s": null
+   }
+  ]
+ },
+ "estimate": {
+  "audio_h": 1.28,
+  "audio_gb": 0.22,
+  "requests": 690,
+  "runs": 8,
+  "gpu_min": 9.5
+ },
+ "host": {
+  "hostname": "vector",
+  "os": "Ubuntu 25.04",
+  "kernel": "6.14.0-37-generic",
+  "cpu": "Intel(R) Core(TM) i9-14900K",
+  "cpus": 32,
+  "mem_total": "32037232 kB",
+  "cpu_governor": "powersave",
+  "cpu_epp": "balance_performance",
+  "no_turbo": "0",
+  "tz": "PKT +0500",
+  "gpu": "index, name, uuid, driver_version, vbios_version, power.limit [W], clocks.max.sm [MHz], clocks.max.memory [MHz], pcie.link.gen.max, pcie.link.width.max, memory.total [MiB]\n0, NVIDIA GeForce RTX 3090, GPU-b4c11581-9cbf-cde4-a29c-4c9ceb006495, 580.95.05, 94.02.42.00.F1, 370.00 W, 2115 MHz, 9751 MHz, 4, 16, 24576 MiB"
+ },
+ "git": {
+  "head": "c6f5920820f9da95b61a9eb8462e5a309ca07116",
+  "branch": "qwen3-omni-bench",
+  "dirty_files": [
+   "ench/bench_tts.py",
+   "server/bench/plan.py",
+   "server/engine/make_variant.py",
+   "server/engine/deploy/variants/T1_mnbt512.yaml",
+   "server/engine/deploy/variants/T2_ramp.yaml",
+   "server/engine/deploy/variants/T3_adaptive.yaml",
+   "server/engine/deploy/variants/T4_predgraphs.yaml",
+   "server/engine/deploy/variants/T5_decode1.yaml",
+   "server/engine/deploy/variants/T6_ctx25.yaml",
+   "server/results/T0_prod/",
+   "server/results/T1_mnbt512/"
+  ]
+ },
+ "sources": {
+  "bench_tts.py": "9395bc7b428927c173aef3aba45c3783be2196876da0ba95dba8f6b7649d2191",
+  "run_plan.py": "c27ce4432de50c87b3b4579cf4c7dee33352131ff694c7269ca203f49d815da8",
+  "verify_knobs.py": "bd3841f03395e9af83a755333e50f04b6936873d5c9bee8233aea8fc8a9e30d4",
+  "gateway": "bf1d6eff518f524fa47cef9d17824fc00a98ff6865083df069a9916f7035a2fb",
+  "engine_patches": "4510f04e5730b0acf5bced11ea2872c89440943096783bd8d10edae81713f797",
+  "run_engine.sh": "bacdeb2639b70a6b9c4b225cd5db70156d9f5b4cf56ef27efbf8d5367eee88d8",
+  "baseline": "35954bca154518d580ce9383ac1fc3e80b2453b7b3194829be1283b4bdeb8e78",
+  "qc": "bc292b01289c6f3378772a18fb823a9f5be18770d8ff018db41daab5b6b3881c",
+  "pace.json": "abfde2d92735078ab46eff89e41045522857ba9c62633a29d4fb7bada66d735e"
+ },
+ "gpu": {
+  "index": "0",
+  "phase_start_mib": 277,
+  "phase_start_apps": [],
+  "baseline_mib": 278,
+  "baseline_apps": [],
+  "engine_ready_mib": 19984,
+  "engine_ready_apps": [
+   {
+    "pid": 89921,
+    "name": "VLLM::StageEngineCoreProc_stage0_replica0_DP0",
+    "mib": 15328
+   },
+   {
+    "pid": 90544,
+    "name": "VLLM::StageEngineCoreProc_stage1_replica0_DP0",
+    "mib": 4372
+   }
+  ],
+  "engine_stopped_with": "SIGINT",
+  "engine_started_in": "T2_ramp",
+  "released": true,
+  "after_stop_mib": 279,
+  "after_stop_apps": []
+ },
+ "disk": {
+  "free_gb_before": 8.41,
+  "free_gb_after": 8.01,
+  "phase_bytes": 251203548
+ },
+ "knob_checks": [],
+ "bench": [
+  {
+   "i": 1,
+   "via": "gateway",
+   "tag": "ttfa",
+   "cmd": [
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py",
+    "--voice",
+    "shehbaz",
+    "--size",
+    "short",
+    "medium",
+    "--sweep",
+    "1,8,16,32",
+    "--n-rule",
+    "8:6",
+    "--stream",
+    "--voice-mode",
+    "server",
+    "--url",
+    "http://127.0.0.1:8090",
+    "--out",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/T2_ramp",
+    "--gpus",
+    "0",
+    "--tag",
+    "ttfa",
+    "--meta",
+    "phase=T2_ramp",
+    "--meta",
+    "via=gateway",
+    "--meta",
+    "engine=vllm-omni T2_ramp (engine)",
+    "--meta",
+    "engine_kind=vllm",
+    "--meta",
+    "variant=T2_ramp",
+    "--meta",
+    "venv=engine",
+    "--meta",
+    "gateway={\"TTS_NON_STREAMING_MODE_LANGS\": \"ur\", \"TTS_RETRY_MAX\": \"1\", \"TTS_RETRY_ON\": \"suspect,engine_error\", \"TTS_SPLIT_WORDS\": \"60\"}",
+    "--meta",
+    "qc=false"
+   ],
+   "log": "bench_01_gateway.log",
+   "exit_code": 0,
+   "timeout_s": 1800.0,
+   "duration_s": 241.8,
+   "estimate_audio_s": 4597.7,
+   "runs": [
+    "ttfa_shehbaz_short_c1_n8_stream_server",
+    "ttfa_shehbaz_short_c8_n48_stream_server",
+    "ttfa_shehbaz_short_c16_n96_stream_server",
+    "ttfa_shehbaz_short_c32_n192_stream_server",
+    "ttfa_shehbaz_medium_c1_n8_stream_server",
+    "ttfa_shehbaz_medium_c8_n48_stream_server",
+    "ttfa_shehbaz_medium_c16_n96_stream_server",
+    "ttfa_shehbaz_medium_c32_n192_stream_server"
+   ]
+  }
+ ],
+ "engine": {
+  "kind": "vllm",
+  "variant": "T2_ramp",
+  "venv": "engine",
+  "args": [],
+  "describe": "vllm-omni T2_ramp (engine)",
+  "cmd": [
+   "bash",
+   "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/run_engine.sh",
+   "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/deploy/variants/T2_ramp.yaml",
+   "8091",
+   "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine"
+  ],
+  "cwd": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server",
+  "url": "http://127.0.0.1:8091",
+  "log": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/logs/engine_T2_ramp.log",
+  "env": {
+   "CUDA_VISIBLE_DEVICES": "0",
+   "TTS_ENGINE_GPU": "0",
+   "VLLM_USE_FLASHINFER_SAMPLER": "0"
+  },
+  "yaml_path": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/deploy/variants/T2_ramp.yaml",
+  "yaml_sha256": "b4676a6c8bb07b53c3d080c9a1397c90ec74e24f48d0e6e1a6e7fc09bc6689ed",
+  "yaml": "# GENERATED by engine/make_variant.py - do not edit, regenerate instead.\n# variant:   T2_ramp: TTFA experiment T2_ramp\n# base:      engine/deploy/variants/custom_voices.yaml (sha256 d9ac9b2ef1a6d2b0)\n# overrides: --connector-extra codec_chunk_ramp=[1,2,4,8,16,25]\nasync_chunk: true\nconnectors:\n  connector_of_shared_memory:\n    name: SharedMemoryConnector\n    extra:\n      codec_streaming: true\n      connector_get_sleep_s: 0.01\n      connector_get_max_wait_first_chunk: 3000\n      connector_get_max_wait: 300\n      codec_chunk_frames: 25\n      codec_left_context_frames: 72\n      initial_codec_chunk_frames: 1\n      decode_batch_max_size: 4\n      codec_chunk_ramp:\n      - 1\n      - 2\n      - 4\n      - 8\n      - 16\n      - 25\nstages:\n- stage_id: 0\n  max_num_seqs: 64\n  gpu_memory_utilization: 0.6\n  trust_remote_code: true\n  enable_prefix_caching: false\n  async_scheduling: true\n  max_num_batched_tokens: 32768\n  max_model_len: 4096\n  enforce_eager: false\n  devices: '0'\n  output_connectors:\n    to_stage_1: connector_of_shared_memory\n  default_sampling_params:\n    temperature: 0.9\n    top_k: 50\n    max_tokens: 4096\n    min_tokens: 2\n    repetition_penalty: 1.05\n  silence_ban_frames: 0\n  subtalker_sampling_params:\n    do_sample: true\n    temperature: 0.9\n    top_k: 50\n    top_p: 1.0\n- stage_id: 1\n  max_num_seqs: 64\n  gpu_memory_utilization: 0.18\n  enforce_eager: false\n  trust_remote_code: true\n  enable_prefix_caching: false\n  async_scheduling: true\n  max_num_batched_tokens: 65536\n  max_model_len: 65536\n  devices: '0'\n  input_connectors:\n    from_stage_0: connector_of_shared_memory\n  default_sampling_params:\n    temperature: 0.0\n    top_p: 1.0\n    top_k: -1\n    max_tokens: 65536\n    repetition_penalty: 1.0\nplatforms:\n  rocm:\n    stages:\n    - stage_id: 1\n      enforce_eager: true\n  npu:\n    stages:\n    - stage_id: 0\n      enforce_eager: false\n      compilation_config:\n        cudagraph_mode: PIECEWISE\n    - stage_id: 1\n      compilation_config:\n        cudagraph_mode: PIECEWISE\ncustom_voice_dir: state/custom_voices\n",
+  "patches": {
+   "all_applied": true,
+   "exit_code": 0,
+   "output": "rep_penalty: applied (/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni)"
+  },
+  "gpu_baseline_mib": 278,
+  "gpu_baseline_apps": [],
+  "log_offset": 0,
+  "ready_s": 97.0,
+  "wait_ready": {
+   "cmd": [
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/wait_ready.py",
+    "http://127.0.0.1:8091",
+    "--timeout",
+    "1703",
+    "--voices-dir",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices"
+   ],
+   "output": "ready: /health after 0 s; 1.76 s of audio in 0.92 s (inline:trump, ? codec frames)"
+  },
+  "ready_mib": 19984,
+  "ready_apps": [
+   {
+    "pid": 89921,
+    "name": "VLLM::StageEngineCoreProc_stage0_replica0_DP0",
+    "mib": 15328
+   },
+   {
+    "pid": 90544,
+    "name": "VLLM::StageEngineCoreProc_stage1_replica0_DP0",
+    "mib": 4372
+   }
+  ],
+  "voices": {
+   "status": 200,
+   "body": {
+    "voices": [
+     "bench-shehbaz",
+     "bench-trump",
+     "default",
+     "shehbaz-80c2b47dfc",
+     "shehbaz-avg",
+     "shehbaz-prompt",
+     "smoke-shehbaz",
+     "smoke-trump",
+     "trump-avg",
+     "trump-cc1c00d5e5",
+     "trump-prompt"
+    ],
+    "uploaded_voices": [
+     {
+      "name": "bench-shehbaz",
+      "consent": "benchmark",
+      "created_at": 1790293937,
+      "file_size": 1346132,
+      "mime_type": "audio/wav",
+      "embedding_source": "audio",
+      "embedding_dim": null,
+      "ref_text": "اور حملوں کے جواب میں ہماری بہادر افواج، ہمارے پُرعزم اور بہادر سپہ سالار سید عاصم منیر کی لیڈرشپ میں وطنِ عزیز کی سلامتی اور خود مختاری کے تحفظ بسم اللہ الرحمن الرحیم۔ عزیز اہلِ وطن، السلام علیکم۔"
+     },
+     {
+      "name": "bench-trump",
+      "consent": "benchmark",
+      "created_at": 1790293922,
+      "file_size": 1114156,
+      "mime_type": "audio/wav",
+      "embedding_source": "audio",
+      "embedding_dim": null,
+      "ref_text": "Almost every one of these countries wrote me a letter of thank you. The Prime Minister of Pakistan, terrific man, said that Donald Trump was responsible for saving thirty million lives and probably many more than that. The President of Azerbaijan said President Trump in six months did a miracle. It was an absolute miracle that nobody thought could be done."
+     },
+     {
+      "name": "shehbaz-80c2b47dfc",
+      "consent": "tts-gateway:shehbaz",
+      "created_at": 1790288326,
+      "file_size": 1346132,
+      "mime_type": "audio/wav",
+      "embedding_source": "audio",
+      "embedding_dim": null,
+      "ref_text": "اور حملوں کے جواب میں ہماری بہادر افواج، ہمارے پُرعزم اور بہادر سپہ سالار سید عاصم منیر کی لیڈرشپ میں وطنِ عزیز کی سلامتی اور خود مختاری کے تحفظ بسم اللہ الرحمن الرحیم۔ عزیز اہلِ وطن، السلام علیکم۔"
+     },
+     {
+      "name": "smoke-shehbaz",
+      "consent": "smoke",
+      "created_at": 1790288274,
+      "file_size": 1346132,
+      "mime_type": "audio/wav",
+      "embedding_source": "audio",
+      "embedding_dim": null,
+      "ref_text": "اور حملوں کے جواب میں ہماری بہادر افواج، ہمارے پُرعزم اور بہادر سپہ سالار سید عاصم منیر کی لیڈرشپ میں وطنِ عزیز کی سلامتی اور خود مختاری کے تحفظ بسم اللہ الرحمن الرحیم۔ عزیز اہلِ وطن، السلام علیکم۔"
+     },
+     {
+      "name": "smoke-trump",
+      "consent": "smoke",
+      "created_at": 1790288269,
+      "file_size": 1114156,
+      "mime_type": "audio/wav",
+      "embedding_source": "audio",
+      "embedding_dim": null,
+      "ref_text": "Almost every one of these countries wrote me a letter of thank you. The Prime Minister of Pakistan, terrific man, said that Donald Trump was responsible for saving thirty million lives and probably many more than that. The President of Azerbaijan said President Trump in six months did a miracle. It was an absolute miracle that nobody thought could be done."
+     },
+     {
+      "name": "trump-cc1c00d5e5",
+      "consent": "tts-gateway:trump",
+      "created_at": 1790288327,
+      "file_size": 1114156,
+      "mime_type": "audio/wav",
+      "embedding_source": "audio",
+      "embedding_dim": null,
+      "ref_text": "Almost every one of these countries wrote me a letter of thank you. The Prime Minister of Pakistan, terrific man, said that Donald Trump was responsible for saving thirty million lives and probably many more than that. The President of Azerbaijan said President Trump in six months did a miracle. It was an absolute miracle that nobody thought could be done."
+     }
+    ]
+   }
+  },
+  "log_findings": {
+   "kv_cache": [
+    "(StageEngineCoreProc_stage0_replica0 pid=89921) INFO 09-28 16:22:00 [kv_cache_utils.py:1869] GPU KV cache size: 91,120 tokens, Maximum concurrency for 4,096 tokens per request: 22.25x"
+   ],
+   "preemption": 0,
+   "builtin_retries": 0,
+   "errors": 0,
+   "error_samples": []
+  }
+ },
+ "versions": {
+  "runner_python": "3.12.6",
+  "gateway": {
+   "python": "3.12.6",
+   "packages": {
+    "fastapi": "0.141.1",
+    "uvicorn": "0.53.0",
+    "starlette": "1.7.0",
+    "httpx": "0.28.1",
+    "pydantic": "2.13.5",
+    "pydantic-settings": "2.15.0",
+    "numpy": "2.5.3",
+    "soundfile": "0.14.0"
+   }
+  },
+  "engine": {
+   "python": "3.12.6",
+   "packages": {
+    "vllm": "0.28.0",
+    "vllm-omni": "0.28.0",
+    "torch": "2.13.0",
+    "torchaudio": "2.11.0",
+    "transformers": "5.14.1",
+    "flashinfer-python": "0.6.16.post3",
+    "triton": "3.7.1",
+    "nvidia-cudnn-cu13": "9.20.0.48",
+    "nvidia-nccl-cu13": "2.29.7",
+    "safetensors": "0.8.0",
+    "numpy": "2.3.5"
+   }
+  },
+  "nvidia_driver": "580.95.05"
+ },
+ "gateway": {
+  "enabled": true,
+  "cmd": [
+   "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python",
+   "-m",
+   "tts_gateway"
+  ],
+  "cwd": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/gateway",
+  "url": "http://127.0.0.1:8090",
+  "log": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/logs/gateway_T2_ramp.log",
+  "env": {
+   "TTS_API_KEY": "<redacted>",
+   "TTS_ENGINE_URL": "http://127.0.0.1:8091",
+   "TTS_HOST": "127.0.0.1",
+   "TTS_NON_STREAMING_MODE_LANGS": "ur",
+   "TTS_PORT": "8090",
+   "TTS_RETRY_MAX": "1",
+   "TTS_RETRY_ON": "suspect,engine_error",
+   "TTS_SPLIT_WORDS": "60",
+   "TTS_VOICES_DIR": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices"
+  },
+  "ready_s": 2.0,
+  "overrides": {
+   "TTS_NON_STREAMING_MODE_LANGS": "ur",
+   "TTS_SPLIT_WORDS": "60",
+   "TTS_RETRY_MAX": "1",
+   "TTS_RETRY_ON": "suspect,engine_error"
+  },
+  "ready_body": {
+   "status": 200,
+   "body": {
+    "ready": true,
+    "backend": "vllm_omni",
+    "voices": [
+     "shehbaz",
+     "trump"
+    ],
+    "inflight": 0,
+    "queued": 0
+   }
+  },
+  "voices": {
+   "status": 200,
+   "body": {
+    "object": "list",
+    "data": [
+     {
+      "id": "shehbaz",
+      "object": "voice",
+      "label": "Shehbaz Sharif",
+      "language": "ur",
+      "default_language": "Auto",
+      "ref_seconds": 28.044
+     },
+     {
+      "id": "trump",
+      "object": "voice",
+      "label": "Donald Trump",
+      "language": "en",
+      "default_language": "English",
+      "ref_seconds": 23.211
+     }
+    ]
+   }
+  },
+  "stopped_with": "SIGINT"
+ },
+ "finished": "2026-09-28T16:27:11+05:00",
+ "duration_s": 344.1,
+ "audio": {
+  "runs": 8,
+  "wav_files": 688,
+  "seconds": 5079.9,
+  "hours": 1.411
+ },
+ "commands": [
+  "cd /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server && CUDA_VISIBLE_DEVICES=0 TTS_ENGINE_GPU=0 VLLM_USE_FLASHINFER_SAMPLER=0 bash /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/run_engine.sh /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/deploy/variants/T2_ramp.yaml 8091 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine >> /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/logs/engine_T2_ramp.log 2>&1 &",
+  "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/wait_ready.py http://127.0.0.1:8091 --timeout 1703 --voices-dir /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices",
+  "cd /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/gateway && TTS_API_KEY='<redacted>' TTS_ENGINE_URL=http://127.0.0.1:8091 TTS_HOST=127.0.0.1 TTS_NON_STREAMING_MODE_LANGS=ur TTS_PORT=8090 TTS_RETRY_MAX=1 TTS_RETRY_ON=suspect,engine_error TTS_SPLIT_WORDS=60 TTS_VOICES_DIR=/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python -m tts_gateway >> /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/logs/gateway_T2_ramp.log 2>&1 &",
+  "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice shehbaz --size short medium --sweep 1,8,16,32 --n-rule 8:6 --stream --voice-mode server --url http://127.0.0.1:8090 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/T2_ramp --gpus 0 --tag ttfa --meta phase=T2_ramp --meta via=gateway --meta 'engine=vllm-omni T2_ramp (engine)' --meta engine_kind=vllm --meta variant=T2_ramp --meta venv=engine --meta 'gateway={\"TTS_NON_STREAMING_MODE_LANGS\": \"ur\", \"TTS_RETRY_MAX\": \"1\", \"TTS_RETRY_ON\": \"suspect,engine_error\", \"TTS_SPLIT_WORDS\": \"60\"}' --meta qc=false"
+ ]
+}

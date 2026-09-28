@@ -19,7 +19,7 @@ gateway (`server/gateway`). Measured 2026-09-24/25 on the machine `vector`. Ever
 | | |
 |---|---|
 | **Engine** | vLLM-Omni 0.28.0 (+ vllm 0.28.0, torch 2.13 cu130), bf16 talker, fp32 Code2Wav, CUDA graphs, async_chunk **on**, FlashInfer sampler **off** |
-| **Speed** | RTF ≈ 0.18-0.20 per request (5-5.7x realtime) at c=1; streaming first audio **0.12 s**; **31-35x realtime aggregate** at 32 concurrent on 15-60 s texts, 38-40x at 64. About 3x the plain qwen-tts baseline per request and 3-4x its aggregate |
+| **Speed** | RTF ≈ 0.18-0.20 per request (5-5.7x realtime) at c=1; streaming first audio **0.12 s**, but smooth playback only from 0.37 s (0.15 s with the voice-agent config, §4.6); **31-35x realtime aggregate** at 32 concurrent on 15-60 s texts, 38-40x at 64. About 3x the plain qwen-tts baseline per request and 3-4x its aggregate |
 | **Capacity** | 32 requests in flight: long texts (~16-33 s of audio) p50 14-26 s; short sentences p50 3.6-4.4 s, 5.5-7 req/s; roughly 30 simultaneous real-time streams |
 | **English quality** | WER 0.6-1.5%, severe failures 0-2% per take, speaker similarity 0.98 (WavLM base-plus-sv; the Kaggle "0.97" scale) / 0.82-0.87 (WavLM-Large) |
 | **Urdu quality** | Accented but intelligible (WER ~0.37, CER ~0.17, by stock Whisper large-v3); **severe failures** (skipped passage, garble, loop, runaway) **15.5% per take** on the 43 ~95-word prompts with default settings, **7.7% with `non_streaming_mode=true`**, and up to 93% on ~200-word texts unless mitigated (16% with `non_streaming_mode`, 12% with it plus sentence splitting) |
@@ -128,8 +128,8 @@ TTFA p50 / p99 in seconds (first audio byte past the WAV header), and x realtime
 (xxlong: trump 0.126 s at c=1, 0.639 s at c=8.) Streaming costs no throughput. Audio arrives in 2-s chunks after the
 first. Per-stream RTF (total time / audio) stays below 1 for 30-60 s texts up to c=32 (p90 0.38 at c=8, 0.53 at c=16,
 0.83 at c=32), so on average each stream is produced faster than it plays; for short sentences at c=32 it is 1.3-1.9
-(the 1.8-2.5 s wait for the first audio dominates). Chunk-to-chunk gaps were not measured; upstream reports audible
-gaps under load on 3090s (#2562), so players should buffer a chunk. A streamed take cannot be retried,
+(the 1.8-2.5 s wait for the first audio dominates). Chunk-to-chunk gaps are measured in §4.6: with the production
+chunking, every stream runs dry right after its first 80 ms. A streamed take cannot be retried,
 so streamed Urdu carries the per-take failure rate (§5). `non_streaming_mode=true` adds 7-36 ms to TTFA at c=1 and
 ~180 ms at c=8 on ~95-word Urdu (X9).
 
@@ -166,6 +166,41 @@ registers and warms up both voices in ~1.5 s.
 Through the gateway vs engine direct, short sentences: c=1 latency p50 0.711 vs 0.712 s (trump), 1.03 vs 1.00 s
 (shehbaz); c=16 x realtime 15.9 vs 15.2 (trump), 18.9 vs 19.2 (shehbaz). The gateway (auth, admission, pace check,
 labels, logs) adds no measurable latency. With 1 retry at c=32 on long Urdu, one take was retried and all 64 succeeded.
+
+### 4.6 Streaming start latency for calling agents (T0-T8, E14)
+
+TTFA alone is misleading here: production streams 1 codec frame (80 ms), then nothing until the next 25 frames (2 s)
+are generated and decoded. What a caller hears is set by the **gapless start**: the earliest playback start that
+never runs dry (`bench_tts.py` records every chunk's arrival).
+
+Urdu, streamed through the gateway, closed loop, n = max(8, 6c). Values are gapless start p50 for short / medium
+sentences, in seconds:
+
+| calls speaking at once | 1 | 8 | 16 | 32 |
+|---|---|---|---|---|
+| production (T0) | 0.37 / 0.38 | 1.06 / 0.95 | 1.67 / 1.43 | 3.09 / 2.47 |
+| 512-token prefill steps + chunk ramp 1,2,4,8,16,25 (T7) | **0.12 / 0.13** | 0.37 / **0.31** | 1.26 / 0.77 | 3.32 / 2.87 |
+| 512-token prefill steps + adaptive chunks (T8) | 0.15 / 0.16 | 0.39 / 0.44 | **0.98 / 0.62** | 3.16 / 2.87 |
+
+- **Up to 8 calls speaking at once, T7 and T8 cut the real start about 3×.** The typical stall goes from 0.7 s to none.
+- **At 16, T8 is best:** the typical stall is 0-0.2 s, against 0.3-0.8 s for T7 and 1.1-1.2 s for production.
+- **Both halve the TTFA tail** (p90 at c=16: 0.7-1.0 s vs 1.4 s), for 6-13% less throughput at c ≥ 16.
+- **At 32 the card is saturated.** Each stream is generated slower than it plays, so nothing avoids gaps; only a
+  second GPU helps.
+- **No gain from the other knobs:** code-predictor CUDA graphs (enabled only on NPU in 0.28), one stream per Code2Wav
+  decode, and a shorter Code2Wav context changed nothing.
+- **Quality is unchanged,** scored on all 688 takes of each config:
+
+  | config | CER-nospace | SIM-L | severe |
+  |---|---|---|---|
+  | production | 14.2% | 0.747 | 2.8% |
+  | T7 | 14.5% | 0.752 | 1.7% |
+  | T8 | 14.1% | 0.753 | 2.0% |
+
+  The differences are within noise.
+
+The full table is in [`results/T_summary.md`](results/T_summary.md). For voice agents, T8 is the recommended engine
+config (§8).
 
 ## 5. Quality
 
@@ -313,8 +348,9 @@ guardrails above.
 | retries | `TTS_RETRY_MAX=1`, `TTS_RETRY_ON=suspect,engine_error,qc` | runaways, pace outliers and wrong-voice takes for +2-4% compute (Urdu severe 7.7% → 5.8%) |
 | QC sidecar | **on in its cheap mode**: `TTS_QC_URL=http://127.0.0.1:8092`, `TTS_QC_CHECKS=sim,audio`, `TTS_QC_ASR=0` | catches the ~1% wrong-voice trump takes for 1.4 GB and no measurable cost |
 | Whisper QC | off at peak load on one GPU; for low load or quality-critical Urdu, or on a second GPU: `TTS_QC_ASR=1`, `TTS_QC_CHECKS=asr,sim,audio`, `TTS_RETRY_MAX=2` | full-gate retries take Urdu to 1.9% (R=1) / 0.5% (R=2) severe, but Whisper inline costs 2-7x throughput under load on the same card |
-| streaming | for interactive use (TTFA 0.12 s at c=1, < 0.7 s at c <= 8, 1.3 s at c=16); non-streaming where Urdu quality matters most (only non-streaming takes can be retried) | |
-| capacity planning | ~30 simultaneous real-time streams, or 5-7 short sentences/s, per 3090 | P2/P3 |
+| streaming | for interactive use; non-streaming where Urdu quality matters most (only non-streaming takes can be retried) | with production chunking the first 80 ms is followed by a gap: smooth audio from 0.37 s at c=1, ~1 s at c=8, 1.4-1.7 s at c=16 (§4.6) |
+| **voice agents (not yet deployed)** | engine `engine/deploy/variants/T8_mnbt512_adaptive.yaml`: stage-0 `max_num_batched_tokens` 512 + `codec_chunk_adaptive` (min 2 frames, 50 ms margin) | smooth audio from 0.15 s at 1 call, ~0.4 s at 8, 0.6-1.0 s at 16, with few stalls; half the TTFA tail; 6-11% less throughput at c ≥ 16 (§4.6) |
+| capacity planning | ~16 calls speaking at the same moment for smooth streamed audio (more stall; at 32 streams are generated slower than they play), or 5-7 short sentences/s non-streamed, per 3090 | P2/P3, T-series |
 
 These are the values in `deploy/env.example` and the installed units (`~/.config/qwen3-tts/env`).
 

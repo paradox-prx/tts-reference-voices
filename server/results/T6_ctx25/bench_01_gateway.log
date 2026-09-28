@@ -1,0 +1,29 @@
+=== 2026-09-28T16:45:39+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice shehbaz --size short medium --sweep 1,8,16,32 --n-rule 8:6 --stream --voice-mode server --url http://127.0.0.1:8090 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/T6_ctx25 --gpus 0 --tag ttfa --meta phase=T6_ctx25 --meta via=gateway --meta 'engine=vllm-omni T6_ctx25 (engine)' --meta engine_kind=vllm --meta variant=T6_ctx25 --meta venv=engine --meta 'gateway={"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_RETRY_MAX": "1", "TTS_RETRY_ON": "suspect,engine_error", "TTS_SPLIT_WORDS": "60"}' --meta qc=false
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='shehbaz'
+  server voice 'shehbaz': listed by GET /v1/audio/voices
+warmup shehbaz 1: 0.68s ok
+warmup shehbaz 2: 0.92s ok
+shehbaz short (ur.json): shehbaz 345 texts
+  ttfa_shehbaz_short_c1_n8_stream_server: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.109) | lat p50=1.012s p90=1.263s p99=1.426s | ttfa p50=0.119s p90=0.12s, gapless start p50=0.368s p90=0.373s (8 would stall) | 5.22x realtime (p90-wall 5.22x, stragglers 0), 1.02 req/s | gpu 19395 MiB 96.1%
+  ttfa_shehbaz_short_c8_n48_stream_server: ok 48/48 err 0 suspect 0 (short 0, long 0; pace x1.153) | lat p50=2.177s p90=3.293s p99=4.981s | ttfa p50=0.288s p90=0.956s, gapless start p50=1.054s p90=1.494s (48 would stall) | 15.65x realtime (p90-wall 14.59x, stragglers 0), 3.3 req/s | gpu 19438 MiB 97.3%
+  ttfa_shehbaz_short_c16_n96_stream_server: ok 96/96 err 0 suspect 1 (short 0, long 1; pace x1.114) | lat p50=3.064s p90=4.89s p99=6.562s | ttfa p50=0.389s p90=1.64s, gapless start p50=1.691s p90=2.322s (96 would stall) | 20.04x realtime (p90-wall 18.53x, stragglers 0), 4.67 req/s | gpu 19488 MiB 95.1%
+  ttfa_shehbaz_short_c32_n192_stream_server: ok 192/192 err 0 suspect 0 (short 0, long 0; pace x1.106) | lat p50=4.83s p90=8.185s p99=11.002s | ttfa p50=0.73s p90=2.62s, gapless start p50=3.031s p90=3.983s (192 would stall) | 24.27x realtime (p90-wall 22.51x, stragglers 0), 5.67 req/s | gpu 19901 MiB 99.2%
+shehbaz medium (ur.json): shehbaz 145 texts
+  ttfa_shehbaz_medium_c1_n8_stream_server: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.117) | lat p50=2.229s p90=2.551s p99=2.651s | ttfa p50=0.122s p90=0.123s, gapless start p50=0.379s p90=0.381s (8 would stall) | 5.43x realtime (p90-wall 5.43x, stragglers 0), 0.5 req/s | gpu 19906 MiB 97.8%
+  ttfa_shehbaz_medium_c8_n48_stream_server: ok 48/48 err 0 suspect 0 (short 0, long 0; pace x1.137) | lat p50=4.236s p90=5.392s p99=5.79s | ttfa p50=0.25s p90=0.738s, gapless start p50=0.998s p90=1.284s (48 would stall) | 18.38x realtime (p90-wall 17.48x, stragglers 0), 1.78 req/s | gpu 19899 MiB 99.0%
+  ttfa_shehbaz_medium_c16_n96_stream_server: ok 96/96 err 0 suspect 0 (short 0, long 0; pace x1.109) | lat p50=6.381s p90=8.31s p99=10.057s | ttfa p50=0.342s p90=1.416s, gapless start p50=1.388s p90=2.144s (96 would stall) | 25.01x realtime (p90-wall 24.01x, stragglers 0), 2.32 req/s | gpu 19905 MiB 99.4%
+  note: 192 requests > 145 medium texts for shehbaz, so some repeat
+  ttfa_shehbaz_medium_c32_n192_stream_server: ok 192/192 err 0 suspect 0 (short 0, long 0; pace x1.108) | lat p50=10.053s p90=12.903s p99=16.058s | ttfa p50=0.562s p90=2.78s, gapless start p50=2.428s p90=3.829s (192 would stall) | 31.24x realtime (p90-wall 30.02x, stragglers 0), 3.0 req/s | gpu 20131 MiB 99.0%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/T6_ctx25
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | gapless start p50 | gapless start p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ttfa_shehbaz_short_c1_n8_stream_server | 8 | 8 | 0 | 0 | 1.012 | 1.263 | 1.426 | 0.119 | 0.12 | 0.368 | 0.373 | 5.12 | 5.22 | 5.22 | 0 | 0.193 | 1.02 | 19395 | 96.1 |
+| ttfa_shehbaz_short_c8_n48_stream_server | 48 | 48 | 0 | 0 | 2.177 | 3.293 | 4.981 | 0.288 | 0.956 | 1.054 | 1.494 | 4.74 | 15.65 | 14.59 | 0 | 0.492 | 3.3 | 19438 | 97.3 |
+| ttfa_shehbaz_short_c16_n96_stream_server | 96 | 96 | 0 | 1 | 3.064 | 4.89 | 6.562 | 0.389 | 1.64 | 1.691 | 2.322 | 4.29 | 20.04 | 18.53 | 0 | 0.777 | 4.67 | 19488 | 95.1 |
+| ttfa_shehbaz_short_c32_n192_stream_server | 192 | 192 | 0 | 0 | 4.83 | 8.185 | 11.002 | 0.73 | 2.62 | 3.031 | 3.983 | 4.28 | 24.27 | 22.51 | 0 | 1.277 | 5.67 | 19901 | 99.2 |
+| ttfa_shehbaz_medium_c1_n8_stream_server | 8 | 8 | 0 | 0 | 2.229 | 2.551 | 2.651 | 0.122 | 0.123 | 0.379 | 0.381 | 10.82 | 5.43 | 5.43 | 0 | 0.186 | 0.5 | 19906 | 97.8 |
+| ttfa_shehbaz_medium_c8_n48_stream_server | 48 | 48 | 0 | 0 | 4.236 | 5.392 | 5.79 | 0.25 | 0.738 | 0.998 | 1.284 | 10.31 | 18.38 | 17.48 | 0 | 0.425 | 1.78 | 19899 | 99.0 |
+| ttfa_shehbaz_medium_c16_n96_stream_server | 96 | 96 | 0 | 0 | 6.381 | 8.31 | 10.057 | 0.342 | 1.416 | 1.388 | 2.144 | 10.76 | 25.01 | 24.01 | 0 | 0.614 | 2.32 | 19905 | 99.4 |
+| ttfa_shehbaz_medium_c32_n192_stream_server | 192 | 192 | 0 | 0 | 10.053 | 12.903 | 16.058 | 0.562 | 2.78 | 2.428 | 3.829 | 10.4 | 31.24 | 30.02 | 0 | 0.987 | 3.0 | 20131 | 99.0 |
+

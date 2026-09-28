@@ -404,6 +404,7 @@ async def one_request(client, url: str, payload: dict, timeout: float, fmt: str 
     t0 = time.perf_counter()
     st = {"ttfb": None, "ttfa": None, "status": None, "headers": {}, "error": None}
     chunks: list[bytes] = []
+    timeline: list[tuple[float, int]] = []  # (seconds since the request, bytes received before this chunk)
 
     async def fetch() -> None:
         got = 0
@@ -417,6 +418,7 @@ async def one_request(client, url: str, payload: dict, timeout: float, fmt: str 
                 if not chunk:
                     continue
                 now = time.perf_counter() - t0
+                timeline.append((now, got))
                 chunks.append(chunk)
                 got += len(chunk)
                 if st["ttfb"] is None:
@@ -440,7 +442,15 @@ async def one_request(client, url: str, payload: dict, timeout: float, fmt: str 
     except Exception as exc:                                  # noqa: BLE001 - every failure is a result
         st["error"] = f"{type(exc).__name__}: {exc}"
     return {"latency": time.perf_counter() - t0, "ttfb": st["ttfb"], "ttfa": st["ttfa"], "status": st["status"],
-            "error": st["error"], "data": b"".join(chunks), "headers": st["headers"]}
+            "error": st["error"], "data": b"".join(chunks), "headers": st["headers"], "timeline": timeline}
+
+
+def playback_start(timeline: list[tuple[float, int]], header: int, bytes_per_s: float) -> float | None:
+    """The earliest start of playback (seconds after the request) from which the stream never runs dry: a byte at
+    audio time a must have arrived by start + a, so start = max over chunks of (arrival - audio time of its first
+    byte). start - ttfa is the total stall of a player that starts at the first audio byte and waits when it runs dry."""
+    starts = [t - max(0, before - header) / bytes_per_s for t, before in timeline]  # a header-only chunk: <= ttfa
+    return round(max(starts), 3) if starts else None
 
 
 async def register_voice(client, args, voice: Voice) -> None:
@@ -597,6 +607,11 @@ async def run_one(client, args, lanes: list[Lane], size: str, n: int, c: int, gp
             if pcm is not None:
                 row["pace_ratio"], row["suspect_reason"] = suspect_of(secs, letters, voice, args.band)
                 row["pcm_sha256"] = hashlib.sha256(pcm).hexdigest()
+                if args.stream and res["timeline"] and row["ttfa"] is not None:
+                    start = playback_start(res["timeline"], len(res["data"]) - len(pcm), sr * ch * width)
+                    row["play_start"] = start
+                    row["stall_s"] = round(max(0.0, start - res["ttfa"]), 3) if start is not None else None
+                    row["chunks"] = len(res["timeline"])
             else:                                            # flac/mp3/opus: no duration without a decoder
                 row["pace_ratio"], row["suspect_reason"] = None, None
             row["suspect"] = row["suspect_reason"] is not None
@@ -623,6 +638,8 @@ async def run_one(client, args, lanes: list[Lane], size: str, n: int, c: int, gp
     ok = [r for r in rows if not r["error"]]
     lat = [r["latency"] for r in ok]
     ttfa = [r["ttfa"] for r in ok if r["ttfa"] is not None]
+    starts = [r["play_start"] for r in ok if r.get("play_start") is not None]
+    stalls = [r["stall_s"] for r in ok if r.get("stall_s") is not None]
     audio = sum(r.get("audio_s") or 0 for r in ok)
     hdr = [r["resp_headers"] for r in rows]
     retries = [int(h.get("x-tts-retries", 0) or 0) for h in hdr]
@@ -657,6 +674,9 @@ async def run_one(client, args, lanes: list[Lane], size: str, n: int, c: int, gp
                "lat_max": round(max(lat), 3) if lat else None,
                "ttfa_mean": round(statistics.mean(ttfa), 3) if ttfa else None,
                "ttfa_p50": pct(ttfa, 50), "ttfa_p90": pct(ttfa, 90), "ttfa_p99": pct(ttfa, 99),
+               "play_start_p50": pct(starts, 50), "play_start_p90": pct(starts, 90), "play_start_p99": pct(starts, 99),
+               "stall_p50": pct(stalls, 50), "stall_p90": pct(stalls, 90),
+               "stalled": sum(1 for x in stalls if x > 0.05),
                "audio_s": round(audio, 1), "audio_mean_s": round(audio / len(ok), 2) if ok else None,
                "throughput_x_realtime": round(audio / wall, 2) if wall else None,
                "x_realtime_p90wall": round(audio90 / t90, 2) if t90 > 0 else None, "t90_s": round(t90, 2),
@@ -683,7 +703,8 @@ async def run_one(client, args, lanes: list[Lane], size: str, n: int, c: int, gp
             f.write(json.dumps({**r, "file": f"{run}/{r['file']}"} if r.get("file") else r, ensure_ascii=False) + "\n")
     (run_dir / "summary.json").write_text(json.dumps({"summary": summary, "config": cfg}, indent=1, ensure_ascii=False)
                                           + "\n", encoding="utf-8")
-    t = f" ttfa p50={summary['ttfa_p50']}s p90={summary['ttfa_p90']}s |" if args.stream else ""
+    t = (f" ttfa p50={summary['ttfa_p50']}s p90={summary['ttfa_p90']}s, gapless start p50={summary['play_start_p50']}s "
+         f"p90={summary['play_start_p90']}s ({summary['stalled']} would stall) |") if args.stream else ""
     dup = f" DUPLICATE AUDIO x{summary['dup_audio']}" if summary["dup_audio"] else ""
     print(f"  {run}: ok {summary['ok']}/{len(jobs)} err {summary['errors']} suspect {summary['suspect']}"
           f" (short {summary['suspect_short']}, long {summary['suspect_long']}; pace x{summary['pace_ratio_p50']}){dup} | "
@@ -700,7 +721,8 @@ SUMMARY_COLS = ["run", "folder", "tag", "invocation", "started", "voice", "size"
                 "stream", "voice_mode", "url", "ok", "errors", "error_kinds", "suspect", "suspect_short",
                 "suspect_long", "dup_audio", "retried", "retries_total", "gw_suspect", "qc_pass", "qc_fail",
                 "qc_error", "wall_s", "lat_mean", "lat_p50", "lat_p90", "lat_p95", "lat_p99", "lat_max",
-                "ttfa_mean", "ttfa_p50", "ttfa_p90", "ttfa_p99", "audio_s", "audio_mean_s", "throughput_x_realtime",
+                "ttfa_mean", "ttfa_p50", "ttfa_p90", "ttfa_p99", "play_start_p50", "play_start_p90", "play_start_p99",
+                "stall_p50", "stall_p90", "stalled", "audio_s", "audio_mean_s", "throughput_x_realtime",
                 "x_realtime_p90wall", "t90_s", "stragglers", "req_per_s", "rtf_mean", "rtf_p50", "rtf_p90", "pace_ratio_p10", "pace_ratio_p50", "pace_ratio_p90",
                 "pace_s_per_letter", "pace_source", "mean_words", "language", "max_new_tokens", "params",
                 "extra_params", "meta", "gpu_mem_first_mib", "gpu_mem_peak_mib", "gpu_util_mean"]
@@ -730,9 +752,10 @@ def write_tables(out_dir: Path, summaries: list[dict], invocations: list[dict]) 
                               indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     tmp.replace(out_dir / "summary.json")
     cols = ("run", "n", "ok", "errors", "suspect", "lat_p50", "lat_p90", "lat_p99", "ttfa_p50", "ttfa_p90",
-            "audio_mean_s", "throughput_x_realtime", "x_realtime_p90wall", "stragglers", "rtf_p50", "req_per_s",
+            "play_start_p50", "play_start_p90", "audio_mean_s", "throughput_x_realtime", "x_realtime_p90wall", "stragglers", "rtf_p50", "req_per_s",
             "gpu_mem_peak_mib", "gpu_util_mean")
-    md = ["| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime "
+    md = ["| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | gapless start p50 "
+          "| gapless start p90 | audio s/req | x realtime "
           "| x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |", "|" + "---|" * len(cols)]
     for s in summaries:
         md.append("| " + " | ".join(str(s.get(k)) if s.get(k) not in (None, "") else "–" for k in cols) + " |")

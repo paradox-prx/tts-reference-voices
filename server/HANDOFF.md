@@ -90,6 +90,13 @@
 > `bench/export_audio.py`). Takes with political / official texts (keyword list in `eval/pick_samples.py`) are left
 > out of all published audio: my call, told to the user (`results/README.md`).
 >
+> **Streaming start latency (E14, T0-T8, REPORT §4.6):** `bench_tts.py` now records chunk arrivals (`play_start`,
+> `stall_s`). Production's 0.12 s TTFA is followed by a gap: 1 frame, then 25-frame chunks. For voice agents the
+> recommended engine is `engine/deploy/variants/T8_mnbt512_adaptive.yaml`: smooth audio from 0.15 s at 1 call and
+> 0.6-1.0 s at 16, against 0.37 s and 1.4-1.7 s in production. It is NOT deployed; the user decides. To deploy, set
+> `TTS_ENGINE_DEPLOY` in `~/.config/qwen3-tts/env` and restart the units. The T phases' FLACs are in git (user request)
+> and in the release.
+>
 > **Tests (all green):** gateway 124, engine 30 (+4 skipped: no ops/upstream here), QC 71, eval 8, baseline 86.
 
 # Session 1 record (pb-ai-pc1, state as of 2026-09-24 ~19:00 PKT)

@@ -1,0 +1,435 @@
+{
+ "phase": "T7_mnbt512_ramp",
+ "runs": {
+  "ttfa_shehbaz_medium_c16_n96_stream_server [shehbaz]": {
+   "n": 96,
+   "runaways": 0,
+   "severe": {
+    "k": 2,
+    "rate": 0.0208,
+    "ci95": [
+     0.0057,
+     0.0728
+    ]
+   },
+   "moderate": {
+    "k": 5,
+    "rate": 0.0521,
+    "ci95": [
+     0.0224,
+     0.1162
+    ]
+   },
+   "clean": {
+    "k": 89,
+    "rate": 0.9271,
+    "ci95": [
+     0.8571,
+     0.9642
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 7,
+    "rate": 0.0729,
+    "ci95": [
+     0.0358,
+     0.1429
+    ]
+   },
+   "reasons": {
+    "char_ratio": 3,
+    "repeat": 2,
+    "char_ratio<0.8": 2,
+    "loop_long_word": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3516,
+    "cer_nospace": 0.143,
+    "sim_prompt_large": 0.7993,
+    "sim_prompt_base": 0.977,
+    "sim_heldout_large": 0.8299
+   }
+  },
+  "ttfa_shehbaz_medium_c1_n8_stream_server [shehbaz]": {
+   "n": 8,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "clean": {
+    "k": 8,
+    "rate": 1.0,
+    "ci95": [
+     0.6756,
+     1.0
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "reasons": {},
+   "non_severe_means": {
+    "wer": 0.3663,
+    "cer_nospace": 0.1448,
+    "sim_prompt_large": 0.8013,
+    "sim_prompt_base": 0.9744,
+    "sim_heldout_large": 0.8345
+   }
+  },
+  "ttfa_shehbaz_medium_c32_n192_stream_server [shehbaz]": {
+   "n": 192,
+   "runaways": 0,
+   "severe": {
+    "k": 2,
+    "rate": 0.0104,
+    "ci95": [
+     0.0029,
+     0.0372
+    ]
+   },
+   "moderate": {
+    "k": 9,
+    "rate": 0.0469,
+    "ci95": [
+     0.0249,
+     0.0867
+    ]
+   },
+   "clean": {
+    "k": 181,
+    "rate": 0.9427,
+    "ci95": [
+     0.9003,
+     0.9677
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 11,
+    "rate": 0.0573,
+    "ci95": [
+     0.0323,
+     0.0997
+    ]
+   },
+   "reasons": {
+    "char_ratio": 7,
+    "char_ratio<0.8": 2,
+    "repeat": 2
+   },
+   "non_severe_means": {
+    "wer": 0.347,
+    "cer_nospace": 0.1435,
+    "sim_prompt_large": 0.8013,
+    "sim_prompt_base": 0.9753,
+    "sim_heldout_large": 0.8355
+   }
+  },
+  "ttfa_shehbaz_medium_c8_n48_stream_server [shehbaz]": {
+   "n": 48,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.0741
+    ]
+   },
+   "moderate": {
+    "k": 2,
+    "rate": 0.0417,
+    "ci95": [
+     0.0115,
+     0.1398
+    ]
+   },
+   "clean": {
+    "k": 46,
+    "rate": 0.9583,
+    "ci95": [
+     0.8602,
+     0.9885
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 2,
+    "rate": 0.0417,
+    "ci95": [
+     0.0115,
+     0.1398
+    ]
+   },
+   "reasons": {
+    "char_ratio": 2
+   },
+   "non_severe_means": {
+    "wer": 0.327,
+    "cer_nospace": 0.1355,
+    "sim_prompt_large": 0.789,
+    "sim_prompt_base": 0.9763,
+    "sim_heldout_large": 0.8269
+   }
+  },
+  "ttfa_shehbaz_short_c16_n96_stream_server [shehbaz]": {
+   "n": 96,
+   "runaways": 0,
+   "severe": {
+    "k": 2,
+    "rate": 0.0208,
+    "ci95": [
+     0.0057,
+     0.0728
+    ]
+   },
+   "moderate": {
+    "k": 8,
+    "rate": 0.0833,
+    "ci95": [
+     0.0428,
+     0.1559
+    ]
+   },
+   "clean": {
+    "k": 86,
+    "rate": 0.8958,
+    "ci95": [
+     0.8188,
+     0.9424
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 10,
+    "rate": 0.1042,
+    "ci95": [
+     0.0576,
+     0.1812
+    ]
+   },
+   "reasons": {
+    "cer_nospace": 4,
+    "char_ratio": 4,
+    "char_ratio<0.8": 2
+   },
+   "non_severe_means": {
+    "wer": 0.3465,
+    "cer_nospace": 0.1396,
+    "sim_prompt_large": 0.7073,
+    "sim_prompt_base": 0.955,
+    "sim_heldout_large": 0.7431
+   }
+  },
+  "ttfa_shehbaz_short_c1_n8_stream_server [shehbaz]": {
+   "n": 8,
+   "runaways": 0,
+   "severe": {
+    "k": 1,
+    "rate": 0.125,
+    "ci95": [
+     0.0224,
+     0.4709
+    ]
+   },
+   "moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "clean": {
+    "k": 7,
+    "rate": 0.875,
+    "ci95": [
+     0.5291,
+     0.9776
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 1,
+    "rate": 0.125,
+    "ci95": [
+     0.0224,
+     0.4709
+    ]
+   },
+   "reasons": {
+    "pace": 1
+   },
+   "non_severe_means": {
+    "wer": 0.1826,
+    "cer_nospace": 0.0856,
+    "sim_prompt_large": 0.6693,
+    "sim_prompt_base": 0.9589,
+    "sim_heldout_large": 0.7019
+   }
+  },
+  "ttfa_shehbaz_short_c32_n192_stream_server [shehbaz]": {
+   "n": 192,
+   "runaways": 0,
+   "severe": {
+    "k": 4,
+    "rate": 0.0208,
+    "ci95": [
+     0.0081,
+     0.0523
+    ]
+   },
+   "moderate": {
+    "k": 18,
+    "rate": 0.0938,
+    "ci95": [
+     0.0601,
+     0.1433
+    ]
+   },
+   "clean": {
+    "k": 170,
+    "rate": 0.8854,
+    "ci95": [
+     0.8326,
+     0.9231
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 22,
+    "rate": 0.1146,
+    "ci95": [
+     0.0769,
+     0.1674
+    ]
+   },
+   "reasons": {
+    "char_ratio": 16,
+    "cer_nospace": 5,
+    "char_ratio<0.8": 3,
+    "pace": 1,
+    "garbled": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3578,
+    "cer_nospace": 0.1459,
+    "sim_prompt_large": 0.7099,
+    "sim_prompt_base": 0.9588,
+    "sim_heldout_large": 0.7427
+   }
+  },
+  "ttfa_shehbaz_short_c8_n48_stream_server [shehbaz]": {
+   "n": 48,
+   "runaways": 0,
+   "severe": {
+    "k": 1,
+    "rate": 0.0208,
+    "ci95": [
+     0.0037,
+     0.109
+    ]
+   },
+   "moderate": {
+    "k": 2,
+    "rate": 0.0417,
+    "ci95": [
+     0.0115,
+     0.1398
+    ]
+   },
+   "clean": {
+    "k": 45,
+    "rate": 0.9375,
+    "ci95": [
+     0.8316,
+     0.9785
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 3,
+    "rate": 0.0625,
+    "ci95": [
+     0.0215,
+     0.1684
+    ]
+   },
+   "reasons": {
+    "char_ratio": 2,
+    "char_ratio<0.8": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3153,
+    "cer_nospace": 0.1287,
+    "sim_prompt_large": 0.7102,
+    "sim_prompt_base": 0.9597,
+    "sim_heldout_large": 0.7471
+   }
+  },
+  "ALL": {
+   "n": 688,
+   "runaways": 0,
+   "severe": {
+    "k": 12,
+    "rate": 0.0174,
+    "ci95": [
+     0.01,
+     0.0302
+    ]
+   },
+   "moderate": {
+    "k": 44,
+    "rate": 0.064,
+    "ci95": [
+     0.048,
+     0.0848
+    ]
+   },
+   "clean": {
+    "k": 632,
+    "rate": 0.9186,
+    "ci95": [
+     0.8958,
+     0.9368
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 56,
+    "rate": 0.0814,
+    "ci95": [
+     0.0632,
+     0.1042
+    ]
+   },
+   "reasons": {
+    "char_ratio": 34,
+    "char_ratio<0.8": 10,
+    "cer_nospace": 9,
+    "repeat": 4,
+    "pace": 2,
+    "garbled": 1,
+    "loop_long_word": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3455,
+    "cer_nospace": 0.1414,
+    "sim_prompt_large": 0.754,
+    "sim_prompt_base": 0.9669,
+    "sim_heldout_large": 0.7879
+   }
+  }
+ }
+}
