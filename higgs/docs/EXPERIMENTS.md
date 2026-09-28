@@ -17,6 +17,8 @@ its `summary.json`, the per-request rows (latency, time to first audio, audio se
 | S1a | `low_latency.yaml` / `low_latency_fa.yaml` (FULL_DECODE_ONLY CUDA graphs) | FAILED: FlashInfer JIT; then `cudaErrorStreamCaptureUnsupported` during graph capture |
 | S1 | `piecewise.yaml` (PIECEWISE CUDA graphs, FLASH_ATTN) | SLOWER than eager: c=1 1.5x vs 2.5x realtime, c=16 17x vs 19x (8 runs, stopped early) |
 | S2 | `mem080_seqs32.yaml` (stage-0 0.80 -> KV 79,232 tokens, max_num_seqs 32) | c=32: short 17x, long 32.7x, xlong 26.4x realtime; GPU 23.5 GB peak |
+| Q1-Q4 | the 43 prompts per voice, K=2 takes, c=8: sampling 0.8 vs 1.0, Qwen clip vs 25 s Higgs clip, expressive set plain vs tags | 0.8/50 wins (38 % vs 56 % bad), Qwen clip wins (38 % vs 51 %); failure = text length (Urdu <= 90 words 14 %, 91-110 41 %, > 110 100 %); tags: re-scoring |
+| G0-G2 | gateway: no split / split 60 words / split + 1 pace retry, on ~100- and ~200-word texts | unsplit 71 % / 100 % bad -> split 25 % / 46 % -> split + retry 0 % / 4 % (Urdu WER 0.036); latency down too (parallel parts) |
 
 ## H00 setup (2026-09-28 17:3x-18:xx)
 
@@ -142,3 +144,66 @@ Stage 0 `gpu_memory_utilization` 0.80 (KV cache 11 GiB = 79,232 tokens, "9.67x f
 At 32 in flight Higgs reaches 31 x realtime on ~25 s texts, the same as Qwen at c=32, at the cost of 22-31 s p50
 latency; the card is full (23.5 GB of 24 GB peak, desktop included), so 32 is the ceiling on this GPU. Streaming
 c=16/32 and trump c=32 rows: the run folder.
+
+## Q1-Q4 the 43 benchmark prompts (`results/Q_prompts`, 19:21-19:47, scored 19:50-20:04 on the GPU)
+
+`higgs/bench/quality_runs.sh`: `--size prompts --takes 2 -c 8` on `mem080_seqs32.yaml`, pace from
+`higgs/calibration/pace.json`, 86 takes per arm, 516 takes, 4.6 h of audio, 0 errors. Speed was the same in every arm
+(lat p50 15-18 s, 14.3-15.4 x realtime). Quality (`QUALITY.md` with `--by tag,voice`):
+
+| arm | voice | WER | CER-ns | SIM-L | pace | gate fail | bad | leading reasons |
+|---|---|---|---|---|---|---|---|---|
+| Q1 temperature 0.8 / top_k 50, Qwen clip | shehbaz | 0.146 | 0.114 | 0.851 | 0.96 | 36.0 % | 38.4 % [29, 49] | del_run 29, char_ratio 27, cer 11 |
+| Q1 | trump | 0.088 | 0.082 | 0.830 | 0.96 | 66.3 % | 66.3 % [56, 75] | del_run 55, wer 27, char_ratio 18 |
+| Q2 temperature 1.0 / top_p 0.95 (upstream) | shehbaz | 0.232 | 0.195 | 0.864 | 0.86 | 50.0 % | 55.8 % [45, 66] | del_run 44, char_ratio 37, cer 23 |
+| Q3 25 s Higgs-style reference (clips 08+05) | shehbaz | 0.166 | 0.135 | 0.861 | 0.96 | 45.3 % | 51.2 % [41, 61] | del_run 43, char_ratio 29 |
+| Q4 expressive set, plain text | shehbaz | 0.193 | 0.162 | 0.862 | 0.90 | 45.3 % | 46.5 % [36, 57] | del_run 38, char_ratio 36 |
+| Q4 expressive set, with the 43 control tags | shehbaz | 0.234 | 0.200 | 0.810 | 0.97 | 57.0 % | 60.5 % [50, 70] | del_run 43, char_ratio 39, cer 23 |
+
+- These prompts are long (Urdu 71-130 words, English 91-160), i.e. the length where Higgs drops passages. By length,
+  Q1 Urdu: <= 90 words 2/14 bad (14 %), 91-110 words 29/70 (41 %), 111-130 words 2/2; English: 91-110 words 17/30
+  (57 %), 111-130 36/52 (69 %), > 130 4/4. Bad takes have a median char_ratio of 0.81 (a fifth of the text missing)
+  and are *shorter* (median 30 s vs 35 s for good takes): the model ends early rather than looping.
+- Of the 43 Urdu prompts, 9 failed in both takes, 15 in one, 19 in neither: a retry recovers ~60 % of failures at this
+  length; splitting to <= 60-word parts (where the baseline measured 1-7 % bad) is the structural fix (G1/G2).
+- Sampling: Boson's 0.8 / 50 beats upstream's 1.0 / top_p 0.95 by 17 points of bad rate and 9 WER points; the
+  higher temperature makes the model drop more text (pace ratio 0.86). Kept 0.8 / 50.
+- Reference: the Qwen benchmark's 28 s clip beats the livelier 25 s Higgs-style clip (51 % vs 38 % bad, WER 0.166 vs
+  0.146) at equal similarity, so the Kaggle finding "the livelier reference beats the long one" does not carry over
+  to this engine's 30 s limit and prompt layout. Kept `qwen3-tts`.
+- Control tags (re-scored against the plain words, `higgs/bench/strip_tags.py`): the tagged texts are spoken as the
+  plain words, but they cost quality on this engine: bad 60.5 % vs 46.5 % for the same texts untagged, WER 0.234 vs
+  0.193, SIM-L 0.81 vs 0.86 (more dropped passages, a slightly different voice). Whether the emotion / style is
+  audible needs listening: `samples/higgs-tts-3/tags/` holds two plain / tagged pairs (whispering, laughter).
+
+## G0-G2 the gateway in front of Higgs (`results/G_gateway`, 20:05-20:22, scored 20:23-20:31)
+
+`higgs/bench/gateway_runs.sh`: the repo's gateway (`higgs/engine/run_gateway.sh`: Higgs request shape, voices
+registered with the engine once, pace from `higgs/calibration/pace.json`, `max_new_tokens` at 25 fps, no auth, no QC
+sidecar) on `mem080_seqs32.yaml`, `--voice-mode server`. Three arms, each its own gateway process; per arm shehbaz
+xlong (~98 words) and xxlong (~200 words) at c=1 and c=8, trump xlong at c=8, one streaming run. 240 takes, 3.05 h.
+Note that the three arms drew different texts from the pools (each run continues where the previous stopped), so
+arm-to-arm differences of a few takes are within that noise; the unsplit-vs-split contrast is not.
+
+| arm | shehbaz xlong c=1 lat p50 s | xlong c=8 lat p50 / xRT | xxlong c=1 lat p50 / xRT | xxlong c=8 lat p50 / xRT | trump xlong c=8 lat p50 / xRT | stream xlong c=8 TTFA p50 s |
+|---|---|---|---|---|---|---|
+| G0 no split, no retries | 12.96 | 16.20 / 13.4 | 11.05 / 2.5 (truncated audio) | 13.39 / 10.1 (truncated) | 15.67 / 14.4 | 1.35 |
+| G1 split at 60 words | 9.60 | 15.26 / 17.2 | 11.03 / 7.7 | 22.12 / 25.9 | 13.13 / 21.4 | 1.19 |
+| G2 split + 1 retry on pace / engine error | 9.38 | 15.06 / 19.9 | 10.93 / 7.5 | 23.43 / 25.7 | 13.21 / 21.6 | 1.21 |
+
+| arm | shehbaz xlong: WER / bad | shehbaz xxlong: WER / bad | trump xlong: WER / bad | shehbaz xlong stream: WER / bad |
+|---|---|---|---|---|
+| G0 | 0.275 / 70.8 % (24) | 0.784 / 100 % (24) | 0.039 / 43.8 % (16) | 0.083 / 31.2 % (16) |
+| G1 | 0.071 / 25.0 % | 0.093 / 45.8 % | 0.003 / 0 % | 0.036 / 0 % |
+| G2 | 0.036 / 0 % | 0.036 / 4.2 % | 0.004 / 6.2 % | 0.030 / 0 % |
+
+- Splitting turns the ~200-word texts from unusable (every take stops at 15-20 s) into 83 s takes at the calibrated
+  pace, and makes long texts *faster*: the parts run in parallel on free engine slots, so a 200-word Urdu text takes
+  11 s at c=1 (7.5 x realtime from a single request) and a 100-word one 9.4 s instead of 13.
+- Splitting alone still leaves some parts with dropped words and adds `word_gap` flags at part joins (G1: word_gap 8,
+  del_run 8 on xxlong); with one retry on pace-suspect takes G2 reaches WER 0.036 on both lengths with 0-4 % bad,
+  the same quality as single 25 s texts (B0 long: WER 0.052, 6.6 % bad). Retries were rare (1 in 16 xxlong c=8
+  requests), so most of the G1 -> G2 gap is text-window noise; the split-vs-unsplit gap is not.
+- The gateway's overhead is invisible next to the engine (G0 xlong c=1 12.96 s vs 13.45 s engine direct in B0).
+- The gateway registered both voices with the Higgs engine through `POST /v1/audio/voices` at start-up and served
+  them by name; streaming through the gateway kept TTFA at the engine's level (1.2-1.35 s at c=8).

@@ -1,0 +1,476 @@
+{
+ "results": "higgs/results/G_gateway",
+ "by": [
+  "tag",
+  "voice",
+  "size",
+  "stream"
+ ],
+ "groups": [
+  {
+   "key": {
+    "tag": "G0",
+    "voice": "shehbaz",
+    "size": "xlong",
+    "stream": "nonstream"
+   },
+   "takes": 24,
+   "audio_s": 728.5600000000001,
+   "wer": 0.2745708333333333,
+   "cer_nospace": 0.24697916666666667,
+   "sim_large": 0.7836958333333334,
+   "sim_base": 0.9360791666666667,
+   "pace_ratio": 0.8490416666666667,
+   "gate_fail": [
+    0.6666666666666666,
+    0.4670595949408046,
+    0.8202802131162036
+   ],
+   "bad": [
+    0.7083333333333334,
+    0.508319363412903,
+    0.8508553966583573
+   ],
+   "top_reasons": [
+    [
+     "del_run",
+     16
+    ],
+    [
+     "char_ratio",
+     11
+    ],
+    [
+     "cer_nospace",
+     7
+    ],
+    [
+     "pace",
+     3
+    ]
+   ]
+  },
+  {
+   "key": {
+    "tag": "G0",
+    "voice": "shehbaz",
+    "size": "xlong",
+    "stream": "stream"
+   },
+   "takes": 16,
+   "audio_s": 550.72,
+   "wer": 0.08299375,
+   "cer_nospace": 0.0647375,
+   "sim_large": 0.86116875,
+   "sim_base": 0.97870625,
+   "pace_ratio": 0.9629375,
+   "gate_fail": [
+    0.1875,
+    0.06591478773586765,
+    0.4300935986845823
+   ],
+   "bad": [
+    0.3125,
+    0.14164435051961052,
+    0.5559606813326594
+   ],
+   "top_reasons": [
+    [
+     "del_run",
+     5
+    ],
+    [
+     "char_ratio",
+     3
+    ],
+    [
+     "pace",
+     1
+    ],
+    [
+     "cer_nospace",
+     1
+    ]
+   ]
+  },
+  {
+   "key": {
+    "tag": "G0",
+    "voice": "shehbaz",
+    "size": "xxlong",
+    "stream": "nonstream"
+   },
+   "takes": 24,
+   "audio_s": 528.9599999999999,
+   "wer": 0.7843,
+   "cer_nospace": 0.7654791666666667,
+   "sim_large": 0.8494125,
+   "sim_base": 0.9800708333333333,
+   "pace_ratio": 0.309125,
+   "gate_fail": [
+    1.0,
+    0.8620194241710247,
+    1.0
+   ],
+   "bad": [
+    1.0,
+    0.8620194241710247,
+    1.0
+   ],
+   "top_reasons": [
+    [
+     "pace",
+     24
+    ],
+    [
+     "cer_nospace",
+     24
+    ],
+    [
+     "char_ratio",
+     24
+    ],
+    [
+     "del_run",
+     24
+    ]
+   ]
+  },
+  {
+   "key": {
+    "tag": "G0",
+    "voice": "trump",
+    "size": "xlong",
+    "stream": "nonstream"
+   },
+   "takes": 16,
+   "audio_s": 506.68,
+   "wer": 0.03854375,
+   "cer_nospace": 0.0403125,
+   "sim_large": 0.82175625,
+   "sim_base": 0.97795,
+   "pace_ratio": 0.9840625,
+   "gate_fail": [
+    0.4375,
+    0.2309836333518552,
+    0.6682180439322347
+   ],
+   "bad": [
+    0.4375,
+    0.2309836333518552,
+    0.6682180439322347
+   ],
+   "top_reasons": [
+    [
+     "del_run",
+     7
+    ],
+    [
+     "wer",
+     3
+    ],
+    [
+     "char_ratio",
+     2
+    ],
+    [
+     "repeat_excess",
+     1
+    ]
+   ]
+  },
+  {
+   "key": {
+    "tag": "G1",
+    "voice": "shehbaz",
+    "size": "xlong",
+    "stream": "nonstream"
+   },
+   "takes": 24,
+   "audio_s": 1044.6800000000003,
+   "wer": 0.07107916666666667,
+   "cer_nospace": 0.04293333333333334,
+   "sim_large": 0.8679666666666667,
+   "sim_base": 0.9779375,
+   "pace_ratio": 1.2172083333333332,
+   "gate_fail": [
+    0.25,
+    0.1199920347934233,
+    0.4489982531210644
+   ],
+   "bad": [
+    0.25,
+    0.1199920347934233,
+    0.4489982531210644
+   ],
+   "top_reasons": [
+    [
+     "word_gap",
+     5
+    ],
+    [
+     "del_run",
+     4
+    ],
+    [
+     "char_ratio",
+     3
+    ],
+    [
+     "pace",
+     2
+    ]
+   ]
+  },
+  {
+   "key": {
+    "tag": "G1",
+    "voice": "shehbaz",
+    "size": "xlong",
+    "stream": "stream"
+   },
+   "takes": 16,
+   "audio_s": 664.2399999999999,
+   "wer": 0.03621875,
+   "cer_nospace": 0.0118375,
+   "sim_large": 0.8788125,
+   "sim_base": 0.98589375,
+   "pace_ratio": 1.156875,
+   "gate_fail": [
+    0.0,
+    0.0,
+    0.19361341827271994
+   ],
+   "bad": [
+    0.0,
+    0.0,
+    0.19361341827271994
+   ],
+   "top_reasons": []
+  },
+  {
+   "key": {
+    "tag": "G1",
+    "voice": "shehbaz",
+    "size": "xxlong",
+    "stream": "nonstream"
+   },
+   "takes": 24,
+   "audio_s": 2029.9599999999998,
+   "wer": 0.09304583333333333,
+   "cer_nospace": 0.0657625,
+   "sim_large": 0.8868791666666667,
+   "sim_base": 0.9858708333333334,
+   "pace_ratio": 1.176375,
+   "gate_fail": [
+    0.4166666666666667,
+    0.24467347246538232,
+    0.6116566235061137
+   ],
+   "bad": [
+    0.4583333333333333,
+    0.2789105835168143,
+    0.6492544644689336
+   ],
+   "top_reasons": [
+    [
+     "word_gap",
+     8
+    ],
+    [
+     "del_run",
+     8
+    ],
+    [
+     "char_ratio",
+     4
+    ],
+    [
+     "lead_sil",
+     1
+    ]
+   ]
+  },
+  {
+   "key": {
+    "tag": "G1",
+    "voice": "trump",
+    "size": "xlong",
+    "stream": "nonstream"
+   },
+   "takes": 16,
+   "audio_s": 634.28,
+   "wer": 0.00308125,
+   "cer_nospace": 0.00215625,
+   "sim_large": 0.8677625,
+   "sim_base": 0.98808125,
+   "pace_ratio": 1.2310625,
+   "gate_fail": [
+    0.0,
+    0.0,
+    0.19361341827271994
+   ],
+   "bad": [
+    0.0,
+    0.0,
+    0.19361341827271994
+   ],
+   "top_reasons": []
+  },
+  {
+   "key": {
+    "tag": "G2",
+    "voice": "shehbaz",
+    "size": "xlong",
+    "stream": "nonstream"
+   },
+   "takes": 24,
+   "audio_s": 997.36,
+   "wer": 0.03550416666666667,
+   "cer_nospace": 0.010141666666666667,
+   "sim_large": 0.8807791666666667,
+   "sim_base": 0.9862333333333333,
+   "pace_ratio": 1.1610833333333332,
+   "gate_fail": [
+    0.0,
+    0.0,
+    0.13798057582897535
+   ],
+   "bad": [
+    0.0,
+    0.0,
+    0.13798057582897535
+   ],
+   "top_reasons": []
+  },
+  {
+   "key": {
+    "tag": "G2",
+    "voice": "shehbaz",
+    "size": "xlong",
+    "stream": "stream"
+   },
+   "takes": 16,
+   "audio_s": 649.32,
+   "wer": 0.030137499999999998,
+   "cer_nospace": 0.00996875,
+   "sim_large": 0.883525,
+   "sim_base": 0.98568125,
+   "pace_ratio": 1.1295625,
+   "gate_fail": [
+    0.0,
+    0.0,
+    0.19361341827271994
+   ],
+   "bad": [
+    0.0,
+    0.0,
+    0.19361341827271994
+   ],
+   "top_reasons": []
+  },
+  {
+   "key": {
+    "tag": "G2",
+    "voice": "shehbaz",
+    "size": "xxlong",
+    "stream": "nonstream"
+   },
+   "takes": 24,
+   "audio_s": 2019.48,
+   "wer": 0.0358,
+   "cer_nospace": 0.010975,
+   "sim_large": 0.895075,
+   "sim_base": 0.9889458333333333,
+   "pace_ratio": 1.1721666666666666,
+   "gate_fail": [
+    0.0,
+    0.0,
+    0.13798057582897535
+   ],
+   "bad": [
+    0.041666666666666664,
+    0.007393265354805126,
+    0.20242226248842232
+   ],
+   "top_reasons": [
+    [
+     "del_run",
+     1
+    ],
+    [
+     "word_gap",
+     1
+    ]
+   ]
+  },
+  {
+   "key": {
+    "tag": "G2",
+    "voice": "trump",
+    "size": "xlong",
+    "stream": "nonstream"
+   },
+   "takes": 16,
+   "audio_s": 629.5200000000001,
+   "wer": 0.00355625,
+   "cer_nospace": 0.00215625,
+   "sim_large": 0.8696,
+   "sim_base": 0.987275,
+   "pace_ratio": 1.2215625,
+   "gate_fail": [
+    0.0,
+    0.0,
+    0.19361341827271994
+   ],
+   "bad": [
+    0.0625,
+    0.01111905730833121,
+    0.2832926836802987
+   ],
+   "top_reasons": [
+    [
+     "unaligned_tail",
+     1
+    ]
+   ]
+  }
+ ],
+ "all": {
+  "takes": 240,
+  "audio_s": 10983.759999999995,
+  "wer": 0.14239875,
+  "cer_nospace": 0.12297166666666666,
+  "sim_large": 0.8618891666666667,
+  "sim_base": 0.97908625,
+  "pace_ratio": 1.0342375,
+  "gate_fail": [
+   0.275,
+   0.22238768826588753,
+   0.33470183214408356
+  ],
+  "bad": [
+   0.3,
+   0.24554559424634673,
+   0.36075620167362743
+  ],
+  "top_reasons": [
+   [
+    "del_run",
+    65
+   ],
+   [
+    "char_ratio",
+    47
+   ],
+   [
+    "cer_nospace",
+    33
+   ],
+   [
+    "pace",
+    30
+   ]
+  ]
+ }
+}

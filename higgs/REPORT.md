@@ -1,9 +1,9 @@
 # Higgs TTS 3 on one RTX 3090: baseline benchmark and comparison with Qwen3-TTS
 
-Status: **baseline complete** (2026-09-28 18:23-18:51 PKT, scored 19:01). The screen of engine profiles, the quality
-runs on the 43 benchmark prompts, sentence-splitting for long texts and the gateway integration follow; this file is
-updated as they land (`docs/EXPERIMENTS.md` has every run). All numbers below are from `results/B0_baseline_flash_attn/`
-(`COMPARE.md`, `QUALITY.md`, per run `summary.json`, per take `requests.jsonl` and `scores.jsonl`).
+Status: complete for this round (2026-09-28): baseline (B0), engine-profile screens (S1, S2), the 43-prompt quality
+arms (Q1-Q4) and the gateway arms (G0-G2); 2,048 scored takes, 15 h of audio, 0 HTTP errors. `docs/EXPERIMENTS.md`
+has every run; numbers come from `results/<experiment>/` (`COMPARE.md`, `QUALITY.md`, `ARMS.md`, per run
+`summary.json`, per take `requests.jsonl` and `scores.jsonl`).
 
 ## 1. Summary
 
@@ -26,7 +26,9 @@ updated as they land (`docs/EXPERIMENTS.md` has every run). All numbers below ar
   does not support), and the speaker similarity is higher (WavLM-Large 0.84-0.86 vs 0.70-0.79). English is at 0-1 %
   WER. **But Higgs drops text from long inputs:** at ~98 words (~30 s of speech) 43 % of Urdu takes and 67 % of English
   takes lose whole passages (deletion runs, WER 6-16 %), and at ~200 words every take stops after 15-20 s of audio.
-  Long texts must be split into ≤ ~60-word parts (the gateway already does this for Qwen, `TTS_SPLIT_WORDS`).
+  **The gateway fixes it:** split at sentence ends into ≤ 60-word parts generated in parallel, plus one retry on
+  pace-suspect takes, and the same texts come out at WER 3.6 % with 0 % (100 words) / 4 % (200 words) bad takes,
+  faster than unsplit (a 200-word Urdu text in 11 s at c=1) (§4.2).
 - **Failures per take on ≤ 65-word texts:** Urdu 1-8 % `bad` (medium 1.4 %, long 6-8 %; short sentences 19 % but that
   is mostly the pace detector on 3 s clips, see §4), 0 errors, 2 runaways in 648 takes (a 10-word sentence that ran
   63 s, a ~30 s text that hit the 82 s cap).
@@ -102,6 +104,41 @@ TTFA grows almost linearly with the number of requests in flight (each new reque
 reference + text waits behind the running decodes; the eager talker has no decode graph). English (`trump`): short
 c=1 1.68 s p50, xlong c=1 12.2 s, c=8 15.7 s (14.6x realtime); streaming TTFA 0.31 s at c=1, 0.9-1.0 s at c=8.
 
+### 3.1 Engine profiles (S1, S2)
+
+The upstream Higgs profiles offer two talker graph paths, mutually exclusive: the default keeps the talker eager with
+Higgs' own local MLP CUDA graph; the "low latency" profile captures vLLM FULL_DECODE_ONLY graphs. On this stack the
+second fails at capture (`cudaErrorStreamCaptureUnsupported`, S1a), and vLLM's PIECEWISE graphs (S1, `piecewise.yaml`)
+are slower than eager, because they switch the local MLP graph off without replacing it (torch.compile is disabled
+by the model's config):
+
+| shehbaz, non-streaming | eager (B0) lat p50 s / xRT | piecewise (S1) lat p50 s / xRT |
+|---|---|---|
+| short c=1 / c=16 | 2.53 / 2.5, 4.35 / 12.0 | 3.50 / 1.5, 6.01 / 10.2 |
+| long c=1 / c=16 | 9.75 / 2.6, 18.17 / 19.4 | 15.65 / 1.6, 21.23 / 17.4 |
+
+So the eager talker is the fastest Higgs talker available here, and its per-step cost sets the c=1 speed (RTF 0.4).
+
+The default profile reserves 60 % of the card for the talker (KV cache 44,928 tokens) and 25 % for the codec decoder,
+which only uses 0.7 GB. `mem080_seqs32.yaml` moves the split to 0.80 / 0.08 (KV 79,232 tokens) and allows 32
+requests in flight (S2, `results/S2_mem080_seqs32`):
+
+| shehbaz | c | lat p50 / p90 / p99 s | xRT | req/s | suspects | GPU peak MiB | Qwen at the same c |
+|---|---|---|---|---|---|---|---|
+| short | 16 | 4.57 / 6.97 / 16.6 | 13.4 | 1.43 | 2 | 23,090 | 17.8 |
+| short | 32 | 7.18 / 11.50 / 13.2 | 16.2 | 3.44 | 5 | 23,211 | 21.4 |
+| long | 16 | 17.73 / 21.00 / 22.9 | 19.6 | 0.84 | 0 | 23,386 | 26.0 |
+| long | 32 | 22.34 / 24.83 / 26.6 | 31.4 | 1.27 | 0 | 23,388 | 31.8 |
+| xlong | 16 | 23.23 / 27.66 / 33.8 | 19.5 | 0.58 | 0 | 23,522 | 26.1 |
+| xlong | 32 | 31.02 / 34.91 / 41.8 | 28.8 | 0.78 | 5 | 23,524 | 33.3 |
+| xlong stream | 16 / 32 | TTFA p50 2.55 / 1.98 s | 19.4 / 30.3 | | 0 / 4 | | TTFA 1.25 / 2.53 |
+| trump xlong | 32 | 26.42 / 30.14 / 32.4 | 31.6 | 1.11 | 1 | 23,504 | 33.9 |
+
+At 32 in flight Higgs matches Qwen's throughput on 25 s texts (31 x realtime) and reaches 29-32 x on 30 s texts, at
+22-31 s p50 latency and with the card full (23.5 GB peak, desktop included): 32 is this GPU's ceiling for Higgs.
+Between c=16 and c=32 latency grows 25-55 % while throughput grows 45-60 %, so c=16 (19-20 x, 18-23 s p50 on long
+texts) is the better production point unless queue depth matters more than latency.
+
 ## 4. Quality (`results/B0_baseline_flash_attn/QUALITY.md`)
 
 | voice | size | takes | WER | CER-ns | SIM-L | SIM-B | pace | gate fail | bad | leading bad reasons |
@@ -140,6 +177,52 @@ What the failures are:
 - **Pauses / silence:** `pause > 2 s` inside a take on 3 long takes; no leading-silence, no wrong-voice takes
   (SIM-L never below 0.5; the wrong-voice case Qwen showed at ~1 % did not occur).
 
+### 4.1 The 43 benchmark prompts: sampling, reference clip, control tags (Q1-Q4, `results/Q_prompts`)
+
+Two takes per prompt at c=8 (86 takes per arm), the same texts the Qwen benchmark used (Urdu 71-130 words, English
+91-160 words), scored the same way. Speed was identical across arms (14.3-15.4 x realtime, lat p50 15-18 s).
+
+| arm | voice | WER | CER-ns | SIM-L | pace | bad takes (95 % CI) | what fails |
+|---|---|---|---|---|---|---|---|
+| Q1 temperature 0.8 / top_k 50, Qwen clip (the baseline config) | shehbaz | 0.146 | 0.114 | 0.85 | 0.96 | 38.4 % [29, 49] | deletion runs, short transcripts |
+| Q1 | trump | 0.088 | 0.082 | 0.83 | 0.96 | 66.3 % [56, 75] | deletion runs |
+| Q2 temperature 1.0 / top_p 0.95 / top_k 50 (upstream default) | shehbaz | 0.232 | 0.195 | 0.86 | 0.86 | 55.8 % [45, 66] | more deletions, faster pace |
+| Q3 the 25 s Higgs-style reference (`higgs-v3-25s`) | shehbaz | 0.166 | 0.135 | 0.86 | 0.96 | 51.2 % [41, 61] | deletions |
+| Q4 expressive set, plain text | shehbaz | 0.193 | 0.162 | 0.86 | 0.90 | 46.5 % [36, 57] | deletions |
+| Q4 expressive set, the 43 control tags in the text | shehbaz | (re-scored against the plain words; see `docs/EXPERIMENTS.md`) | | | | | |
+
+- **Failure is a function of text length.** Q1 Urdu: <= 90 words 14 % bad, 91-110 words 41 %, > 110 words 100 %;
+  English: 91-110 words 57 %, 111-130 69 %, > 130 100 %. Bad takes are shorter than good ones (median 30 s vs 35 s)
+  with a fifth of the text missing (char ratio 0.81): the model ends early rather than looping. Of the 43 Urdu
+  prompts, 9 failed both takes, 15 one take, 19 neither, so one retry recovers ~60 % of the failures at this length;
+  keeping parts under ~60 words (1-7 % bad in the baseline) removes most of them (§4.2).
+- **Sampling:** Boson's 0.8 / 50 beats upstream's 1.0 / 0.95 by 17 points of bad rate and 9 points of WER; the hotter
+  sampling drops more text. Kept.
+- **Reference clip:** the Qwen benchmark's 28 s clip (three shehbaz clips) beats the livelier 25 s Higgs-style clip
+  by 13 points at equal speaker similarity, so the Kaggle finding that the livelier reference wins does not carry over
+  here. Kept `qwen3-tts`.
+- **Control tags** (`<|emotion:...|>`, `<|prosody:...|>`, `<|style:...|>`, `<|sfx:...|>` in the text): the tagged
+  texts come out as the plain words, transcribed like the plain arm, so tags do not break Urdu speech on this engine;
+  whether the requested emotion or style is audible needs listening (`samples/` will carry a pair).
+
+### 4.2 Long texts through the gateway: splitting and retries (G0-G2, `results/G_gateway`)
+
+The repo's gateway in front of the Higgs engine (`engine/run_gateway.sh`; voices registered once, Higgs pace
+calibration, caps at 25 fps), three arms on the ~100-word (xlong) and ~200-word (xxlong) texts, c=1 and c=8, 240
+takes. The arms drew different texts from the pools, so differences of a few takes between G1 and G2 are noise; the
+unsplit-vs-split contrast is not.
+
+| arm | Urdu 100 words: WER / bad | Urdu 200 words: WER / bad | English 155 words: WER / bad | Urdu 100 w c=1 lat p50 | Urdu 200 w c=1 lat / xRT | Urdu 200 w c=8 lat / xRT |
+|---|---|---|---|---|---|---|
+| G0 as is (no split, no retry) | 0.275 / 71 % | 0.784 / 100 % (stops at 15-20 s) | 0.039 / 44 % | 12.96 s | 11.05 s / 2.5 (truncated) | 13.39 s / 10.1 (truncated) |
+| G1 split at 60 words | 0.071 / 25 % | 0.093 / 46 % | 0.003 / 0 % | 9.60 s | 11.03 s / 7.7 | 22.12 s / 25.9 |
+| G2 split + 1 retry on pace-suspect / engine-error takes | **0.036 / 0 %** | **0.036 / 4 %** | 0.004 / 6 % | 9.38 s | 10.93 s / 7.5 | 23.43 s / 25.7 |
+
+Splitting makes long texts both correct and faster (the parts run in parallel on free slots: a 200-word text is one
+request of 11 s at c=1, 7.5 x realtime); the retry cleans up the parts that still drop words (1 retry in 16 requests
+at c=8). Streaming through the gateway (xlong c=8): TTFA 1.19-1.35 s, WER 0.030-0.036, 0 % bad with splitting. The
+gateway's own overhead is not measurable next to the engine (12.96 s vs 13.45 s engine direct at c=1).
+
 ## 5. Against Qwen3-TTS: what the numbers say
 
 | | Higgs TTS 3 (4B) | Qwen3-TTS 1.7B-Base | note |
@@ -147,7 +230,7 @@ What the failures are:
 | Urdu intelligibility (WER, Whisper) | **1-6 %** on ≤ 65 words | 34-38 % | Urdu is a supported, "production-quality" language for Higgs; unsupported for Qwen |
 | speaker similarity (WavLM-L / base) | **0.84-0.86 / 0.98** | 0.70-0.79 / 0.96-0.98 | both recognisably the speaker |
 | English WER | 0-1 % | 0.3-1.5 % | equal |
-| long inputs (≥ ~100 words) | drops passages; stops at ~15-20 s for ~200 words | 15.5 % / 93 % severe failures without `non_streaming_mode` | both need splitting |
+| long inputs (≥ ~100 words) | drops passages; stops at ~15-20 s for ~200 words; **0-4 % bad, WER 0.036 through the gateway (split 60 + retry)** | 15.5 % / 93 % severe failures without `non_streaming_mode`; 7.7 % / 12 % with it and splitting | both need splitting; Higgs ends up far cleaner |
 | per-request speed at c=1 | RTF 0.40 (2.5x) | RTF 0.19 (5x) | Higgs ~2x slower |
 | throughput at c=16 / max | 12-20x / (max_num_seqs 16) | 18-26x / 31-35x at c=32-64 | Higgs ~75 % of Qwen at c=16 |
 | streaming TTFA at c=1 / c=8 | 0.34 s / 1.1-1.3 s | 0.12 s / 0.4-0.7 s | |
@@ -155,7 +238,27 @@ What the failures are:
 | engine issues on this box | FlashInfer JIT, PR #7065 needed, no FULL_DECODE CUDA graphs (capture fails) | FlashInfer sampler JIT | |
 | licence | research / non-commercial | Apache-2.0 | production use of Higgs needs Boson's commercial licence |
 
-## 6. Caveats
+## 6. Recommended configuration for Higgs TTS 3 on this card (benchmark use)
+
+Everything below is what the measurements picked; the licence still decides whether it can be served at all.
+
+| knob | choice | evidence |
+|---|---|---|
+| engine | vLLM-Omni 0.28.0 + `engine/patches/apply_pr7065.sh`, `engine/deploy/mem080_seqs32.yaml` (FLASH_ATTN, eager talker with its local MLP graph, stage-0 memory 0.80 = 79k-token KV cache, stage-1 0.08, `max_num_seqs` 32) | FlashInfer JIT fails here (H01); FULL_DECODE graphs fail to capture (S1a); piecewise graphs are slower (S1); the codec decoder uses 0.7 GB of its 25 % reservation (H02); 32 in flight needs the bigger KV (S2) |
+| concurrency | 16 in flight for latency (18-23 s p50 on 25-30 s texts, 19-20 x realtime), 32 for throughput (29-32 x, 22-31 s p50); never more (the card is full at 32) | S2 |
+| sampling | temperature 0.8, top_k 50, top_p 1.0, no fixed seed | Q2: 1.0 / 0.95 drops more text (+17 points bad, +9 WER points) |
+| reference | the 28 s three-clip `references/qwen3-tts.wav` + transcript, registered once with the engine | Q3: the livelier 25 s clip loses 13 points; 1-30 s is the engine's limit |
+| text length | split at sentence ends into parts of <= 60 words, generated in parallel and joined (`TTS_SPLIT_WORDS=60`) | baseline: 1-7 % bad up to ~65 words vs 41-100 % beyond 90; G1/G2: ~100- and ~200-word texts at WER 0.04-0.09, faster than unsplit |
+| guardrail and retries | the gateway's pace band (0.6-1.8 x of `higgs/calibration/pace.json`: 0.122 s/letter shehbaz, 0.081 trump) and `max_new_tokens` from the text at 25 fps; 1 retry on pace-suspect takes and engine errors (`TTS_RETRY_MAX=1`) | G2: WER 0.036, 0-4 % bad on 100-200-word Urdu texts; Q1: a second take recovers ~60 % of failed prompts; runaways 0.3 % of takes (B0) |
+| streaming | `stream_format: audio`, WAV or PCM; expect TTFA 0.34 s alone, ~1.2 s at 8 in flight, ~2 s at 16-32 | B0, S2, G1 |
+| language field | none (Higgs detects Urdu / English itself); `task_type` none | engine source (`docs/research.md`) |
+
+Against Qwen3-TTS with its production configuration (§5): Higgs is the better *Urdu* engine by a wide margin
+(WER 3-6 % vs 34-38 % on paragraph-length texts, higher speaker similarity) at about half the per-request speed, the
+same throughput at 32 in flight, 2-3 x the streaming start latency, and a licence that requires a commercial
+agreement for production.
+
+## 7. Caveats
 
 - One card shared with the desktop; Higgs ran alone on the GPU (the Qwen units were stopped). Bench, engine and desktop
   share the CPU.
@@ -166,13 +269,14 @@ What the failures are:
 - Pace calibration is Qwen's; the short-text `bad` rate for Higgs is inflated by it (§4).
 - Reference clips are the Qwen benchmark's 23-28 s clips (the engine limit is 30 s). Boson recommends supplying the
   transcript, which was done. A shorter, livelier reference is a pending A/B.
-- The 43 benchmark prompts per voice (`--size prompts`) were not yet run as a quality set with repeated takes; the
-  xlong rows use the same texts once each.
+- The gateway arms drew different text windows from the pools; their per-arm rates rest on 16-24 takes each.
+- Control tags were measured only by ASR / similarity (they cost quality on this engine); whether they render the
+  intended emotion or style was not judged by listening.
 - Whisper's Urdu WER floor on real speech is ~12 % for this speaker; the 1-6 % measured on Higgs takes means Whisper
   finds the clone *easier* to transcribe than the real recordings (clean studio-like output), not that it is
   indistinguishable from the speaker.
 
-## 7. Reproduce
+## 8. Reproduce
 
 ```bash
 hf download bosonai/higgs-tts-3-4b && hf download k2-fsa/OmniVoice --include "audio_tokenizer/*"

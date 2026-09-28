@@ -18,6 +18,10 @@ python bench/bench_tts.py --voice shehbaz --size prompts --takes 6 -c 16 \
     --extra-param repetition_penalty=1.15 --max-new-tokens auto            # 43 prompts x 6 takes
 python bench/bench_tts.py --voice trump shehbaz --mix --size xlong -n 16 -c 16   # both voices in one batch
 python bench/bench_tts.py --voice shehbaz --pools bench/pools/auralis_ur.json --size short medium long -n 20 -c 20
+# Higgs TTS 3 (vLLM-Omni, higgs/): no task_type / language, 25 fps caps, which references.json entry is the clip
+python bench/bench_tts.py --url http://127.0.0.1:8095 --task-type none --language none --ref-key qwen3-tts \
+    --codec-hz 25 --engine-label "Higgs TTS 3" --pace-file higgs/calibration/pace.json --voice shehbaz --size long -c 8
+python bench/bench_tts.py ... --size prompts --prompts-file benchmarks/shehbaz_ur_expressive.json --prompt-field higgs_text
 python bench/bench_tts.py --voice shehbaz --size xxlong --sweep 1,8 --estimate   # requests + audio seconds, sends nothing
 ```
 

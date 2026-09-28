@@ -64,3 +64,12 @@ transcript, metrics and source take are in [`samples.json`](samples.json).
 | [worst/trump_30s_02.wav](worst/trump_30s_02.wav) | trump | 26.4 s | 0.87 / 0.990 | WER 0.200 | 0.80 | wer>0.1, char_ratio<0.88, del_run>=3 | They told me it couldn't be done. They said, you'll never build a golf course on that land, it's too rocky, to… |
 | [worst/trump_30s_03.wav](worst/trump_30s_03.wav) | trump | 30.9 s | 0.65 / 0.943 | WER 0.085 | 0.95 | del_run>=3 | We did it! We won! Eighteenth hole, the whole club watching, I'm down by one stroke, and I hit the most beauti… |
 | [worst/trump_30s_04.wav](worst/trump_30s_04.wav) | trump | 30.1 s | 0.84 / 0.991 | WER 0.057 | 0.99 | ins_run>=3 | I have to admit something, and it's not easy for me. I don't admit things very often. Last week, I was playing… |
+
+## tags
+
+The same expressive-set prompts spoken from the plain text and from the text with Higgs control tags (`benchmarks/shehbaz_ur_expressive.json`, `higgs_text`): listen for whether the tag (shouting, whispering, sadness, laughter, slow, elation) is rendered. Both are AI-generated clones.
+
+| pair | plain | with tags | tags used |
+|---|---|---|---|
+| 34_style-whispering | [tags/34_style-whispering_plain.wav](tags/34_style-whispering_plain.wav) (33 s) | [tags/34_style-whispering_tags.wav](tags/34_style-whispering_tags.wav) (36 s) | <|style:whispering|> |
+| 36_sfx-laughter | [tags/36_sfx-laughter_plain.wav](tags/36_sfx-laughter_plain.wav) (23 s) | [tags/36_sfx-laughter_tags.wav](tags/36_sfx-laughter_tags.wav) (29 s) | <|emotion:amusement|> <|prosody:expressive_high|> <|sfx:laughter|> |

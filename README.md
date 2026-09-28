@@ -30,6 +30,13 @@ server/results/                 every benchmark run's numbers; the final server 
 engine + OpenAI-compatible gateway + quality checks + systemd units), with its benchmark report in
 [`server/REPORT.md`](server/REPORT.md) and an experiment log in [`server/docs/EXPERIMENTS.md`](server/docs/EXPERIMENTS.md).
 
+## Benchmarks of both engines on one RTX 3090
+
+- [`server/`](server/): the Qwen3-TTS voice-clone server (vLLM-Omni + gateway) and its benchmark: [`server/REPORT.md`](server/REPORT.md).
+- [`higgs/`](higgs/): Higgs TTS 3 on the same engine stack, benchmarked with the same voices, texts and tool:
+  [`higgs/REPORT.md`](higgs/REPORT.md) (research / non-commercial licence: a candidate, not a deployment).
+- [`samples/`](samples/): labelled AI-generated sample takes of each engine (`qwen3-tts/` FLAC, `higgs-tts-3/` WAV).
+
 ## Which reference to use
 
 | file | for | what it is |

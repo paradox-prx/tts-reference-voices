@@ -1,2 +1,7 @@
 quality runs started 2026-09-28T19:21:39+05:00 url=http://127.0.0.1:8095 takes=2
 == bench --tag Q1_t08 --voice shehbaz trump --ref-key qwen3-tts
+== bench --tag Q2_t10 --voice shehbaz --ref-key qwen3-tts --extra-param temperature=1.0 --extra-param top_p=0.95
+== bench --tag Q3_ref25 --voice shehbaz --ref-key higgs-v3-25s
+== bench --tag Q4_expr_plain --voice shehbaz --ref-key qwen3-tts --prompts-file /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/benchmarks/shehbaz_ur_expressive.json
+== bench --tag Q4_expr_tags --voice shehbaz --ref-key qwen3-tts --prompts-file /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/benchmarks/shehbaz_ur_expressive.json --prompt-field higgs_text
+quality runs finished 2026-09-28T19:40:35+05:00

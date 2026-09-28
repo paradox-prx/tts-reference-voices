@@ -632,5 +632,69 @@
    "run": "B0_baseline_flash_attn",
    "file": "en_st_trump_xlong_c8_n16_stream_inline/audio/011.wav"
   }
+ },
+ {
+  "file": "tags/34_style-whispering_plain.wav",
+  "voice": "shehbaz",
+  "lang": "ur",
+  "size": "prompts",
+  "audio_s": 33.16,
+  "text": "ذرا قریب آئیں، ایک راز کی بات بتاتا ہوں۔ کسی کو بتانا نہیں۔ اس پورے دفتر میں سب سے اچھی چائے کون بناتا ہے؟ کوئی بڑا خانساماں نہیں۔ ہمارے پرانے چپڑاسی، بشیر صاحب۔ وہ چائے میں تھوڑی سی الائچی ڈالتے ہیں، اور دودھ کو خوب پکاتے ہیں۔ میں روز شام کو چپکے سے ان سے ایک کپ منگواتا ہوں۔ اگر یہ بات باہر نکل گئی نا، تو سارے افسر ان کے کمرے کے باہر قطار لگا لیں گے، اور میری چائے کی باری ہی نہیں آئے گی۔ تو بس، یہ بات ہمارے درمیان رہے۔ ٹھیک ہے؟",
+  "text_tagged": null,
+  "pace_ratio": 0.847,
+  "source": {
+   "results": "Q_prompts",
+   "run": "Q4_expr_plain_shehbaz_prompts_c8_n43_k2_nonstream_inline",
+   "file": "audio/033_t0.wav"
+  },
+  "note": "control-tag pair, plain"
+ },
+ {
+  "file": "tags/34_style-whispering_tags.wav",
+  "voice": "shehbaz",
+  "lang": "ur",
+  "size": "prompts",
+  "audio_s": 35.64,
+  "text": "ذرا قریب آئیں، ایک راز کی بات بتاتا ہوں۔ کسی کو بتانا نہیں۔ اس پورے دفتر میں سب سے اچھی چائے کون بناتا ہے؟ کوئی بڑا خانساماں نہیں۔ ہمارے پرانے چپڑاسی، بشیر صاحب۔ وہ چائے میں تھوڑی سی الائچی ڈالتے ہیں، اور دودھ کو خوب پکاتے ہیں۔ میں روز شام کو چپکے سے ان سے ایک کپ منگواتا ہوں۔ اگر یہ بات باہر نکل گئی نا، تو سارے افسر ان کے کمرے کے باہر قطار لگا لیں گے، اور میری چائے کی باری ہی نہیں آئے گی۔ تو بس، یہ بات ہمارے درمیان رہے۔ ٹھیک ہے؟",
+  "text_tagged": "<|style:whispering|>ذرا قریب آئیں، ایک راز کی بات بتاتا ہوں۔ <|style:whispering|>کسی کو بتانا نہیں۔ <|style:whispering|>اس پورے دفتر میں سب سے اچھی چائے کون بناتا ہے؟ <|style:whispering|>کوئی بڑا خانساماں نہیں۔ <|style:whispering|>ہمارے پرانے چپڑاسی، بشیر صاحب۔ <|style:whispering|>وہ چائے میں تھوڑی سی الائچی ڈالتے ہیں، اور دودھ کو خوب پکاتے ہیں۔ <|style:whispering|>میں روز شام کو چپکے سے ان سے ایک کپ منگواتا ہوں۔ <|style:whispering|>اگر یہ بات باہر نکل گئی نا، تو سارے افسر ان کے کمرے کے باہر قطار لگا لیں گے، اور میری چائے کی باری ہی نہیں آئے گی۔ <|style:whispering|>تو بس، یہ بات ہمارے درمیان رہے۔ <|style:whispering|>ٹھیک ہے؟",
+  "pace_ratio": 0.911,
+  "source": {
+   "results": "Q_prompts",
+   "run": "Q4_expr_tags_shehbaz_prompts_c8_n43_k2_nonstream_inline",
+   "file": "audio/033_t0.wav"
+  },
+  "note": "control-tag pair, tags"
+ },
+ {
+  "file": "tags/36_sfx-laughter_plain.wav",
+  "voice": "shehbaz",
+  "lang": "ur",
+  "size": "prompts",
+  "audio_s": 23.4,
+  "text": "ساتھیو، ایک دلچسپ واقعہ سناتا ہوں۔ پچھلے ہفتے میں صبح سویرے ایک دفتر کا اچانک دورہ کرنے گیا۔ سات بجے تھے۔ دفتر میں صرف چوکیدار موجود تھا، اور وہ بھی سو رہا تھا! ہاہاہا۔ میں نے اسے جگایا تو اس نے آنکھیں ملتے ہوئے کہا، صاحب، اتنی صبح تو کوئی نہیں آتا! ہاہا۔ میں نے کہا، بھائی، میں تو آ گیا ہوں! پھر آٹھ بجے افسران آنا شروع ہوئے، اور ہر ایک کا چہرہ دیکھنے والا تھا۔ Haha، ایک صاحب تو اپنی چائے کا کپ لیے دروازے پر ہی رک گئے۔ میں نے کہا، جناب، چائے بعد میں، کام پہلے! Hahaha۔",
+  "text_tagged": null,
+  "pace_ratio": 0.552,
+  "source": {
+   "results": "Q_prompts",
+   "run": "Q4_expr_plain_shehbaz_prompts_c8_n43_k2_nonstream_inline",
+   "file": "audio/035_t0.wav"
+  },
+  "note": "control-tag pair, plain"
+ },
+ {
+  "file": "tags/36_sfx-laughter_tags.wav",
+  "voice": "shehbaz",
+  "lang": "ur",
+  "size": "prompts",
+  "audio_s": 29.0,
+  "text": "ساتھیو، ایک دلچسپ واقعہ سناتا ہوں۔ پچھلے ہفتے میں صبح سویرے ایک دفتر کا اچانک دورہ کرنے گیا۔ سات بجے تھے۔ دفتر میں صرف چوکیدار موجود تھا، اور وہ بھی سو رہا تھا! ہاہاہا۔ میں نے اسے جگایا تو اس نے آنکھیں ملتے ہوئے کہا، صاحب، اتنی صبح تو کوئی نہیں آتا! ہاہا۔ میں نے کہا، بھائی، میں تو آ گیا ہوں! پھر آٹھ بجے افسران آنا شروع ہوئے، اور ہر ایک کا چہرہ دیکھنے والا تھا۔ Haha، ایک صاحب تو اپنی چائے کا کپ لیے دروازے پر ہی رک گئے۔ میں نے کہا، جناب، چائے بعد میں، کام پہلے! Hahaha۔",
+  "text_tagged": "<|emotion:amusement|><|prosody:expressive_high|>ساتھیو، ایک دلچسپ واقعہ سناتا ہوں۔ <|emotion:amusement|><|prosody:expressive_high|>پچھلے ہفتے میں صبح سویرے ایک دفتر کا اچانک دورہ کرنے گیا۔ <|emotion:amusement|><|prosody:expressive_high|>سات بجے تھے۔ <|emotion:amusement|><|prosody:expressive_high|>دفتر میں صرف چوکیدار موجود تھا، اور وہ بھی سو رہا تھا! <|emotion:amusement|><|prosody:expressive_high|><|sfx:laughter|>ہاہاہا۔ <|emotion:amusement|><|prosody:expressive_high|>میں نے اسے جگایا تو اس نے آنکھیں ملتے ہوئے کہا، صاحب، اتنی صبح تو کوئی نہیں آتا! <|emotion:amusement|><|prosody:expressive_high|><|sfx:laughter|>ہاہا۔ <|emotion:amusement|><|prosody:expressive_high|>میں نے کہا، بھائی، میں تو آ گیا ہوں! <|emotion:amusement|><|prosody:expressive_high|>پھر آٹھ بجے افسران آنا شروع ہوئے، اور ہر ایک کا چہرہ دیکھنے والا تھا۔ <|emotion:amusement|><|prosody:expressive_high|><|sfx:laughter|>Haha، ایک صاحب تو اپنی چائے کا کپ لیے دروازے پر ہی رک گئے۔ <|emotion:amusement|><|prosody:expressive_high|>میں نے کہا، جناب، چائے بعد میں، کام پہلے! <|emotion:amusement|><|prosody:expressive_high|><|sfx:laughter|>Hahaha۔",
+  "pace_ratio": 0.684,
+  "source": {
+   "results": "Q_prompts",
+   "run": "Q4_expr_tags_shehbaz_prompts_c8_n43_k2_nonstream_inline",
+   "file": "audio/035_t0.wav"
+  },
+  "note": "control-tag pair, tags"
  }
 ]

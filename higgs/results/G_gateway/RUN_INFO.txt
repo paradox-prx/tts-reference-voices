@@ -1,0 +1,14 @@
+gateway runs started 2026-09-28T20:05:29+05:00
+== arm G0: split 0 words, retries 0
+== bench --tag G0 --voice shehbaz --size xlong xxlong --sweep 1,8 --n-rule 8:2 --meta arm=G0 --meta split=0 --meta retries=0
+== bench --tag G0 --voice trump --size xlong --sweep 8 --n-rule 8:2 --meta arm=G0 --meta split=0 --meta retries=0
+== bench --tag G0 --voice shehbaz --size xlong --sweep 8 --n-rule 8:2 --stream --format wav --meta arm=G0 --meta split=0 --meta retries=0
+== arm G1: split 60 words, retries 0
+== bench --tag G1 --voice shehbaz --size xlong xxlong --sweep 1,8 --n-rule 8:2 --meta arm=G1 --meta split=60 --meta retries=0
+== bench --tag G1 --voice trump --size xlong --sweep 8 --n-rule 8:2 --meta arm=G1 --meta split=60 --meta retries=0
+== bench --tag G1 --voice shehbaz --size xlong --sweep 8 --n-rule 8:2 --stream --format wav --meta arm=G1 --meta split=60 --meta retries=0
+== arm G2: split 60 words, retries 1
+== bench --tag G2 --voice shehbaz --size xlong xxlong --sweep 1,8 --n-rule 8:2 --meta arm=G2 --meta split=60 --meta retries=1
+== bench --tag G2 --voice trump --size xlong --sweep 8 --n-rule 8:2 --meta arm=G2 --meta split=60 --meta retries=1
+== bench --tag G2 --voice shehbaz --size xlong --sweep 8 --n-rule 8:2 --stream --format wav --meta arm=G2 --meta split=60 --meta retries=1
+gateway runs finished 2026-09-28T20:22:06+05:00

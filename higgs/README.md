@@ -12,6 +12,11 @@ Layout:
 | `engine/run_higgs.sh` | starts the engine (vLLM-Omni 0.28.0 from `server/venvs/engine`, port 8095, GPU 0) with a deploy YAML |
 | `engine/deploy/*.yaml` | deploy profiles derived from upstream's (`base`, `low_latency`, `flash_attn`, `seqs64`); each header lists its differences |
 | `bench/baseline.sh` | the Urdu/English baseline: sizes x concurrency, non-streaming and streaming, engine direct |
+| `bench/screen.sh`, `quality_runs.sh`, `gateway_runs.sh` | engine-profile screen; the 43-prompt quality arms (sampling, reference clip, control tags); the gateway arms (sentence splitting, retries) |
+| `bench/compare.py`, `quality_table.py`, `pick_samples.py`, `strip_tags.py` | tables against the Qwen matrix; quality per voice/size/arm; labelled WAV samples; de-tag control-tag runs before scoring |
+| `engine/run_gateway.sh` | the repo's gateway (`server/gateway`) in front of the Higgs engine: Higgs request shape, 60-word splitting, pace retries |
+| `engine/patches/apply_pr7065.sh` | the vllm-omni PR #7065 backport without which every clone request fails on 0.28.0 |
+| `calibration/pace.json` | Higgs' expected seconds per letter per voice (from the clean baseline takes), for the pace guardrail |
 | `results/<experiment>/<run>/` | every take (`audio/*.wav`, AI-labelled), `requests.jsonl`, `summary.json`; audio is gitignored, numbers are not |
 | `docs/research.md` | what was checked before the first run (model, licence, serving path, limits) with sources |
 | `docs/EXPERIMENTS.md` | the log of every experiment with its numbers |
@@ -62,4 +67,13 @@ higgs/bench/baseline.sh                       # -> higgs/results/B0_baseline_<ti
 
 It calls `bench/bench_tts.py` with `--task-type none --language none --ref-key qwen3-tts --codec-hz 25`. Scoring
 (Whisper large-v3 WER/CER, speaker similarity) uses `server/eval/score_run.py` on the result folders, exactly as for
-the Qwen runs.
+the Qwen runs; `bench/compare.py` and `bench/quality_table.py` turn the numbers into the report's tables.
+
+Gateway in front of Higgs (OpenAI-compatible, with splitting and retries; auth off for the benchmark):
+
+```bash
+higgs/engine/run_gateway.sh 8090          # TTS_SPLIT_WORDS=60 TTS_RETRY_MAX=0 by default; TTS_* override
+curl -s localhost:8090/ready
+curl -s localhost:8090/v1/audio/speech -H 'Content-Type: application/json' \
+  -d '{"input":"پاکستان کی معیشت میں بہتری کے آثار نمایاں ہیں۔","voice":"shehbaz"}' -o out.wav
+```
