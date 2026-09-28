@@ -1,0 +1,9 @@
+# generated audio and run output (AI-generated voice clones: publish only labelled, and only on purpose)
+results/**/*.wav
+results/**/*.flac
+results/**/*.pcm
+results/**/*.mp3
+logs/
+state/
+__pycache__/
+*.pyc

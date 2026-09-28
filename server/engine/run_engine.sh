@@ -97,9 +97,16 @@ else
     fi
 fi
 if [[ -d $model ]]; then
-    for f in config.json model.safetensors speech_tokenizer/config.json speech_tokenizer/model.safetensors; do
-        [[ -s $model/$f ]] || die "model directory $model lacks $f (incomplete download?)"
-    done
+    [[ -s $model/config.json ]] || die "model directory $model lacks config.json (incomplete download?)"
+    [[ -s $model/model.safetensors || -s $model/model.safetensors.index.json ]] ||
+        die "model directory $model lacks model.safetensors (incomplete download?)"
+    # Qwen3-TTS ships its codec as speech_tokenizer/; other models served by vLLM-Omni (Higgs TTS 3, higgs/) bundle
+    # theirs in the main checkpoint or fetch it separately (HIGGS_AUDIO_TOKENIZER_PATH).
+    if grep -q '"model_type": *"qwen3_tts"' "$model/config.json"; then
+        for f in speech_tokenizer/config.json speech_tokenizer/model.safetensors; do
+            [[ -s $model/$f ]] || die "model directory $model lacks $f (incomplete download?)"
+        done
+    fi
 fi
 
 # --- precomputed voices: vLLM-Omni silently loads nothing when custom_voice_dir has no manifest

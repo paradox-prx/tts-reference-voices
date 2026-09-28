@@ -1,0 +1,5 @@
+baseline started 2026-09-28T18:23:42+05:00 url=http://127.0.0.1:8095 deploy=flash_attn.yaml
+name, driver_version, memory.used [MiB], memory.total [MiB]
+NVIDIA GeForce RTX 3090, 580.95.05, 17819 MiB, 24576 MiB
+{'vllm': '0.28.0', 'vllm-omni': '0.28.0', 'torch': '2.13.0', 'transformers': '5.14.1'}
+== bench --tag ur_ns --voice shehbaz --size short medium long xlong xxlong --sweep 1,2,4,8,16 --n-rule 8:2

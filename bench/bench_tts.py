@@ -107,9 +107,11 @@ SUSPECT_BAND = "0.6,1.8"
 TIMEOUT = {"short": 120.0, "medium": 180.0, "long": 300.0, "xlong": 420.0, "xxlong": 600.0, "prompts": 420.0}
 VOICE_MODES = ("inline", "upload", "server", "nocache")
 DEFAULT_VOICE_NAME = {"upload": "bench-{voice}", "server": "{voice}"}
-CODEC_HZ = 12.5                                               # Qwen3-TTS-12Hz codec frames per second of audio
+CODEC_HZ = 12.5                                               # codec frames per second of audio: Qwen3-TTS-12Hz 12.5,
+                                                              # Higgs TTS 3 25 (--codec-hz); used by --max-new-tokens
 MIN_NEW_TOKENS, MAX_NEW_TOKENS = 96, 4096                     # the gateway's length-cap clamp (textproc.py)
-AI_LABEL = "AI-generated speech (Qwen3-TTS voice clone benchmark). Not a real recording of the speaker. Do not publish."
+AI_LABEL = "AI-generated speech ({engine} voice clone benchmark). Not a real recording of the speaker. Do not publish."
+ENGINE_LABEL = "Qwen3-TTS"                                    # --engine-label, named in the audio label
 _HAS_WORD = re.compile(r"[^\W_]")
 
 
@@ -192,8 +194,13 @@ def wav_pcm(data: bytes) -> tuple[bytes, int, int, int]:
     return pcm[:len(pcm) - len(pcm) % (ch * width)], sr, ch, width
 
 
-def labelled_wav(pcm: bytes, sr: int, ch: int = 1, width: int = 2, comment: str = AI_LABEL) -> bytes:
+def ai_label() -> str:
+    return AI_LABEL.format(engine=ENGINE_LABEL)
+
+
+def labelled_wav(pcm: bytes, sr: int, ch: int = 1, width: int = 2, comment: str | None = None) -> bytes:
     """A clean RIFF/WAVE file with a LIST/INFO chunk (ICMT comment, ISFT software) ahead of the data chunk."""
+    comment = comment or ai_label()
     def sub(cid: bytes, text: str) -> bytes:
         b = text.encode("utf-8") + b"\0"
         b += b"\0" * (len(b) & 1)
@@ -261,9 +268,10 @@ class GpuMonitor:
 # ------------------------------------------------------------------------------------------------ voices and texts
 
 class Voice:
-    def __init__(self, voice_id: str, voices_dir: Path) -> None:
+    def __init__(self, voice_id: str, voices_dir: Path, ref_key: str = "qwen3-tts") -> None:
         folder = voices_dir / voice_id
-        refs = json.loads((folder / "references" / "references.json").read_text(encoding="utf-8"))["qwen3-tts"]
+        refs = json.loads((folder / "references" / "references.json").read_text(encoding="utf-8"))[ref_key]
+        self.ref_key = ref_key
         meta = json.loads((folder / "voice.json").read_text(encoding="utf-8"))
         self.id, self.lang = voice_id, meta.get("language", "en")
         self.ref_path = folder / "references" / refs["file"]
@@ -364,7 +372,9 @@ def warm_text(args, voice: Voice, w: int) -> str:
 def build_payload(args, voice: Voice, text: str, seed: int | None = None) -> tuple[dict, int | None]:
     """(JSON body, nocache counter or None). Field order: base fields, voice/reference, stream, --param, then
     --extra-param merged into extra_params, --max-new-tokens and the seed."""
-    p = {"input": text, "task_type": "Base", "response_format": args.format}
+    p = {"input": text, "response_format": args.format}
+    if args.task_type.lower() != "none":
+        p["task_type"] = args.task_type
     lang = args.language or ("English" if voice.lang == "en" else "Auto")
     if lang.lower() != "none":
         p["language"] = lang
@@ -560,7 +570,7 @@ async def run_one(client, args, lanes: list[Lane], size: str, n: int, c: int, gp
     run_dir.mkdir(parents=True)
     if not args.no_audio:
         audio_dir.mkdir()
-        (run_dir / "AI_GENERATED_AUDIO.txt").write_text(AI_LABEL + "\n", encoding="utf-8")
+        (run_dir / "AI_GENERATED_AUDIO.txt").write_text(ai_label() + "\n", encoding="utf-8")
     timeout = args.timeout or TIMEOUT[size] * max(1.0, c / 16)
     sem, rows = asyncio.Semaphore(c), []
     partial = open(run_dir / "requests.partial.jsonl", "a", encoding="utf-8")   # survives a killed run
@@ -881,6 +891,17 @@ def build_parser() -> argparse.ArgumentParser:
     ap.add_argument("--pcm-rate", type=int, default=24000, help="sample rate of --format pcm (s16 mono)")
     ap.add_argument("--language", default=None,
                     help="override (default: English for en voices, Auto otherwise; 'none' omits the field)")
+    ap.add_argument("--task-type", default="Base",
+                    help="task_type field (default Base = Qwen3-TTS voice clone; 'none' omits it, e.g. for Higgs TTS 3, "
+                         "which clones from ref_audio without a task type)")
+    ap.add_argument("--ref-key", default="qwen3-tts", metavar="KEY",
+                    help="which entry of voices/<id>/references/references.json is the reference clip + transcript "
+                         "(default qwen3-tts; vLLM-Omni accepts 1-30 s clips whichever model it serves)")
+    ap.add_argument("--codec-hz", type=float, default=CODEC_HZ,
+                    help="codec frames per second of the served model, for --max-new-tokens auto|words (default 12.5, "
+                         "Qwen3-TTS-12Hz; Higgs TTS 3 is 25)")
+    ap.add_argument("--engine-label", default=ENGINE_LABEL,
+                    help="model name written into the AI-generated label of every WAV (default Qwen3-TTS)")
     ap.add_argument("--voice-mode", choices=VOICE_MODES, default="inline",
                     help="inline: ref_audio + ref_text in every request. upload: POST /v1/audio/voices once, then "
                          "voice=<name>. server: only voice=<name>, for a server that already knows the voice (our "
@@ -955,6 +976,8 @@ def build_parser() -> argparse.ArgumentParser:
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     ap = build_parser()
     args = ap.parse_args(argv)
+    global CODEC_HZ, ENGINE_LABEL
+    CODEC_HZ, ENGINE_LABEL = args.codec_hz, args.engine_label
     try:
         args.params = dict(parse_param(p) for p in args.param)
         args.extra = dict(parse_param(p) for p in args.extra_param)
@@ -993,7 +1016,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def load_voices(args) -> list[Voice]:
-    voices = [Voice(v, args.voices_dir) for v in args.voice]
+    voices = [Voice(v, args.voices_dir, args.ref_key) for v in args.voice]
     resolve_paces(voices, args)
     for v in voices:
         v.engine_name = args.voice_name.format(voice=v.id) if args.voice_name else None
@@ -1091,7 +1114,7 @@ async def main() -> None:
                             "pace_source": v.pace_source, "engine_name": v.engine_name} for v in voices}
     invocations.append(cfg)
     if not args.no_audio:
-        (out_dir / "AI_GENERATED_AUDIO.txt").write_text(AI_LABEL + "\n", encoding="utf-8")
+        (out_dir / "AI_GENERATED_AUDIO.txt").write_text(ai_label() + "\n", encoding="utf-8")
     for v in voices:
         print(f"voice {v.id} ({v.lang}): ref {v.ref_path.name} {v.ref_seconds:.2f} s / {v.ref_letters} letters; "
               f"expected pace {v.pace:.4f} s/letter ({v.pace_source}); suspect outside "

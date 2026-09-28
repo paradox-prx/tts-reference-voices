@@ -1,0 +1,405 @@
+diff --git a/examples/offline_inference/text_to_speech/higgs_audio_v3/end2end.py b/examples/offline_inference/text_to_speech/higgs_audio_v3/end2end.py
+index 8b2f3c8a178..70c9bb77921 100644
+--- a/examples/offline_inference/text_to_speech/higgs_audio_v3/end2end.py
++++ b/examples/offline_inference/text_to_speech/higgs_audio_v3/end2end.py
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: Apache-2.0
+-# SPDX-FileCopyrightText: Copyright contributors to the vLLM project
++# SPDX-FileCopyrightText: Copyright contributors to the vLLM-Omni project
+ """Offline higgs-audio v3 inference example.
+ 
+ Runs Stage 0 (Qwen3 talker) + Stage 1 (HiggsAudio codec) end-to-end
+@@ -171,11 +171,13 @@ def main():
+                 num_ref_tokens=int(ref_codes_delayed.shape[0]),
+                 reference_text=args.ref_text,
+             )
++            prompt_ids, audio_placeholder_positions = adapter.prepare_prompt_for_engine(prompt_ids)
+             prompt = {
+                 "prompt_token_ids": prompt_ids,
+                 "additional_information": {
+                     "audio_input_ids": ref_codes_delayed.to(torch.long),
+                     "audio_input_ids_mask": torch.ones(ref_codes_delayed.shape[0], dtype=torch.bool),
++                    "audio_placeholder_positions": audio_placeholder_positions,
+                 },
+             }
+         else:
+diff --git a/tests/entrypoints/openai_api/test_serving_speech.py b/tests/entrypoints/openai_api/test_serving_speech.py
+index 0af78787bf8..dd3f5befdc5 100644
+--- a/tests/entrypoints/openai_api/test_serving_speech.py
++++ b/tests/entrypoints/openai_api/test_serving_speech.py
+@@ -1674,29 +1674,39 @@ def test_conditioning_cache_salt_changes_with_ref_audio_cache_key(self):
+ 
+     @pytest.mark.asyncio
+     async def test_higgs_v3_cache_salt_changes_with_ref_audio_cache_key(self, speech_server, mocker):
+-        """Higgs v3 voice clone uses placeholder prompt ids + prefix caching.
++        """Higgs v3 voice clone uses position-marked prompt ids + prefix caching.
+         The salt must move when the resolve key moves, or a same-path rewrite
+         reuses KV from the previous reference."""
+-        from unittest.mock import AsyncMock, MagicMock
++        from vllm_omni.model_executor.models.higgs_audio_v3.higgs_audio_v3_tokenizer import (
++            HiggsAudioV3TokenizerAdapter,
++        )
+ 
+-        adapter = MagicMock()
+-        adapter.build_prompt.return_value = [1, 1, 1, 1]
+-        speech_server._resolve_higgs_audio_v3_adapter = AsyncMock(return_value=adapter)
+-        codes = torch.arange(8, dtype=torch.long).view(8, 1)
+-        speech_server._resolve_higgs_audio_v3_ref_codes = AsyncMock(return_value=(codes, False, False))
+-        speech_server._get_resolved_ref_audio_artifact_key = MagicMock(return_value="art")
++        tokenizer = mocker.MagicMock()
++        tokenizer.get_added_vocab.return_value = {
++            "<|tts|>": 151700,
++            "<|text|>": 151701,
++            "<|audio|>": 151702,
++        }
++        adapter = HiggsAudioV3TokenizerAdapter(tokenizer)
++        mocker.patch.object(adapter, "build_prompt", return_value=[1, -100, -100, 2])
++        speech_server._resolve_higgs_audio_v3_adapter = mocker.AsyncMock(return_value=adapter)
++        codes = torch.arange(16, dtype=torch.long).view(2, 8)
++        speech_server._resolve_higgs_audio_v3_ref_codes = mocker.AsyncMock(return_value=(codes, False, False))
++        speech_server._get_resolved_ref_audio_artifact_key = mocker.MagicMock(return_value="art")
+ 
+         req = OpenAICreateSpeechRequest(
+             input="hello",
+             ref_audio="file:///data/spk.wav",
+             ref_text="transcript",
+         )
+-        speech_server._resolve_ref_audio = AsyncMock(return_value=([0.1] * 48000, 24000, "key_aaa"))
++        speech_server._resolve_ref_audio = mocker.AsyncMock(return_value=([0.1] * 48000, 24000, "key_aaa"))
+         prompt_a = await speech_server._build_higgs_audio_v3_params(req)
+-        speech_server._resolve_ref_audio = AsyncMock(return_value=([0.9] * 48000, 24000, "key_bbb"))
++        speech_server._resolve_ref_audio = mocker.AsyncMock(return_value=([0.9] * 48000, 24000, "key_bbb"))
+         prompt_b = await speech_server._build_higgs_audio_v3_params(req)
+ 
++        assert prompt_a["prompt_token_ids"] == [1, 151700, 151700, 2]
+         assert prompt_a["prompt_token_ids"] == prompt_b["prompt_token_ids"]
++        assert prompt_a["additional_information"]["audio_placeholder_positions"].tolist() == [1, 2]
+         assert prompt_a["cache_salt"] != prompt_b["cache_salt"]
+         assert prompt_a["additional_information"]["ref_audio_cache_key"] == "key_aaa"
+         assert prompt_b["additional_information"]["ref_audio_cache_key"] == "key_bbb"
+diff --git a/tests/model_executor/models/higgs_audio_v3/test_higgs_audio_v3.py b/tests/model_executor/models/higgs_audio_v3/test_higgs_audio_v3.py
+index f5a7094ef5f..3fba046dcac 100755
+--- a/tests/model_executor/models/higgs_audio_v3/test_higgs_audio_v3.py
++++ b/tests/model_executor/models/higgs_audio_v3/test_higgs_audio_v3.py
+@@ -892,6 +892,81 @@ class FakeTalker:
+         assert r2 == {}  # Second row is all -1
+ 
+ 
++# ---- AC-3: Reference Audio Substitution Tests ----
++
++
++class TestReferenceAudioSubstitution:
++    def _make_talker(self, query_start_loc):
++        from vllm_omni.model_executor.models.higgs_audio_v3 import higgs_audio_v3_talker as mod
++
++        class FakeTalker:
++            _last_step_query_start_loc = query_start_loc
++            _apply_ref_audio_substitution = mod.HiggsAudioV3TalkerForConditionalGeneration._apply_ref_audio_substitution
++
++            @staticmethod
++            def multimodal_embedding(codes):
++                return codes.to(torch.float32)
++
++        return FakeTalker()
++
++    @staticmethod
++    def _reference_info():
++        return [
++            {
++                "audio_input_ids": torch.tensor([[5], [7]], dtype=torch.long),
++                "audio_input_ids_mask": torch.tensor([True, True]),
++                "audio_placeholder_positions": torch.tensor([1, 2]),
++            }
++        ]
++
++    def test_valid_placeholder_tokens_are_replaced_from_explicit_positions(self):
++        talker = self._make_talker(torch.tensor([0, 4]))
++        hidden_states = torch.zeros(4, 1)
++        input_ids = torch.tensor([1, 151702, 151702, 2])
++        positions = torch.arange(4)
++
++        result = talker._apply_ref_audio_substitution(
++            hidden_states,
++            input_ids,
++            positions,
++            self._reference_info(),
++        )
++
++        assert result[:, 0].tolist() == [0.0, 5.0, 7.0, 0.0]
++
++    def test_chunked_prefill_selects_code_by_absolute_prompt_position(self):
++        talker = self._make_talker(torch.tensor([0, 1]))
++        hidden_states = torch.zeros(1, 1)
++        input_ids = torch.tensor([151702])
++        positions = torch.tensor([2])
++
++        result = talker._apply_ref_audio_substitution(
++            hidden_states,
++            input_ids,
++            positions,
++            self._reference_info(),
++        )
++
++        assert result[:, 0].tolist() == [7.0]
++
++    def test_legacy_negative_placeholder_tokens_remain_supported(self):
++        talker = self._make_talker(torch.tensor([0, 4]))
++        hidden_states = torch.zeros(4, 1)
++        input_ids = torch.tensor([1, -100, -100, 2])
++        positions = torch.arange(4)
++        reference_info = self._reference_info()
++        reference_info[0].pop("audio_placeholder_positions")
++
++        result = talker._apply_ref_audio_substitution(
++            hidden_states,
++            input_ids,
++            positions,
++            reference_info,
++        )
++
++        assert result[:, 0].tolist() == [0.0, 5.0, 7.0, 0.0]
++
++
+ # ---- AC-6: Audio Feedback Method Tests ----
+ 
+ 
+@@ -1545,6 +1620,23 @@ def test_no_voice_clone_tokens_in_plain_tts(self):
+         assert 151703 not in ids  # <|ref_audio|>
+         assert 151704 not in ids  # <|ref_text|>
+ 
++    def test_voice_clone_prompt_is_vocab_valid_for_engine(self):
++        from vllm_omni.model_executor.models.higgs_audio_v3.higgs_audio_v3_tokenizer import (
++            HiggsAudioV3TokenizerAdapter,
++        )
++
++        adapter = HiggsAudioV3TokenizerAdapter(self._make_mock_tokenizer())
++        prompt_ids = adapter.build_prompt("Hello", num_ref_tokens=2)
++
++        engine_prompt_ids, placeholder_positions = adapter.prepare_prompt_for_engine(prompt_ids)
++
++        assert min(prompt_ids) < 0
++        assert min(engine_prompt_ids) >= 0
++        assert placeholder_positions.tolist() == [2, 3]
++        filler_ids = [engine_prompt_ids[index] for index in placeholder_positions.tolist()]
++        assert filler_ids == [adapter.tts_id] * 2
++        assert adapter.audio_id not in filler_ids
++
+ 
+ class TestVoiceCloneReferenceCache:
+     def test_audio_tokenizer_dir_env_accepts_parent_or_subdir(self, tmp_path, monkeypatch):
+diff --git a/vllm_omni/entrypoints/openai/serving_speech.py b/vllm_omni/entrypoints/openai/serving_speech.py
+index 224485cbd0a..2eabe14c010 100644
+--- a/vllm_omni/entrypoints/openai/serving_speech.py
++++ b/vllm_omni/entrypoints/openai/serving_speech.py
+@@ -1649,8 +1649,8 @@ async def _build_higgs_audio_v3_params(self, request: OpenAICreateSpeechRequest)
+         """Build prompt_token_ids for higgs_audio_v3.
+ 
+         Plain-text path: builds ``[tts, text, tokens, audio]``.
+-        Voice-clone path: encodes reference audio, applies delay pattern,
+-        builds ``[tts, (ref_text, tokens,) ref_audio, -100xN, text, tokens, audio]``.
++        Voice-clone path: encodes reference audio, applies delay pattern, and
++        records reference-audio prompt positions while submitting valid token IDs.
+         """
+         adapter = await self._resolve_higgs_audio_v3_adapter()
+ 
+@@ -1681,12 +1681,14 @@ async def _build_higgs_audio_v3_params(self, request: OpenAICreateSpeechRequest)
+             num_ref_tokens=int(ref_codes_delayed.shape[0]),
+             reference_text=request.ref_text or None,
+         )
++        prompt_ids, audio_placeholder_positions = adapter.prepare_prompt_for_engine(prompt_ids)
+         prompt = tokens_input(prompt_token_ids=prompt_ids)
+         import torch
+ 
+         prompt["additional_information"] = {
+             "audio_input_ids": ref_codes_delayed.to(torch.long),
+             "audio_input_ids_mask": torch.ones(ref_codes_delayed.shape[0], dtype=torch.bool),
++            "audio_placeholder_positions": audio_placeholder_positions,
+             "ref_audio_cache_key": cache_key,
+         }
+         # Placeholder prompt ids do not change when a same-path file is
+diff --git a/vllm_omni/model_executor/models/higgs_audio_v3/higgs_audio_v3_talker.py b/vllm_omni/model_executor/models/higgs_audio_v3/higgs_audio_v3_talker.py
+index 186e48714fc..8fbac95f7cf 100644
+--- a/vllm_omni/model_executor/models/higgs_audio_v3/higgs_audio_v3_talker.py
++++ b/vllm_omni/model_executor/models/higgs_audio_v3/higgs_audio_v3_talker.py
+@@ -458,8 +458,8 @@ def forward(
+             info_dicts = kwargs.get("runtime_additional_information")
+ 
+         if inputs_embeds is None:
+-            # Mask -100 placeholders to 0 before embedding. Use torch.where
+-            # (no Python data-dependent branch) so this is CUDA-graph safe.
++            # Keep legacy/offline negative sentinels safe before embedding.
++            # Online serving submits vocab-valid IDs plus explicit positions.
+             safe_ids = torch.where(input_ids < 0, torch.zeros_like(input_ids), input_ids)
+             hidden_states = self.model.embed_tokens(safe_ids)
+         else:
+@@ -502,8 +502,8 @@ def forward(
+                 and not self._is_single_token_decode_step(int(hidden_states.shape[0]))
+             )
+         if is_prefill and info_dicts:
+-            # Voice clone: replace -100 placeholder positions with ref audio embeddings
+-            hidden_states = self._apply_ref_audio_substitution(hidden_states, input_ids, info_dicts)
++            # Voice clone: replace marked prompt positions with ref audio embeddings.
++            hidden_states = self._apply_ref_audio_substitution(hidden_states, input_ids, positions, info_dicts)
+ 
+         # Audio feedback at decode: replace continuation token embeddings
+         if input_ids is not None and inputs_embeds is None:
+@@ -644,24 +644,24 @@ def _apply_ref_audio_substitution(
+         self,
+         hidden_states: torch.Tensor,
+         input_ids: torch.Tensor,
++        positions: torch.Tensor,
+         info_dicts: list[dict[str, Any]] | None,
+     ) -> torch.Tensor:
+-        """Replace -100 placeholder positions with fused multi-codebook embeddings
+-        of the delay-pattern-encoded reference audio codes.
++        """Inject fused reference-audio embeddings at marked prompt positions.
+ 
+         Called at prefill to inject voice clone reference. ``info_dicts`` is a
+         list of per-request dicts from ``model_intermediate_buffer``, each
+         containing ``audio_input_ids`` ([T, N] delayed codes) and
+-            ``audio_input_ids_mask`` ([T] bool mask).
++        ``audio_input_ids_mask`` ([T] bool mask). New callers also provide
++        ``audio_placeholder_positions`` ([T] absolute prompt positions). Legacy
++        callers that still submit -100 token IDs remain supported.
+         """
+         if not info_dicts:
+             return hidden_states
+ 
+-        PLACEHOLDER = -100
+         flat_ids = input_ids.reshape(-1)
+-        placeholder_mask = flat_ids == PLACEHOLDER
+-        if not placeholder_mask.any():
+-            return hidden_states
++        flat_positions = positions.reshape(-1)
++        legacy_placeholder_mask = flat_ids == -100
+ 
+         # Use query_start_loc to map placeholders to per-request spans
+         q_start = self._last_step_query_start_loc
+@@ -681,12 +681,15 @@ def _apply_ref_audio_substitution(
+ 
+             codes = info.get("audio_input_ids")
+             mask = info.get("audio_input_ids_mask")
++            placeholder_positions = info.get("audio_placeholder_positions")
+ 
+             # Handle msgspec serialization (may be list-wrapped)
+             if isinstance(codes, list):
+                 codes = codes[0] if codes else None
+             if isinstance(mask, list):
+                 mask = mask[0] if mask else None
++            if isinstance(placeholder_positions, list):
++                placeholder_positions = placeholder_positions[0] if placeholder_positions else None
+             if not isinstance(codes, torch.Tensor):
+                 continue
+ 
+@@ -696,29 +699,54 @@ def _apply_ref_audio_substitution(
+             if codes.ndim != 2:
+                 continue
+ 
++            if isinstance(placeholder_positions, torch.Tensor):
++                if placeholder_positions.ndim == 2:
++                    placeholder_positions = placeholder_positions[0]
++                placeholder_positions = placeholder_positions.reshape(-1)
++
+             if isinstance(mask, torch.Tensor):
+                 if mask.ndim == 2:
+                     mask = mask[0]
+-                codes = codes[mask.to(dtype=torch.bool)]
++                mask = mask.reshape(-1).to(dtype=torch.bool)
++                codes = codes[mask.to(device=codes.device)]
++                if isinstance(placeholder_positions, torch.Tensor) and placeholder_positions.numel() == mask.numel():
++                    placeholder_positions = placeholder_positions[mask.to(device=placeholder_positions.device)]
+ 
+             if codes.numel() == 0:
+                 continue
+ 
+-            # Find placeholder positions in this request's span
+             s = int(q_start_list[i])
+             e = int(q_start_list[i + 1])
+-            if e - s <= 1:
+-                continue  # Decode step, skip
+-
+-            span_mask = placeholder_mask[s:e]
+-            placeholders = span_mask.nonzero(as_tuple=True)[0]
+-            n_codes = int(codes.shape[0])
++            if e <= s:
++                continue
+ 
+-            if int(placeholders.numel()) < n_codes:
+-                continue  # Mismatch
++            if isinstance(placeholder_positions, torch.Tensor):
++                if placeholder_positions.numel() == 0 or placeholder_positions.numel() != codes.shape[0]:
++                    continue
++                request_positions = flat_positions[s:e]
++                ref_positions = placeholder_positions.to(
++                    device=request_positions.device,
++                    dtype=request_positions.dtype,
++                )
++                code_rows = torch.searchsorted(ref_positions, request_positions)
++                in_range = code_rows < ref_positions.numel()
++                bounded_rows = code_rows.clamp(max=ref_positions.numel() - 1)
++                matches = in_range & (ref_positions[bounded_rows] == request_positions)
++                if not matches.any():
++                    continue
++                target = matches.nonzero(as_tuple=True)[0] + s
++                codes = codes.index_select(0, code_rows[matches].to(device=codes.device))
++            else:
++                if e - s <= 1:
++                    continue  # Legacy decode step, skip
++                span_mask = legacy_placeholder_mask[s:e]
++                placeholders = span_mask.nonzero(as_tuple=True)[0]
++                n_codes = int(codes.shape[0])
++                if int(placeholders.numel()) < n_codes:
++                    continue
++                target = placeholders[:n_codes] + s
+ 
+             # Embed delayed codes via fused multi-codebook embedding
+-            target = placeholders[:n_codes] + s
+             codes_device = codes.to(device=hidden_states.device, dtype=torch.long)
+             embeds = self.multimodal_embedding(codes_device)  # [n_codes, hidden]
+ 
+diff --git a/vllm_omni/model_executor/models/higgs_audio_v3/higgs_audio_v3_tokenizer.py b/vllm_omni/model_executor/models/higgs_audio_v3/higgs_audio_v3_tokenizer.py
+index 8f881564a84..3d5b6dd502a 100644
+--- a/vllm_omni/model_executor/models/higgs_audio_v3/higgs_audio_v3_tokenizer.py
++++ b/vllm_omni/model_executor/models/higgs_audio_v3/higgs_audio_v3_tokenizer.py
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: Apache-2.0
+-# SPDX-FileCopyrightText: Copyright contributors to the vLLM project
++# SPDX-FileCopyrightText: Copyright contributors to the vLLM-Omni project
+ """Prompt builder for higgs-audio v3 TTS.
+ 
+ Prompt formats:
+@@ -10,7 +10,9 @@
+   Voice clone (with ref text):
+     <|tts|> <|ref_text|> {ref text tokens} <|ref_audio|> [-100]×N <|text|> {text tokens} <|audio|>
+ 
+--100 placeholders are replaced at prefill time with fused multi-codebook
++``build_prompt`` uses -100 as a model-local sentinel. Before engine submission,
++the tokenizer adapter replaces those sentinels with a valid token ID and records
++their positions. The talker uses the positions to inject fused multi-codebook
+ embeddings of the delay-pattern-encoded reference audio codes.
+ """
+ 
+@@ -97,6 +99,23 @@ def __init__(self, tokenizer: Any) -> None:
+     def tokenizer(self) -> Any:
+         return self._tok
+ 
++    def prepare_prompt_for_engine(self, prompt_ids: list[int]) -> tuple[list[int], torch.Tensor]:
++        """Replace reference-audio sentinels before vLLM token validation.
++
++        The returned positions retain the model-specific placeholder semantics
++        while every submitted token ID belongs to this tokenizer's vocabulary.
++        """
++        placeholder_positions = torch.tensor(
++            [index for index, token_id in enumerate(prompt_ids) if token_id == AUDIO_PLACEHOLDER_ID],
++            dtype=torch.long,
++        )
++        # The embedding at every marked position is replaced before the
++        # transformer layers run. Use <|tts|> as the valid filler so the
++        # placeholders cannot be mistaken for <|audio|> continuation tokens by
++        # the model's sampler state machine.
++        engine_prompt_ids = [self.tts_id if token_id == AUDIO_PLACEHOLDER_ID else token_id for token_id in prompt_ids]
++        return engine_prompt_ids, placeholder_positions
++
+     def build_prompt(
+         self,
+         text: str,
