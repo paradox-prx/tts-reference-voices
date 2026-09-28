@@ -1,0 +1,46 @@
+=== 2026-09-25T05:18:15+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice shehbaz --pools /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/pools/auralis_ur.json --size short medium long --sweep 1,4,8,16,32 --n-rule 8:1 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P6_auralis --gpus 0 --tag sweep --meta phase=P6_auralis --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x
+warmup shehbaz 1: 0.88s ok
+warmup shehbaz 2: 0.85s ok
+shehbaz short (auralis_ur.json): shehbaz 151 texts
+  sweep_shehbaz_short_c1_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.094) | lat p50=0.691s p90=0.783s p99=0.8s | 4.86x realtime (p90-wall 4.86x, stragglers 0), 1.44 req/s | gpu 19826 MiB 94.5%
+  sweep_shehbaz_short_c4_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x0.953) | lat p50=1.087s p90=1.165s p99=1.455s | 11.11x realtime (p90-wall 11.11x, stragglers 0), 3.48 req/s | gpu 19826 MiB 82.8%
+  sweep_shehbaz_short_c8_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x0.981) | lat p50=1.648s p90=1.757s p99=1.818s | 14.25x realtime (p90-wall 14.25x, stragglers 0), 4.34 req/s | gpu 19826 MiB 99.0%
+  sweep_shehbaz_short_c16_n16_nonstream_inline: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x0.947) | lat p50=2.547s p90=2.843s p99=2.866s | 18.6x realtime (p90-wall 17.36x, stragglers 0), 5.56 req/s | gpu 19828 MiB 99.5%
+  sweep_shehbaz_short_c32_n32_nonstream_inline: ok 32/32 err 0 suspect 0 (short 0, long 0; pace x0.994) | lat p50=4.282s p90=4.684s p99=4.774s | 22.85x realtime (p90-wall 20.42x, stragglers 0), 6.67 req/s | gpu 19828 MiB 95.2%
+shehbaz medium (auralis_ur.json): shehbaz 105 texts
+  sweep_shehbaz_medium_c1_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.009) | lat p50=0.802s p90=1.337s p99=1.497s | 5.18x realtime (p90-wall 5.18x, stragglers 0), 1.02 req/s | gpu 19829 MiB 98.4%
+  sweep_shehbaz_medium_c4_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.026) | lat p50=1.97s p90=2.24s p99=2.245s | 13.8x realtime (p90-wall 13.81x, stragglers 0), 2.07 req/s | gpu 19828 MiB 98.8%
+  sweep_shehbaz_medium_c8_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.007) | lat p50=3.017s p90=3.107s p99=3.251s | 17.14x realtime (p90-wall 17.15x, stragglers 0), 2.45 req/s | gpu 19828 MiB 99.3%
+  sweep_shehbaz_medium_c16_n16_nonstream_inline: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x1.063) | lat p50=4.454s p90=4.827s p99=5.045s | 22.61x realtime (p90-wall 21.74x, stragglers 0), 3.14 req/s | gpu 19829 MiB 98.9%
+  sweep_shehbaz_medium_c32_n32_nonstream_inline: ok 32/32 err 0 suspect 0 (short 0, long 0; pace x1.045) | lat p50=7.145s p90=7.8s p99=7.94s | 29.72x realtime (p90-wall 26.81x, stragglers 0), 4.03 req/s | gpu 19829 MiB 87.6%
+shehbaz long (auralis_ur.json): shehbaz 21 texts
+  sweep_shehbaz_long_c1_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x0.902) | lat p50=2.946s p90=3.361s p99=3.609s | 5.55x realtime (p90-wall 5.55x, stragglers 0), 0.34 req/s | gpu 19829 MiB 96.9%
+  sweep_shehbaz_long_c4_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.017) | lat p50=4.354s p90=4.65s p99=4.761s | 14.38x realtime (p90-wall 14.38x, stragglers 0), 0.88 req/s | gpu 19829 MiB 98.9%
+  sweep_shehbaz_long_c8_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x0.941) | lat p50=6.565s p90=7.154s p99=7.581s | 18.07x realtime (p90-wall 18.08x, stragglers 0), 1.06 req/s | gpu 19828 MiB 99.1%
+  sweep_shehbaz_long_c16_n16_nonstream_inline: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x0.918) | lat p50=8.752s p90=9.384s p99=9.77s | 25.7x realtime (p90-wall 24.63x, stragglers 0), 1.63 req/s | gpu 19828 MiB 99.5%
+  note: 32 requests > 21 long texts for shehbaz, so some repeat
+  sweep_shehbaz_long_c32_n32_nonstream_inline: ok 32/32 err 0 suspect 0 (short 0, long 0; pace x0.951) | lat p50=13.972s p90=14.836s p99=15.236s | 33.86x realtime (p90-wall 30.9x, stragglers 0), 2.09 req/s | gpu 19829 MiB 99.5%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P6_auralis
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| n20c20_shehbaz_short_c20_n20_nonstream_inline | 20 | 20 | 0 | 0 | 3.189 | 3.433 | 3.47 | – | – | 3.36 | 19.25 | 17.1 | 0 | 0.963 | 5.74 | 19831 | 99.1 |
+| n20c20_shehbaz_medium_c20_n20_nonstream_inline | 20 | 20 | 0 | 0 | 5.135 | 5.279 | 5.35 | – | – | 5.92 | 22.04 | 19.5 | 0 | 0.805 | 3.72 | 19829 | 99.8 |
+| n20c20_shehbaz_long_c20_n20_nonstream_inline | 20 | 20 | 0 | 0 | 11.211 | 11.779 | 12.306 | – | – | 16.3 | 26.37 | 24.29 | 0 | 0.691 | 1.62 | 19828 | 99.6 |
+| sweep_shehbaz_short_c1_n8_nonstream_inline | 8 | 8 | 0 | 0 | 0.691 | 0.783 | 0.8 | – | – | 3.38 | 4.86 | 4.86 | 0 | 0.204 | 1.44 | 19826 | 94.5 |
+| sweep_shehbaz_short_c4_n8_nonstream_inline | 8 | 8 | 0 | 0 | 1.087 | 1.165 | 1.455 | – | – | 3.19 | 11.11 | 11.11 | 0 | 0.331 | 3.48 | 19826 | 82.8 |
+| sweep_shehbaz_short_c8_n8_nonstream_inline | 8 | 8 | 0 | 0 | 1.648 | 1.757 | 1.818 | – | – | 3.28 | 14.25 | 14.25 | 0 | 0.51 | 4.34 | 19826 | 99.0 |
+| sweep_shehbaz_short_c16_n16_nonstream_inline | 16 | 16 | 0 | 0 | 2.547 | 2.843 | 2.866 | – | – | 3.35 | 18.6 | 17.36 | 0 | 0.769 | 5.56 | 19828 | 99.5 |
+| sweep_shehbaz_short_c32_n32_nonstream_inline | 32 | 32 | 0 | 0 | 4.282 | 4.684 | 4.774 | – | – | 3.43 | 22.85 | 20.42 | 0 | 1.239 | 6.67 | 19828 | 95.2 |
+| sweep_shehbaz_medium_c1_n8_nonstream_inline | 8 | 8 | 0 | 0 | 0.802 | 1.337 | 1.497 | – | – | 5.07 | 5.18 | 5.18 | 0 | 0.196 | 1.02 | 19829 | 98.4 |
+| sweep_shehbaz_medium_c4_n8_nonstream_inline | 8 | 8 | 0 | 0 | 1.97 | 2.24 | 2.245 | – | – | 6.68 | 13.8 | 13.81 | 0 | 0.283 | 2.07 | 19828 | 98.8 |
+| sweep_shehbaz_medium_c8_n8_nonstream_inline | 8 | 8 | 0 | 0 | 3.017 | 3.107 | 3.251 | – | – | 6.99 | 17.14 | 17.15 | 0 | 0.433 | 2.45 | 19828 | 99.3 |
+| sweep_shehbaz_medium_c16_n16_nonstream_inline | 16 | 16 | 0 | 0 | 4.454 | 4.827 | 5.045 | – | – | 7.2 | 22.61 | 21.74 | 0 | 0.626 | 3.14 | 19829 | 98.9 |
+| sweep_shehbaz_medium_c32_n32_nonstream_inline | 32 | 32 | 0 | 0 | 7.145 | 7.8 | 7.94 | – | – | 7.38 | 29.72 | 26.81 | 0 | 0.981 | 4.03 | 19829 | 87.6 |
+| sweep_shehbaz_long_c1_n8_nonstream_inline | 8 | 8 | 0 | 0 | 2.946 | 3.361 | 3.609 | – | – | 16.31 | 5.55 | 5.55 | 0 | 0.18 | 0.34 | 19829 | 96.9 |
+| sweep_shehbaz_long_c4_n8_nonstream_inline | 8 | 8 | 0 | 0 | 4.354 | 4.65 | 4.761 | – | – | 16.39 | 14.38 | 14.38 | 0 | 0.262 | 0.88 | 19829 | 98.9 |
+| sweep_shehbaz_long_c8_n8_nonstream_inline | 8 | 8 | 0 | 0 | 6.565 | 7.154 | 7.581 | – | – | 17.13 | 18.07 | 18.08 | 0 | 0.391 | 1.06 | 19828 | 99.1 |
+| sweep_shehbaz_long_c16_n16_nonstream_inline | 16 | 16 | 0 | 0 | 8.752 | 9.384 | 9.77 | – | – | 15.76 | 25.7 | 24.63 | 0 | 0.55 | 1.63 | 19828 | 99.5 |
+| sweep_shehbaz_long_c32_n32_nonstream_inline | 32 | 32 | 0 | 0 | 13.972 | 14.836 | 15.236 | – | – | 16.2 | 33.86 | 30.9 | 0 | 0.848 | 2.09 | 19829 | 99.5 |
+

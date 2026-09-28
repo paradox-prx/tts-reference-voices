@@ -1,0 +1,517 @@
+{
+ "when": "2026-09-25T03:19:20.818583+05:00",
+ "rows": [
+  {
+   "tag": "c1",
+   "voice": "trump",
+   "stream": false,
+   "i": 0,
+   "status": 200,
+   "total_s": 0.955,
+   "ttfa_s": 0.954,
+   "audio_s": 4.72,
+   "text": "Thank you very much. It's a great honor to be here with so many incredible people tonight.",
+   "headers": {
+    "x-request-id": "b2b35963892942c98b2327faeb350ff3",
+    "x-ai-generated": "true",
+    "x-tts-voice": "trump",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000",
+    "x-tts-audio-seconds": "4.720",
+    "x-tts-suspect": "0",
+    "x-tts-engine-ms": "934",
+    "x-tts-qc": "off",
+    "x-tts-pace-ratio": "0.836"
+   }
+  },
+  {
+   "tag": "c1",
+   "voice": "trump",
+   "stream": true,
+   "i": 0,
+   "status": 200,
+   "total_s": 0.885,
+   "ttfa_s": 0.119,
+   "audio_s": 4.56,
+   "text": "Thank you very much. It's a great honor to be here with so many incredible people tonight.",
+   "headers": {
+    "x-request-id": "8335781e9406404dbb99b05585f32394",
+    "x-ai-generated": "true",
+    "x-tts-voice": "trump",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000"
+   }
+  },
+  {
+   "tag": "c1",
+   "voice": "shehbaz",
+   "stream": false,
+   "i": 0,
+   "status": 200,
+   "total_s": 1.215,
+   "ttfa_s": 1.214,
+   "audio_s": 6.48,
+   "text": "آج ہم ایک نئے دور کا آغاز کر رہے ہیں جس میں ترقی اور خوشحالی سب کے لیے ہوگی۔",
+   "headers": {
+    "x-request-id": "b425c91c04004d05b41a36e2fdf23392",
+    "x-ai-generated": "true",
+    "x-tts-voice": "shehbaz",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000",
+    "x-tts-audio-seconds": "6.480",
+    "x-tts-suspect": "0",
+    "x-tts-engine-ms": "1212",
+    "x-tts-qc": "off",
+    "x-tts-pace-ratio": "1.292"
+   }
+  },
+  {
+   "tag": "c1",
+   "voice": "shehbaz",
+   "stream": true,
+   "i": 0,
+   "status": 200,
+   "total_s": 1.196,
+   "ttfa_s": 0.11,
+   "audio_s": 6.4,
+   "text": "آج ہم ایک نئے دور کا آغاز کر رہے ہیں جس میں ترقی اور خوشحالی سب کے لیے ہوگی۔",
+   "headers": {
+    "x-request-id": "9754a27e019c46e99afb389a1624887f",
+    "x-ai-generated": "true",
+    "x-tts-voice": "shehbaz",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "trump",
+   "stream": false,
+   "i": 0,
+   "status": 200,
+   "total_s": 2.436,
+   "ttfa_s": 2.435,
+   "audio_s": 4.96,
+   "text": "Thank you very much. It's a great honor to be here with so many incredible people tonight.",
+   "headers": {
+    "x-request-id": "0aaa4a435b30496ebd74faa98121d06d",
+    "x-ai-generated": "true",
+    "x-tts-voice": "trump",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000",
+    "x-tts-audio-seconds": "4.960",
+    "x-tts-suspect": "0",
+    "x-tts-engine-ms": "2432",
+    "x-tts-qc": "off",
+    "x-tts-pace-ratio": "0.879"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "trump",
+   "stream": false,
+   "i": 1,
+   "status": 200,
+   "total_s": 2.493,
+   "ttfa_s": 2.492,
+   "audio_s": 4.96,
+   "text": "We have done things that nobody thought were possible, and we are just getting started, believe me.",
+   "headers": {
+    "x-request-id": "631ac5be100e47e2b036baa1d8424e53",
+    "x-ai-generated": "true",
+    "x-tts-voice": "trump",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000",
+    "x-tts-audio-seconds": "4.960",
+    "x-tts-suspect": "0",
+    "x-tts-engine-ms": "2488",
+    "x-tts-qc": "off",
+    "x-tts-pace-ratio": "0.780"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "trump",
+   "stream": false,
+   "i": 2,
+   "status": 200,
+   "total_s": 2.582,
+   "ttfa_s": 2.581,
+   "audio_s": 5.2,
+   "text": "The economy is stronger than ever before, jobs are coming back, and wages are going up for everyone.",
+   "headers": {
+    "x-request-id": "8d9baefca7534128888a5e845f702fb2",
+    "x-ai-generated": "true",
+    "x-tts-voice": "trump",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000",
+    "x-tts-audio-seconds": "5.200",
+    "x-tts-suspect": "0",
+    "x-tts-engine-ms": "2576",
+    "x-tts-qc": "off",
+    "x-tts-pace-ratio": "0.818"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "trump",
+   "stream": false,
+   "i": 3,
+   "status": 200,
+   "total_s": 2.622,
+   "ttfa_s": 2.621,
+   "audio_s": 5.28,
+   "text": "I want to thank the wonderful people of this great state for their support and their friendship.",
+   "headers": {
+    "x-request-id": "acd4bcddf24a476e80295872a3b407c4",
+    "x-ai-generated": "true",
+    "x-tts-voice": "trump",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000",
+    "x-tts-audio-seconds": "5.280",
+    "x-tts-suspect": "0",
+    "x-tts-engine-ms": "2616",
+    "x-tts-qc": "off",
+    "x-tts-pace-ratio": "0.841"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "shehbaz",
+   "stream": false,
+   "i": 0,
+   "status": 200,
+   "total_s": 3.094,
+   "ttfa_s": 3.093,
+   "audio_s": 7.52,
+   "text": "آج ہم ایک نئے دور کا آغاز کر رہے ہیں جس میں ترقی اور خوشحالی سب کے لیے ہوگی۔",
+   "headers": {
+    "x-request-id": "de84a0838b794d379f9388d9e96497d5",
+    "x-ai-generated": "true",
+    "x-tts-voice": "shehbaz",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000",
+    "x-tts-audio-seconds": "7.520",
+    "x-tts-suspect": "0",
+    "x-tts-engine-ms": "3086",
+    "x-tts-qc": "off",
+    "x-tts-pace-ratio": "1.499"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "shehbaz",
+   "stream": false,
+   "i": 1,
+   "status": 200,
+   "total_s": 2.853,
+   "ttfa_s": 2.852,
+   "audio_s": 6.0,
+   "text": "حکومت نے تعلیم اور صحت کے شعبوں میں بڑی سرمایہ کاری کا فیصلہ کیا ہے۔",
+   "headers": {
+    "x-request-id": "e96f8227c646464fa81e4f489812d3d5",
+    "x-ai-generated": "true",
+    "x-tts-voice": "shehbaz",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000",
+    "x-tts-audio-seconds": "6.000",
+    "x-tts-suspect": "0",
+    "x-tts-engine-ms": "2845",
+    "x-tts-qc": "off",
+    "x-tts-pace-ratio": "1.286"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "shehbaz",
+   "stream": false,
+   "i": 2,
+   "status": 200,
+   "total_s": 2.758,
+   "ttfa_s": 2.757,
+   "audio_s": 5.92,
+   "text": "ہم اپنے کسانوں کو ہر ممکن سہولت فراہم کریں گے تاکہ ملک خود کفیل ہو سکے۔",
+   "headers": {
+    "x-request-id": "899c3454686345a89204f2c04fb6360d",
+    "x-ai-generated": "true",
+    "x-tts-voice": "shehbaz",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000",
+    "x-tts-audio-seconds": "5.920",
+    "x-tts-suspect": "0",
+    "x-tts-engine-ms": "2750",
+    "x-tts-qc": "off",
+    "x-tts-pace-ratio": "1.223"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "shehbaz",
+   "stream": false,
+   "i": 3,
+   "status": 200,
+   "total_s": 2.854,
+   "ttfa_s": 2.852,
+   "audio_s": 6.0,
+   "text": "نوجوان اس قوم کا مستقبل ہیں اور ان کے لیے روزگار کے مواقع پیدا کرنا ہماری ذمہ داری ہے۔",
+   "headers": {
+    "x-request-id": "6264733688f14a2ca718186ea5fc77ef",
+    "x-ai-generated": "true",
+    "x-tts-voice": "shehbaz",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000",
+    "x-tts-audio-seconds": "6.000",
+    "x-tts-suspect": "0",
+    "x-tts-engine-ms": "2845",
+    "x-tts-qc": "off",
+    "x-tts-pace-ratio": "1.018"
+   }
+  },
+  {
+   "tag": "c8_summary",
+   "stream": false,
+   "wall_s": 3.095,
+   "audio_s": 45.84,
+   "x_realtime": 14.81
+  },
+  {
+   "tag": "c8",
+   "voice": "trump",
+   "stream": true,
+   "i": 0,
+   "status": 200,
+   "total_s": 1.739,
+   "ttfa_s": 0.15,
+   "audio_s": 4.08,
+   "text": "Thank you very much. It's a great honor to be here with so many incredible people tonight.",
+   "headers": {
+    "x-request-id": "3e979f76227444cc8c3cb06825f09cee",
+    "x-ai-generated": "true",
+    "x-tts-voice": "trump",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "trump",
+   "stream": true,
+   "i": 1,
+   "status": 200,
+   "total_s": 2.22,
+   "ttfa_s": 0.631,
+   "audio_s": 5.12,
+   "text": "We have done things that nobody thought were possible, and we are just getting started, believe me.",
+   "headers": {
+    "x-request-id": "a808c1774e514df39ff635a663dd484a",
+    "x-ai-generated": "true",
+    "x-tts-voice": "trump",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "trump",
+   "stream": true,
+   "i": 2,
+   "status": 200,
+   "total_s": 2.301,
+   "ttfa_s": 0.632,
+   "audio_s": 5.28,
+   "text": "The economy is stronger than ever before, jobs are coming back, and wages are going up for everyone.",
+   "headers": {
+    "x-request-id": "324968a2e84e4d44938200887e556fde",
+    "x-ai-generated": "true",
+    "x-tts-voice": "trump",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "trump",
+   "stream": true,
+   "i": 3,
+   "status": 200,
+   "total_s": 2.27,
+   "ttfa_s": 0.633,
+   "audio_s": 5.2,
+   "text": "I want to thank the wonderful people of this great state for their support and their friendship.",
+   "headers": {
+    "x-request-id": "7c43f38a24144eaf89462b4c472823c5",
+    "x-ai-generated": "true",
+    "x-tts-voice": "trump",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "shehbaz",
+   "stream": true,
+   "i": 0,
+   "status": 200,
+   "total_s": 2.509,
+   "ttfa_s": 0.633,
+   "audio_s": 6.24,
+   "text": "آج ہم ایک نئے دور کا آغاز کر رہے ہیں جس میں ترقی اور خوشحالی سب کے لیے ہوگی۔",
+   "headers": {
+    "x-request-id": "90f1054d6d4c4c4e8b1bc26961bc30b2",
+    "x-ai-generated": "true",
+    "x-tts-voice": "shehbaz",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "shehbaz",
+   "stream": true,
+   "i": 1,
+   "status": 200,
+   "total_s": 2.093,
+   "ttfa_s": 0.631,
+   "audio_s": 4.72,
+   "text": "حکومت نے تعلیم اور صحت کے شعبوں میں بڑی سرمایہ کاری کا فیصلہ کیا ہے۔",
+   "headers": {
+    "x-request-id": "507a98c30a2c406fa77eeaca7accecec",
+    "x-ai-generated": "true",
+    "x-tts-voice": "shehbaz",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "shehbaz",
+   "stream": true,
+   "i": 2,
+   "status": 200,
+   "total_s": 2.156,
+   "ttfa_s": 0.632,
+   "audio_s": 4.88,
+   "text": "ہم اپنے کسانوں کو ہر ممکن سہولت فراہم کریں گے تاکہ ملک خود کفیل ہو سکے۔",
+   "headers": {
+    "x-request-id": "00c414accb1c4644ac13117c1f29b84e",
+    "x-ai-generated": "true",
+    "x-tts-voice": "shehbaz",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000"
+   }
+  },
+  {
+   "tag": "c8",
+   "voice": "shehbaz",
+   "stream": true,
+   "i": 3,
+   "status": 200,
+   "total_s": 2.397,
+   "ttfa_s": 0.632,
+   "audio_s": 5.76,
+   "text": "نوجوان اس قوم کا مستقبل ہیں اور ان کے لیے روزگار کے مواقع پیدا کرنا ہماری ذمہ داری ہے۔",
+   "headers": {
+    "x-request-id": "d389e43044ca4fbcb5b45f3df58ba035",
+    "x-ai-generated": "true",
+    "x-tts-voice": "shehbaz",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000"
+   }
+  },
+  {
+   "tag": "c8_summary",
+   "stream": true,
+   "wall_s": 2.511,
+   "audio_s": 41.28,
+   "x_realtime": 16.44
+  },
+  {
+   "route": "/v1/voices",
+   "body": {
+    "object": "list",
+    "data": [
+     {
+      "id": "shehbaz",
+      "object": "voice",
+      "label": "Shehbaz Sharif",
+      "language": "ur",
+      "default_language": "Auto",
+      "ref_seconds": 28.044
+     },
+     {
+      "id": "trump",
+      "object": "voice",
+      "label": "Donald Trump",
+      "language": "en",
+      "default_language": "English",
+      "ref_seconds": 23.211
+     }
+    ]
+   }
+  },
+  {
+   "route": "/v1/models",
+   "body": {
+    "object": "list",
+    "data": [
+     {
+      "id": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+      "object": "model",
+      "created": 0,
+      "owned_by": "qwen3-tts-server"
+     }
+    ]
+   }
+  },
+  {
+   "route": "/ready",
+   "body": {
+    "ready": true,
+    "backend": "vllm_omni",
+    "voices": [
+     "shehbaz",
+     "trump"
+    ],
+    "inflight": 0,
+    "queued": 0
+   }
+  },
+  {
+   "route": "/metrics",
+   "sample": [
+    "tts_requests_total{status=\"ok\",voice=\"trump\"} 10.0",
+    "tts_requests_total{status=\"ok\",voice=\"shehbaz\"} 10.0",
+    "tts_request_seconds_count 20.0",
+    "tts_request_seconds_sum 43.518299999999996",
+    "tts_queue_wait_seconds_count 20.0",
+    "tts_queue_wait_seconds_sum 0.00024385901269852184",
+    "tts_inflight 0.0",
+    "tts_queue_depth 0.0",
+    "tts_qc_seconds_count 0.0",
+    "tts_qc_seconds_sum 0.0",
+    "tts_audio_seconds_total{voice=\"trump\"} 49.36000000000001",
+    "tts_audio_seconds_total{voice=\"shehbaz\"} 59.92"
+   ]
+  }
+ ]
+}

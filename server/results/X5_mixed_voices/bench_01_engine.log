@@ -1,0 +1,15 @@
+=== 2026-09-25T05:30:53+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --mix --size xlong -c 16 -n 16 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X5_mixed_voices --gpus 0 --tag mix --meta phase=X5_mixed_voices --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x
+warmup trump 1: 0.30s ok
+warmup trump 2: 0.67s ok
+warmup shehbaz 1: 0.71s ok
+warmup shehbaz 2: 0.84s ok
+trump+shehbaz xlong (en.json, ur.json): trump 43 texts, shehbaz 43 texts
+  mix_trump+shehbaz_xlong_c16_n16_nonstream_inline: ok 32/32 err 0 suspect 0 (short 0, long 0; pace x0.991) | lat p50=17.384s p90=19.723s p99=21.617s | 28.52x realtime (p90-wall 26.35x, stragglers 0), 0.86 req/s | gpu 19829 MiB 99.3%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X5_mixed_voices
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| mix_trump+shehbaz_xlong_c16_n16_nonstream_inline | 32 | 32 | 0 | 0 | 17.384 | 19.723 | 21.617 | – | – | 33.08 | 28.52 | 26.35 | 0 | 0.532 | 0.86 | 19829 | 99.3 |
+

@@ -1,0 +1,57 @@
+{
+ "name": "max_new_tokens",
+ "url": "http://127.0.0.1:8091",
+ "voice": "shehbaz",
+ "text": "میرے پیارے بہنو اور بھائیو، جب میں آپ کے درمیان آتا ہوں تو میرا دل خوشی سے بھر جاتا ہے۔",
+ "seed": null,
+ "spec": {
+  "name": "max_new_tokens",
+  "via": "engine",
+  "voice": "shehbaz",
+  "fails": {
+   "cap40": {
+    "max_new_tokens": 40
+   }
+  }
+ },
+ "deterministic_base": false,
+ "takes": [
+  {
+   "label": "base_a",
+   "status": 200,
+   "error": null,
+   "latency_s": 1.692,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto"
+   },
+   "headers": {
+    "x-vllm-omni-input-tokens": "409",
+    "x-vllm-omni-output-tokens": "114",
+    "x-vllm-omni-total-tokens": "523",
+    "x-vllm-omni-input-text-tokens": "58",
+    "x-vllm-omni-input-audio-tokens": "351"
+   },
+   "audio_s": 9.04,
+   "pcm_sha256": "ebc1967bad88fea4f83ee8eefc9bd5bf864c04d82ab2f44bdd59645b67b5f3b7",
+   "file": "base_a.wav"
+  },
+  {
+   "label": "fails_cap40",
+   "status": 500,
+   "error": "HTTP 500: {\"error\": {\"message\": \"Qwen3-TTS Base did not emit codec EOS before its token budget (40/40 codec tokens); the generated audio is incomplete.\", \"type\": \"server_error\", \"param\": null, \"code\": 500}}",
+   "latency_s": 0.63,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto",
+    "max_new_tokens": 40
+   },
+   "headers": {},
+   "verdict": "refused"
+  }
+ ],
+ "problems": [],
+ "ok": true
+}

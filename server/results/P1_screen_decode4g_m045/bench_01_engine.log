@@ -1,0 +1,26 @@
+=== 2026-09-25T04:20:51+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --size medium --sweep 1,8,32 --n-rule 8:2:32 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P1_screen_decode4g_m045 --gpus 0 --meta phase=P1_screen_decode4g_m045 --meta via=engine --meta 'engine=vllm-omni decode4g_m045 (engine)' --meta engine_kind=vllm --meta variant=decode4g_m045 --meta venv=engine --meta gateway= --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0795 s/letter (file); suspect outside 0.6-1.8 x
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.0880 s/letter (file); suspect outside 0.6-1.8 x
+warmup trump 1: 0.33s ok
+warmup trump 2: 0.63s ok
+trump medium (en.json): trump 186 texts
+  trump_medium_c1_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x0.934) | lat p50=1.222s p90=1.795s p99=1.907s | 5.31x realtime (p90-wall 5.31x, stragglers 0), 0.77 req/s | gpu 20284 MiB 96.0%
+  trump_medium_c8_n16_nonstream_inline: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x0.884) | lat p50=2.848s p90=3.434s p99=3.998s | 15.6x realtime (p90-wall 15.05x, stragglers 0), 2.51 req/s | gpu 20328 MiB 99.0%
+  trump_medium_c32_n32_nonstream_inline: ok 32/32 err 0 suspect 0 (short 0, long 0; pace x0.818) | lat p50=6.494s p90=6.919s p99=7.385s | 27.29x realtime (p90-wall 25.23x, stragglers 0), 4.3 req/s | gpu 20608 MiB 99.7%
+warmup shehbaz 1: 0.83s ok
+warmup shehbaz 2: 0.78s ok
+shehbaz medium (ur.json): shehbaz 145 texts
+  shehbaz_medium_c1_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.278) | lat p50=2.298s p90=2.349s p99=2.69s | 5.41x realtime (p90-wall 5.41x, stragglers 0), 0.51 req/s | gpu 20829 MiB 96.7%
+  shehbaz_medium_c8_n16_nonstream_inline: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x1.347) | lat p50=4.079s p90=4.855s p99=5.089s | 17.52x realtime (p90-wall 17.36x, stragglers 0), 1.79 req/s | gpu 20827 MiB 99.0%
+  shehbaz_medium_c32_n32_nonstream_inline: ok 32/32 err 0 suspect 0 (short 0, long 0; pace x1.338) | lat p50=8.557s p90=9.576s p99=9.915s | 30.75x realtime (p90-wall 28.12x, stragglers 0), 3.21 req/s | gpu 20832 MiB 99.5%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P1_screen_decode4g_m045
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| trump_medium_c1_n8_nonstream_inline | 8 | 8 | 0 | 0 | 1.222 | 1.795 | 1.907 | – | – | 6.86 | 5.31 | 5.31 | 0 | 0.19 | 0.77 | 20284 | 96.0 |
+| trump_medium_c8_n16_nonstream_inline | 16 | 16 | 0 | 0 | 2.848 | 3.434 | 3.998 | – | – | 6.22 | 15.6 | 15.05 | 0 | 0.492 | 2.51 | 20328 | 99.0 |
+| trump_medium_c32_n32_nonstream_inline | 32 | 32 | 0 | 0 | 6.494 | 6.919 | 7.385 | – | – | 6.34 | 27.29 | 25.23 | 0 | 0.999 | 4.3 | 20608 | 99.7 |
+| shehbaz_medium_c1_n8_nonstream_inline | 8 | 8 | 0 | 0 | 2.298 | 2.349 | 2.69 | – | – | 10.56 | 5.41 | 5.41 | 0 | 0.187 | 0.51 | 20829 | 96.7 |
+| shehbaz_medium_c8_n16_nonstream_inline | 16 | 16 | 0 | 0 | 4.079 | 4.855 | 5.089 | – | – | 9.79 | 17.52 | 17.36 | 0 | 0.416 | 1.79 | 20827 | 99.0 |
+| shehbaz_medium_c32_n32_nonstream_inline | 32 | 32 | 0 | 0 | 8.557 | 9.576 | 9.915 | – | – | 9.57 | 30.75 | 28.12 | 0 | 0.894 | 3.21 | 20832 | 99.5 |
+

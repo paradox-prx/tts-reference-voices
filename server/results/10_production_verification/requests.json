@@ -1,0 +1,106 @@
+{
+ "when": "2026-09-25T12:04:34.413495+05:00",
+ "rows": [
+  {
+   "case": "auth_missing",
+   "status": 401,
+   "total_s": 0.002,
+   "ttfb_s": 0.002,
+   "bytes": 135,
+   "headers": {
+    "x-request-id": "6e3595580b33406aac86eb3f7ea5809f"
+   },
+   "words": 1,
+   "body": "{\"error\":{\"message\":\"missing or invalid API key (Authorization: Bearer <key>)\",\"type\":\"authentication_error\",\"code\":\"invalid_api_key\"}}"
+  },
+  {
+   "case": "en_short_wav",
+   "status": 200,
+   "total_s": 0.647,
+   "ttfb_s": 0.646,
+   "bytes": 146052,
+   "headers": {
+    "x-request-id": "706d97c498d840b0b522f10b447eabbb",
+    "x-ai-generated": "true",
+    "x-tts-voice": "trump",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000",
+    "x-tts-audio-seconds": "3.040",
+    "x-tts-suspect": "0",
+    "x-tts-engine-ms": "645",
+    "x-tts-qc": "off",
+    "x-tts-parts": "1",
+    "x-tts-pace-ratio": "0.944"
+   },
+   "words": 9,
+   "audio_s": 3.04,
+   "format": "WAV"
+  },
+  {
+   "case": "ur_long_split_nsm",
+   "status": 200,
+   "total_s": 5.363,
+   "ttfb_s": 5.34,
+   "bytes": 3584772,
+   "headers": {
+    "x-request-id": "ea4cd57d621c44a487c60e9325f30c59",
+    "x-ai-generated": "true",
+    "x-tts-voice": "shehbaz",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000",
+    "x-tts-audio-seconds": "74.680",
+    "x-tts-suspect": "0",
+    "x-tts-engine-ms": "5336",
+    "x-tts-qc": "off",
+    "x-tts-parts": "4",
+    "x-tts-pace-ratio": "1.068"
+   },
+   "words": 202,
+   "audio_s": 74.68,
+   "format": "WAV"
+  },
+  {
+   "case": "en_stream_pcm",
+   "status": 200,
+   "total_s": 0.874,
+   "ttfb_s": 0.13,
+   "bytes": 211200,
+   "headers": {
+    "x-request-id": "3324144dd41241ddb2c52761b9079b43",
+    "x-ai-generated": "true",
+    "x-tts-voice": "trump",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000"
+   },
+   "words": 12,
+   "audio_s": 4.4
+  },
+  {
+   "case": "ur_mp3",
+   "status": 200,
+   "total_s": 1.111,
+   "ttfb_s": 1.111,
+   "bytes": 42060,
+   "headers": {
+    "x-request-id": "1372a7a36eda43f49284ea9613fb931b",
+    "x-ai-generated": "true",
+    "x-tts-voice": "shehbaz",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000",
+    "x-tts-audio-seconds": "5.680",
+    "x-tts-suspect": "0",
+    "x-tts-engine-ms": "1082",
+    "x-tts-qc": "off",
+    "x-tts-parts": "1",
+    "x-tts-pace-ratio": "1.383"
+   },
+   "words": 12,
+   "audio_s": 5.68,
+   "format": "MP3"
+  }
+ ]
+}

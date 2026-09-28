@@ -1,0 +1,14 @@
+=== 2026-09-25T08:29:17+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump --size xxlong -n 43 -c 8 --timeout 900 --voice-mode server --url http://127.0.0.1:8090 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X7_split_60 --gpus 0 --tag split_60 --meta phase=X7_split_60 --meta via=gateway --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta 'gateway={"TTS_RETRY_MAX": "0", "TTS_SPLIT_WORDS": "60"}' --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x; voice='trump'
+  server voice 'trump': listed by GET /v1/audio/voices
+warmup trump 1: 0.39s ok
+warmup trump 2: 0.70s ok
+trump xxlong (en.json): trump 43 texts
+  split_60_trump_xxlong_c8_n43_nonstream_server: ok 43/43 err 0 suspect 0 (short 0, long 0; pace x1.013) | lat p50=14.255s p90=16.549s p99=52.294s | 31.68x realtime (p90-wall 30.51x, stragglers 1), 0.48 req/s | gpu 20406 MiB 99.4%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X7_split_60
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| split_60_shehbaz_xxlong_c8_n43_nonstream_server | 43 | 43 | 0 | 0 | 16.831 | 18.807 | 21.114 | – | – | 70.63 | 31.95 | 31.71 | 0 | 0.236 | 0.45 | 20407 | 99.6 |
+| split_60_trump_xxlong_c8_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.255 | 16.549 | 52.294 | – | – | 65.33 | 31.68 | 30.51 | 1 | 0.224 | 0.48 | 20406 | 99.4 |
+

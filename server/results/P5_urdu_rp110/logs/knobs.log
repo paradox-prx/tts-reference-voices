@@ -1,0 +1,5 @@
+=== 2026-09-25T05:01:19+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/bench/verify_knobs.py --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P5_urdu_rp110/knobs --voices-dir /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices --spec '{"name": "rp_1.10", "via": "engine", "voice": "shehbaz", "fails": {"extra_rp_neg": {"extra_params": {"repetition_penalty": -1}}}, "succeeds": {"extra_rp_1.10": {"extra_params": {"repetition_penalty": 1.1}}}}'
+  base_a: HTTP 200 6.88 s 
+  fails_extra_rp_neg: HTTP 400 - s refused HTTP 400: {"error":{"message":"extra_params.repetition_penalty must be a finite number > 0","type":"BadRequestError","pa
+  succeeds_extra_rp_1.10: HTTP 200 7.6 s accepted
+knob check rp_1.10: OK

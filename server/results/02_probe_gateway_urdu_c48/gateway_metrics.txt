@@ -1,0 +1,3 @@
+tts_requests_total{status="ok",voice="shehbaz"} 98.0
+tts_retries_total{reason="engine_error"} 1.0
+tts_engine_errors_total{kind="failure"} 1.0

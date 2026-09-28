@@ -1,0 +1,45 @@
+=== 2026-09-25T05:40:29+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --size xlong --sweep 1,2,4,8,16 --n-rule 4:1 --timeout 1800 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P9_baseline_b8 --gpus 0 --meta phase=P9_baseline_b8 --meta via=engine --meta 'engine=qwen-tts baseline --max-batch 8' --meta engine_kind=qwentts --meta variant= --meta venv= --meta gateway= --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x
+warmup trump 1: 1.17s ok
+warmup trump 2: 1.81s ok
+trump xlong (en.json): trump 43 texts
+  trump_xlong_c1_n4_nonstream_inline: ok 4/4 err 0 suspect 0 (short 0, long 0; pace x1.045) | lat p50=19.637s p90=20.459s p99=20.459s | 1.72x realtime (p90-wall 1.72x, stragglers 0), 0.05 req/s | gpu 15041 MiB 56.7%
+  trump_xlong_c2_n4_nonstream_inline: ok 4/4 err 0 suspect 0 (short 0, long 0; pace x0.971) | lat p50=21.0s p90=21.004s p99=21.004s | 3.18x realtime (p90-wall 3.18x, stragglers 0), 0.1 req/s | gpu 15041 MiB 60.7%
+  trump_xlong_c4_n4_nonstream_inline: ok 4/4 err 0 suspect 0 (short 0, long 0; pace x0.975) | lat p50=20.641s p90=20.645s p99=20.645s | 6.16x realtime (p90-wall 6.16x, stragglers 0), 0.19 req/s | gpu 15098 MiB 62.4%
+  trump_xlong_c8_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x0.998) | lat p50=22.753s p90=22.758s p99=22.762s | 11.03x realtime (p90-wall 11.03x, stragglers 0), 0.35 req/s | gpu 18066 MiB 66.6%
+  trump_xlong_c16_n16_nonstream_inline: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x0.973) | lat p50=56.18s p90=78.515s p99=78.531s | 6.68x realtime (p90-wall 6.31x, stragglers 0), 0.2 req/s | gpu 18077 MiB 65.3%
+warmup shehbaz 1: 2.13s ok
+warmup shehbaz 2: 2.44s ok
+shehbaz xlong (ur.json): shehbaz 43 texts
+  shehbaz_xlong_c1_n4_nonstream_inline: ok 4/4 err 0 suspect 1 (short 1, long 0; pace x0.856) | lat p50=19.128s p90=19.551s p99=19.551s | 1.7x realtime (p90-wall 1.7x, stragglers 0), 0.06 req/s | gpu 18077 MiB 57.5%
+  shehbaz_xlong_c2_n4_nonstream_inline: ok 3/4 err 1 suspect 0 (short 0, long 0; pace x0.944) | lat p50=21.689s p90=51.475s p99=51.475s | 1.38x realtime (p90-wall 1.38x, stragglers 0), 0.04 req/s | gpu 18077 MiB 61.4%
+    ERR[shehbaz 3] HTTP 500: {"error":{"message":"Qwen3-TTS Base did not emit codec EOS before its token budget (964/964 codec tokens); the generated audio is incomplete.","type":"InternalServerError","param":null,"code":500}}
+  shehbaz_xlong_c4_n4_nonstream_inline: ok 4/4 err 0 suspect 0 (short 0, long 0; pace x0.93) | lat p50=20.518s p90=20.521s p99=20.521s | 6.41x realtime (p90-wall 6.41x, stragglers 0), 0.19 req/s | gpu 18077 MiB 62.4%
+  shehbaz_xlong_c8_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x0.907) | lat p50=26.245s p90=26.249s p99=26.256s | 9.94x realtime (p90-wall 9.94x, stragglers 0), 0.3 req/s | gpu 18130 MiB 66.0%
+  shehbaz_xlong_c16_n16_nonstream_inline: ok 16/16 err 0 suspect 1 (short 1, long 0; pace x0.887) | lat p50=40.289s p90=62.263s p99=62.27s | 7.62x realtime (p90-wall 7.19x, stragglers 0), 0.26 req/s | gpu 18133 MiB 64.6%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P9_baseline_b8
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| trump_short_c1_n8_nonstream_inline | 8 | 8 | 0 | 1 | 2.273 | 3.345 | 3.373 | – | – | 3.53 | 1.56 | 1.56 | 0 | 0.641 | 0.44 | 5835 | 56.3 |
+| trump_short_c2_n8_nonstream_inline | 8 | 8 | 0 | 0 | 3.202 | 3.556 | 3.559 | – | – | 2.71 | 2.16 | 2.16 | 0 | 0.945 | 0.8 | 7106 | 62.3 |
+| trump_short_c4_n8_nonstream_inline | 8 | 8 | 0 | 1 | 4.228 | 4.233 | 4.234 | – | – | 3.14 | 3.86 | 3.86 | 0 | 1.012 | 1.23 | 9919 | 65.0 |
+| trump_short_c8_n16_nonstream_inline | 16 | 16 | 0 | 0 | 4.468 | 7.632 | 7.633 | – | – | 3.09 | 4.09 | 3.66 | 0 | 2.061 | 1.32 | 14990 | 68.0 |
+| trump_short_c16_n32_nonstream_inline | 32 | 32 | 0 | 0 | 8.117 | 8.133 | 8.134 | – | – | 2.87 | 5.68 | 5.04 | 0 | 2.579 | 1.98 | 14991 | 72.5 |
+| shehbaz_short_c1_n8_nonstream_inline | 8 | 8 | 0 | 0 | 3.14 | 3.522 | 4.52 | – | – | 4.74 | 1.62 | 1.62 | 0 | 0.621 | 0.34 | 15001 | 57.8 |
+| shehbaz_short_c2_n8_nonstream_inline | 8 | 8 | 0 | 0 | 2.806 | 3.416 | 3.418 | – | – | 3.56 | 2.72 | 2.72 | 0 | 0.716 | 0.77 | 14993 | 60.5 |
+| shehbaz_short_c4_n8_nonstream_inline | 8 | 8 | 0 | 0 | 5.667 | 5.674 | 5.675 | – | – | 5.37 | 4.3 | 4.3 | 0 | 0.876 | 0.8 | 14992 | 65.7 |
+| shehbaz_short_c8_n16_nonstream_inline | 16 | 16 | 0 | 0 | 4.925 | 6.495 | 6.495 | – | – | 4.01 | 5.62 | 5.31 | 0 | 1.364 | 1.4 | 14993 | 67.1 |
+| shehbaz_short_c16_n32_nonstream_inline | 32 | 32 | 0 | 0 | 11.086 | 13.474 | 13.518 | – | – | 4.26 | 5.91 | 5.24 | 0 | 2.829 | 1.39 | 15007 | 70.4 |
+| trump_xlong_c1_n4_nonstream_inline | 4 | 4 | 0 | 0 | 19.637 | 20.459 | 20.459 | – | – | 33.58 | 1.72 | 1.72 | 0 | 0.582 | 0.05 | 15041 | 56.7 |
+| trump_xlong_c2_n4_nonstream_inline | 4 | 4 | 0 | 0 | 21.0 | 21.004 | 21.004 | – | – | 31.58 | 3.18 | 3.18 | 0 | 0.635 | 0.1 | 15041 | 60.7 |
+| trump_xlong_c4_n4_nonstream_inline | 4 | 4 | 0 | 0 | 20.641 | 20.645 | 20.645 | – | – | 31.8 | 6.16 | 6.16 | 0 | 0.665 | 0.19 | 15098 | 62.4 |
+| trump_xlong_c8_n8_nonstream_inline | 8 | 8 | 0 | 0 | 22.753 | 22.758 | 22.762 | – | – | 31.4 | 11.03 | 11.03 | 0 | 0.748 | 0.35 | 18066 | 66.6 |
+| trump_xlong_c16_n16_nonstream_inline | 16 | 16 | 0 | 0 | 56.18 | 78.515 | 78.531 | – | – | 32.77 | 6.68 | 6.31 | 0 | 1.778 | 0.2 | 18077 | 65.3 |
+| shehbaz_xlong_c1_n4_nonstream_inline | 4 | 4 | 0 | 1 | 19.128 | 19.551 | 19.551 | – | – | 26.14 | 1.7 | 1.7 | 0 | 0.591 | 0.06 | 18077 | 57.5 |
+| shehbaz_xlong_c2_n4_nonstream_inline | 4 | 3 | 1 | 0 | 21.689 | 51.475 | 51.475 | – | – | 33.76 | 1.38 | 1.38 | 0 | 0.655 | 0.04 | 18077 | 61.4 |
+| shehbaz_xlong_c4_n4_nonstream_inline | 4 | 4 | 0 | 0 | 20.518 | 20.521 | 20.521 | – | – | 32.88 | 6.41 | 6.41 | 0 | 0.619 | 0.19 | 18077 | 62.4 |
+| shehbaz_xlong_c8_n8_nonstream_inline | 8 | 8 | 0 | 0 | 26.245 | 26.249 | 26.256 | – | – | 32.62 | 9.94 | 9.94 | 0 | 0.828 | 0.3 | 18130 | 66.0 |
+| shehbaz_xlong_c16_n16_nonstream_inline | 16 | 16 | 0 | 1 | 40.289 | 62.263 | 62.27 | – | – | 29.67 | 7.62 | 7.19 | 0 | 1.395 | 0.26 | 18133 | 64.6 |
+

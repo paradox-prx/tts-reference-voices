@@ -1,0 +1,151 @@
+{
+ "phase": "X7_split_60",
+ "runs": {
+  "split_60_shehbaz_xxlong_c8_n43_nonstream_server [shehbaz]": {
+   "n": 43,
+   "runaways": 0,
+   "severe": {
+    "k": 10,
+    "rate": 0.2326,
+    "ci95": [
+     0.1315,
+     0.3774
+    ]
+   },
+   "moderate": {
+    "k": 9,
+    "rate": 0.2093,
+    "ci95": [
+     0.1142,
+     0.3521
+    ]
+   },
+   "clean": {
+    "k": 24,
+    "rate": 0.5581,
+    "ci95": [
+     0.4111,
+     0.6957
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 19,
+    "rate": 0.4419,
+    "ci95": [
+     0.3043,
+     0.5889
+    ]
+   },
+   "reasons": {
+    "skip": 8,
+    "voiced_gap": 6,
+    "repeat": 5,
+    "skip_phrase": 4,
+    "char_ratio<0.8": 2,
+    "loop_long_word": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3616,
+    "cer_nospace": 0.1537,
+    "sim_prompt_large": 0.821,
+    "sim_prompt_base": 0.9909,
+    "sim_heldout_large": 0.8546
+   }
+  },
+  "split_60_trump_xxlong_c8_n43_nonstream_server [trump]": {
+   "n": 43,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.082
+    ]
+   },
+   "moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.082
+    ]
+   },
+   "clean": {
+    "k": 43,
+    "rate": 1.0,
+    "ci95": [
+     0.918,
+     1.0
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.082
+    ]
+   },
+   "reasons": {},
+   "non_severe_means": {
+    "wer": 0.01,
+    "cer_nospace": 0.007,
+    "sim_prompt_large": 0.8693,
+    "sim_prompt_base": 0.9868,
+    "sim_heldout_large": 0.0
+   }
+  },
+  "ALL": {
+   "n": 86,
+   "runaways": 0,
+   "severe": {
+    "k": 10,
+    "rate": 0.1163,
+    "ci95": [
+     0.0644,
+     0.201
+    ]
+   },
+   "moderate": {
+    "k": 9,
+    "rate": 0.1047,
+    "ci95": [
+     0.056,
+     0.1871
+    ]
+   },
+   "clean": {
+    "k": 67,
+    "rate": 0.7791,
+    "ci95": [
+     0.6805,
+     0.8538
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 19,
+    "rate": 0.2209,
+    "ci95": [
+     0.1462,
+     0.3195
+    ]
+   },
+   "reasons": {
+    "skip": 8,
+    "voiced_gap": 6,
+    "repeat": 5,
+    "skip_phrase": 4,
+    "char_ratio<0.8": 2,
+    "loop_long_word": 1
+   },
+   "non_severe_means": {
+    "wer": 0.1627,
+    "cer_nospace": 0.0707,
+    "sim_prompt_large": 0.8483,
+    "sim_prompt_base": 0.9886,
+    "sim_heldout_large": 0.3711
+   }
+  }
+ }
+}

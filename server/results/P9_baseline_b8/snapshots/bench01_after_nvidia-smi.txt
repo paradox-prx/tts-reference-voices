@@ -1,0 +1,32 @@
+# 2026-09-25T05:40:29+05:00
+Fri Sep 25 05:40:29 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.95.05              Driver Version: 580.95.05      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 3090        Off |   00000000:01:00.0 Off |                  N/A |
+| 48%   73C    P2            295W /  370W |   15006MiB /  24576MiB |     65%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A            3074      G   /usr/lib/xorg/Xorg                      153MiB |
+|    0   N/A  N/A            3329      G   /usr/bin/gnome-shell                     24MiB |
+|    0   N/A  N/A            4654      G   /usr/bin/nautilus                        18MiB |
+|    0   N/A  N/A            4912      G   /usr/share/code/code                     43MiB |
+|    0   N/A  N/A            7292      G   ...rack-uuid=3190708988185955192         27MiB |
+|    0   N/A  N/A          300316      C   ...rver/venvs/qwentts/bin/python      14682MiB |
++-----------------------------------------------------------------------------------------+
+
+timestamp, memory.used [MiB], memory.total [MiB], utilization.gpu [%], temperature.gpu, power.draw [W], clocks.current.sm [MHz], clocks.current.memory [MHz], pstate
+2026/09/25 05:40:29.676, 15006 MiB, 24576 MiB, 65 %, 73, 297.16 W, 1815 MHz, 9501 MHz, P2
+
+pid, process_name, used_gpu_memory [MiB]
+300316, /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/qwentts/bin/python, 14682 MiB

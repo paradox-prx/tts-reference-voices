@@ -1,0 +1,358 @@
+{
+ "about": "Real-model end-to-end check of server/baseline/qwen_tts_server.py on CPU (the GPU was reserved for the vLLM engine; CUDA_VISIBLE_DEVICES=''). Proves the code path: model load from the local snapshot, repo voice prompts, dynamic batching with mixed voices and languages, generate, per-row cap handling, WAV encoding with the AI label. CPU speed numbers are NOT representative of anything: this CPU has no AVX-512/AMX bf16, so bf16 runs a slow, effectively single-threaded path.",
+ "generated_at": "2026-09-25T04:21+05:00",
+ "machine": {
+  "hostname": "vector",
+  "cpu": "Intel(R) Core(TM) i9-14900K",
+  "logical_cpus": 32,
+  "avx512_bf16": false,
+  "amx_bf16": false,
+  "avx512f": false,
+  "avx_vnni": true,
+  "avx2": true,
+  "torch_mkldnn_bf16_supported": false,
+  "observed": "one worker thread at ~100% CPU for the whole generation despite --threads 4 (the other threads idle): the bf16 CPU kernels used here do not parallelise on this CPU"
+ },
+ "command": "CUDA_VISIBLE_DEVICES='' HF_HUB_OFFLINE=1 nice -n 19 server/venvs/qwentts/bin/python server/baseline/qwen_tts_server.py --device cpu --dtype bfloat16 --threads 4 --port 18093 --max-batch 4 --no-warmup",
+ "server_code_note": "The server process ran the code as of 03:35 PKT. Edits made afterwards and not exercised by this run (all covered by the 86 fake-model tests): transformers log verbosity set to error, a client-disconnect log status (499), a guard around the batcher's result delivery, and skipping delivery/retry for already-cancelled futures. The generation path is unchanged.",
+ "config": {
+  "host": "127.0.0.1",
+  "port": 18093,
+  "model": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+  "device": "cpu",
+  "dtype": "bfloat16",
+  "attn": "sdpa",
+  "voices_dir": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices",
+  "max_batch": 4,
+  "batch_window_ms": 20.0,
+  "no_prompt_cache": false,
+  "prompt_cache_size": 256,
+  "avg_embedding": false,
+  "length_policy": "error",
+  "no_length_retry": false,
+  "qwen_regex": false,
+  "max_queue": 512,
+  "threads": 4,
+  "no_warmup": true,
+  "log_level": "INFO",
+  "log_tz": "Asia/Karachi"
+ },
+ "versions": {
+  "qwen-tts": "0.1.1",
+  "transformers": "4.57.3",
+  "torch": "2.13.0",
+  "torchaudio": "2.11.0",
+  "accelerate": "1.12.0",
+  "tokenizers": "0.22.2",
+  "fastapi": "0.136.3",
+  "uvicorn": "0.53.0",
+  "numpy": "2.3.5",
+  "soundfile": "0.14.0",
+  "librosa": "1.0.0",
+  "torch_cuda": "13.0",
+  "python": "3.12.6"
+ },
+ "startup": {
+  "model": {
+   "model_path": "/home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3",
+   "revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+   "tokenizer_regex": "stock (fix_mistral_regex=True)",
+   "load_s": 0.54,
+   "attn_implementation": "sdpa"
+  },
+  "voice_prepared": [
+   {
+    "ts": "2026-09-25T03:36:24.563+05:00",
+    "level": "info",
+    "event": "voice_prepared",
+    "voice": "shehbaz",
+    "language": "Auto",
+    "ref_seconds": 28.044,
+    "ref_sha256_ok": true,
+    "prompt_ms": 42868.0,
+    "ref_code_frames": 351,
+    "spk_embedding_norm": 17.178
+   },
+   {
+    "ts": "2026-09-25T03:37:17.066+05:00",
+    "level": "info",
+    "event": "voice_prepared",
+    "voice": "trump",
+    "language": "English",
+    "ref_seconds": 23.211,
+    "ref_sha256_ok": true,
+    "prompt_ms": 52502.8,
+    "ref_code_frames": 291,
+    "spk_embedding_norm": 17.3236
+   }
+  ],
+  "ready_s": 98.09,
+  "note": "load_s is small because from_pretrained maps the safetensors lazily; most weight I/O happens on first use. prompt_ms = create_voice_clone_prompt (speech-tokenizer encode of the 23-28 s reference + speaker encoder) in bf16 on this CPU."
+ },
+ "request_1_single": {
+  "request": {
+   "input": "Hello there.",
+   "voice": "trump",
+   "task_type": "Base",
+   "language": "English",
+   "response_format": "wav"
+  },
+  "client": "curl --max-time 900: the client timed out at 900.0 s, 1.2 s before the server finished, so no WAV was received; the server-side result below is from its request log line",
+  "server_log": {
+   "ts": "2026-09-25T03:52:45.368+05:00",
+   "level": "info",
+   "event": "request",
+   "request_id": "cpu-e2e-en1",
+   "status": "ok",
+   "http_status": 200,
+   "voice": "trump",
+   "chars": 12,
+   "format": "wav",
+   "seed": null,
+   "max_new_tokens": null,
+   "ref": "repo",
+   "lang": "English",
+   "non_streaming_mode": false,
+   "sampling": {
+    "temperature": 0.9,
+    "top_k": 50,
+    "top_p": 1.0,
+    "repetition_penalty": 1.05
+   },
+   "batch_size": 1,
+   "batch_id": 1,
+   "queue_ms": 20.4,
+   "prompt_ms": 1.1,
+   "gen_ms": 901213.3,
+   "prompt_cache": "hit",
+   "text_tokens": 3,
+   "codec_frames": 12,
+   "cap": 192,
+   "batch_cap": 192,
+   "finish_reason": "stop",
+   "retries": 0,
+   "audio_s": 0.96,
+   "total_ms": 901235.3,
+   "rtf": 938.787
+  }
+ },
+ "request_2_3_concurrent_batch": {
+  "what": "2 requests sent at the same instant (threads + barrier), 20 ms batch window: expected one generate call with batch size 2, mixed voices (trump/shehbaz) and languages (English/Auto)",
+  "results": [
+   {
+    "name": "en_trump",
+    "request": {
+     "input": "Hi there.",
+     "voice": "trump",
+     "task_type": "Base",
+     "language": "English"
+    },
+    "started": "2026-09-25T03:53:27+05:00",
+    "status": 200,
+    "latency_s": 1585.61,
+    "headers": {
+     "x-request-id": "cpu-e2e-en_trump",
+     "x-ai-generated": "true",
+     "x-baseline-batch-size": "2",
+     "x-baseline-batch-id": "2",
+     "x-baseline-queue-ms": "20.4",
+     "x-baseline-prompt-ms": "0.5",
+     "x-baseline-gen-ms": "1585582.1",
+     "x-baseline-codec-frames": "9",
+     "x-baseline-text-tokens": "3",
+     "x-baseline-max-new-tokens": "192",
+     "x-baseline-batch-max-new-tokens": "192",
+     "x-baseline-finish-reason": "stop",
+     "x-baseline-prompt-cache": "hit",
+     "x-baseline-retries": "0",
+     "x-baseline-sample-rate": "24000",
+     "content-type": "audio/wav"
+    },
+    "bytes": 34692,
+    "sample_rate": 24000,
+    "samples": 17280,
+    "audio_s": 0.72,
+    "wav_label": "AI-generated speech (Qwen3-TTS voice clone). Not a real recording.",
+    "wav_label_ok": true,
+    "peak": 0.5117,
+    "rms_dbfs": -17.06,
+    "saved": "scratch dir only (AI-generated audio, not committed): cpu_audio/en_trump.wav",
+    "sha256": "cdd8da0f813fe59e447b4e358d3b1d55aed76211db7a80bedd21d9443e753b73",
+    "server_log": {
+     "ts": "2026-09-25T04:19:52.840+05:00",
+     "level": "info",
+     "event": "request",
+     "request_id": "cpu-e2e-en_trump",
+     "status": "ok",
+     "http_status": 200,
+     "voice": "trump",
+     "chars": 9,
+     "format": "wav",
+     "seed": null,
+     "max_new_tokens": null,
+     "ref": "repo",
+     "lang": "English",
+     "non_streaming_mode": false,
+     "sampling": {
+      "temperature": 0.9,
+      "top_k": 50,
+      "top_p": 1.0,
+      "repetition_penalty": 1.05
+     },
+     "batch_size": 2,
+     "batch_id": 2,
+     "queue_ms": 20.4,
+     "prompt_ms": 0.5,
+     "gen_ms": 1585582.1,
+     "prompt_cache": "hit",
+     "text_tokens": 3,
+     "codec_frames": 9,
+     "cap": 192,
+     "batch_cap": 192,
+     "finish_reason": "stop",
+     "retries": 0,
+     "audio_s": 0.72,
+     "total_ms": 1585603.7,
+     "rtf": 2202.227
+    }
+   },
+   {
+    "name": "ur_shehbaz",
+    "request": {
+     "input": "آپ کا شکریہ۔",
+     "voice": "shehbaz",
+     "task_type": "Base",
+     "language": "Urdu"
+    },
+    "started": "2026-09-25T03:53:27+05:00",
+    "status": 200,
+    "latency_s": 1585.62,
+    "headers": {
+     "x-request-id": "cpu-e2e-ur_shehbaz",
+     "x-ai-generated": "true",
+     "x-baseline-batch-size": "2",
+     "x-baseline-batch-id": "2",
+     "x-baseline-queue-ms": "20.6",
+     "x-baseline-prompt-ms": "0.5",
+     "x-baseline-gen-ms": "1585582.1",
+     "x-baseline-codec-frames": "21",
+     "x-baseline-text-tokens": "10",
+     "x-baseline-max-new-tokens": "192",
+     "x-baseline-batch-max-new-tokens": "192",
+     "x-baseline-finish-reason": "stop",
+     "x-baseline-prompt-cache": "hit",
+     "x-baseline-retries": "0",
+     "x-baseline-sample-rate": "24000",
+     "content-type": "audio/wav"
+    },
+    "bytes": 80772,
+    "sample_rate": 24000,
+    "samples": 40320,
+    "audio_s": 1.68,
+    "wav_label": "AI-generated speech (Qwen3-TTS voice clone). Not a real recording.",
+    "wav_label_ok": true,
+    "peak": 0.7383,
+    "rms_dbfs": -21.74,
+    "saved": "scratch dir only (AI-generated audio, not committed): cpu_audio/ur_shehbaz.wav",
+    "sha256": "8297e4b99a6e5a30cd708ce0cfaa1fa27255a81fc9ea64381680bf5fc3b56103",
+    "server_log": {
+     "ts": "2026-09-25T04:19:52.840+05:00",
+     "level": "info",
+     "event": "request",
+     "request_id": "cpu-e2e-ur_shehbaz",
+     "status": "ok",
+     "http_status": 200,
+     "voice": "shehbaz",
+     "chars": 12,
+     "format": "wav",
+     "seed": null,
+     "max_new_tokens": null,
+     "ref": "repo",
+     "lang": "Auto",
+     "non_streaming_mode": false,
+     "sampling": {
+      "temperature": 0.9,
+      "top_k": 50,
+      "top_p": 1.0,
+      "repetition_penalty": 1.05
+     },
+     "batch_size": 2,
+     "batch_id": 2,
+     "queue_ms": 20.6,
+     "prompt_ms": 0.5,
+     "gen_ms": 1585582.1,
+     "prompt_cache": "hit",
+     "text_tokens": 10,
+     "codec_frames": 21,
+     "cap": 192,
+     "batch_cap": 192,
+     "finish_reason": "stop",
+     "retries": 0,
+     "audio_s": 1.68,
+     "total_ms": 1585604.0,
+     "rtf": 943.812
+    }
+   }
+  ],
+  "same_batch": true,
+  "all_labels_ok": true,
+  "frames_match_samples": true
+ },
+ "server_info_after": {
+  "engine": {
+   "stats": {
+    "prompts_created": 2,
+    "prompt_hits": 3,
+    "generate_calls": 2,
+    "batches": 2,
+    "rows": 3
+   },
+   "defaults": {
+    "temperature": 0.9,
+    "top_k": 50,
+    "top_p": 1.0,
+    "repetition_penalty": 1.05
+   },
+   "prompt_cache_entries": 0,
+   "pinned_prompts": 2
+  },
+  "batcher": {
+   "stats": {
+    "submitted": 3,
+    "max_pending": 2,
+    "completed": 3
+   },
+   "pending": 0,
+   "busy": false,
+   "batch_sizes": {
+    "1": 1,
+    "2": 1
+   }
+  }
+ },
+ "rss_mib": {
+  "peak": 7628,
+  "first_sample_after_ready": 2161,
+  "last": 5181,
+  "samples": 1272,
+  "interval_s": 2,
+  "note": "sampled with ps every 2 s from after startup until shutdown; limit for this run was 10 GB"
+ },
+ "tokenizer_checks": {
+  "hub_id_offline_load": "fails: transformers 4.57.3 _patch_mistral_regex calls huggingface_hub.model_info() for non-local paths -> OfflineModeIsEnabled; the server therefore resolves the hub id to the local snapshot",
+  "reference_text_tokens": {
+   "stock local load (fix_mistral_regex=True, Mistral regex)": {
+    "trump": 67,
+    "shehbaz": 111
+   },
+   "fix_mistral_regex=False (Qwen2 regex, --qwen-regex)": {
+    "trump": 67,
+    "shehbaz": 112
+   }
+  },
+  "same_ids": {
+   "trump": true,
+   "shehbaz": false
+  }
+ }
+}

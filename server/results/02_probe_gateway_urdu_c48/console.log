@@ -1,0 +1,11 @@
+voice shehbaz (ur): ref qwen3-tts.wav, pools ur.json: short=345, medium=145, long=43, xlong=43
+warmup 1: 0.84s ok
+warmup 2: 0.73s ok
+  note: 96 requests > 43 long texts, so some repeat within this run
+  gw_retry1_cap_shehbaz_long_c48_n96: ok 96/96 err 0 suspect 0 | lat p50=23.828s p90=35.701s p99=40.807s | 34.34x realtime, 1.54 req/s | gpu 16967 MiB 99.5%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/02_probe_gateway_urdu_c48
+| tag | voice | size | c | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | x realtime | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| gw_retry1_cap | shehbaz | long | 48 | 96 | 96 | 0 | 0 | 23.828 | 35.701 | 40.807 | – | – | 34.34 | 1.54 | 16967 | 99.5 |
+

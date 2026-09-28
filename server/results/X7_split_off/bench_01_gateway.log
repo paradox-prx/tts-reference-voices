@@ -1,0 +1,16 @@
+=== 2026-09-25T08:22:09+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice shehbaz --size xxlong -n 43 -c 8 --timeout 900 --voice-mode server --url http://127.0.0.1:8090 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X7_split_off --gpus 0 --tag split_off --meta phase=X7_split_off --meta via=gateway --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta 'gateway={"TTS_RETRY_MAX": "0", "TTS_SPLIT_WORDS": "0"}' --meta qc=false
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='shehbaz'
+  server voice 'shehbaz': listed by GET /v1/audio/voices
+warmup shehbaz 1: 0.67s ok
+warmup shehbaz 2: 0.97s ok
+shehbaz xxlong (ur.json): shehbaz 43 texts
+  split_off_shehbaz_xxlong_c8_n43_nonstream_server: ok 25/43 err 18 suspect 16 (short 16, long 0; pace x0.572) | lat p50=15.663s p90=23.992s p99=34.39s | 6.11x realtime (p90-wall 6.66x, stragglers 15), 0.13 req/s | gpu 20406 MiB 98.9%
+    ERR[shehbaz 5] HTTP 502: {"error":{"message":"speech engine failed","type":"server_error","code":"engine_error"}}
+    ERR[shehbaz 10] HTTP 502: {"error":{"message":"speech engine failed","type":"server_error","code":"engine_error"}}
+    ERR[shehbaz 11] HTTP 502: {"error":{"message":"speech engine failed","type":"server_error","code":"engine_error"}}
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X7_split_off
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| split_off_shehbaz_xxlong_c8_n43_nonstream_server | 43 | 25 | 18 | 16 | 15.663 | 23.992 | 34.39 | – | – | 47.01 | 6.11 | 6.66 | 15 | 0.38 | 0.13 | 20406 | 98.9 |
+

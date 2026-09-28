@@ -1,0 +1,38 @@
+=== 2026-09-25T04:23:52+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --size short --sweep 1,2,4,8,16,32 --n-rule 8:2 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P2_matrix --gpus 0 --meta phase=P2_matrix --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0795 s/letter (file); suspect outside 0.6-1.8 x
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.0880 s/letter (file); suspect outside 0.6-1.8 x
+warmup trump 1: 0.40s ok
+warmup trump 2: 0.65s ok
+trump short (en.json): trump 393 texts
+  trump_short_c1_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x0.95) | lat p50=0.792s p90=1.0s p99=1.01s | 5.01x realtime (p90-wall 5.01x, stragglers 0), 1.39 req/s | gpu 19144 MiB 98.1%
+  trump_short_c2_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.076) | lat p50=0.628s p90=1.137s p99=1.164s | 8.13x realtime (p90-wall 8.13x, stragglers 0), 2.97 req/s | gpu 19147 MiB 93.3%
+  trump_short_c4_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.218) | lat p50=0.893s p90=1.211s p99=1.387s | 10.64x realtime (p90-wall 10.64x, stragglers 0), 3.55 req/s | gpu 19167 MiB 99.0%
+  trump_short_c8_n16_nonstream_inline: ok 16/16 err 0 suspect 1 (short 0, long 1; pace x0.915) | lat p50=1.364s p90=2.311s p99=2.863s | 13.39x realtime (p90-wall 12.64x, stragglers 0), 4.45 req/s | gpu 19195 MiB 98.4%
+  trump_short_c16_n32_nonstream_inline: ok 32/32 err 0 suspect 1 (short 1, long 0; pace x0.924) | lat p50=2.399s p90=3.986s p99=4.494s | 16.09x realtime (p90-wall 14.77x, stragglers 0), 5.57 req/s | gpu 19235 MiB 99.3%
+  trump_short_c32_n64_nonstream_inline: ok 64/64 err 0 suspect 0 (short 0, long 0; pace x0.991) | lat p50=3.643s p90=5.969s p99=6.846s | 20.85x realtime (p90-wall 18.44x, stragglers 0), 7.01 req/s | gpu 19463 MiB 94.6%
+warmup shehbaz 1: 0.89s ok
+warmup shehbaz 2: 0.79s ok
+shehbaz short (ur.json): shehbaz 345 texts
+  shehbaz_short_c1_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.494) | lat p50=1.047s p90=1.222s p99=1.355s | 5.13x realtime (p90-wall 5.13x, stragglers 0), 1.01 req/s | gpu 19675 MiB 94.1%
+  shehbaz_short_c2_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.337) | lat p50=0.939s p90=1.06s p99=1.177s | 8.04x realtime (p90-wall 8.04x, stragglers 0), 2.23 req/s | gpu 19670 MiB 98.1%
+  shehbaz_short_c4_n8_nonstream_inline: ok 8/8 err 0 suspect 1 (short 0, long 1; pace x1.342) | lat p50=1.478s p90=1.838s p99=2.259s | 11.38x realtime (p90-wall 11.38x, stragglers 0), 2.21 req/s | gpu 19678 MiB 98.0%
+  shehbaz_short_c8_n16_nonstream_inline: ok 16/16 err 0 suspect 1 (short 0, long 1; pace x1.25) | lat p50=1.819s p90=2.69s p99=3.389s | 14.89x realtime (p90-wall 13.65x, stragglers 0), 3.79 req/s | gpu 19678 MiB 97.0%
+  shehbaz_short_c16_n32_nonstream_inline: ok 32/32 err 0 suspect 3 (short 0, long 3; pace x1.383) | lat p50=2.683s p90=4.794s p99=5.876s | 19.59x realtime (p90-wall 17.77x, stragglers 0), 4.49 req/s | gpu 19670 MiB 89.1%
+  shehbaz_short_c32_n64_nonstream_inline: ok 64/64 err 0 suspect 3 (short 0, long 3; pace x1.322) | lat p50=4.359s p90=7.518s p99=9.266s | 22.48x realtime (p90-wall 21.36x, stragglers 0), 5.49 req/s | gpu 19811 MiB 99.3%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P2_matrix
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| trump_short_c1_n8_nonstream_inline | 8 | 8 | 0 | 0 | 0.792 | 1.0 | 1.01 | – | – | 3.61 | 5.01 | 5.01 | 0 | 0.202 | 1.39 | 19144 | 98.1 |
+| trump_short_c2_n8_nonstream_inline | 8 | 8 | 0 | 0 | 0.628 | 1.137 | 1.164 | – | – | 2.74 | 8.13 | 8.13 | 0 | 0.253 | 2.97 | 19147 | 93.3 |
+| trump_short_c4_n8_nonstream_inline | 8 | 8 | 0 | 0 | 0.893 | 1.211 | 1.387 | – | – | 3.0 | 10.64 | 10.64 | 0 | 0.355 | 3.55 | 19167 | 99.0 |
+| trump_short_c8_n16_nonstream_inline | 16 | 16 | 0 | 1 | 1.364 | 2.311 | 2.863 | – | – | 3.01 | 13.39 | 12.64 | 0 | 0.533 | 4.45 | 19195 | 98.4 |
+| trump_short_c16_n32_nonstream_inline | 32 | 32 | 0 | 1 | 2.399 | 3.986 | 4.494 | – | – | 2.89 | 16.09 | 14.77 | 0 | 0.912 | 5.57 | 19235 | 99.3 |
+| trump_short_c32_n64_nonstream_inline | 64 | 64 | 0 | 0 | 3.643 | 5.969 | 6.846 | – | – | 2.97 | 20.85 | 18.44 | 0 | 1.397 | 7.01 | 19463 | 94.6 |
+| shehbaz_short_c1_n8_nonstream_inline | 8 | 8 | 0 | 0 | 1.047 | 1.222 | 1.355 | – | – | 5.06 | 5.13 | 5.13 | 0 | 0.195 | 1.01 | 19675 | 94.1 |
+| shehbaz_short_c2_n8_nonstream_inline | 8 | 8 | 0 | 0 | 0.939 | 1.06 | 1.177 | – | – | 3.6 | 8.04 | 8.04 | 0 | 0.243 | 2.23 | 19670 | 98.1 |
+| shehbaz_short_c4_n8_nonstream_inline | 8 | 8 | 0 | 1 | 1.478 | 1.838 | 2.259 | – | – | 5.14 | 11.38 | 11.38 | 0 | 0.301 | 2.21 | 19678 | 98.0 |
+| shehbaz_short_c8_n16_nonstream_inline | 16 | 16 | 0 | 1 | 1.819 | 2.69 | 3.389 | – | – | 3.94 | 14.89 | 13.65 | 0 | 0.5 | 3.79 | 19678 | 97.0 |
+| shehbaz_short_c16_n32_nonstream_inline | 32 | 32 | 0 | 3 | 2.683 | 4.794 | 5.876 | – | – | 4.36 | 19.59 | 17.77 | 0 | 0.753 | 4.49 | 19670 | 89.1 |
+| shehbaz_short_c32_n64_nonstream_inline | 64 | 64 | 0 | 3 | 4.359 | 7.518 | 9.266 | – | – | 4.1 | 22.48 | 21.36 | 0 | 1.263 | 5.49 | 19811 | 99.3 |
+

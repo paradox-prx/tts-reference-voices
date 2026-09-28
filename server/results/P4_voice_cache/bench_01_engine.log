@@ -1,0 +1,28 @@
+=== 2026-09-25T04:52:02+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --size short --sweep 1,8,32 --n-rule 8:2:32 --voice-mode upload --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P4_voice_cache --gpus 0 --meta phase=P4_voice_cache --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x; voice='bench-trump'
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='bench-shehbaz'
+voice upload 'bench-trump': HTTP 200 {"success":true,"voice":{"name":"bench-trump","consent":"benchmark","created_at":1790293922,"mime_type":"audio/wav","file_size":1114156,"ref_text":"Almost every
+warmup trump 1: 0.39s ok
+warmup trump 2: 0.64s ok
+trump short (en.json): trump 393 texts
+  trump_short_c1_n8_nonstream_upload: ok 8/8 err 0 suspect 1 (short 0, long 1; pace x1.079) | lat p50=0.78s p90=0.983s p99=0.994s | 5.08x realtime (p90-wall 5.08x, stragglers 0), 1.41 req/s | gpu 19128 MiB 98.2%
+  trump_short_c8_n16_nonstream_upload: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x1.18) | lat p50=1.348s p90=2.558s p99=2.782s | 12.86x realtime (p90-wall 11.42x, stragglers 0), 4.63 req/s | gpu 19168 MiB 98.6%
+  trump_short_c32_n32_nonstream_upload: ok 32/32 err 0 suspect 0 (short 0, long 0; pace x1.046) | lat p50=3.76s p90=4.577s p99=4.777s | 20.35x realtime (p90-wall 17.59x, stragglers 0), 6.69 req/s | gpu 19474 MiB 99.8%
+voice upload 'bench-shehbaz': HTTP 200 {"success":true,"voice":{"name":"bench-shehbaz","consent":"benchmark","created_at":1790293937,"mime_type":"audio/wav","file_size":1346132,"ref_text":"اور حملوں 
+warmup shehbaz 1: 0.76s ok
+warmup shehbaz 2: 0.85s ok
+shehbaz short (ur.json): shehbaz 345 texts
+  shehbaz_short_c1_n8_nonstream_upload: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.081) | lat p50=0.9s p90=1.169s p99=1.6s | 5.22x realtime (p90-wall 5.22x, stragglers 0), 1.06 req/s | gpu 19604 MiB 98.7%
+  shehbaz_short_c8_n16_nonstream_upload: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x1.201) | lat p50=2.19s p90=2.913s p99=3.015s | 14.84x realtime (p90-wall 14.11x, stragglers 0), 3.08 req/s | gpu 19604 MiB 99.4%
+  shehbaz_short_c32_n32_nonstream_upload: ok 32/32 err 0 suspect 0 (short 0, long 0; pace x1.089) | lat p50=4.201s p90=5.924s p99=6.245s | 22.18x realtime (p90-wall 19.21x, stragglers 0), 5.12 req/s | gpu 19832 MiB 99.6%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P4_voice_cache
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| trump_short_c1_n8_nonstream_upload | 8 | 8 | 0 | 1 | 0.78 | 0.983 | 0.994 | – | – | 3.61 | 5.08 | 5.08 | 0 | 0.203 | 1.41 | 19128 | 98.2 |
+| trump_short_c8_n16_nonstream_upload | 16 | 16 | 0 | 0 | 1.348 | 2.558 | 2.782 | – | – | 2.77 | 12.86 | 11.42 | 0 | 0.573 | 4.63 | 19168 | 98.6 |
+| trump_short_c32_n32_nonstream_upload | 32 | 32 | 0 | 0 | 3.76 | 4.577 | 4.777 | – | – | 3.04 | 20.35 | 17.59 | 0 | 1.424 | 6.69 | 19474 | 99.8 |
+| shehbaz_short_c1_n8_nonstream_upload | 8 | 8 | 0 | 0 | 0.9 | 1.169 | 1.6 | – | – | 4.94 | 5.22 | 5.22 | 0 | 0.194 | 1.06 | 19604 | 98.7 |
+| shehbaz_short_c8_n16_nonstream_upload | 16 | 16 | 0 | 0 | 2.19 | 2.913 | 3.015 | – | – | 4.82 | 14.84 | 14.11 | 0 | 0.507 | 3.08 | 19604 | 99.4 |
+| shehbaz_short_c32_n32_nonstream_upload | 32 | 32 | 0 | 0 | 4.201 | 5.924 | 6.245 | – | – | 4.33 | 22.18 | 19.21 | 0 | 1.167 | 5.12 | 19832 | 99.6 |
+

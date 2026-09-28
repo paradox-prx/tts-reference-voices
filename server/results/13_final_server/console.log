@@ -1,0 +1,285 @@
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x; voice='trump'
+  server voice 'trump': listed by GET /v1/audio/voices
+warmup trump 1: 0.41s ok
+warmup trump 2: 0.84s ok
+trump short (en.json): trump 393 texts
+  final_c1_trump_short_c1_n16_nonstream_server: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x1.27) | lat p50=0.654s p90=1.02s p99=1.031s | 4.8x realtime (p90-wall 4.82x, stragglers 0), 1.49 req/s | gpu 20736 MiB 96.0%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x; voice='trump'
+  server voice 'trump': listed by GET /v1/audio/voices
+trump short (en.json): trump 393 texts
+  final_c1_trump_short_c1_n16_stream_server: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x1.122) | lat p50=0.613s p90=0.985s p99=1.061s | ttfa p50=0.109s p90=0.113s | 4.98x realtime (p90-wall 5.01x, stragglers 0), 1.58 req/s | gpu 20730 MiB 96.3%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x; voice='trump'
+  server voice 'trump': listed by GET /v1/audio/voices
+trump short (en.json): trump 393 texts
+  final_c16_trump_short_c16_n64_nonstream_server: ok 64/64 err 0 suspect 0 (short 0, long 0; pace x1.106) | lat p50=2.377s p90=4.385s p99=5.024s | 17.15x realtime (p90-wall 16.43x, stragglers 0), 5.53 req/s | gpu 20843 MiB 96.9%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+| final_c16_trump_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 2.377 | 4.385 | 5.024 | – | – | 3.1 | 17.15 | 16.43 | 0 | 0.853 | 5.53 | 20843 | 96.9 |
+
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x; voice='trump'
+  server voice 'trump': listed by GET /v1/audio/voices
+trump medium (en.json): trump 186 texts
+  final_c16_trump_medium_c16_n64_nonstream_server: ok 64/64 err 0 suspect 0 (short 0, long 0; pace x0.955) | lat p50=4.321s p90=5.787s p99=6.272s | 21.95x realtime (p90-wall 20.32x, stragglers 0), 3.38 req/s | gpu 20884 MiB 99.6%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+| final_c16_trump_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 2.377 | 4.385 | 5.024 | – | – | 3.1 | 17.15 | 16.43 | 0 | 0.853 | 5.53 | 20843 | 96.9 |
+| final_c16_trump_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 4.321 | 5.787 | 6.272 | – | – | 6.49 | 21.95 | 20.32 | 0 | 0.683 | 3.38 | 20884 | 99.6 |
+
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x; voice='trump'
+  server voice 'trump': listed by GET /v1/audio/voices
+trump long (en.json): trump 68 texts
+  final_c16_trump_long_c16_n43_nonstream_server: ok 43/43 err 0 suspect 0 (short 0, long 0; pace x0.997) | lat p50=9.455s p90=11.139s p99=11.636s | 24.6x realtime (p90-wall 23.09x, stragglers 0), 1.54 req/s | gpu 20920 MiB 99.2%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+| final_c16_trump_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 2.377 | 4.385 | 5.024 | – | – | 3.1 | 17.15 | 16.43 | 0 | 0.853 | 5.53 | 20843 | 96.9 |
+| final_c16_trump_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 4.321 | 5.787 | 6.272 | – | – | 6.49 | 21.95 | 20.32 | 0 | 0.683 | 3.38 | 20884 | 99.6 |
+| final_c16_trump_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 9.455 | 11.139 | 11.636 | – | – | 15.94 | 24.6 | 23.09 | 0 | 0.589 | 1.54 | 20920 | 99.2 |
+
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x; voice='trump'
+  server voice 'trump': listed by GET /v1/audio/voices
+trump prompts (trump_en.json): trump 43 texts
+  final_c16_trump_prompts_c16_n43_nonstream_server: ok 43/43 err 0 suspect 0 (short 0, long 0; pace x1.015) | lat p50=14.667s p90=27.043s p99=39.594s | 27.21x realtime (p90-wall 28.89x, stragglers 0), 0.83 req/s | gpu 21004 MiB 99.4%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+| final_c16_trump_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 2.377 | 4.385 | 5.024 | – | – | 3.1 | 17.15 | 16.43 | 0 | 0.853 | 5.53 | 20843 | 96.9 |
+| final_c16_trump_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 4.321 | 5.787 | 6.272 | – | – | 6.49 | 21.95 | 20.32 | 0 | 0.683 | 3.38 | 20884 | 99.6 |
+| final_c16_trump_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 9.455 | 11.139 | 11.636 | – | – | 15.94 | 24.6 | 23.09 | 0 | 0.589 | 1.54 | 20920 | 99.2 |
+| final_c16_trump_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.667 | 27.043 | 39.594 | – | – | 32.79 | 27.21 | 28.89 | 0 | 0.45 | 0.83 | 21004 | 99.4 |
+
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x; voice='trump'
+  server voice 'trump': listed by GET /v1/audio/voices
+trump xxlong (en.json): trump 43 texts
+  final_c16_trump_xxlong_c16_n43_nonstream_server: ok 43/43 err 0 suspect 0 (short 0, long 0; pace x1.015) | lat p50=19.436s p90=70.46s p99=73.003s | 27.96x realtime (p90-wall 25.76x, stragglers 9), 0.42 req/s | gpu 21155 MiB 99.5%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+| final_c16_trump_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 2.377 | 4.385 | 5.024 | – | – | 3.1 | 17.15 | 16.43 | 0 | 0.853 | 5.53 | 20843 | 96.9 |
+| final_c16_trump_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 4.321 | 5.787 | 6.272 | – | – | 6.49 | 21.95 | 20.32 | 0 | 0.683 | 3.38 | 20884 | 99.6 |
+| final_c16_trump_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 9.455 | 11.139 | 11.636 | – | – | 15.94 | 24.6 | 23.09 | 0 | 0.589 | 1.54 | 20920 | 99.2 |
+| final_c16_trump_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.667 | 27.043 | 39.594 | – | – | 32.79 | 27.21 | 28.89 | 0 | 0.45 | 0.83 | 21004 | 99.4 |
+| final_c16_trump_xxlong_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 19.436 | 70.46 | 73.003 | – | – | 65.82 | 27.96 | 25.76 | 9 | 0.294 | 0.42 | 21155 | 99.5 |
+
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x; voice='trump'
+  server voice 'trump': listed by GET /v1/audio/voices
+trump medium (en.json): trump 186 texts
+  final_c32_trump_medium_c32_n128_nonstream_server: ok 128/128 err 0 suspect 0 (short 0, long 0; pace x0.948) | lat p50=6.826s p90=9.119s p99=11.693s | 26.94x realtime (p90-wall 25.58x, stragglers 0), 4.09 req/s | gpu 21151 MiB 97.3%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+| final_c16_trump_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 2.377 | 4.385 | 5.024 | – | – | 3.1 | 17.15 | 16.43 | 0 | 0.853 | 5.53 | 20843 | 96.9 |
+| final_c16_trump_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 4.321 | 5.787 | 6.272 | – | – | 6.49 | 21.95 | 20.32 | 0 | 0.683 | 3.38 | 20884 | 99.6 |
+| final_c16_trump_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 9.455 | 11.139 | 11.636 | – | – | 15.94 | 24.6 | 23.09 | 0 | 0.589 | 1.54 | 20920 | 99.2 |
+| final_c16_trump_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.667 | 27.043 | 39.594 | – | – | 32.79 | 27.21 | 28.89 | 0 | 0.45 | 0.83 | 21004 | 99.4 |
+| final_c16_trump_xxlong_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 19.436 | 70.46 | 73.003 | – | – | 65.82 | 27.96 | 25.76 | 9 | 0.294 | 0.42 | 21155 | 99.5 |
+| final_c32_trump_medium_c32_n128_nonstream_server | 128 | 128 | 0 | 0 | 6.826 | 9.119 | 11.693 | – | – | 6.59 | 26.94 | 25.58 | 0 | 1.119 | 4.09 | 21151 | 97.3 |
+
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='shehbaz'
+  server voice 'shehbaz': listed by GET /v1/audio/voices
+warmup shehbaz 1: 0.70s ok
+warmup shehbaz 2: 0.78s ok
+shehbaz short (ur.json): shehbaz 345 texts
+  final_c1_shehbaz_short_c1_n16_nonstream_server: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x1.133) | lat p50=1.007s p90=1.798s p99=1.861s | 4.64x realtime (p90-wall 4.61x, stragglers 0), 1.01 req/s | gpu 21152 MiB 96.4%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+| final_c16_trump_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 2.377 | 4.385 | 5.024 | – | – | 3.1 | 17.15 | 16.43 | 0 | 0.853 | 5.53 | 20843 | 96.9 |
+| final_c16_trump_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 4.321 | 5.787 | 6.272 | – | – | 6.49 | 21.95 | 20.32 | 0 | 0.683 | 3.38 | 20884 | 99.6 |
+| final_c16_trump_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 9.455 | 11.139 | 11.636 | – | – | 15.94 | 24.6 | 23.09 | 0 | 0.589 | 1.54 | 20920 | 99.2 |
+| final_c16_trump_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.667 | 27.043 | 39.594 | – | – | 32.79 | 27.21 | 28.89 | 0 | 0.45 | 0.83 | 21004 | 99.4 |
+| final_c16_trump_xxlong_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 19.436 | 70.46 | 73.003 | – | – | 65.82 | 27.96 | 25.76 | 9 | 0.294 | 0.42 | 21155 | 99.5 |
+| final_c32_trump_medium_c32_n128_nonstream_server | 128 | 128 | 0 | 0 | 6.826 | 9.119 | 11.693 | – | – | 6.59 | 26.94 | 25.58 | 0 | 1.119 | 4.09 | 21151 | 97.3 |
+| final_c1_shehbaz_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 1.007 | 1.798 | 1.861 | – | – | 4.61 | 4.64 | 4.61 | 0 | 0.206 | 1.01 | 21152 | 96.4 |
+
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='shehbaz'
+  server voice 'shehbaz': listed by GET /v1/audio/voices
+shehbaz short (ur.json): shehbaz 345 texts
+  final_c1_shehbaz_short_c1_n16_stream_server: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x1.121) | lat p50=0.878s p90=1.317s p99=1.381s | ttfa p50=0.12s p90=0.122s | 5.04x realtime (p90-wall 5.05x, stragglers 0), 1.16 req/s | gpu 21153 MiB 94.3%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+| final_c16_trump_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 2.377 | 4.385 | 5.024 | – | – | 3.1 | 17.15 | 16.43 | 0 | 0.853 | 5.53 | 20843 | 96.9 |
+| final_c16_trump_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 4.321 | 5.787 | 6.272 | – | – | 6.49 | 21.95 | 20.32 | 0 | 0.683 | 3.38 | 20884 | 99.6 |
+| final_c16_trump_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 9.455 | 11.139 | 11.636 | – | – | 15.94 | 24.6 | 23.09 | 0 | 0.589 | 1.54 | 20920 | 99.2 |
+| final_c16_trump_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.667 | 27.043 | 39.594 | – | – | 32.79 | 27.21 | 28.89 | 0 | 0.45 | 0.83 | 21004 | 99.4 |
+| final_c16_trump_xxlong_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 19.436 | 70.46 | 73.003 | – | – | 65.82 | 27.96 | 25.76 | 9 | 0.294 | 0.42 | 21155 | 99.5 |
+| final_c32_trump_medium_c32_n128_nonstream_server | 128 | 128 | 0 | 0 | 6.826 | 9.119 | 11.693 | – | – | 6.59 | 26.94 | 25.58 | 0 | 1.119 | 4.09 | 21151 | 97.3 |
+| final_c1_shehbaz_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 1.007 | 1.798 | 1.861 | – | – | 4.61 | 4.64 | 4.61 | 0 | 0.206 | 1.01 | 21152 | 96.4 |
+| final_c1_shehbaz_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.878 | 1.317 | 1.381 | 0.12 | 0.122 | 4.36 | 5.04 | 5.05 | 0 | 0.199 | 1.16 | 21153 | 94.3 |
+
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='shehbaz'
+  server voice 'shehbaz': listed by GET /v1/audio/voices
+shehbaz short (ur.json): shehbaz 345 texts
+  final_c16_shehbaz_short_c16_n64_nonstream_server: ok 64/64 err 0 suspect 0 (short 0, long 0; pace x1.159) | lat p50=3.554s p90=5.529s p99=6.626s | 19.38x realtime (p90-wall 18.0x, stragglers 0), 4.02 req/s | gpu 21154 MiB 97.9%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+| final_c16_trump_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 2.377 | 4.385 | 5.024 | – | – | 3.1 | 17.15 | 16.43 | 0 | 0.853 | 5.53 | 20843 | 96.9 |
+| final_c16_trump_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 4.321 | 5.787 | 6.272 | – | – | 6.49 | 21.95 | 20.32 | 0 | 0.683 | 3.38 | 20884 | 99.6 |
+| final_c16_trump_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 9.455 | 11.139 | 11.636 | – | – | 15.94 | 24.6 | 23.09 | 0 | 0.589 | 1.54 | 20920 | 99.2 |
+| final_c16_trump_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.667 | 27.043 | 39.594 | – | – | 32.79 | 27.21 | 28.89 | 0 | 0.45 | 0.83 | 21004 | 99.4 |
+| final_c16_trump_xxlong_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 19.436 | 70.46 | 73.003 | – | – | 65.82 | 27.96 | 25.76 | 9 | 0.294 | 0.42 | 21155 | 99.5 |
+| final_c32_trump_medium_c32_n128_nonstream_server | 128 | 128 | 0 | 0 | 6.826 | 9.119 | 11.693 | – | – | 6.59 | 26.94 | 25.58 | 0 | 1.119 | 4.09 | 21151 | 97.3 |
+| final_c1_shehbaz_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 1.007 | 1.798 | 1.861 | – | – | 4.61 | 4.64 | 4.61 | 0 | 0.206 | 1.01 | 21152 | 96.4 |
+| final_c1_shehbaz_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.878 | 1.317 | 1.381 | 0.12 | 0.122 | 4.36 | 5.04 | 5.05 | 0 | 0.199 | 1.16 | 21153 | 94.3 |
+| final_c16_shehbaz_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 3.554 | 5.529 | 6.626 | – | – | 4.82 | 19.38 | 18.0 | 0 | 0.789 | 4.02 | 21154 | 97.9 |
+
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='shehbaz'
+  server voice 'shehbaz': listed by GET /v1/audio/voices
+shehbaz medium (ur.json): shehbaz 145 texts
+  final_c16_shehbaz_medium_c16_n64_nonstream_server: ok 64/64 err 0 suspect 0 (short 0, long 0; pace x1.134) | lat p50=6.664s p90=8.434s p99=9.622s | 23.1x realtime (p90-wall 22.28x, stragglers 0), 2.23 req/s | gpu 21155 MiB 99.3%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+| final_c16_trump_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 2.377 | 4.385 | 5.024 | – | – | 3.1 | 17.15 | 16.43 | 0 | 0.853 | 5.53 | 20843 | 96.9 |
+| final_c16_trump_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 4.321 | 5.787 | 6.272 | – | – | 6.49 | 21.95 | 20.32 | 0 | 0.683 | 3.38 | 20884 | 99.6 |
+| final_c16_trump_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 9.455 | 11.139 | 11.636 | – | – | 15.94 | 24.6 | 23.09 | 0 | 0.589 | 1.54 | 20920 | 99.2 |
+| final_c16_trump_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.667 | 27.043 | 39.594 | – | – | 32.79 | 27.21 | 28.89 | 0 | 0.45 | 0.83 | 21004 | 99.4 |
+| final_c16_trump_xxlong_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 19.436 | 70.46 | 73.003 | – | – | 65.82 | 27.96 | 25.76 | 9 | 0.294 | 0.42 | 21155 | 99.5 |
+| final_c32_trump_medium_c32_n128_nonstream_server | 128 | 128 | 0 | 0 | 6.826 | 9.119 | 11.693 | – | – | 6.59 | 26.94 | 25.58 | 0 | 1.119 | 4.09 | 21151 | 97.3 |
+| final_c1_shehbaz_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 1.007 | 1.798 | 1.861 | – | – | 4.61 | 4.64 | 4.61 | 0 | 0.206 | 1.01 | 21152 | 96.4 |
+| final_c1_shehbaz_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.878 | 1.317 | 1.381 | 0.12 | 0.122 | 4.36 | 5.04 | 5.05 | 0 | 0.199 | 1.16 | 21153 | 94.3 |
+| final_c16_shehbaz_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 3.554 | 5.529 | 6.626 | – | – | 4.82 | 19.38 | 18.0 | 0 | 0.789 | 4.02 | 21154 | 97.9 |
+| final_c16_shehbaz_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 6.664 | 8.434 | 9.622 | – | – | 10.35 | 23.1 | 22.28 | 0 | 0.656 | 2.23 | 21155 | 99.3 |
+
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='shehbaz'
+  server voice 'shehbaz': listed by GET /v1/audio/voices
+shehbaz long (ur.json): shehbaz 43 texts
+  final_c16_shehbaz_long_c16_n43_nonstream_server: ok 43/43 err 0 suspect 0 (short 0, long 0; pace x1.035) | lat p50=14.059s p90=17.126s p99=18.887s | 24.26x realtime (p90-wall 22.23x, stragglers 0), 1.03 req/s | gpu 21355 MiB 97.9%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+| final_c16_trump_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 2.377 | 4.385 | 5.024 | – | – | 3.1 | 17.15 | 16.43 | 0 | 0.853 | 5.53 | 20843 | 96.9 |
+| final_c16_trump_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 4.321 | 5.787 | 6.272 | – | – | 6.49 | 21.95 | 20.32 | 0 | 0.683 | 3.38 | 20884 | 99.6 |
+| final_c16_trump_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 9.455 | 11.139 | 11.636 | – | – | 15.94 | 24.6 | 23.09 | 0 | 0.589 | 1.54 | 20920 | 99.2 |
+| final_c16_trump_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.667 | 27.043 | 39.594 | – | – | 32.79 | 27.21 | 28.89 | 0 | 0.45 | 0.83 | 21004 | 99.4 |
+| final_c16_trump_xxlong_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 19.436 | 70.46 | 73.003 | – | – | 65.82 | 27.96 | 25.76 | 9 | 0.294 | 0.42 | 21155 | 99.5 |
+| final_c32_trump_medium_c32_n128_nonstream_server | 128 | 128 | 0 | 0 | 6.826 | 9.119 | 11.693 | – | – | 6.59 | 26.94 | 25.58 | 0 | 1.119 | 4.09 | 21151 | 97.3 |
+| final_c1_shehbaz_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 1.007 | 1.798 | 1.861 | – | – | 4.61 | 4.64 | 4.61 | 0 | 0.206 | 1.01 | 21152 | 96.4 |
+| final_c1_shehbaz_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.878 | 1.317 | 1.381 | 0.12 | 0.122 | 4.36 | 5.04 | 5.05 | 0 | 0.199 | 1.16 | 21153 | 94.3 |
+| final_c16_shehbaz_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 3.554 | 5.529 | 6.626 | – | – | 4.82 | 19.38 | 18.0 | 0 | 0.789 | 4.02 | 21154 | 97.9 |
+| final_c16_shehbaz_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 6.664 | 8.434 | 9.622 | – | – | 10.35 | 23.1 | 22.28 | 0 | 0.656 | 2.23 | 21155 | 99.3 |
+| final_c16_shehbaz_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.059 | 17.126 | 18.887 | – | – | 23.67 | 24.26 | 22.23 | 0 | 0.58 | 1.03 | 21355 | 97.9 |
+
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='shehbaz'
+  server voice 'shehbaz': listed by GET /v1/audio/voices
+shehbaz prompts (shehbaz_ur.json): shehbaz 43 texts
+  final_c16_shehbaz_prompts_c16_n43_nonstream_server: ok 43/43 err 0 suspect 0 (short 0, long 0; pace x1.053) | lat p50=18.477s p90=21.959s p99=57.092s | 28.34x realtime (p90-wall 26.16x, stragglers 1), 0.75 req/s | gpu 22206 MiB 97.9%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+| final_c16_trump_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 2.377 | 4.385 | 5.024 | – | – | 3.1 | 17.15 | 16.43 | 0 | 0.853 | 5.53 | 20843 | 96.9 |
+| final_c16_trump_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 4.321 | 5.787 | 6.272 | – | – | 6.49 | 21.95 | 20.32 | 0 | 0.683 | 3.38 | 20884 | 99.6 |
+| final_c16_trump_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 9.455 | 11.139 | 11.636 | – | – | 15.94 | 24.6 | 23.09 | 0 | 0.589 | 1.54 | 20920 | 99.2 |
+| final_c16_trump_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.667 | 27.043 | 39.594 | – | – | 32.79 | 27.21 | 28.89 | 0 | 0.45 | 0.83 | 21004 | 99.4 |
+| final_c16_trump_xxlong_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 19.436 | 70.46 | 73.003 | – | – | 65.82 | 27.96 | 25.76 | 9 | 0.294 | 0.42 | 21155 | 99.5 |
+| final_c32_trump_medium_c32_n128_nonstream_server | 128 | 128 | 0 | 0 | 6.826 | 9.119 | 11.693 | – | – | 6.59 | 26.94 | 25.58 | 0 | 1.119 | 4.09 | 21151 | 97.3 |
+| final_c1_shehbaz_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 1.007 | 1.798 | 1.861 | – | – | 4.61 | 4.64 | 4.61 | 0 | 0.206 | 1.01 | 21152 | 96.4 |
+| final_c1_shehbaz_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.878 | 1.317 | 1.381 | 0.12 | 0.122 | 4.36 | 5.04 | 5.05 | 0 | 0.199 | 1.16 | 21153 | 94.3 |
+| final_c16_shehbaz_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 3.554 | 5.529 | 6.626 | – | – | 4.82 | 19.38 | 18.0 | 0 | 0.789 | 4.02 | 21154 | 97.9 |
+| final_c16_shehbaz_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 6.664 | 8.434 | 9.622 | – | – | 10.35 | 23.1 | 22.28 | 0 | 0.656 | 2.23 | 21155 | 99.3 |
+| final_c16_shehbaz_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.059 | 17.126 | 18.887 | – | – | 23.67 | 24.26 | 22.23 | 0 | 0.58 | 1.03 | 21355 | 97.9 |
+| final_c16_shehbaz_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 18.477 | 21.959 | 57.092 | – | – | 37.63 | 28.34 | 26.16 | 1 | 0.499 | 0.75 | 22206 | 97.9 |
+
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='shehbaz'
+  server voice 'shehbaz': listed by GET /v1/audio/voices
+shehbaz xxlong (ur.json): shehbaz 43 texts
+  final_c16_shehbaz_xxlong_c16_n43_nonstream_server: ok 43/43 err 0 suspect 0 (short 0, long 0; pace x1.082) | lat p50=22.542s p90=88.882s p99=99.539s | 28.2x realtime (p90-wall 28.53x, stragglers 9), 0.37 req/s | gpu 22501 MiB 99.6%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+| final_c16_trump_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 2.377 | 4.385 | 5.024 | – | – | 3.1 | 17.15 | 16.43 | 0 | 0.853 | 5.53 | 20843 | 96.9 |
+| final_c16_trump_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 4.321 | 5.787 | 6.272 | – | – | 6.49 | 21.95 | 20.32 | 0 | 0.683 | 3.38 | 20884 | 99.6 |
+| final_c16_trump_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 9.455 | 11.139 | 11.636 | – | – | 15.94 | 24.6 | 23.09 | 0 | 0.589 | 1.54 | 20920 | 99.2 |
+| final_c16_trump_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.667 | 27.043 | 39.594 | – | – | 32.79 | 27.21 | 28.89 | 0 | 0.45 | 0.83 | 21004 | 99.4 |
+| final_c16_trump_xxlong_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 19.436 | 70.46 | 73.003 | – | – | 65.82 | 27.96 | 25.76 | 9 | 0.294 | 0.42 | 21155 | 99.5 |
+| final_c32_trump_medium_c32_n128_nonstream_server | 128 | 128 | 0 | 0 | 6.826 | 9.119 | 11.693 | – | – | 6.59 | 26.94 | 25.58 | 0 | 1.119 | 4.09 | 21151 | 97.3 |
+| final_c1_shehbaz_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 1.007 | 1.798 | 1.861 | – | – | 4.61 | 4.64 | 4.61 | 0 | 0.206 | 1.01 | 21152 | 96.4 |
+| final_c1_shehbaz_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.878 | 1.317 | 1.381 | 0.12 | 0.122 | 4.36 | 5.04 | 5.05 | 0 | 0.199 | 1.16 | 21153 | 94.3 |
+| final_c16_shehbaz_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 3.554 | 5.529 | 6.626 | – | – | 4.82 | 19.38 | 18.0 | 0 | 0.789 | 4.02 | 21154 | 97.9 |
+| final_c16_shehbaz_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 6.664 | 8.434 | 9.622 | – | – | 10.35 | 23.1 | 22.28 | 0 | 0.656 | 2.23 | 21155 | 99.3 |
+| final_c16_shehbaz_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.059 | 17.126 | 18.887 | – | – | 23.67 | 24.26 | 22.23 | 0 | 0.58 | 1.03 | 21355 | 97.9 |
+| final_c16_shehbaz_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 18.477 | 21.959 | 57.092 | – | – | 37.63 | 28.34 | 26.16 | 1 | 0.499 | 0.75 | 22206 | 97.9 |
+| final_c16_shehbaz_xxlong_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 22.542 | 88.882 | 99.539 | – | – | 75.99 | 28.2 | 28.53 | 9 | 0.303 | 0.37 | 22501 | 99.6 |
+
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='shehbaz'
+  server voice 'shehbaz': listed by GET /v1/audio/voices
+shehbaz medium (ur.json): shehbaz 145 texts
+  final_c32_shehbaz_medium_c32_n128_nonstream_server: ok 128/128 err 0 suspect 0 (short 0, long 0; pace x1.117) | lat p50=10.627s p90=13.468s p99=16.354s | 29.11x realtime (p90-wall 27.37x, stragglers 0), 2.73 req/s | gpu 22836 MiB 99.6%
+
+results: server/results/13_final_server
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| final_c1_trump_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 0.654 | 1.02 | 1.031 | – | – | 3.23 | 4.8 | 4.82 | 0 | 0.218 | 1.49 | 20736 | 96.0 |
+| final_c1_trump_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.613 | 0.985 | 1.061 | 0.109 | 0.113 | 3.16 | 4.98 | 5.01 | 0 | 0.205 | 1.58 | 20730 | 96.3 |
+| final_c16_trump_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 2.377 | 4.385 | 5.024 | – | – | 3.1 | 17.15 | 16.43 | 0 | 0.853 | 5.53 | 20843 | 96.9 |
+| final_c16_trump_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 4.321 | 5.787 | 6.272 | – | – | 6.49 | 21.95 | 20.32 | 0 | 0.683 | 3.38 | 20884 | 99.6 |
+| final_c16_trump_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 9.455 | 11.139 | 11.636 | – | – | 15.94 | 24.6 | 23.09 | 0 | 0.589 | 1.54 | 20920 | 99.2 |
+| final_c16_trump_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.667 | 27.043 | 39.594 | – | – | 32.79 | 27.21 | 28.89 | 0 | 0.45 | 0.83 | 21004 | 99.4 |
+| final_c16_trump_xxlong_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 19.436 | 70.46 | 73.003 | – | – | 65.82 | 27.96 | 25.76 | 9 | 0.294 | 0.42 | 21155 | 99.5 |
+| final_c32_trump_medium_c32_n128_nonstream_server | 128 | 128 | 0 | 0 | 6.826 | 9.119 | 11.693 | – | – | 6.59 | 26.94 | 25.58 | 0 | 1.119 | 4.09 | 21151 | 97.3 |
+| final_c1_shehbaz_short_c1_n16_nonstream_server | 16 | 16 | 0 | 0 | 1.007 | 1.798 | 1.861 | – | – | 4.61 | 4.64 | 4.61 | 0 | 0.206 | 1.01 | 21152 | 96.4 |
+| final_c1_shehbaz_short_c1_n16_stream_server | 16 | 16 | 0 | 0 | 0.878 | 1.317 | 1.381 | 0.12 | 0.122 | 4.36 | 5.04 | 5.05 | 0 | 0.199 | 1.16 | 21153 | 94.3 |
+| final_c16_shehbaz_short_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 3.554 | 5.529 | 6.626 | – | – | 4.82 | 19.38 | 18.0 | 0 | 0.789 | 4.02 | 21154 | 97.9 |
+| final_c16_shehbaz_medium_c16_n64_nonstream_server | 64 | 64 | 0 | 0 | 6.664 | 8.434 | 9.622 | – | – | 10.35 | 23.1 | 22.28 | 0 | 0.656 | 2.23 | 21155 | 99.3 |
+| final_c16_shehbaz_long_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 14.059 | 17.126 | 18.887 | – | – | 23.67 | 24.26 | 22.23 | 0 | 0.58 | 1.03 | 21355 | 97.9 |
+| final_c16_shehbaz_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 18.477 | 21.959 | 57.092 | – | – | 37.63 | 28.34 | 26.16 | 1 | 0.499 | 0.75 | 22206 | 97.9 |
+| final_c16_shehbaz_xxlong_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 22.542 | 88.882 | 99.539 | – | – | 75.99 | 28.2 | 28.53 | 9 | 0.303 | 0.37 | 22501 | 99.6 |
+| final_c32_shehbaz_medium_c32_n128_nonstream_server | 128 | 128 | 0 | 0 | 10.627 | 13.468 | 16.354 | – | – | 10.67 | 29.11 | 27.37 | 0 | 1.05 | 2.73 | 22836 | 99.6 |
+
+DONE 2026-09-28T13:02:45+05:00

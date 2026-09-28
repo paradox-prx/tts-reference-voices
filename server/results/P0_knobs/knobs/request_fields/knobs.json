@@ -1,0 +1,239 @@
+{
+ "name": "request_fields",
+ "url": "http://127.0.0.1:8091",
+ "voice": "shehbaz",
+ "text": "میرے پیارے بہنو اور بھائیو، جب میں آپ کے درمیان آتا ہوں تو میرا دل خوشی سے بھر جاتا ہے۔",
+ "seed": null,
+ "spec": {
+  "name": "request_fields",
+  "via": "engine",
+  "voice": "shehbaz",
+  "fails": {
+   "extra_rp_neg": {
+    "extra_params": {
+     "repetition_penalty": -1
+    }
+   },
+   "extra_temperature_neg": {
+    "extra_params": {
+     "temperature": -1
+    }
+   },
+   "nsm_invalid": {
+    "non_streaming_mode": "x"
+   },
+   "language_urdu": {
+    "language": "Urdu"
+   },
+   "cap40": {
+    "max_new_tokens": 40
+   }
+  },
+  "succeeds": {
+   "toplevel_rp_neg_ignored": {
+    "repetition_penalty": -1
+   },
+   "toplevel_temperature_neg_ignored": {
+    "temperature": -1
+   },
+   "custom_voice_avg": {
+    "voice": "shehbaz-avg",
+    "ref_audio": null,
+    "ref_text": null
+   }
+  },
+  "listed": [
+   "trump-avg",
+   "trump-prompt",
+   "shehbaz-avg",
+   "shehbaz-prompt"
+  ]
+ },
+ "deterministic_base": false,
+ "takes": [
+  {
+   "label": "listed",
+   "status": 200,
+   "error": null,
+   "listed": [
+    "bench-shehbaz",
+    "bench-trump",
+    "default",
+    "shehbaz-80c2b47dfc",
+    "shehbaz-avg",
+    "shehbaz-prompt",
+    "smoke-shehbaz",
+    "smoke-trump",
+    "trump-avg",
+    "trump-cc1c00d5e5",
+    "trump-prompt"
+   ],
+   "verdict": "listed"
+  },
+  {
+   "label": "base_a",
+   "status": 200,
+   "error": null,
+   "latency_s": 1.556,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto"
+   },
+   "headers": {
+    "x-vllm-omni-input-tokens": "409",
+    "x-vllm-omni-output-tokens": "101",
+    "x-vllm-omni-total-tokens": "510",
+    "x-vllm-omni-input-text-tokens": "58",
+    "x-vllm-omni-input-audio-tokens": "351"
+   },
+   "audio_s": 8.0,
+   "pcm_sha256": "ca24ecd459b76df66fb4e387744510ff71d355b19ebbf54285cbfba029eba5a5",
+   "file": "base_a.wav"
+  },
+  {
+   "label": "fails_extra_rp_neg",
+   "status": 400,
+   "error": "HTTP 400: {\"error\":{\"message\":\"extra_params.repetition_penalty must be a finite number > 0\",\"type\":\"BadRequestError\",\"param\":null,\"code\":400}}",
+   "latency_s": 0.013,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto",
+    "extra_params": {
+     "repetition_penalty": -1
+    }
+   },
+   "headers": {},
+   "verdict": "refused"
+  },
+  {
+   "label": "fails_extra_temperature_neg",
+   "status": 400,
+   "error": "HTTP 400: {\"error\":{\"message\":\"Speech generation failed: temperature must be non-negative, got -1. (parameter=temperature, value=-1)\",\"type\":\"BadRequestError\",\"param\":null,\"code\":400}}",
+   "latency_s": 0.017,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto",
+    "extra_params": {
+     "temperature": -1
+    }
+   },
+   "headers": {},
+   "verdict": "refused"
+  },
+  {
+   "label": "fails_nsm_invalid",
+   "status": 400,
+   "error": "HTTP 400: {\"error\":{\"message\":\"1 validation error:\\n  {'type': 'bool_parsing', 'loc': ('body', 'non_streaming_mode'), 'msg': 'Input should be a valid boolean, unable to interpret input', 'input': 'x'}\",\"type\":\"",
+   "latency_s": 0.007,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto",
+    "non_streaming_mode": "x"
+   },
+   "headers": {},
+   "verdict": "refused"
+  },
+  {
+   "label": "fails_language_urdu",
+   "status": 400,
+   "error": "HTTP 400: {\"error\":{\"message\":\"Invalid language 'Urdu'. Supported: Auto, Chinese, English, French, German, Italian, Japanese, Korean, Portuguese, Russian, Spanish\",\"type\":\"BadRequestError\",\"param\":null,\"code\":4",
+   "latency_s": 0.006,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Urdu"
+   },
+   "headers": {},
+   "verdict": "refused"
+  },
+  {
+   "label": "fails_cap40",
+   "status": 500,
+   "error": "HTTP 500: {\"error\": {\"message\": \"Qwen3-TTS Base did not emit codec EOS before its token budget (40/40 codec tokens); the generated audio is incomplete.\", \"type\": \"server_error\", \"param\": null, \"code\": 500}}",
+   "latency_s": 0.615,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto",
+    "max_new_tokens": 40
+   },
+   "headers": {},
+   "verdict": "refused"
+  },
+  {
+   "label": "succeeds_toplevel_rp_neg_ignored",
+   "status": 200,
+   "error": null,
+   "latency_s": 1.367,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto",
+    "repetition_penalty": -1
+   },
+   "headers": {
+    "x-vllm-omni-input-tokens": "409",
+    "x-vllm-omni-output-tokens": "94",
+    "x-vllm-omni-total-tokens": "503",
+    "x-vllm-omni-input-text-tokens": "58",
+    "x-vllm-omni-input-audio-tokens": "351"
+   },
+   "audio_s": 7.44,
+   "pcm_sha256": "f7e680105da882396630b42ade944c9aef3de26d2eeaa09f6f5b69bbfa9fba41",
+   "file": "succeeds_toplevel_rp_neg_ignored.wav",
+   "verdict": "accepted"
+  },
+  {
+   "label": "succeeds_toplevel_temperature_neg_ignored",
+   "status": 200,
+   "error": null,
+   "latency_s": 1.359,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto",
+    "temperature": -1
+   },
+   "headers": {
+    "x-vllm-omni-input-tokens": "409",
+    "x-vllm-omni-output-tokens": "93",
+    "x-vllm-omni-total-tokens": "502",
+    "x-vllm-omni-input-text-tokens": "58",
+    "x-vllm-omni-input-audio-tokens": "351"
+   },
+   "audio_s": 7.36,
+   "pcm_sha256": "efd7001c099fd191e808b830b19354851617f738e80f4431a5e0d5e8645bb95d",
+   "file": "succeeds_toplevel_temperature_neg_ignored.wav",
+   "verdict": "accepted"
+  },
+  {
+   "label": "succeeds_custom_voice_avg",
+   "status": 200,
+   "error": null,
+   "latency_s": 1.337,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto",
+    "voice": "shehbaz-avg"
+   },
+   "headers": {
+    "x-vllm-omni-input-tokens": "409",
+    "x-vllm-omni-output-tokens": "91",
+    "x-vllm-omni-total-tokens": "500",
+    "x-vllm-omni-input-text-tokens": "58",
+    "x-vllm-omni-input-audio-tokens": "351"
+   },
+   "audio_s": 7.2,
+   "pcm_sha256": "e6803d44e2ddc0bce280e19b41bc51b5750767e2235a6cc738489e5eff78c01a",
+   "file": "succeeds_custom_voice_avg.wav",
+   "verdict": "accepted"
+  }
+ ],
+ "problems": [],
+ "ok": true
+}

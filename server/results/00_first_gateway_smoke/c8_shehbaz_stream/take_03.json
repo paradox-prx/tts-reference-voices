@@ -1,0 +1,19 @@
+{
+ "tag": "c8",
+ "voice": "shehbaz",
+ "stream": true,
+ "i": 3,
+ "status": 200,
+ "total_s": 2.397,
+ "ttfa_s": 0.632,
+ "audio_s": 5.76,
+ "text": "نوجوان اس قوم کا مستقبل ہیں اور ان کے لیے روزگار کے مواقع پیدا کرنا ہماری ذمہ داری ہے۔",
+ "headers": {
+  "x-request-id": "d389e43044ca4fbcb5b45f3df58ba035",
+  "x-ai-generated": "true",
+  "x-tts-voice": "shehbaz",
+  "x-tts-retries": "0",
+  "x-tts-queue-ms": "0",
+  "x-tts-sample-rate": "24000"
+ }
+}

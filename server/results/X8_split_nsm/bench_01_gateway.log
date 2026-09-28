@@ -1,0 +1,13 @@
+=== 2026-09-25T11:21:17+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice shehbaz --size xxlong -n 43 -c 8 --timeout 900 --voice-mode server --url http://127.0.0.1:8090 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X8_split_nsm --gpus 0 --tag split60_nsm --meta phase=X8_split_nsm --meta via=gateway --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta 'gateway={"TTS_NON_STREAMING_MODE_LANGS": "ur", "TTS_RETRY_MAX": "0", "TTS_SPLIT_WORDS": "60"}' --meta qc=false
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='shehbaz'
+  server voice 'shehbaz': listed by GET /v1/audio/voices
+warmup shehbaz 1: 0.80s ok
+warmup shehbaz 2: 0.98s ok
+shehbaz xxlong (ur.json): shehbaz 43 texts
+  split60_nsm_shehbaz_xxlong_c8_n43_nonstream_server: ok 43/43 err 0 suspect 0 (short 0, long 0; pace x1.068) | lat p50=18.878s p90=21.957s p99=24.073s | 30.56x realtime (p90-wall 30.3x, stragglers 0), 0.4 req/s | gpu 20201 MiB 99.3%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X8_split_nsm
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| split60_nsm_shehbaz_xxlong_c8_n43_nonstream_server | 43 | 43 | 0 | 0 | 18.878 | 21.957 | 24.073 | – | – | 75.48 | 30.56 | 30.3 | 0 | 0.256 | 0.4 | 20201 | 99.3 |
+

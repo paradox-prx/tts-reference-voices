@@ -1,0 +1,24 @@
+{
+ "tag": "c8",
+ "voice": "trump",
+ "stream": false,
+ "i": 2,
+ "status": 200,
+ "total_s": 2.582,
+ "ttfa_s": 2.581,
+ "audio_s": 5.2,
+ "text": "The economy is stronger than ever before, jobs are coming back, and wages are going up for everyone.",
+ "headers": {
+  "x-request-id": "8d9baefca7534128888a5e845f702fb2",
+  "x-ai-generated": "true",
+  "x-tts-voice": "trump",
+  "x-tts-retries": "0",
+  "x-tts-queue-ms": "0",
+  "x-tts-sample-rate": "24000",
+  "x-tts-audio-seconds": "5.200",
+  "x-tts-suspect": "0",
+  "x-tts-engine-ms": "2576",
+  "x-tts-qc": "off",
+  "x-tts-pace-ratio": "0.818"
+ }
+}

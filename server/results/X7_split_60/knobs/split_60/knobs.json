@@ -1,0 +1,65 @@
+{
+ "name": "split_60",
+ "url": "http://127.0.0.1:8090",
+ "voice": "trump",
+ "text": "You know, I look out at this room and I see the most beautiful people. Truly, the most beautiful people in the world.",
+ "seed": null,
+ "spec": {
+  "name": "split_60",
+  "via": "gateway",
+  "voice": "trump",
+  "base": {
+   "voice": "trump",
+   "ref_audio": null,
+   "ref_text": null,
+   "task_type": null
+  },
+  "headers": {
+   "x-tts-retries": [
+    "0"
+   ]
+  }
+ },
+ "deterministic_base": false,
+ "takes": [
+  {
+   "label": "base_a",
+   "status": 200,
+   "error": null,
+   "latency_s": 1.065,
+   "request": {
+    "response_format": "wav",
+    "language": "English",
+    "voice": "trump"
+   },
+   "headers": {
+    "x-request-id": "aeb89f1e9f254039b4a4086de9b17ede",
+    "x-ai-generated": "true",
+    "x-tts-voice": "trump",
+    "x-tts-retries": "0",
+    "x-tts-queue-ms": "0",
+    "x-tts-sample-rate": "24000",
+    "x-tts-audio-seconds": "5.600",
+    "x-tts-suspect": "0",
+    "x-tts-engine-ms": "1051",
+    "x-tts-qc": "off",
+    "x-tts-parts": "1",
+    "x-tts-pace-ratio": "0.879"
+   },
+   "audio_s": 5.6,
+   "pcm_sha256": "3b18adfcd1e014aa97937b75d6b48f4336c46e84afe3454c7eb309e810ad4493",
+   "file": "base_a.wav",
+   "header_checks": {
+    "x-tts-retries": {
+     "got": "0",
+     "allowed": [
+      "0"
+     ],
+     "ok": true
+    }
+   }
+  }
+ ],
+ "problems": [],
+ "ok": true
+}

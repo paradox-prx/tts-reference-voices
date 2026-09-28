@@ -1,0 +1,18 @@
+=== 2026-09-25T05:17:51+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice shehbaz --pools /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/pools/auralis_ur.json --size short medium long -n 20 -c 20 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P6_auralis --gpus 0 --tag n20c20 --meta phase=P6_auralis --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x
+warmup shehbaz 1: 1.03s ok
+warmup shehbaz 2: 0.84s ok
+shehbaz short (auralis_ur.json): shehbaz 151 texts
+  n20c20_shehbaz_short_c20_n20_nonstream_inline: ok 20/20 err 0 suspect 0 (short 0, long 0; pace x1.019) | lat p50=3.189s p90=3.433s p99=3.47s | 19.25x realtime (p90-wall 17.1x, stragglers 0), 5.74 req/s | gpu 19831 MiB 99.1%
+shehbaz medium (auralis_ur.json): shehbaz 105 texts
+  n20c20_shehbaz_medium_c20_n20_nonstream_inline: ok 20/20 err 0 suspect 0 (short 0, long 0; pace x0.988) | lat p50=5.135s p90=5.279s p99=5.35s | 22.04x realtime (p90-wall 19.5x, stragglers 0), 3.72 req/s | gpu 19829 MiB 99.8%
+shehbaz long (auralis_ur.json): shehbaz 21 texts
+  n20c20_shehbaz_long_c20_n20_nonstream_inline: ok 20/20 err 0 suspect 0 (short 0, long 0; pace x0.941) | lat p50=11.211s p90=11.779s p99=12.306s | 26.37x realtime (p90-wall 24.29x, stragglers 0), 1.62 req/s | gpu 19828 MiB 99.6%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P6_auralis
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| n20c20_shehbaz_short_c20_n20_nonstream_inline | 20 | 20 | 0 | 0 | 3.189 | 3.433 | 3.47 | – | – | 3.36 | 19.25 | 17.1 | 0 | 0.963 | 5.74 | 19831 | 99.1 |
+| n20c20_shehbaz_medium_c20_n20_nonstream_inline | 20 | 20 | 0 | 0 | 5.135 | 5.279 | 5.35 | – | – | 5.92 | 22.04 | 19.5 | 0 | 0.805 | 3.72 | 19829 | 99.8 |
+| n20c20_shehbaz_long_c20_n20_nonstream_inline | 20 | 20 | 0 | 0 | 11.211 | 11.779 | 12.306 | – | – | 16.3 | 26.37 | 24.29 | 0 | 0.691 | 1.62 | 19828 | 99.6 |
+

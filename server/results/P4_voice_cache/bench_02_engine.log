@@ -1,0 +1,32 @@
+=== 2026-09-25T04:52:38+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --size short --sweep 1,8,32 --n-rule 8:2:32 --voice-mode inline --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P4_voice_cache --gpus 0 --meta phase=P4_voice_cache --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x
+warmup trump 1: 0.37s ok
+warmup trump 2: 0.66s ok
+trump short (en.json): trump 393 texts
+  trump_short_c1_n8_nonstream_inline: ok 8/8 err 0 suspect 1 (short 0, long 1; pace x1.115) | lat p50=0.725s p90=1.136s p99=1.209s | 5.05x realtime (p90-wall 5.05x, stragglers 0), 1.33 req/s | gpu 19832 MiB 95.2%
+  trump_short_c8_n16_nonstream_inline: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x1.163) | lat p50=1.166s p90=2.562s p99=2.671s | 12.75x realtime (p90-wall 11.72x, stragglers 0), 4.56 req/s | gpu 19832 MiB 98.9%
+  trump_short_c32_n32_nonstream_inline: ok 32/32 err 0 suspect 0 (short 0, long 0; pace x1.092) | lat p50=3.891s p90=4.769s p99=4.799s | 20.47x realtime (p90-wall 17.34x, stragglers 0), 6.64 req/s | gpu 19832 MiB 99.1%
+warmup shehbaz 1: 0.68s ok
+warmup shehbaz 2: 0.96s ok
+shehbaz short (ur.json): shehbaz 345 texts
+  shehbaz_short_c1_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.04) | lat p50=1.043s p90=1.146s p99=1.299s | 5.13x realtime (p90-wall 5.13x, stragglers 0), 1.07 req/s | gpu 19832 MiB 93.5%
+  shehbaz_short_c8_n16_nonstream_inline: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x1.167) | lat p50=2.01s p90=2.897s p99=3.266s | 14.95x realtime (p90-wall 13.99x, stragglers 0), 3.19 req/s | gpu 19830 MiB 98.8%
+  shehbaz_short_c32_n32_nonstream_inline: ok 32/32 err 0 suspect 0 (short 0, long 0; pace x1.09) | lat p50=4.543s p90=5.664s p99=6.188s | 22.42x realtime (p90-wall 20.29x, stragglers 0), 5.11 req/s | gpu 19830 MiB 94.2%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P4_voice_cache
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| trump_short_c1_n8_nonstream_upload | 8 | 8 | 0 | 1 | 0.78 | 0.983 | 0.994 | – | – | 3.61 | 5.08 | 5.08 | 0 | 0.203 | 1.41 | 19128 | 98.2 |
+| trump_short_c8_n16_nonstream_upload | 16 | 16 | 0 | 0 | 1.348 | 2.558 | 2.782 | – | – | 2.77 | 12.86 | 11.42 | 0 | 0.573 | 4.63 | 19168 | 98.6 |
+| trump_short_c32_n32_nonstream_upload | 32 | 32 | 0 | 0 | 3.76 | 4.577 | 4.777 | – | – | 3.04 | 20.35 | 17.59 | 0 | 1.424 | 6.69 | 19474 | 99.8 |
+| shehbaz_short_c1_n8_nonstream_upload | 8 | 8 | 0 | 0 | 0.9 | 1.169 | 1.6 | – | – | 4.94 | 5.22 | 5.22 | 0 | 0.194 | 1.06 | 19604 | 98.7 |
+| shehbaz_short_c8_n16_nonstream_upload | 16 | 16 | 0 | 0 | 2.19 | 2.913 | 3.015 | – | – | 4.82 | 14.84 | 14.11 | 0 | 0.507 | 3.08 | 19604 | 99.4 |
+| shehbaz_short_c32_n32_nonstream_upload | 32 | 32 | 0 | 0 | 4.201 | 5.924 | 6.245 | – | – | 4.33 | 22.18 | 19.21 | 0 | 1.167 | 5.12 | 19832 | 99.6 |
+| trump_short_c1_n8_nonstream_inline | 8 | 8 | 0 | 1 | 0.725 | 1.136 | 1.209 | – | – | 3.8 | 5.05 | 5.05 | 0 | 0.201 | 1.33 | 19832 | 95.2 |
+| trump_short_c8_n16_nonstream_inline | 16 | 16 | 0 | 0 | 1.166 | 2.562 | 2.671 | – | – | 2.79 | 12.75 | 11.72 | 0 | 0.596 | 4.56 | 19832 | 98.9 |
+| trump_short_c32_n32_nonstream_inline | 32 | 32 | 0 | 0 | 3.891 | 4.769 | 4.799 | – | – | 3.08 | 20.47 | 17.34 | 0 | 1.405 | 6.64 | 19832 | 99.1 |
+| shehbaz_short_c1_n8_nonstream_inline | 8 | 8 | 0 | 0 | 1.043 | 1.146 | 1.299 | – | – | 4.81 | 5.13 | 5.13 | 0 | 0.2 | 1.07 | 19832 | 93.5 |
+| shehbaz_short_c8_n16_nonstream_inline | 16 | 16 | 0 | 0 | 2.01 | 2.897 | 3.266 | – | – | 4.69 | 14.95 | 13.99 | 0 | 0.52 | 3.19 | 19830 | 98.8 |
+| shehbaz_short_c32_n32_nonstream_inline | 32 | 32 | 0 | 0 | 4.543 | 5.664 | 6.188 | – | – | 4.39 | 22.42 | 20.29 | 0 | 1.148 | 5.11 | 19830 | 94.2 |
+

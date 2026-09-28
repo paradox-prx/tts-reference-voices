@@ -1,0 +1,15 @@
+=== 2026-09-25T08:16:03+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice shehbaz --size xxlong -n 43 -c 16 --timeout 900 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X6_nsm_long_urdu --gpus 0 --tag nsm_false --meta phase=X6_nsm_long_urdu --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x
+warmup shehbaz 1: 0.74s ok
+warmup shehbaz 2: 0.85s ok
+shehbaz xxlong (ur.json): shehbaz 43 texts
+  nsm_false_shehbaz_xxlong_c16_n43_nonstream_inline: ok 27/43 err 16 suspect 14 (short 14, long 0; pace x0.588) | lat p50=21.731s p90=40.268s p99=53.662s | 9.8x realtime (p90-wall 10.07x, stragglers 14), 0.18 req/s | gpu 20408 MiB 99.2%
+    ERR[shehbaz 1] HTTP 500: {"error": {"message": "Qwen3-TTS Base did not emit codec EOS before its token budget (2004/2004 codec tokens); the generated audio is incomplete.", "type": "server_error", "param": null, "code": 500}}
+    ERR[shehbaz 2] HTTP 500: {"error": {"message": "Qwen3-TTS Base did not emit codec EOS before its token budget (1929/1929 codec tokens); the generated audio is incomplete.", "type": "server_error", "param": null, "code": 500}}
+    ERR[shehbaz 3] HTTP 500: {"error": {"message": "Qwen3-TTS Base did not emit codec EOS before its token budget (1977/1977 codec tokens); the generated audio is incomplete.", "type": "server_error", "param": null, "code": 500}}
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X6_nsm_long_urdu
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| nsm_false_shehbaz_xxlong_c16_n43_nonstream_inline | 43 | 27 | 16 | 14 | 21.731 | 40.268 | 53.662 | – | – | 53.21 | 9.8 | 10.07 | 14 | 0.527 | 0.18 | 20408 | 99.2 |
+

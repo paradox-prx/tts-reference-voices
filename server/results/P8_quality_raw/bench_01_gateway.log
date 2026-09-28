@@ -1,0 +1,22 @@
+=== 2026-09-25T05:32:39+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --size prompts -c 16 --timeout 900 --voice-mode server --url http://127.0.0.1:8090 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P8_quality_raw --gpus 0 --tag raw --meta phase=P8_quality_raw --meta via=gateway --meta 'engine=vllm-omni custom_voices (engine) --stage-overrides {"0": {"gpu_memory_utilization": 0.45}}' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta 'gateway={"TTS_RETRY_MAX": "0"}' --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x; voice='trump'
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='shehbaz'
+  server voice 'trump': listed by GET /v1/audio/voices
+warmup trump 1: 0.34s ok
+warmup trump 2: 0.72s ok
+trump prompts (trump_en.json): trump 43 texts
+  raw_trump_prompts_c16_n43_nonstream_server: ok 43/43 err 0 suspect 0 (short 0, long 0; pace x1.006) | lat p50=16.499s p90=19.291s p99=26.45s | 28.1x realtime (p90-wall 25.99x, stragglers 0), 0.86 req/s | gpu 15936 MiB 99.4%
+  server voice 'shehbaz': listed by GET /v1/audio/voices
+warmup shehbaz 1: 0.79s ok
+warmup shehbaz 2: 0.76s ok
+shehbaz prompts (shehbaz_ur.json): shehbaz 43 texts
+  raw_shehbaz_prompts_c16_n43_nonstream_server: ok 41/43 err 2 suspect 0 (short 0, long 0; pace x0.954) | lat p50=17.681s p90=20.128s p99=31.504s | 22.97x realtime (p90-wall 24.41x, stragglers 0), 0.67 req/s | gpu 15937 MiB 99.2%
+    ERR[shehbaz 2] HTTP 502: {"error":{"message":"speech engine failed","type":"server_error","code":"engine_error"}}
+    ERR[shehbaz 37] HTTP 502: {"error":{"message":"speech engine failed","type":"server_error","code":"engine_error"}}
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P8_quality_raw
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| raw_trump_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 16.499 | 19.291 | 26.45 | – | – | 32.72 | 28.1 | 25.99 | 0 | 0.528 | 0.86 | 15936 | 99.4 |
+| raw_shehbaz_prompts_c16_n43_nonstream_server | 43 | 41 | 2 | 0 | 17.681 | 20.128 | 31.504 | – | – | 34.26 | 22.97 | 24.41 | 0 | 0.535 | 0.67 | 15937 | 99.2 |
+

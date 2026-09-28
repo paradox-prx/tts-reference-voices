@@ -83,7 +83,12 @@
 > public branch and, asked about it explicitly, chose "public branch, labelled"; then asked for ~40 sorted by quality.
 > 40 labelled FLAC takes are in `samples/qwen3-tts/{best,mid,worst}/` (20 / 10 / 10; README with AI-generated
 > disclaimer, texts, metrics, failure type, source runs), picked and written by `eval/pick_samples.py` (skips texts
-> that read as political statements or official announcements). Everything else under `server/results/` stays local.
+> that read as political statements or official announcements). Then the user asked to publish all the results plus
+> a run of the final server: `server/results/` numbers and logs of every phase are in git (`.gitignore` keeps audio
+> out), `results/13_final_server/` (the production service through the gateway, 2026-09-28) is in git with its
+> FLACs, and every other phase's audio is in the GitHub release `bench-audio-2026-09-28` (one tar per phase from
+> `bench/export_audio.py`). Takes with political / official texts (keyword list in `eval/pick_samples.py`) are left
+> out of all published audio: my call, told to the user (`results/README.md`).
 >
 > **Tests (all green):** gateway 124, engine 30 (+4 skipped: no ops/upstream here), QC 71, eval 8, baseline 86.
 

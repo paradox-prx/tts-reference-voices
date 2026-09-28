@@ -1,0 +1,24 @@
+{
+ "tag": "c8",
+ "voice": "trump",
+ "stream": false,
+ "i": 1,
+ "status": 200,
+ "total_s": 2.493,
+ "ttfa_s": 2.492,
+ "audio_s": 4.96,
+ "text": "We have done things that nobody thought were possible, and we are just getting started, believe me.",
+ "headers": {
+  "x-request-id": "631ac5be100e47e2b036baa1d8424e53",
+  "x-ai-generated": "true",
+  "x-tts-voice": "trump",
+  "x-tts-retries": "0",
+  "x-tts-queue-ms": "0",
+  "x-tts-sample-rate": "24000",
+  "x-tts-audio-seconds": "4.960",
+  "x-tts-suspect": "0",
+  "x-tts-engine-ms": "2488",
+  "x-tts-qc": "off",
+  "x-tts-pace-ratio": "0.780"
+ }
+}

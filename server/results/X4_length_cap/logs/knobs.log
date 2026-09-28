@@ -1,0 +1,4 @@
+=== 2026-09-25T05:27:03+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/bench/verify_knobs.py --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X4_length_cap/knobs --voices-dir /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices --spec '{"name": "max_new_tokens", "via": "engine", "voice": "shehbaz", "fails": {"cap40": {"max_new_tokens": 40}}}'
+  base_a: HTTP 200 9.04 s 
+  fails_cap40: HTTP 500 - s refused HTTP 500: {"error": {"message": "Qwen3-TTS Base did not emit codec EOS before its token budget (40/40 codec tokens); the
+knob check max_new_tokens: OK

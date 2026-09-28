@@ -1,0 +1,83 @@
+{
+ "name": "language",
+ "url": "http://127.0.0.1:8091",
+ "voice": "trump",
+ "text": "You know, I look out at this room and I see the most beautiful people. Truly, the most beautiful people in the world.",
+ "seed": null,
+ "spec": {
+  "name": "language",
+  "via": "engine",
+  "voice": "trump",
+  "fails": {
+   "urdu": {
+    "language": "Urdu"
+   }
+  },
+  "succeeds": {
+   "auto": {
+    "language": "Auto"
+   }
+  }
+ },
+ "deterministic_base": false,
+ "takes": [
+  {
+   "label": "base_a",
+   "status": 200,
+   "error": null,
+   "latency_s": 1.008,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "English"
+   },
+   "headers": {
+    "x-vllm-omni-input-tokens": "318",
+    "x-vllm-omni-output-tokens": "66",
+    "x-vllm-omni-total-tokens": "384",
+    "x-vllm-omni-input-text-tokens": "27",
+    "x-vllm-omni-input-audio-tokens": "291"
+   },
+   "audio_s": 5.2,
+   "pcm_sha256": "b52f59cf30399a2cc686bc7f6fe159f0c375fef1e51ac97e2dde23a6e4c808ba",
+   "file": "base_a.wav"
+  },
+  {
+   "label": "fails_urdu",
+   "status": 400,
+   "error": "HTTP 400: {\"error\":{\"message\":\"Invalid language 'Urdu'. Supported: Auto, Chinese, English, French, German, Italian, Japanese, Korean, Portuguese, Russian, Spanish\",\"type\":\"BadRequestError\",\"param\":null,\"code\":4",
+   "latency_s": 0.006,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Urdu"
+   },
+   "headers": {},
+   "verdict": "refused"
+  },
+  {
+   "label": "succeeds_auto",
+   "status": 200,
+   "error": null,
+   "latency_s": 1.056,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto"
+   },
+   "headers": {
+    "x-vllm-omni-input-tokens": "318",
+    "x-vllm-omni-output-tokens": "71",
+    "x-vllm-omni-total-tokens": "389",
+    "x-vllm-omni-input-text-tokens": "27",
+    "x-vllm-omni-input-audio-tokens": "291"
+   },
+   "audio_s": 5.6,
+   "pcm_sha256": "6d43a927a711d7390e03f88f56112fa45195ab4938946ce0ee828d1ae1ffb121",
+   "file": "succeeds_auto.wav",
+   "verdict": "accepted"
+  }
+ ],
+ "problems": [],
+ "ok": true
+}

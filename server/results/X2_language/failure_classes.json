@@ -1,0 +1,97 @@
+{
+ "phase": "X2_language",
+ "runs": {
+  "lang_auto_trump_prompts_c16_n43_nonstream_inline [trump]": {
+   "n": 43,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.082
+    ]
+   },
+   "moderate": {
+    "k": 1,
+    "rate": 0.0233,
+    "ci95": [
+     0.0041,
+     0.1206
+    ]
+   },
+   "clean": {
+    "k": 42,
+    "rate": 0.9767,
+    "ci95": [
+     0.8794,
+     0.9959
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 1,
+    "rate": 0.0233,
+    "ci95": [
+     0.0041,
+     0.1206
+    ]
+   },
+   "reasons": {
+    "repeat": 1
+   },
+   "non_severe_means": {
+    "wer": 0.0111,
+    "cer_nospace": 0.0056,
+    "sim_prompt_large": 0.8503,
+    "sim_prompt_base": 0.9861,
+    "sim_heldout_large": 0.0
+   }
+  },
+  "ALL": {
+   "n": 43,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.082
+    ]
+   },
+   "moderate": {
+    "k": 1,
+    "rate": 0.0233,
+    "ci95": [
+     0.0041,
+     0.1206
+    ]
+   },
+   "clean": {
+    "k": 42,
+    "rate": 0.9767,
+    "ci95": [
+     0.8794,
+     0.9959
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 1,
+    "rate": 0.0233,
+    "ci95": [
+     0.0041,
+     0.1206
+    ]
+   },
+   "reasons": {
+    "repeat": 1
+   },
+   "non_severe_means": {
+    "wer": 0.0111,
+    "cer_nospace": 0.0056,
+    "sim_prompt_large": 0.8503,
+    "sim_prompt_base": 0.9861,
+    "sim_heldout_large": 0.0
+   }
+  }
+ }
+}

@@ -1,0 +1,15 @@
+=== 2026-09-25T11:15:40+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice shehbaz --size prompts --takes 6 -c 16 --extra-param repetition_penalty=1.05 --param non_streaming_mode=true --timeout 900 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P5_urdu_nsm --gpus 0 --tag nsm_rp1.05 --meta phase=P5_urdu_nsm --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x
+warmup shehbaz 1: 0.74s ok
+warmup shehbaz 2: 1.04s ok
+shehbaz prompts (shehbaz_ur.json): shehbaz 43 texts
+  nsm_rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline: ok 253/258 err 5 suspect 0 (short 0, long 0; pace x0.994) | lat p50=19.704s p90=22.216s p99=24.69s | 26.93x realtime (p90-wall 26.92x, stragglers 0), 0.76 req/s | gpu 19661 MiB 99.3%
+    ERR[shehbaz 0] HTTP 500: {"error": {"message": "Qwen3-TTS Base did not emit codec EOS before its token budget (955/955 codec tokens); the generated audio is incomplete.", "type": "server_error", "param": null, "code": 500}}
+    ERR[shehbaz 35] HTTP 500: {"error": {"message": "Qwen3-TTS Base did not emit codec EOS before its token budget (1068/1068 codec tokens); the generated audio is incomplete.", "type": "server_error", "param": null, "code": 500}}
+    ERR[shehbaz 37] HTTP 500: {"error": {"message": "Qwen3-TTS Base did not emit codec EOS before its token budget (1018/1018 codec tokens); the generated audio is incomplete.", "type": "server_error", "param": null, "code": 500}}
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P5_urdu_nsm
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| nsm_rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline | 258 | 253 | 5 | 0 | 19.704 | 22.216 | 24.69 | – | – | 35.29 | 26.93 | 26.92 | 0 | 0.564 | 0.76 | 19661 | 99.3 |
+

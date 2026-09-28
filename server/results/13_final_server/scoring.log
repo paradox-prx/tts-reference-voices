@@ -1,0 +1,48 @@
+results/13_final_server: 834 takes, 0 already scored, 834 to score -> results/13_final_server/scores.jsonl
+Loading weights:   0%|          | 0/710 [00:00<?, ?it/s]Loading weights:  72%|███████▏  | 508/710 [00:00<00:00, 5057.23it/s]Loading weights: 100%|██████████| 710/710 [00:00<00:00, 4084.10it/s]
+Loading weights:   0%|          | 0/266 [00:00<?, ?it/s]Loading weights: 100%|██████████| 266/266 [00:00<00:00, 40816.74it/s]
+models loaded in 7.5s: {'asr': 2.98, 'sim_large': 2.57, 'refs_large': 0.69, 'sim_base': 0.16, 'refs_base': 0.33}
+  20/834 5s eta 213s | final_c1_trump_short_c1_n16_stream_server/audio/002.wav: wer=0.0 cer_ns=0.0 sim_L=0.8021 gate=pass
+  40/834 10s eta 201s | final_c16_trump_short_c16_n64_nonstream_server/audio/007.wav: wer=0.0 cer_ns=0.0 sim_L=0.7781 gate=pass
+  60/834 15s eta 189s | final_c16_trump_short_c16_n64_nonstream_server/audio/028.wav: wer=0.0 cer_ns=0.0 sim_L=0.6211 gate=pass
+  80/834 19s eta 182s | final_c16_trump_short_c16_n64_nonstream_server/audio/047.wav: wer=0.0 cer_ns=0.0 sim_L=0.7727 gate=pass
+  100/834 24s eta 179s | final_c16_trump_medium_c16_n64_nonstream_server/audio/002.wav: wer=0.0 cer_ns=0.0 sim_L=0.8739 gate=pass
+  120/834 31s eta 186s | final_c16_trump_medium_c16_n64_nonstream_server/audio/023.wav: wer=0.0 cer_ns=0.0 sim_L=0.8436 gate=pass
+  140/834 38s eta 189s | final_c16_trump_medium_c16_n64_nonstream_server/audio/043.wav: wer=0.0 cer_ns=0.0 sim_L=0.856 gate=pass
+  160/834 45s eta 191s | final_c16_trump_medium_c16_n64_nonstream_server/audio/063.wav: wer=0.0 cer_ns=0.0 sim_L=0.8425 gate=pass
+  180/834 58s eta 211s | final_c16_trump_long_c16_n43_nonstream_server/audio/019.wav: wer=0.0154 cer_ns=0.0131 sim_L=0.8874 gate=pass
+  200/834 71s eta 224s | final_c16_trump_long_c16_n43_nonstream_server/audio/039.wav: wer=0.0 cer_ns=0.0 sim_L=0.869 gate=pass
+  220/834 96s eta 267s | final_c16_trump_prompts_c16_n43_nonstream_server/audio/016.wav: wer=0.0 cer_ns=0.0 sim_L=0.8907 gate=pass
+  240/834 122s eta 302s | final_c16_trump_prompts_c16_n43_nonstream_server/audio/036.wav: wer=0.0439 cer_ns=0.0095 sim_L=0.8582 gate=pass
+  260/834 163s eta 361s | final_c16_trump_xxlong_c16_n43_nonstream_server/audio/013.wav: wer=0.0 cer_ns=0.0 sim_L=0.8547 gate=pass
+  280/834 213s eta 421s | final_c16_trump_xxlong_c16_n43_nonstream_server/audio/033.wav: wer=0.0126 cer_ns=0.0066 sim_L=0.8798 gate=pass
+  300/834 238s eta 423s | final_c32_trump_medium_c32_n128_nonstream_server/audio/010.wav: wer=0.0 cer_ns=0.0 sim_L=0.8096 gate=pass
+  320/834 245s eta 393s | final_c32_trump_medium_c32_n128_nonstream_server/audio/030.wav: wer=0.0 cer_ns=0.0 sim_L=0.8464 gate=pass
+  340/834 252s eta 366s | final_c32_trump_medium_c32_n128_nonstream_server/audio/050.wav: wer=0.0 cer_ns=0.0 sim_L=0.775 gate=pass
+  360/834 259s eta 340s | final_c32_trump_medium_c32_n128_nonstream_server/audio/070.wav: wer=0.0 cer_ns=0.0 sim_L=0.8235 gate=pass
+  380/834 265s eta 317s | final_c32_trump_medium_c32_n128_nonstream_server/audio/090.wav: wer=0.0 cer_ns=0.0 sim_L=0.8229 gate=pass
+  400/834 273s eta 296s | final_c32_trump_medium_c32_n128_nonstream_server/audio/110.wav: wer=0.0 cer_ns=0.0 sim_L=0.8633 gate=pass
+  420/834 279s eta 275s | final_c1_shehbaz_short_c1_n16_nonstream_server/audio/002.wav: wer=0.2 cer_ns=0.069 sim_L=0.697 gate=pass
+  440/834 285s eta 256s | final_c1_shehbaz_short_c1_n16_stream_server/audio/006.wav: wer=0.25 cer_ns=0.1923 sim_L=0.7853 gate=pass
+  460/834 291s eta 237s | final_c16_shehbaz_short_c16_n64_nonstream_server/audio/011.wav: wer=0.1667 cer_ns=0.0625 sim_L=0.481 gate=pass
+  480/834 298s eta 220s | final_c16_shehbaz_short_c16_n64_nonstream_server/audio/030.wav: wer=0.8182 cer_ns=0.3824 sim_L=0.8051 gate=cer_nospace>0.35,char_ratio<0.85 BAD:cer_nospace>0.3,char_ratio<0.88
+  500/834 303s eta 203s | final_c16_shehbaz_short_c16_n64_nonstream_server/audio/050.wav: wer=0.5 cer_ns=0.1429 sim_L=0.6298 gate=pass
+  520/834 311s eta 188s | final_c16_shehbaz_medium_c16_n64_nonstream_server/audio/005.wav: wer=0.1579 cer_ns=0.069 sim_L=0.8116 gate=pass
+  540/834 321s eta 175s | final_c16_shehbaz_medium_c16_n64_nonstream_server/audio/026.wav: wer=0.3929 cer_ns=0.1579 sim_L=0.7991 gate=pass
+  560/834 331s eta 162s | final_c16_shehbaz_medium_c16_n64_nonstream_server/audio/045.wav: wer=0.3793 cer_ns=0.1264 sim_L=0.7824 gate=pass
+  580/834 343s eta 150s | final_c16_shehbaz_long_c16_n43_nonstream_server/audio/002.wav: wer=0.2787 cer_ns=0.1397 sim_L=0.8553 gate=pass
+  600/834 364s eta 142s | final_c16_shehbaz_long_c16_n43_nonstream_server/audio/022.wav: wer=0.2576 cer_ns=0.0905 sim_L=0.8665 gate=pass
+  620/834 385s eta 133s | final_c16_shehbaz_long_c16_n43_nonstream_server/audio/042.wav: wer=0.431 cer_ns=0.1316 sim_L=0.8301 gate=pass
+  640/834 421s eta 128s | final_c16_shehbaz_prompts_c16_n43_nonstream_server/audio/019.wav: wer=0.22 cer_ns=0.0991 sim_L=0.8343 gate=pass
+  660/834 457s eta 121s | final_c16_shehbaz_prompts_c16_n43_nonstream_server/audio/040.wav: wer=0.3409 cer_ns=0.1389 sim_L=0.8713 gate=repeat_excess>=6 BAD:repeat_excess>=5
+  680/834 527s eta 119s | final_c16_shehbaz_xxlong_c16_n43_nonstream_server/audio/016.wav: wer=0.2798 cer_ns=0.1266 sim_L=0.8716 gate=repeat_excess>=6 BAD:repeat_excess>=5
+  700/834 593s eta 114s | final_c16_shehbaz_xxlong_c16_n43_nonstream_server/audio/035.wav: wer=0.385 cer_ns=0.1634 sim_L=0.829 gate=repeat_excess>=6 BAD:repeat_excess>=5
+  720/834 620s eta 98s | final_c32_shehbaz_medium_c32_n128_nonstream_server/audio/013.wav: wer=0.52 cer_ns=0.2174 sim_L=0.795 gate=pass
+  740/834 630s eta 80s | final_c32_shehbaz_medium_c32_n128_nonstream_server/audio/033.wav: wer=0.2 cer_ns=0.1552 sim_L=0.8067 gate=pass
+  760/834 640s eta 62s | final_c32_shehbaz_medium_c32_n128_nonstream_server/audio/053.wav: wer=0.4643 cer_ns=0.1798 sim_L=0.8639 gate=pass BAD:char_ratio<0.88
+  780/834 650s eta 45s | final_c32_shehbaz_medium_c32_n128_nonstream_server/audio/073.wav: wer=0.037 cer_ns=0.0116 sim_L=0.7751 gate=pass
+  800/834 660s eta 28s | final_c32_shehbaz_medium_c32_n128_nonstream_server/audio/093.wav: wer=0.3929 cer_ns=0.1458 sim_L=0.8308 gate=pass
+  820/834 671s eta 11s | final_c32_shehbaz_medium_c32_n128_nonstream_server/audio/113.wav: wer=0.6522 cer_ns=0.2581 sim_L=0.7639 gate=pass
+  834/834 678s eta 0s | final_c32_shehbaz_medium_c32_n128_nonstream_server/audio/127.wav: wer=0.4545 cer_ns=0.1949 sim_L=0.7803 gate=pass
+results/13_final_server: scored 834 in 677.9s
+results/13_final_server: gate fail 41/834, bad 80/834, corpus {'n': 834, 'wer': 0.1627, 'cer': 0.062, 'cer_nospace': 0.0671} -> results/13_final_server/scores_summary.json

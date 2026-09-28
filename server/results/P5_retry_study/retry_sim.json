@@ -1,0 +1,840 @@
+{
+ "scores": [
+  "results/P5_urdu_rp105/takes_all.jsonl",
+  "results/P5_urdu_rp110/takes_all.jsonl",
+  "results/P5_urdu_rp115/takes_all.jsonl",
+  "results/P5_urdu_rp120/takes_all.jsonl"
+ ],
+ "cost": "audio_s",
+ "n_boot": 2000,
+ "setting_mode": "run",
+ "bad_source": "score_run's bad label",
+ "settings": {
+  "rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]": {
+   "n_prompts": 43,
+   "takes_per_prompt": [
+    6
+   ],
+   "n_takes": 258,
+   "take_bad": {
+    "k": 40,
+    "n": 258,
+    "rate": 0.155,
+    "ci95": [
+     0.116,
+     0.2042
+    ]
+   },
+   "take_gate_fail": {
+    "k": 79,
+    "n": 258,
+    "rate": 0.3062,
+    "ci95": [
+     0.2531,
+     0.3649
+    ]
+   },
+   "gate_recall": {
+    "k": 40,
+    "n": 40,
+    "rate": 1.0,
+    "ci95": [
+     0.9124,
+     1.0
+    ]
+   },
+   "gate_precision": {
+    "k": 40,
+    "n": 79,
+    "rate": 0.5063,
+    "ci95": [
+     0.3984,
+     0.6137
+    ]
+   },
+   "false_reject": {
+    "k": 39,
+    "n": 218,
+    "rate": 0.1789,
+    "ci95": [
+     0.1337,
+     0.2352
+    ]
+   },
+   "prompts_with_any_bad": 21,
+   "prompts_all_bad": 0,
+   "retry": [
+    {
+     "R": 0,
+     "final_bad_rate": 0.155,
+     "ci95": [
+      0.0969,
+      0.2209
+     ],
+     "mean_attempts": 1.0,
+     "extra_compute": -0.0,
+     "extra_compute_ci95": [
+      -0.0,
+      0.0
+     ],
+     "shipped_gate_fail": 0.3062,
+     "iid_prediction": 0.155
+    },
+    {
+     "R": 1,
+     "final_bad_rate": 0.0884,
+     "ci95": [
+      0.0357,
+      0.1519
+     ],
+     "mean_attempts": 1.306,
+     "extra_compute": 0.3106,
+     "extra_compute_ci95": [
+      0.2209,
+      0.4088
+     ],
+     "shipped_gate_fail": 0.1659,
+     "iid_prediction": 0.024
+    },
+    {
+     "R": 2,
+     "final_bad_rate": 0.0721,
+     "ci95": [
+      0.0174,
+      0.1407
+     ],
+     "mean_attempts": 1.472,
+     "extra_compute": 0.4806,
+     "extra_compute_ci95": [
+      0.3086,
+      0.6734
+     ],
+     "shipped_gate_fail": 0.1209,
+     "iid_prediction": 0.0037
+    },
+    {
+     "R": 3,
+     "final_bad_rate": 0.0667,
+     "ci95": [
+      0.0062,
+      0.1411
+     ],
+     "mean_attempts": 1.593,
+     "extra_compute": 0.6058,
+     "extra_compute_ci95": [
+      0.3588,
+      0.8962
+     ],
+     "shipped_gate_fail": 0.0977,
+     "iid_prediction": 0.0006
+    }
+   ],
+   "best_of": [
+    {
+     "best_of": 3,
+     "final_bad_rate": 0.0721,
+     "ci95": [
+      0.0174,
+      0.1407
+     ],
+     "extra_compute": 2.0
+    }
+   ]
+  },
+  "rp1.05_trump_prompts_c16_n43_nonstream_inline [trump]": {
+   "n_prompts": 43,
+   "takes_per_prompt": [
+    1
+   ],
+   "n_takes": 43,
+   "take_bad": {
+    "k": 1,
+    "n": 43,
+    "rate": 0.0233,
+    "ci95": [
+     0.0041,
+     0.1206
+    ]
+   },
+   "take_gate_fail": {
+    "k": 4,
+    "n": 43,
+    "rate": 0.093,
+    "ci95": [
+     0.0368,
+     0.216
+    ]
+   },
+   "gate_recall": {
+    "k": 1,
+    "n": 1,
+    "rate": 1.0,
+    "ci95": [
+     0.2065,
+     1.0
+    ]
+   },
+   "gate_precision": {
+    "k": 1,
+    "n": 4,
+    "rate": 0.25,
+    "ci95": [
+     0.0456,
+     0.6994
+    ]
+   },
+   "false_reject": {
+    "k": 3,
+    "n": 42,
+    "rate": 0.0714,
+    "ci95": [
+     0.0246,
+     0.1901
+    ]
+   },
+   "prompts_with_any_bad": 1,
+   "prompts_all_bad": 1,
+   "retry": [
+    {
+     "R": 0,
+     "final_bad_rate": 0.0233,
+     "ci95": [
+      0.0,
+      0.0698
+     ],
+     "mean_attempts": 1.0,
+     "extra_compute": 0.0,
+     "extra_compute_ci95": [
+      0.0,
+      0.0
+     ],
+     "shipped_gate_fail": 0.093,
+     "iid_prediction": 0.0233
+    }
+   ],
+   "best_of": []
+  },
+  "rp1.10_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]": {
+   "n_prompts": 43,
+   "takes_per_prompt": [
+    6
+   ],
+   "n_takes": 258,
+   "take_bad": {
+    "k": 42,
+    "n": 258,
+    "rate": 0.1628,
+    "ci95": [
+     0.1227,
+     0.2127
+    ]
+   },
+   "take_gate_fail": {
+    "k": 79,
+    "n": 258,
+    "rate": 0.3062,
+    "ci95": [
+     0.2531,
+     0.3649
+    ]
+   },
+   "gate_recall": {
+    "k": 42,
+    "n": 42,
+    "rate": 1.0,
+    "ci95": [
+     0.9162,
+     1.0
+    ]
+   },
+   "gate_precision": {
+    "k": 42,
+    "n": 79,
+    "rate": 0.5316,
+    "ci95": [
+     0.4227,
+     0.6376
+    ]
+   },
+   "false_reject": {
+    "k": 37,
+    "n": 216,
+    "rate": 0.1713,
+    "ci95": [
+     0.1269,
+     0.2272
+    ]
+   },
+   "prompts_with_any_bad": 23,
+   "prompts_all_bad": 0,
+   "retry": [
+    {
+     "R": 0,
+     "final_bad_rate": 0.1628,
+     "ci95": [
+      0.1047,
+      0.2248
+     ],
+     "mean_attempts": 1.0,
+     "extra_compute": 0.0,
+     "extra_compute_ci95": [
+      -0.0,
+      0.0
+     ],
+     "shipped_gate_fail": 0.3062,
+     "iid_prediction": 0.1628
+    },
+    {
+     "R": 1,
+     "final_bad_rate": 0.062,
+     "ci95": [
+      0.0279,
+      0.107
+     ],
+     "mean_attempts": 1.306,
+     "extra_compute": 0.3108,
+     "extra_compute_ci95": [
+      0.2236,
+      0.408
+     ],
+     "shipped_gate_fail": 0.1519,
+     "iid_prediction": 0.0265
+    },
+    {
+     "R": 2,
+     "final_bad_rate": 0.0349,
+     "ci95": [
+      0.007,
+      0.0709
+     ],
+     "mean_attempts": 1.458,
+     "extra_compute": 0.4654,
+     "extra_compute_ci95": [
+      0.3078,
+      0.6485
+     ],
+     "shipped_gate_fail": 0.0965,
+     "iid_prediction": 0.0043
+    },
+    {
+     "R": 3,
+     "final_bad_rate": 0.0217,
+     "ci95": [
+      0.0,
+      0.0481
+     ],
+     "mean_attempts": 1.555,
+     "extra_compute": 0.5632,
+     "extra_compute_ci95": [
+      0.3508,
+      0.8229
+     ],
+     "shipped_gate_fail": 0.0713,
+     "iid_prediction": 0.0007
+    }
+   ],
+   "best_of": [
+    {
+     "best_of": 3,
+     "final_bad_rate": 0.0349,
+     "ci95": [
+      0.007,
+      0.0709
+     ],
+     "extra_compute": 2.0
+    }
+   ]
+  },
+  "rp1.15_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]": {
+   "n_prompts": 43,
+   "takes_per_prompt": [
+    6
+   ],
+   "n_takes": 258,
+   "take_bad": {
+    "k": 41,
+    "n": 258,
+    "rate": 0.1589,
+    "ci95": [
+     0.1194,
+     0.2085
+    ]
+   },
+   "take_gate_fail": {
+    "k": 72,
+    "n": 258,
+    "rate": 0.2791,
+    "ci95": [
+     0.2279,
+     0.3367
+    ]
+   },
+   "gate_recall": {
+    "k": 41,
+    "n": 41,
+    "rate": 1.0,
+    "ci95": [
+     0.9143,
+     1.0
+    ]
+   },
+   "gate_precision": {
+    "k": 41,
+    "n": 72,
+    "rate": 0.5694,
+    "ci95": [
+     0.4544,
+     0.6774
+    ]
+   },
+   "false_reject": {
+    "k": 31,
+    "n": 217,
+    "rate": 0.1429,
+    "ci95": [
+     0.1025,
+     0.1956
+    ]
+   },
+   "prompts_with_any_bad": 25,
+   "prompts_all_bad": 0,
+   "retry": [
+    {
+     "R": 0,
+     "final_bad_rate": 0.1589,
+     "ci95": [
+      0.1047,
+      0.2171
+     ],
+     "mean_attempts": 1.0,
+     "extra_compute": 0.0,
+     "extra_compute_ci95": [
+      -0.0,
+      0.0
+     ],
+     "shipped_gate_fail": 0.2791,
+     "iid_prediction": 0.1589
+    },
+    {
+     "R": 1,
+     "final_bad_rate": 0.0651,
+     "ci95": [
+      0.0295,
+      0.1054
+     ],
+     "mean_attempts": 1.279,
+     "extra_compute": 0.2798,
+     "extra_compute_ci95": [
+      0.2073,
+      0.3604
+     ],
+     "shipped_gate_fail": 0.1147,
+     "iid_prediction": 0.0253
+    },
+    {
+     "R": 2,
+     "final_bad_rate": 0.0337,
+     "ci95": [
+      0.0093,
+      0.0651
+     ],
+     "mean_attempts": 1.394,
+     "extra_compute": 0.3955,
+     "extra_compute_ci95": [
+      0.2706,
+      0.5425
+     ],
+     "shipped_gate_fail": 0.057,
+     "iid_prediction": 0.004
+    },
+    {
+     "R": 3,
+     "final_bad_rate": 0.0186,
+     "ci95": [
+      0.0031,
+      0.0403
+     ],
+     "mean_attempts": 1.451,
+     "extra_compute": 0.454,
+     "extra_compute_ci95": [
+      0.294,
+      0.6447
+     ],
+     "shipped_gate_fail": 0.0295,
+     "iid_prediction": 0.0006
+    }
+   ],
+   "best_of": [
+    {
+     "best_of": 3,
+     "final_bad_rate": 0.0337,
+     "ci95": [
+      0.0093,
+      0.0651
+     ],
+     "extra_compute": 2.0
+    }
+   ]
+  },
+  "rp1.20_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]": {
+   "n_prompts": 43,
+   "takes_per_prompt": [
+    6
+   ],
+   "n_takes": 258,
+   "take_bad": {
+    "k": 38,
+    "n": 258,
+    "rate": 0.1473,
+    "ci95": [
+     0.1092,
+     0.1957
+    ]
+   },
+   "take_gate_fail": {
+    "k": 72,
+    "n": 258,
+    "rate": 0.2791,
+    "ci95": [
+     0.2279,
+     0.3367
+    ]
+   },
+   "gate_recall": {
+    "k": 38,
+    "n": 38,
+    "rate": 1.0,
+    "ci95": [
+     0.9082,
+     1.0
+    ]
+   },
+   "gate_precision": {
+    "k": 38,
+    "n": 72,
+    "rate": 0.5278,
+    "ci95": [
+     0.414,
+     0.6387
+    ]
+   },
+   "false_reject": {
+    "k": 34,
+    "n": 220,
+    "rate": 0.1545,
+    "ci95": [
+     0.1128,
+     0.2082
+    ]
+   },
+   "prompts_with_any_bad": 20,
+   "prompts_all_bad": 1,
+   "retry": [
+    {
+     "R": 0,
+     "final_bad_rate": 0.1473,
+     "ci95": [
+      0.0853,
+      0.2209
+     ],
+     "mean_attempts": 1.0,
+     "extra_compute": 0.0,
+     "extra_compute_ci95": [
+      -0.0,
+      0.0
+     ],
+     "shipped_gate_fail": 0.2791,
+     "iid_prediction": 0.1473
+    },
+    {
+     "R": 1,
+     "final_bad_rate": 0.0744,
+     "ci95": [
+      0.0248,
+      0.1411
+     ],
+     "mean_attempts": 1.279,
+     "extra_compute": 0.282,
+     "extra_compute_ci95": [
+      0.1964,
+      0.3773
+     ],
+     "shipped_gate_fail": 0.1411,
+     "iid_prediction": 0.0217
+    },
+    {
+     "R": 2,
+     "final_bad_rate": 0.0465,
+     "ci95": [
+      0.007,
+      0.1093
+     ],
+     "mean_attempts": 1.42,
+     "extra_compute": 0.4239,
+     "extra_compute_ci95": [
+      0.2706,
+      0.6045
+     ],
+     "shipped_gate_fail": 0.0953,
+     "iid_prediction": 0.0032
+    },
+    {
+     "R": 3,
+     "final_bad_rate": 0.0341,
+     "ci95": [
+      0.0016,
+      0.093
+     ],
+     "mean_attempts": 1.516,
+     "extra_compute": 0.5188,
+     "extra_compute_ci95": [
+      0.3103,
+      0.7806
+     ],
+     "shipped_gate_fail": 0.0729,
+     "iid_prediction": 0.0005
+    }
+   ],
+   "best_of": [
+    {
+     "best_of": 3,
+     "final_bad_rate": 0.0465,
+     "ci95": [
+      0.007,
+      0.1093
+     ],
+     "extra_compute": 2.0
+    }
+   ]
+  },
+  "rp1.20_trump_prompts_c16_n43_nonstream_inline [trump]": {
+   "n_prompts": 43,
+   "takes_per_prompt": [
+    1
+   ],
+   "n_takes": 43,
+   "take_bad": {
+    "k": 0,
+    "n": 43,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.082
+    ]
+   },
+   "take_gate_fail": {
+    "k": 4,
+    "n": 43,
+    "rate": 0.093,
+    "ci95": [
+     0.0368,
+     0.216
+    ]
+   },
+   "gate_recall": {
+    "k": 0,
+    "n": 0,
+    "rate": null,
+    "ci95": null
+   },
+   "gate_precision": {
+    "k": 0,
+    "n": 4,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.4899
+    ]
+   },
+   "false_reject": {
+    "k": 4,
+    "n": 43,
+    "rate": 0.093,
+    "ci95": [
+     0.0368,
+     0.216
+    ]
+   },
+   "prompts_with_any_bad": 0,
+   "prompts_all_bad": 0,
+   "retry": [
+    {
+     "R": 0,
+     "final_bad_rate": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "mean_attempts": 1.0,
+     "extra_compute": 0.0,
+     "extra_compute_ci95": [
+      0.0,
+      0.0
+     ],
+     "shipped_gate_fail": 0.093,
+     "iid_prediction": 0.0
+    }
+   ],
+   "best_of": []
+  }
+ },
+ "baseline": "rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+ "paired": [
+  {
+   "baseline": "rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "setting": "rp1.10_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "R": 0,
+   "n_prompts": 43,
+   "bad_baseline": 0.155,
+   "bad_setting": 0.1628,
+   "diff": 0.0078,
+   "diff_ci95": [
+    -0.0543,
+    0.0659
+   ]
+  },
+  {
+   "baseline": "rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "setting": "rp1.10_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "R": 1,
+   "n_prompts": 43,
+   "bad_baseline": 0.0884,
+   "bad_setting": 0.062,
+   "diff": -0.0264,
+   "diff_ci95": [
+    -0.0915,
+    0.0264
+   ]
+  },
+  {
+   "baseline": "rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "setting": "rp1.10_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "R": 2,
+   "n_prompts": 43,
+   "bad_baseline": 0.0721,
+   "bad_setting": 0.0349,
+   "diff": -0.0372,
+   "diff_ci95": [
+    -0.1081,
+    0.0198
+   ]
+  },
+  {
+   "baseline": "rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "setting": "rp1.10_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "R": 3,
+   "n_prompts": 43,
+   "bad_baseline": 0.0667,
+   "bad_setting": 0.0217,
+   "diff": -0.045,
+   "diff_ci95": [
+    -0.1178,
+    0.0124
+   ]
+  },
+  {
+   "baseline": "rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "setting": "rp1.15_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "R": 0,
+   "n_prompts": 43,
+   "bad_baseline": 0.155,
+   "bad_setting": 0.1589,
+   "diff": 0.0039,
+   "diff_ci95": [
+    -0.0349,
+    0.0426
+   ]
+  },
+  {
+   "baseline": "rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "setting": "rp1.15_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "R": 1,
+   "n_prompts": 43,
+   "bad_baseline": 0.0884,
+   "bad_setting": 0.0651,
+   "diff": -0.0233,
+   "diff_ci95": [
+    -0.0698,
+    0.0171
+   ]
+  },
+  {
+   "baseline": "rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "setting": "rp1.15_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "R": 2,
+   "n_prompts": 43,
+   "bad_baseline": 0.0721,
+   "bad_setting": 0.0337,
+   "diff": -0.0384,
+   "diff_ci95": [
+    -0.1,
+    0.014
+   ]
+  },
+  {
+   "baseline": "rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "setting": "rp1.15_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "R": 3,
+   "n_prompts": 43,
+   "bad_baseline": 0.0667,
+   "bad_setting": 0.0186,
+   "diff": -0.0481,
+   "diff_ci95": [
+    -0.1209,
+    0.0124
+   ]
+  },
+  {
+   "baseline": "rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "setting": "rp1.20_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "R": 0,
+   "n_prompts": 43,
+   "bad_baseline": 0.155,
+   "bad_setting": 0.1473,
+   "diff": -0.0078,
+   "diff_ci95": [
+    -0.0736,
+    0.0543
+   ]
+  },
+  {
+   "baseline": "rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "setting": "rp1.20_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "R": 1,
+   "n_prompts": 43,
+   "bad_baseline": 0.0884,
+   "bad_setting": 0.0744,
+   "diff": -0.014,
+   "diff_ci95": [
+    -0.0915,
+    0.0527
+   ]
+  },
+  {
+   "baseline": "rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "setting": "rp1.20_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "R": 2,
+   "n_prompts": 43,
+   "bad_baseline": 0.0721,
+   "bad_setting": 0.0465,
+   "diff": -0.0256,
+   "diff_ci95": [
+    -0.107,
+    0.05
+   ]
+  },
+  {
+   "baseline": "rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "setting": "rp1.20_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]",
+   "R": 3,
+   "n_prompts": 43,
+   "bad_baseline": 0.0667,
+   "bad_setting": 0.0341,
+   "diff": -0.0326,
+   "diff_ci95": [
+    -0.1225,
+    0.0481
+   ]
+  }
+ ]
+}

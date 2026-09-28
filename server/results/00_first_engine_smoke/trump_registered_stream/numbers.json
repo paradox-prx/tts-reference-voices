@@ -1,0 +1,15 @@
+{
+ "voice": "trump",
+ "mode": "registered",
+ "stream": true,
+ "status": 200,
+ "total_s": 0.784,
+ "ttfb_s": 0.111,
+ "ttfa_s": 0.111,
+ "text": "We are going to build the greatest speech system anybody has ever seen, believe me.",
+ "headers": {},
+ "audio_s": 4.08,
+ "sample_rate": 24000,
+ "rtf": 0.192,
+ "x_realtime": 5.21
+}

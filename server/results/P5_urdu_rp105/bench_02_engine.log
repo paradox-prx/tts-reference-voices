@@ -1,0 +1,13 @@
+=== 2026-09-25T05:00:28+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump --size prompts -c 16 --extra-param repetition_penalty=1.05 --timeout 900 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P5_urdu_rp105 --gpus 0 --tag rp1.05 --meta phase=P5_urdu_rp105 --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x
+warmup trump 1: 0.42s ok
+warmup trump 2: 0.65s ok
+trump prompts (trump_en.json): trump 43 texts
+  rp1.05_trump_prompts_c16_n43_nonstream_inline: ok 43/43 err 0 suspect 0 (short 0, long 0; pace x0.999) | lat p50=16.132s p90=19.055s p99=27.039s | 28.01x realtime (p90-wall 25.97x, stragglers 0), 0.87 req/s | gpu 19829 MiB 98.9%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P5_urdu_rp105
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline | 258 | 251 | 7 | 1 | 17.622 | 19.589 | 23.02 | – | – | 33.03 | 27.65 | 28.24 | 0 | 0.537 | 0.84 | 19830 | 99.3 |
+| rp1.05_trump_prompts_c16_n43_nonstream_inline | 43 | 43 | 0 | 0 | 16.132 | 19.055 | 27.039 | – | – | 32.22 | 28.01 | 25.97 | 0 | 0.53 | 0.87 | 19829 | 98.9 |
+

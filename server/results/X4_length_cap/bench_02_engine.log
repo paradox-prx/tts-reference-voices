@@ -1,0 +1,13 @@
+=== 2026-09-25T05:28:01+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice shehbaz --size prompts -c 16 --extra-param temperature=0.9 --extra-param top_k=50 --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X4_length_cap --gpus 0 --tag cap_off --meta phase=X4_length_cap --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x
+warmup shehbaz 1: 0.76s ok
+warmup shehbaz 2: 0.81s ok
+shehbaz prompts (shehbaz_ur.json): shehbaz 43 texts
+  cap_off_shehbaz_prompts_c16_n43_nonstream_inline: ok 43/43 err 0 suspect 0 (short 0, long 0; pace x0.962) | lat p50=17.813s p90=132.525s p99=147.218s | 8.51x realtime (p90-wall 8.98x, stragglers 5), 0.25 req/s | gpu 19829 MiB 99.1%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X4_length_cap
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| cap_on_shehbaz_prompts_c16_n43_nonstream_inline | 43 | 42 | 1 | 0 | 17.311 | 19.482 | 28.02 | – | – | 33.63 | 26.73 | 24.46 | 0 | 0.533 | 0.79 | 19829 | 99.6 |
+| cap_off_shehbaz_prompts_c16_n43_nonstream_inline | 43 | 43 | 0 | 0 | 17.813 | 132.525 | 147.218 | – | – | 33.64 | 8.51 | 8.98 | 5 | 0.534 | 0.25 | 19829 | 99.1 |
+

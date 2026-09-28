@@ -20,6 +20,8 @@ bench/
 NOTES.md                        everything learned so far: settings, measured numbers, failure modes, vLLM-Omni API
 server/                         the Qwen3-TTS server, its benchmark plan, quality eval and REPORT.md
 samples/qwen3-tts/              40 labelled AI-generated samples, English + Urdu: best/ (20), mid/ (10), worst/ (10)
+server/results/                 every benchmark run's numbers; the final server run with audio (13_final_server/);
+                                all other audio in the release bench-audio-2026-09-28 (server/results/README.md)
 ```
 
 **Setting up a server? Read `NOTES.md` first, then `bench/README.md`.**

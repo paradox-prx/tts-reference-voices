@@ -1,0 +1,3 @@
+=== 2026-09-25T08:22:08+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/bench/verify_knobs.py --url http://127.0.0.1:8090 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X7_split_off/knobs --voices-dir /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices --spec '{"name": "split_off", "via": "gateway", "voice": "trump", "base": {"voice": "trump", "ref_audio": null, "ref_text": null, "task_type": null}, "headers": {"x-tts-retries": ["0"]}}'
+  base_a: HTTP 200 5.2 s 
+knob check split_off: OK

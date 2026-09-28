@@ -26,7 +26,9 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-AI_NOTE = "All audio under these folders is AI-generated (Qwen3-TTS voice clones): never publish it."
+AI_NOTE = ("All audio under these folders is AI-generated (Qwen3-TTS voice clones). Only 13_final_server/ keeps its "
+           "FLACs in git; every other phase's audio is in the GitHub release as labelled FLAC (political / official "
+           "texts left out), see [README.md](README.md).")
 RUN_KEYS = ["run", "tag", "voice", "size", "c", "n", "texts", "takes", "seed", "stream", "voice_mode", "ok", "errors",
             "error_kinds", "suspect", "suspect_short", "suspect_long", "dup_audio", "retried", "retries_total",
             "gw_suspect", "qc_pass", "qc_fail", "qc_error", "wall_s", "lat_mean", "lat_p50", "lat_p90", "lat_p95",

@@ -1,0 +1,50 @@
+=== 2026-09-25T04:48:28+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --size xxlong --sweep 1,8 --n-rule 4:1 --stream --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P3_stream --gpus 0 --meta phase=P3_stream --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x
+warmup trump 1: 0.37s ok
+warmup trump 2: 0.65s ok
+trump xxlong (en.json): trump 43 texts
+  trump_xxlong_c1_n4_stream_inline: ok 4/4 err 0 suspect 0 (short 0, long 0; pace x0.967) | lat p50=10.917s p90=11.243s p99=11.243s | ttfa p50=0.126s p90=0.132s | 5.67x realtime (p90-wall 5.67x, stragglers 0), 0.09 req/s | gpu 20262 MiB 98.1%
+  trump_xxlong_c8_n8_stream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x0.95) | lat p50=23.262s p90=23.761s p99=23.764s | ttfa p50=0.639s p90=0.642s | 20.98x realtime (p90-wall 20.98x, stragglers 0), 0.34 req/s | gpu 20262 MiB 99.1%
+warmup shehbaz 1: 0.79s ok
+warmup shehbaz 2: 0.77s ok
+shehbaz xxlong (ur.json): shehbaz 43 texts
+  shehbaz_xxlong_c1_n4_stream_inline: ok 3/4 err 1 suspect 2 (short 2, long 0; pace x0.548) | lat p50=6.872s p90=8.804s p99=8.804s | ttfa p50=0.13s p90=0.131s | 2.49x realtime (p90-wall 2.49x, stragglers 1), 0.06 req/s | gpu 20262 MiB 98.0%
+    ERR[shehbaz 3] RemoteProtocolError: peer closed connection without sending complete message body (incomplete chunked read)
+  shehbaz_xxlong_c8_n8_stream_inline: ok 5/8 err 3 suspect 4 (short 4, long 0; pace x0.549) | lat p50=14.841s p90=26.459s p99=26.459s | ttfa p50=0.682s p90=0.693s | 5.23x realtime (p90-wall 5.24x, stragglers 1), 0.11 req/s | gpu 20262 MiB 98.9%
+    ERR[shehbaz 3] RemoteProtocolError: peer closed connection without sending complete message body (incomplete chunked read)
+    ERR[shehbaz 5] RemoteProtocolError: peer closed connection without sending complete message body (incomplete chunked read)
+    ERR[shehbaz 7] RemoteProtocolError: peer closed connection without sending complete message body (incomplete chunked read)
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P3_stream
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| trump_short_c1_n8_stream_inline | 8 | 8 | 0 | 0 | 0.726 | 0.994 | 1.0 | 0.116 | 0.126 | 3.62 | 5.01 | 5.01 | 0 | 0.204 | 1.38 | 20258 | 97.5 |
+| trump_short_c2_n8_stream_inline | 8 | 8 | 0 | 0 | 0.55 | 1.079 | 1.245 | 0.169 | 0.19 | 2.66 | 7.85 | 7.85 | 0 | 0.258 | 2.95 | 20262 | 98.2 |
+| trump_short_c4_n8_stream_inline | 8 | 8 | 0 | 0 | 0.907 | 1.234 | 1.413 | 0.358 | 0.361 | 2.87 | 10.17 | 10.17 | 0 | 0.376 | 3.54 | 20262 | 99.5 |
+| trump_short_c8_n16_stream_inline | 16 | 16 | 0 | 0 | 1.453 | 2.624 | 3.252 | 0.43 | 0.659 | 3.16 | 13.87 | 12.37 | 0 | 0.513 | 4.39 | 20271 | 99.0 |
+| trump_short_c16_n32_stream_inline | 32 | 32 | 0 | 0 | 2.305 | 3.736 | 4.417 | 0.807 | 1.257 | 2.94 | 16.74 | 15.6 | 0 | 0.857 | 5.7 | 20276 | 98.3 |
+| trump_short_c32_n64_stream_inline | 64 | 64 | 0 | 0 | 3.763 | 6.413 | 7.142 | 1.768 | 2.456 | 3.01 | 20.64 | 18.52 | 0 | 1.434 | 6.86 | 20276 | 98.8 |
+| shehbaz_short_c1_n8_stream_inline | 8 | 8 | 0 | 1 | 1.06 | 1.306 | 1.538 | 0.121 | 0.123 | 5.29 | 5.15 | 5.15 | 0 | 0.197 | 0.97 | 20271 | 98.4 |
+| shehbaz_short_c2_n8_stream_inline | 8 | 8 | 0 | 0 | 0.917 | 1.129 | 1.138 | 0.142 | 0.195 | 3.56 | 8.03 | 8.03 | 0 | 0.243 | 2.26 | 20266 | 98.9 |
+| shehbaz_short_c4_n8_stream_inline | 8 | 8 | 0 | 1 | 1.563 | 2.076 | 2.535 | 0.365 | 0.371 | 5.38 | 11.68 | 11.68 | 0 | 0.299 | 2.17 | 20266 | 98.4 |
+| shehbaz_short_c8_n16_stream_inline | 16 | 16 | 0 | 0 | 1.905 | 2.9 | 3.241 | 0.37 | 0.695 | 4.06 | 14.68 | 14.06 | 0 | 0.506 | 3.61 | 20266 | 99.2 |
+| shehbaz_short_c16_n32_stream_inline | 32 | 32 | 0 | 1 | 2.614 | 4.433 | 5.748 | 0.46 | 1.298 | 4.19 | 19.16 | 17.07 | 0 | 0.762 | 4.58 | 20274 | 99.1 |
+| shehbaz_short_c32_n64_stream_inline | 64 | 64 | 0 | 1 | 4.432 | 7.413 | 9.023 | 1.016 | 2.531 | 4.1 | 22.57 | 21.37 | 0 | 1.272 | 5.51 | 20276 | 99.7 |
+| trump_xlong_c1_n6_stream_inline | 6 | 6 | 0 | 0 | 5.524 | 5.971 | 6.012 | 0.118 | 0.12 | 31.59 | 5.6 | 5.6 | 0 | 0.178 | 0.18 | 20275 | 97.4 |
+| trump_xlong_c2_n6_stream_inline | 6 | 6 | 0 | 0 | 5.962 | 6.429 | 6.585 | 0.134 | 0.196 | 32.03 | 10.12 | 10.12 | 0 | 0.191 | 0.32 | 20274 | 98.5 |
+| trump_xlong_c4_n6_stream_inline | 6 | 6 | 0 | 0 | 7.439 | 7.902 | 8.196 | 0.353 | 0.356 | 31.28 | 13.19 | 13.2 | 0 | 0.254 | 0.42 | 20278 | 98.5 |
+| trump_xlong_c8_n8_stream_inline | 8 | 8 | 0 | 0 | 11.336 | 13.398 | 15.177 | 0.654 | 0.658 | 33.22 | 17.49 | 17.49 | 0 | 0.379 | 0.53 | 20275 | 98.8 |
+| trump_xlong_c16_n16_stream_inline | 16 | 16 | 0 | 0 | 16.806 | 17.83 | 18.043 | 1.244 | 1.252 | 31.8 | 28.16 | 26.52 | 0 | 0.527 | 0.89 | 20275 | 99.9 |
+| trump_xlong_c32_n32_stream_inline | 32 | 32 | 0 | 0 | 25.63 | 27.811 | 31.037 | 2.417 | 2.435 | 32.98 | 33.95 | 33.04 | 0 | 0.81 | 1.03 | 20272 | 99.6 |
+| shehbaz_xlong_c1_n6_stream_inline | 6 | 6 | 0 | 0 | 5.693 | 5.986 | 6.175 | 0.122 | 0.135 | 32.16 | 5.58 | 5.58 | 0 | 0.179 | 0.17 | 20274 | 97.3 |
+| shehbaz_xlong_c2_n6_stream_inline | 6 | 5 | 1 | 0 | 5.908 | 6.438 | 6.438 | 0.157 | 0.216 | 31.9 | 6.67 | 6.68 | 0 | 0.191 | 0.21 | 20276 | 98.5 |
+| shehbaz_xlong_c4_n6_stream_inline | 6 | 5 | 1 | 0 | 8.549 | 9.007 | 9.007 | 0.354 | 0.359 | 32.94 | 8.34 | 8.34 | 0 | 0.256 | 0.25 | 20280 | 98.8 |
+| shehbaz_xlong_c8_n8_stream_inline | 8 | 8 | 0 | 0 | 13.097 | 14.119 | 15.042 | 0.694 | 0.701 | 35.73 | 18.99 | 18.99 | 0 | 0.381 | 0.53 | 20274 | 99.0 |
+| shehbaz_xlong_c16_n16_stream_inline | 16 | 16 | 0 | 0 | 17.326 | 18.462 | 18.477 | 1.247 | 1.267 | 32.38 | 27.99 | 26.09 | 0 | 0.533 | 0.86 | 20274 | 99.3 |
+| shehbaz_xlong_c32_n32_stream_inline | 32 | 30 | 2 | 0 | 27.205 | 29.075 | 30.479 | 2.532 | 2.563 | 33.89 | 29.8 | 32.76 | 0 | 0.808 | 0.88 | 20276 | 99.5 |
+| trump_xxlong_c1_n4_stream_inline | 4 | 4 | 0 | 0 | 10.917 | 11.243 | 11.243 | 0.126 | 0.132 | 61.96 | 5.67 | 5.67 | 0 | 0.176 | 0.09 | 20262 | 98.1 |
+| trump_xxlong_c8_n8_stream_inline | 8 | 8 | 0 | 0 | 23.262 | 23.761 | 23.764 | 0.639 | 0.642 | 62.35 | 20.98 | 20.98 | 0 | 0.374 | 0.34 | 20262 | 99.1 |
+| shehbaz_xxlong_c1_n4_stream_inline | 4 | 3 | 1 | 2 | 6.872 | 8.804 | 8.804 | 0.13 | 0.131 | 41.65 | 2.49 | 2.49 | 1 | 0.178 | 0.06 | 20262 | 98.0 |
+| shehbaz_xxlong_c8_n8_stream_inline | 8 | 5 | 3 | 4 | 14.841 | 26.459 | 26.459 | 0.682 | 0.693 | 48.43 | 5.23 | 5.24 | 1 | 0.375 | 0.11 | 20262 | 98.9 |
+

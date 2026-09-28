@@ -1,0 +1,19 @@
+{
+ "tag": "c8",
+ "voice": "shehbaz",
+ "stream": true,
+ "i": 0,
+ "status": 200,
+ "total_s": 2.509,
+ "ttfa_s": 0.633,
+ "audio_s": 6.24,
+ "text": "آج ہم ایک نئے دور کا آغاز کر رہے ہیں جس میں ترقی اور خوشحالی سب کے لیے ہوگی۔",
+ "headers": {
+  "x-request-id": "90f1054d6d4c4c4e8b1bc26961bc30b2",
+  "x-ai-generated": "true",
+  "x-tts-voice": "shehbaz",
+  "x-tts-retries": "0",
+  "x-tts-queue-ms": "0",
+  "x-tts-sample-rate": "24000"
+ }
+}

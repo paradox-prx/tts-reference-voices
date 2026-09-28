@@ -1,0 +1,56 @@
+voice trump (en): ref qwen3-tts.wav, pools en.json: short=393, medium=186, long=68, xlong=43
+warmup 1: 0.40s ok
+warmup 2: 0.63s ok
+  probe_prod045_trump_long_c1_n8: ok 8/8 err 0 suspect 0 | lat p50=2.714s p90=3.06s p99=3.355s | 5.59x realtime, 0.36 req/s | gpu 15925 MiB 98.1%
+  probe_prod045_trump_long_c4_n8: ok 8/8 err 0 suspect 0 | lat p50=3.779s p90=4.166s p99=4.637s | 15.58x realtime, 0.98 req/s | gpu 15923 MiB 99.2%
+  probe_prod045_trump_long_c8_n16: ok 16/16 err 0 suspect 0 | lat p50=6.238s p90=7.004s p99=7.744s | 19.46x realtime, 1.2 req/s | gpu 15923 MiB 99.7%
+  probe_prod045_trump_long_c16_n32: ok 32/32 err 0 suspect 0 | lat p50=9.004s p90=10.143s p99=12.786s | 26.29x realtime, 1.59 req/s | gpu 15975 MiB 99.4%
+  probe_prod045_trump_long_c32_n64: ok 64/64 err 0 suspect 0 | lat p50=13.562s p90=15.944s p99=17.154s | 35.06x realtime, 2.17 req/s | gpu 16203 MiB 99.8%
+  note: 96 requests > 68 long texts, so some repeat within this run
+  probe_prod045_trump_long_c48_n96: ok 96/96 err 0 suspect 0 | lat p50=21.274s p90=24.771s p99=27.041s | 34.24x realtime, 2.13 req/s | gpu 16475 MiB 99.4%
+  note: 128 requests > 68 long texts, so some repeat within this run
+  probe_prod045_trump_long_c64_n128: ok 128/128 err 0 suspect 0 | lat p50=24.152s p90=30.263s p99=35.88s | 38.49x realtime, 2.37 req/s | gpu 16752 MiB 98.6%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/01_probe_scaling_engine_direct
+| tag | voice | size | c | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | x realtime | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| probe_prod045 | trump | long | 1 | 8 | 8 | 0 | 0 | 2.714 | 3.06 | 3.355 | – | – | 5.59 | 0.36 | 15925 | 98.1 |
+| probe_prod045 | trump | long | 4 | 8 | 8 | 0 | 0 | 3.779 | 4.166 | 4.637 | – | – | 15.58 | 0.98 | 15923 | 99.2 |
+| probe_prod045 | trump | long | 8 | 16 | 16 | 0 | 0 | 6.238 | 7.004 | 7.744 | – | – | 19.46 | 1.2 | 15923 | 99.7 |
+| probe_prod045 | trump | long | 16 | 32 | 32 | 0 | 0 | 9.004 | 10.143 | 12.786 | – | – | 26.29 | 1.59 | 15975 | 99.4 |
+| probe_prod045 | trump | long | 32 | 64 | 64 | 0 | 0 | 13.562 | 15.944 | 17.154 | – | – | 35.06 | 2.17 | 16203 | 99.8 |
+| probe_prod045 | trump | long | 48 | 96 | 96 | 0 | 0 | 21.274 | 24.771 | 27.041 | – | – | 34.24 | 2.13 | 16475 | 99.4 |
+| probe_prod045 | trump | long | 64 | 128 | 128 | 0 | 0 | 24.152 | 30.263 | 35.88 | – | – | 38.49 | 2.37 | 16752 | 98.6 |
+
+voice shehbaz (ur): ref qwen3-tts.wav, pools ur.json: short=345, medium=145, long=43, xlong=43
+warmup 1: 0.81s ok
+warmup 2: 1.11s ok
+  probe_prod045_shehbaz_long_c1_n8: ok 8/8 err 0 suspect 0 | lat p50=4.05s p90=4.288s p99=4.579s | 5.55x realtime, 0.25 req/s | gpu 16749 MiB 98.6%
+  probe_prod045_shehbaz_long_c4_n8: ok 8/8 err 0 suspect 0 | lat p50=5.278s p90=5.552s p99=5.599s | 15.71x realtime, 0.74 req/s | gpu 16750 MiB 96.1%
+  probe_prod045_shehbaz_long_c8_n16: ok 16/16 err 0 suspect 0 | lat p50=8.547s p90=10.033s p99=10.247s | 19.15x realtime, 0.87 req/s | gpu 16748 MiB 99.4%
+  probe_prod045_shehbaz_long_c16_n32: ok 32/32 err 0 suspect 0 | lat p50=11.667s p90=13.713s p99=14.243s | 27.58x realtime, 1.27 req/s | gpu 16749 MiB 99.7%
+  note: 64 requests > 43 long texts, so some repeat within this run
+  probe_prod045_shehbaz_long_c32_n64: ok 64/64 err 0 suspect 0 | lat p50=18.72s p90=21.715s p99=22.71s | 35.52x realtime, 1.58 req/s | gpu 16753 MiB 99.9%
+  note: 96 requests > 43 long texts, so some repeat within this run
+  probe_prod045_shehbaz_long_c48_n96: ok 96/96 err 0 suspect 0 | lat p50=28.609s p90=33.71s p99=39.474s | 21.98x realtime, 1.0 req/s | gpu 16753 MiB 98.8%
+  note: 128 requests > 43 long texts, so some repeat within this run
+  probe_prod045_shehbaz_long_c64_n128: ok 128/128 err 0 suspect 0 | lat p50=32.893s p90=40.291s p99=113.563s | 22.7x realtime, 1.02 req/s | gpu 16966 MiB 98.8%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/01_probe_scaling_engine_direct
+| tag | voice | size | c | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | x realtime | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| probe_prod045 | trump | long | 1 | 8 | 8 | 0 | 0 | 2.714 | 3.06 | 3.355 | – | – | 5.59 | 0.36 | 15925 | 98.1 |
+| probe_prod045 | trump | long | 4 | 8 | 8 | 0 | 0 | 3.779 | 4.166 | 4.637 | – | – | 15.58 | 0.98 | 15923 | 99.2 |
+| probe_prod045 | trump | long | 8 | 16 | 16 | 0 | 0 | 6.238 | 7.004 | 7.744 | – | – | 19.46 | 1.2 | 15923 | 99.7 |
+| probe_prod045 | trump | long | 16 | 32 | 32 | 0 | 0 | 9.004 | 10.143 | 12.786 | – | – | 26.29 | 1.59 | 15975 | 99.4 |
+| probe_prod045 | trump | long | 32 | 64 | 64 | 0 | 0 | 13.562 | 15.944 | 17.154 | – | – | 35.06 | 2.17 | 16203 | 99.8 |
+| probe_prod045 | trump | long | 48 | 96 | 96 | 0 | 0 | 21.274 | 24.771 | 27.041 | – | – | 34.24 | 2.13 | 16475 | 99.4 |
+| probe_prod045 | trump | long | 64 | 128 | 128 | 0 | 0 | 24.152 | 30.263 | 35.88 | – | – | 38.49 | 2.37 | 16752 | 98.6 |
+| probe_prod045 | shehbaz | long | 1 | 8 | 8 | 0 | 0 | 4.05 | 4.288 | 4.579 | – | – | 5.55 | 0.25 | 16749 | 98.6 |
+| probe_prod045 | shehbaz | long | 4 | 8 | 8 | 0 | 0 | 5.278 | 5.552 | 5.599 | – | – | 15.71 | 0.74 | 16750 | 96.1 |
+| probe_prod045 | shehbaz | long | 8 | 16 | 16 | 0 | 0 | 8.547 | 10.033 | 10.247 | – | – | 19.15 | 0.87 | 16748 | 99.4 |
+| probe_prod045 | shehbaz | long | 16 | 32 | 32 | 0 | 0 | 11.667 | 13.713 | 14.243 | – | – | 27.58 | 1.27 | 16749 | 99.7 |
+| probe_prod045 | shehbaz | long | 32 | 64 | 64 | 0 | 0 | 18.72 | 21.715 | 22.71 | – | – | 35.52 | 1.58 | 16753 | 99.9 |
+| probe_prod045 | shehbaz | long | 48 | 96 | 96 | 0 | 0 | 28.609 | 33.71 | 39.474 | – | – | 21.98 | 1.0 | 16753 | 98.8 |
+| probe_prod045 | shehbaz | long | 64 | 128 | 128 | 0 | 0 | 32.893 | 40.291 | 113.563 | – | – | 22.7 | 1.02 | 16966 | 98.8 |
+

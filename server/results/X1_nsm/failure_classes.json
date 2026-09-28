@@ -1,0 +1,105 @@
+{
+ "phase": "X1_nsm",
+ "runs": {
+  "nsm_true_shehbaz_prompts_c16_n43_nonstream_inline [shehbaz]": {
+   "n": 43,
+   "runaways": 0,
+   "severe": {
+    "k": 3,
+    "rate": 0.0698,
+    "ci95": [
+     0.024,
+     0.1861
+    ]
+   },
+   "moderate": {
+    "k": 6,
+    "rate": 0.1395,
+    "ci95": [
+     0.0656,
+     0.2726
+    ]
+   },
+   "clean": {
+    "k": 34,
+    "rate": 0.7907,
+    "ci95": [
+     0.6479,
+     0.8858
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 9,
+    "rate": 0.2093,
+    "ci95": [
+     0.1142,
+     0.3521
+    ]
+   },
+   "reasons": {
+    "repeat": 4,
+    "voiced_gap": 2,
+    "skip": 2,
+    "skip_phrase": 2,
+    "char_ratio<0.8": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3506,
+    "cer_nospace": 0.1475,
+    "sim_prompt_large": 0.7963,
+    "sim_prompt_base": 0.9794,
+    "sim_heldout_large": 0.833
+   }
+  },
+  "ALL": {
+   "n": 43,
+   "runaways": 0,
+   "severe": {
+    "k": 3,
+    "rate": 0.0698,
+    "ci95": [
+     0.024,
+     0.1861
+    ]
+   },
+   "moderate": {
+    "k": 6,
+    "rate": 0.1395,
+    "ci95": [
+     0.0656,
+     0.2726
+    ]
+   },
+   "clean": {
+    "k": 34,
+    "rate": 0.7907,
+    "ci95": [
+     0.6479,
+     0.8858
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 9,
+    "rate": 0.2093,
+    "ci95": [
+     0.1142,
+     0.3521
+    ]
+   },
+   "reasons": {
+    "repeat": 4,
+    "voiced_gap": 2,
+    "skip": 2,
+    "skip_phrase": 2,
+    "char_ratio<0.8": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3506,
+    "cer_nospace": 0.1475,
+    "sim_prompt_large": 0.7963,
+    "sim_prompt_base": 0.9794,
+    "sim_heldout_large": 0.833
+   }
+  }
+ }
+}

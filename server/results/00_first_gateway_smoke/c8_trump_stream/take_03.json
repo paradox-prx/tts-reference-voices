@@ -1,0 +1,19 @@
+{
+ "tag": "c8",
+ "voice": "trump",
+ "stream": true,
+ "i": 3,
+ "status": 200,
+ "total_s": 2.27,
+ "ttfa_s": 0.633,
+ "audio_s": 5.2,
+ "text": "I want to thank the wonderful people of this great state for their support and their friendship.",
+ "headers": {
+  "x-request-id": "7c43f38a24144eaf89462b4c472823c5",
+  "x-ai-generated": "true",
+  "x-tts-voice": "trump",
+  "x-tts-retries": "0",
+  "x-tts-queue-ms": "0",
+  "x-tts-sample-rate": "24000"
+ }
+}

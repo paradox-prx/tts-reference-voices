@@ -1,0 +1,15 @@
+{
+ "voice": "shehbaz",
+ "mode": "registered",
+ "stream": true,
+ "status": 200,
+ "total_s": 1.099,
+ "ttfb_s": 0.114,
+ "ttfa_s": 0.114,
+ "text": "پاکستان کی معیشت کو مضبوط بنانے کے لیے ہم سب کو مل کر محنت کرنا ہوگی۔",
+ "headers": {},
+ "audio_s": 5.92,
+ "sample_rate": 24000,
+ "rtf": 0.186,
+ "x_realtime": 5.39
+}

@@ -1,0 +1,22 @@
+=== 2026-09-25T05:55:31+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --size short --sweep 1,4 -n 8 --timeout 1800 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P9_baseline_b1 --gpus 0 --meta phase=P9_baseline_b1 --meta via=engine --meta 'engine=qwen-tts baseline --max-batch 1' --meta engine_kind=qwentts --meta variant= --meta venv= --meta gateway= --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x
+warmup trump 1: 1.66s ok
+warmup trump 2: 2.40s ok
+trump short (en.json): trump 393 texts
+  trump_short_c1_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.101) | lat p50=2.409s p90=3.091s p99=3.141s | 1.65x realtime (p90-wall 1.65x, stragglers 0), 0.46 req/s | gpu 5815 MiB 59.9%
+  trump_short_c4_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.253) | lat p50=6.67s p90=6.705s p99=7.095s | 1.63x realtime (p90-wall 1.63x, stragglers 0), 0.58 req/s | gpu 5817 MiB 56.0%
+warmup shehbaz 1: 2.12s ok
+warmup shehbaz 2: 2.16s ok
+shehbaz short (ur.json): shehbaz 345 texts
+  shehbaz_short_c1_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.044) | lat p50=2.965s p90=3.207s p99=4.122s | 1.66x realtime (p90-wall 1.66x, stragglers 0), 0.35 req/s | gpu 5831 MiB 59.9%
+  shehbaz_short_c4_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.062) | lat p50=7.589s p90=8.729s p99=8.747s | 1.64x realtime (p90-wall 1.64x, stragglers 0), 0.46 req/s | gpu 5831 MiB 59.9%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P9_baseline_b1
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| trump_short_c1_n8_nonstream_inline | 8 | 8 | 0 | 0 | 2.409 | 3.091 | 3.141 | – | – | 3.61 | 1.65 | 1.65 | 0 | 0.612 | 0.46 | 5815 | 59.9 |
+| trump_short_c4_n8_nonstream_inline | 8 | 8 | 0 | 0 | 6.67 | 6.705 | 7.095 | – | – | 2.81 | 1.63 | 1.63 | 0 | 2.951 | 0.58 | 5817 | 56.0 |
+| shehbaz_short_c1_n8_nonstream_inline | 8 | 8 | 0 | 0 | 2.965 | 3.207 | 4.122 | – | – | 4.73 | 1.66 | 1.66 | 0 | 0.603 | 0.35 | 5831 | 59.9 |
+| shehbaz_short_c4_n8_nonstream_inline | 8 | 8 | 0 | 0 | 7.589 | 8.729 | 8.747 | – | – | 3.59 | 1.64 | 1.64 | 0 | 2.01 | 0.46 | 5831 | 59.9 |
+

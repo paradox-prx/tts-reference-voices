@@ -1,0 +1,15 @@
+2026-09-25T12:13:32+05:00 kill -9 engine main 542453
+0s unit=active engine_health=000 gateway_ready=503
+5s unit=activating engine_health=000 gateway_ready=503
+10s unit=activating engine_health=000 gateway_ready=503
+15s unit=activating engine_health=000 gateway_ready=503
+20s unit=activating engine_health=000 gateway_ready=503
+25s unit=activating engine_health=000 gateway_ready=503
+30s unit=activating engine_health=000 gateway_ready=503
+35s unit=activating engine_health=000 gateway_ready=503
+40s unit=activating engine_health=000 gateway_ready=503
+45s unit=activating engine_health=000 gateway_ready=503
+50s unit=activating engine_health=000 gateway_ready=503
+55s unit=activating engine_health=000 gateway_ready=503
+60s unit=activating engine_health=000 gateway_ready=503
+65s unit=active engine_health=200 gateway_ready=200

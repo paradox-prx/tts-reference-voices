@@ -1,0 +1,1146 @@
+{
+ "dir": "results/P5_urdu_rp115",
+ "scored_at": "2026-09-25T11:02:33+05:00",
+ "scorer": {
+  "tts_qc": "0.1.0",
+  "device": "cuda",
+  "asr": {
+   "model": "faster-whisper-large-v3",
+   "device": "cuda",
+   "compute_type": "float16",
+   "workers": 2,
+   "beam": 5
+  },
+  "sim_models": [
+   "large",
+   "base"
+  ],
+  "models": {
+   "faster-whisper-large-v3": {
+    "repo": "Systran/faster-whisper-large-v3",
+    "revision": "edaa852ec7e145841d8ffdb056a99866b5f0a478",
+    "sha256": {
+     "model.bin": "69f74147e3334731bc3a76048724833325d2ec74642fb52620eda87352e3d4f1"
+    }
+   },
+   "wavlm-base-plus-sv": {
+    "repo": "microsoft/wavlm-base-plus-sv",
+    "revision": "feb593a6c23c1cc3d9510425c29b0a14d2b07b1e",
+    "sha256": {
+     "pytorch_model.bin": "e906bce2fa42fb497a1d1a9ecf81548adb7e03b12a5644e32d2f42f0d6500fad"
+    }
+   },
+   "beatrice": {
+    "repo": "prj-beatrice/unispeech-wavlm-large-ecapa-tdnn-torch-native",
+    "revision": "13ad4fcc740cbd47992bcc2aaa59186d4072b7c9",
+    "sha256": {
+     "model.safetensors": "559b87088828b5f1bc5762d9746c08ef00ba4e5141b6897bebce1b77a58ae2b7"
+    }
+   }
+  },
+  "versions": {
+   "faster-whisper": "1.2.1",
+   "ctranslate2": "4.8.2",
+   "torch": "2.13.0",
+   "transformers": "5.17.0",
+   "jiwer": "4.0.0",
+   "numpy": "2.5.3",
+   "av": "18.1.0"
+  },
+  "load_s": {
+   "asr": 1.66,
+   "sim_large": 1.52,
+   "refs_large": 0.7,
+   "sim_base": 0.15,
+   "refs_base": 0.29
+  },
+  "voices": {
+   "shehbaz": {
+    "lang": "ur",
+    "pace": 0.111,
+    "pace_source": "pace_file",
+    "prompt": "qwen3-tts.wav",
+    "heldout": [
+     "shehbaz_02.wav",
+     "shehbaz_03.wav",
+     "shehbaz_04.wav",
+     "shehbaz_05.wav",
+     "shehbaz_06.wav"
+    ]
+   },
+   "trump": {
+    "lang": "en",
+    "pace": 0.07,
+    "pace_source": "pace_file",
+    "prompt": "qwen3-tts.wav",
+    "heldout": []
+   }
+  }
+ },
+ "thresholds": {
+  "gate": {
+   "cer_nospace_ur": 0.35,
+   "wer_en": 0.2,
+   "char_ratio_lo": 0.85,
+   "char_ratio_hi": 1.15,
+   "del_run_ur": 8,
+   "del_run_en": 3,
+   "ins_run": 4,
+   "repeat_excess": 4,
+   "token_run": 3,
+   "ins_run_ur": 6,
+   "repeat_excess_ur": 6,
+   "token_run_ur": 4,
+   "char_run": 1,
+   "long_word_s": 2.5,
+   "long_word_voiced": 0.8,
+   "word_gap_s": 2.0,
+   "word_gap_voiced": 0.5,
+   "unaligned_tail_s": 3.0,
+   "pause_s": 2.0,
+   "trail_sil_s": 1.5,
+   "lead_sil_s": 1.0,
+   "speech_ratio": 0.6,
+   "pace_lo": 0.6,
+   "pace_hi": 1.8,
+   "sim_min_s": 2.0,
+   "sim_long_s": 5.0,
+   "sim_short_base": 0.85,
+   "sim_long_base": 0.88,
+   "sim_short_large": 0.4,
+   "sim_long_large": 0.5,
+   "sim_heldout": false,
+   "max_cr": 0.0,
+   "script_drift": 0.0
+  },
+  "bad": {
+   "cer_nospace_ur": 0.3,
+   "wer_en": 0.1,
+   "char_ratio_lo": 0.88,
+   "char_ratio_hi": 1.12,
+   "del_run_ur": 6,
+   "del_run_en": 3,
+   "ins_run": 3,
+   "repeat_excess": 3,
+   "token_run": 3,
+   "ins_run_ur": 5,
+   "repeat_excess_ur": 5,
+   "token_run_ur": 4,
+   "char_run": 1,
+   "long_word_s": 2.0,
+   "long_word_voiced": 0.8,
+   "word_gap_s": 1.5,
+   "word_gap_voiced": 0.5,
+   "unaligned_tail_s": 2.0,
+   "pause_s": 2.0,
+   "trail_sil_s": 1.5,
+   "lead_sil_s": 1.0,
+   "speech_ratio": 0.6,
+   "pace_lo": 0.7,
+   "pace_hi": 1.5,
+   "sim_min_s": 2.0,
+   "sim_long_s": 5.0,
+   "sim_short_base": 0.85,
+   "sim_long_base": 0.88,
+   "sim_short_large": 0.4,
+   "sim_long_large": 0.5,
+   "sim_heldout": true,
+   "max_cr": 2.4,
+   "script_drift": 0.1
+  },
+  "gate_sim": "base",
+  "bad_sim": "large"
+ },
+ "rejudged": true,
+ "runs": {
+  "rp1.15_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]": {
+   "voices": [
+    "shehbaz"
+   ],
+   "repo_voices": [
+    "shehbaz"
+   ],
+   "langs": [
+    "ur"
+   ],
+   "n_takes": 245,
+   "n_prompts": 43,
+   "takes_per_prompt": {
+    "4": 1,
+    "5": 11,
+    "6": 31
+   },
+   "stats": {
+    "wer": {
+     "n": 245,
+     "mean": 0.3777,
+     "median": 0.3659,
+     "p10": 0.2708,
+     "p90": 0.5051,
+     "min": 0.1489,
+     "max": 0.9438
+    },
+    "cer": {
+     "n": 245,
+     "mean": 0.1664,
+     "median": 0.1493,
+     "p10": 0.1,
+     "p90": 0.2652,
+     "min": 0.0486,
+     "max": 0.9101
+    },
+    "cer_nospace": {
+     "n": 245,
+     "mean": 0.1796,
+     "median": 0.1609,
+     "p10": 0.1108,
+     "p90": 0.2721,
+     "min": 0.057,
+     "max": 0.9034
+    },
+    "char_ratio": {
+     "n": 245,
+     "mean": 0.9423,
+     "median": 0.96,
+     "p10": 0.843,
+     "p90": 1.0,
+     "min": 0.1,
+     "max": 1.155
+    },
+    "sim_prompt_large": {
+     "n": 245,
+     "mean": 0.7771,
+     "median": 0.7784,
+     "p10": 0.7387,
+     "p90": 0.8139,
+     "min": 0.6277,
+     "max": 0.8463
+    },
+    "sim_heldout_large": {
+     "n": 245,
+     "mean": 0.8159,
+     "median": 0.8177,
+     "p10": 0.7767,
+     "p90": 0.8532,
+     "min": 0.6619,
+     "max": 0.8776
+    },
+    "sim_prompt_base": {
+     "n": 245,
+     "mean": 0.9816,
+     "median": 0.9826,
+     "p10": 0.9734,
+     "p90": 0.9882,
+     "min": 0.9603,
+     "max": 0.9921
+    },
+    "sim_heldout_base": {
+     "n": 245,
+     "mean": 0.9775,
+     "median": 0.9787,
+     "p10": 0.9671,
+     "p90": 0.9863,
+     "min": 0.9463,
+     "max": 0.9927
+    },
+    "pace_ratio": {
+     "n": 245,
+     "mean": 0.9442,
+     "median": 0.942,
+     "p10": 0.85,
+     "p90": 1.039,
+     "min": 0.728,
+     "max": 1.178
+    },
+    "s_per_letter": {
+     "n": 245,
+     "mean": 0.1048,
+     "median": 0.1046,
+     "p10": 0.0943,
+     "p90": 0.1153,
+     "min": 0.0808,
+     "max": 0.1308
+    },
+    "duration_s": {
+     "n": 245,
+     "mean": 33.1376,
+     "median": 32.88,
+     "p10": 29.52,
+     "p90": 36.56,
+     "min": 23.84,
+     "max": 44.8
+    },
+    "max_internal_sil_s": {
+     "n": 245,
+     "mean": 0.285,
+     "median": 0.24,
+     "p10": 0.1,
+     "p90": 0.56,
+     "min": 0.06,
+     "max": 0.98
+    },
+    "trail_sil_s": {
+     "n": 245,
+     "mean": 0.0487,
+     "median": 0.04,
+     "p10": 0.0,
+     "p90": 0.08,
+     "min": 0.0,
+     "max": 0.44
+    },
+    "max_word_s": {
+     "n": 245,
+     "mean": 1.131,
+     "median": 1.04,
+     "p10": 0.88,
+     "p90": 1.38,
+     "min": 0.64,
+     "max": 6.26
+    },
+    "unaligned_tail_s": {
+     "n": 245,
+     "mean": 0.2647,
+     "median": 0.22,
+     "p10": 0.12,
+     "p90": 0.38,
+     "min": 0.02,
+     "max": 2.64
+    },
+    "seg_max_cr": {
+     "n": 245,
+     "mean": 2.0364,
+     "median": 2.04,
+     "p10": 1.92,
+     "p90": 2.18,
+     "min": 0.94,
+     "max": 2.55
+    }
+   },
+   "corpus": {
+    "n": 245,
+    "wer": 0.3786,
+    "cer": 0.1668,
+    "cer_nospace": 0.1799
+   },
+   "gate_fail": {
+    "k": 59,
+    "n": 245,
+    "rate": 0.2408,
+    "ci95": [
+     0.1915,
+     0.2981
+    ]
+   },
+   "bad": {
+    "k": 78,
+    "n": 245,
+    "rate": 0.3184,
+    "ci95": [
+     0.2632,
+     0.3791
+    ]
+   },
+   "bad_first_take": {
+    "k": 14,
+    "n": 42,
+    "rate": 0.3333,
+    "ci95": [
+     0.2101,
+     0.4845
+    ]
+   },
+   "bad_among_gate_pass": {
+    "k": 19,
+    "n": 186,
+    "rate": 0.1022,
+    "ci95": [
+     0.0664,
+     0.154
+    ]
+   },
+   "gate_vs_bad": {
+    "recall": 0.7564,
+    "precision": 1.0,
+    "false_reject_rate": 0.0
+   },
+   "gate_reasons": {
+    "del_run>=8": 42,
+    "char_ratio<0.85": 26,
+    "repeat_excess>=6": 13,
+    "ins_run>=6": 8,
+    "word_gap>2": 7,
+    "cer_nospace>0.35": 6,
+    "token_run>=4": 4,
+    "long_word>2.5": 2,
+    "char_ratio>1.15": 2
+   },
+   "bad_reasons": {
+    "del_run>=6": 51,
+    "char_ratio<0.88": 34,
+    "repeat_excess>=5": 23,
+    "cer_nospace>0.3": 18,
+    "ins_run>=5": 10,
+    "word_gap>1.5": 9,
+    "token_run>=4": 4,
+    "long_word>2": 4,
+    "char_ratio>1.12": 3,
+    "cr>2.4": 2,
+    "unaligned_tail>2": 2
+   },
+   "per_prompt": [
+    {
+     "prompt": "shehbaz/01_emotion-affection",
+     "takes": 6,
+     "gate_fail": 2,
+     "bad": 3,
+     "wer": 0.3095,
+     "cer_nospace": 0.171,
+     "sim_prompt_large": 0.7834,
+     "sim_prompt_base": 0.9822,
+     "pace_ratio": 0.9685,
+     "duration_s": 33.32,
+     "reasons": {
+      "char_ratio<0.85": 1,
+      "del_run>=8": 2,
+      "bad:char_ratio<0.88": 1,
+      "bad:del_run>=6": 2,
+      "bad:word_gap>1.5": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/02_emotion-amusement",
+     "takes": 6,
+     "gate_fail": 0,
+     "bad": 0,
+     "wer": 0.3382,
+     "cer_nospace": 0.1501,
+     "sim_prompt_large": 0.7637,
+     "sim_prompt_base": 0.9835,
+     "pace_ratio": 0.9663,
+     "duration_s": 36.6667,
+     "reasons": {}
+    },
+    {
+     "prompt": "shehbaz/03_emotion-anger",
+     "takes": 5,
+     "gate_fail": 4,
+     "bad": 4,
+     "wer": 0.4404,
+     "cer_nospace": 0.2811,
+     "sim_prompt_large": 0.7753,
+     "sim_prompt_base": 0.9811,
+     "pace_ratio": 0.8912,
+     "duration_s": 31.456,
+     "reasons": {
+      "del_run>=8": 3,
+      "bad:char_ratio<0.88": 2,
+      "bad:del_run>=6": 3,
+      "char_ratio<0.85": 1,
+      "cer_nospace>0.35": 1,
+      "bad:cer_nospace>0.3": 1,
+      "bad:cr>2.4": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/04_emotion-arousal",
+     "takes": 5,
+     "gate_fail": 1,
+     "bad": 2,
+     "wer": 0.3708,
+     "cer_nospace": 0.1571,
+     "sim_prompt_large": 0.7589,
+     "sim_prompt_base": 0.9738,
+     "pace_ratio": 0.9094,
+     "duration_s": 32.0,
+     "reasons": {
+      "bad:repeat_excess>=5": 2,
+      "repeat_excess>=6": 1,
+      "token_run>=4": 1,
+      "bad:token_run>=4": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/05_emotion-awe",
+     "takes": 6,
+     "gate_fail": 1,
+     "bad": 3,
+     "wer": 0.3402,
+     "cer_nospace": 0.1602,
+     "sim_prompt_large": 0.776,
+     "sim_prompt_base": 0.9831,
+     "pace_ratio": 0.9353,
+     "duration_s": 34.68,
+     "reasons": {
+      "del_run>=8": 1,
+      "word_gap>2": 1,
+      "bad:char_ratio<0.88": 1,
+      "bad:del_run>=6": 2,
+      "bad:word_gap>1.5": 1,
+      "bad:ins_run>=5": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/06_emotion-bitterness",
+     "takes": 6,
+     "gate_fail": 1,
+     "bad": 1,
+     "wer": 0.4004,
+     "cer_nospace": 0.154,
+     "sim_prompt_large": 0.775,
+     "sim_prompt_base": 0.9817,
+     "pace_ratio": 0.9315,
+     "duration_s": 32.6667,
+     "reasons": {
+      "del_run>=8": 1,
+      "bad:char_ratio<0.88": 1,
+      "bad:del_run>=6": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/07_emotion-confusion",
+     "takes": 5,
+     "gate_fail": 1,
+     "bad": 2,
+     "wer": 0.3604,
+     "cer_nospace": 0.1376,
+     "sim_prompt_large": 0.7744,
+     "sim_prompt_base": 0.9813,
+     "pace_ratio": 0.9284,
+     "duration_s": 35.648,
+     "reasons": {
+      "bad:repeat_excess>=5": 2,
+      "repeat_excess>=6": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/08_emotion-contemplation",
+     "takes": 6,
+     "gate_fail": 0,
+     "bad": 0,
+     "wer": 0.3351,
+     "cer_nospace": 0.155,
+     "sim_prompt_large": 0.784,
+     "sim_prompt_base": 0.9845,
+     "pace_ratio": 0.918,
+     "duration_s": 31.9067,
+     "reasons": {}
+    },
+    {
+     "prompt": "shehbaz/09_emotion-contentment",
+     "takes": 6,
+     "gate_fail": 0,
+     "bad": 1,
+     "wer": 0.3085,
+     "cer_nospace": 0.1275,
+     "sim_prompt_large": 0.7731,
+     "sim_prompt_base": 0.9805,
+     "pace_ratio": 0.9732,
+     "duration_s": 33.0533,
+     "reasons": {
+      "bad:del_run>=6": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/10_emotion-determination",
+     "takes": 5,
+     "gate_fail": 4,
+     "bad": 4,
+     "wer": 0.4147,
+     "cer_nospace": 0.2336,
+     "sim_prompt_large": 0.7655,
+     "sim_prompt_base": 0.9808,
+     "pace_ratio": 0.8858,
+     "duration_s": 37.472,
+     "reasons": {
+      "char_ratio<0.85": 2,
+      "del_run>=8": 3,
+      "bad:char_ratio<0.88": 3,
+      "bad:del_run>=6": 3,
+      "ins_run>=6": 1,
+      "bad:ins_run>=5": 1,
+      "bad:long_word>2": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/11_emotion-disgust",
+     "takes": 6,
+     "gate_fail": 5,
+     "bad": 5,
+     "wer": 0.5474,
+     "cer_nospace": 0.2973,
+     "sim_prompt_large": 0.7668,
+     "sim_prompt_base": 0.9838,
+     "pace_ratio": 0.8538,
+     "duration_s": 30.7067,
+     "reasons": {
+      "del_run>=8": 5,
+      "bad:del_run>=6": 5,
+      "bad:word_gap>1.5": 1,
+      "char_ratio<0.85": 4,
+      "bad:cer_nospace>0.3": 4,
+      "bad:char_ratio<0.88": 4,
+      "bad:repeat_excess>=5": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/12_emotion-elation",
+     "takes": 6,
+     "gate_fail": 2,
+     "bad": 2,
+     "wer": 0.3316,
+     "cer_nospace": 0.1723,
+     "sim_prompt_large": 0.761,
+     "sim_prompt_base": 0.9689,
+     "pace_ratio": 0.9887,
+     "duration_s": 32.6,
+     "reasons": {
+      "char_ratio<0.85": 1,
+      "del_run>=8": 2,
+      "word_gap>2": 1,
+      "bad:char_ratio<0.88": 2,
+      "bad:del_run>=6": 2,
+      "bad:word_gap>1.5": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/13_emotion-enthusiasm",
+     "takes": 5,
+     "gate_fail": 0,
+     "bad": 0,
+     "wer": 0.2775,
+     "cer_nospace": 0.1285,
+     "sim_prompt_large": 0.764,
+     "sim_prompt_base": 0.9843,
+     "pace_ratio": 0.9772,
+     "duration_s": 34.608,
+     "reasons": {}
+    },
+    {
+     "prompt": "shehbaz/14_emotion-fear",
+     "takes": 6,
+     "gate_fail": 0,
+     "bad": 0,
+     "wer": 0.3815,
+     "cer_nospace": 0.1646,
+     "sim_prompt_large": 0.7773,
+     "sim_prompt_base": 0.9803,
+     "pace_ratio": 0.9568,
+     "duration_s": 33.7733,
+     "reasons": {}
+    },
+    {
+     "prompt": "shehbaz/15_emotion-helplessness",
+     "takes": 6,
+     "gate_fail": 0,
+     "bad": 2,
+     "wer": 0.3912,
+     "cer_nospace": 0.1621,
+     "sim_prompt_large": 0.765,
+     "sim_prompt_base": 0.9801,
+     "pace_ratio": 0.947,
+     "duration_s": 34.48,
+     "reasons": {
+      "bad:del_run>=6": 1,
+      "bad:repeat_excess>=5": 2
+     }
+    },
+    {
+     "prompt": "shehbaz/16_emotion-longing",
+     "takes": 6,
+     "gate_fail": 0,
+     "bad": 0,
+     "wer": 0.3156,
+     "cer_nospace": 0.1216,
+     "sim_prompt_large": 0.7837,
+     "sim_prompt_base": 0.9822,
+     "pace_ratio": 0.9598,
+     "duration_s": 32.7067,
+     "reasons": {}
+    },
+    {
+     "prompt": "shehbaz/17_emotion-pride",
+     "takes": 6,
+     "gate_fail": 3,
+     "bad": 3,
+     "wer": 0.286,
+     "cer_nospace": 0.1365,
+     "sim_prompt_large": 0.8227,
+     "sim_prompt_base": 0.9778,
+     "pace_ratio": 0.8915,
+     "duration_s": 31.1733,
+     "reasons": {
+      "repeat_excess>=6": 3,
+      "bad:repeat_excess>=5": 3,
+      "del_run>=8": 1,
+      "bad:del_run>=6": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/18_emotion-relief",
+     "takes": 5,
+     "gate_fail": 1,
+     "bad": 4,
+     "wer": 0.4,
+     "cer_nospace": 0.1908,
+     "sim_prompt_large": 0.7794,
+     "sim_prompt_base": 0.9816,
+     "pace_ratio": 0.9256,
+     "duration_s": 33.392,
+     "reasons": {
+      "bad:repeat_excess>=5": 2,
+      "char_ratio<0.85": 1,
+      "del_run>=8": 1,
+      "word_gap>2": 1,
+      "bad:char_ratio<0.88": 1,
+      "bad:del_run>=6": 2,
+      "bad:word_gap>1.5": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/19_emotion-sadness",
+     "takes": 6,
+     "gate_fail": 1,
+     "bad": 2,
+     "wer": 0.4207,
+     "cer_nospace": 0.1734,
+     "sim_prompt_large": 0.7835,
+     "sim_prompt_base": 0.9835,
+     "pace_ratio": 0.9047,
+     "duration_s": 32.3333,
+     "reasons": {
+      "bad:repeat_excess>=5": 1,
+      "del_run>=8": 1,
+      "ins_run>=6": 1,
+      "bad:del_run>=6": 1,
+      "bad:ins_run>=5": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/20_emotion-shame",
+     "takes": 6,
+     "gate_fail": 4,
+     "bad": 5,
+     "wer": 0.3983,
+     "cer_nospace": 0.2492,
+     "sim_prompt_large": 0.7813,
+     "sim_prompt_base": 0.984,
+     "pace_ratio": 1.0382,
+     "duration_s": 37.2267,
+     "reasons": {
+      "char_ratio<0.85": 1,
+      "del_run>=8": 2,
+      "bad:cer_nospace>0.3": 4,
+      "bad:char_ratio<0.88": 1,
+      "bad:del_run>=6": 2,
+      "bad:repeat_excess>=5": 2,
+      "ins_run>=6": 3,
+      "long_word>2.5": 1,
+      "bad:ins_run>=5": 3,
+      "bad:long_word>2": 1,
+      "bad:unaligned_tail>2": 1,
+      "repeat_excess>=6": 1,
+      "bad:char_ratio>1.12": 2,
+      "bad:cr>2.4": 1,
+      "char_ratio>1.15": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/21_emotion-surprise",
+     "takes": 6,
+     "gate_fail": 0,
+     "bad": 0,
+     "wer": 0.2642,
+     "cer_nospace": 0.1158,
+     "sim_prompt_large": 0.788,
+     "sim_prompt_base": 0.9815,
+     "pace_ratio": 0.9762,
+     "duration_s": 32.2933,
+     "reasons": {}
+    },
+    {
+     "prompt": "shehbaz/22_prosody-speed_very_slow",
+     "takes": 6,
+     "gate_fail": 1,
+     "bad": 1,
+     "wer": 0.3372,
+     "cer_nospace": 0.1816,
+     "sim_prompt_large": 0.7936,
+     "sim_prompt_base": 0.9844,
+     "pace_ratio": 0.9638,
+     "duration_s": 31.0267,
+     "reasons": {
+      "cer_nospace>0.35": 1,
+      "char_ratio>1.15": 1,
+      "ins_run>=6": 1,
+      "long_word>2.5": 1,
+      "bad:cer_nospace>0.3": 1,
+      "bad:char_ratio>1.12": 1,
+      "bad:del_run>=6": 1,
+      "bad:ins_run>=5": 1,
+      "bad:long_word>2": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/23_prosody-speed_slow",
+     "takes": 6,
+     "gate_fail": 0,
+     "bad": 0,
+     "wer": 0.3027,
+     "cer_nospace": 0.1084,
+     "sim_prompt_large": 0.7836,
+     "sim_prompt_base": 0.9845,
+     "pace_ratio": 0.9323,
+     "duration_s": 34.36,
+     "reasons": {}
+    },
+    {
+     "prompt": "shehbaz/24_prosody-speed_fast",
+     "takes": 6,
+     "gate_fail": 1,
+     "bad": 1,
+     "wer": 0.4829,
+     "cer_nospace": 0.192,
+     "sim_prompt_large": 0.7689,
+     "sim_prompt_base": 0.9808,
+     "pace_ratio": 0.9465,
+     "duration_s": 37.9333,
+     "reasons": {
+      "repeat_excess>=6": 1,
+      "bad:del_run>=6": 1,
+      "bad:repeat_excess>=5": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/25_prosody-speed_very_fast",
+     "takes": 6,
+     "gate_fail": 3,
+     "bad": 3,
+     "wer": 0.4017,
+     "cer_nospace": 0.1865,
+     "sim_prompt_large": 0.7683,
+     "sim_prompt_base": 0.9823,
+     "pace_ratio": 0.9945,
+     "duration_s": 37.9733,
+     "reasons": {
+      "cer_nospace>0.35": 1,
+      "char_ratio<0.85": 1,
+      "del_run>=8": 1,
+      "word_gap>2": 1,
+      "bad:cer_nospace>0.3": 1,
+      "bad:char_ratio<0.88": 1,
+      "bad:del_run>=6": 1,
+      "bad:word_gap>1.5": 1,
+      "token_run>=4": 2,
+      "bad:token_run>=4": 2
+     }
+    },
+    {
+     "prompt": "shehbaz/26_prosody-pitch_low",
+     "takes": 5,
+     "gate_fail": 1,
+     "bad": 2,
+     "wer": 0.3506,
+     "cer_nospace": 0.1493,
+     "sim_prompt_large": 0.7478,
+     "sim_prompt_base": 0.9849,
+     "pace_ratio": 0.9562,
+     "duration_s": 32.272,
+     "reasons": {
+      "ins_run>=6": 1,
+      "bad:ins_run>=5": 1,
+      "bad:unaligned_tail>2": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/27_prosody-pitch_high",
+     "takes": 6,
+     "gate_fail": 1,
+     "bad": 1,
+     "wer": 0.4283,
+     "cer_nospace": 0.1833,
+     "sim_prompt_large": 0.7938,
+     "sim_prompt_base": 0.9764,
+     "pace_ratio": 0.893,
+     "duration_s": 31.72,
+     "reasons": {
+      "char_ratio<0.85": 1,
+      "del_run>=8": 1,
+      "word_gap>2": 1,
+      "bad:char_ratio<0.88": 1,
+      "bad:del_run>=6": 1,
+      "bad:word_gap>1.5": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/28_prosody-expressive_high",
+     "takes": 6,
+     "gate_fail": 2,
+     "bad": 3,
+     "wer": 0.2456,
+     "cer_nospace": 0.1235,
+     "sim_prompt_large": 0.7904,
+     "sim_prompt_base": 0.9808,
+     "pace_ratio": 1.0203,
+     "duration_s": 34.5333,
+     "reasons": {
+      "ins_run>=6": 1,
+      "bad:ins_run>=5": 2,
+      "word_gap>2": 1,
+      "bad:word_gap>1.5": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/29_prosody-expressive_low",
+     "takes": 6,
+     "gate_fail": 0,
+     "bad": 0,
+     "wer": 0.4982,
+     "cer_nospace": 0.1677,
+     "sim_prompt_large": 0.753,
+     "sim_prompt_base": 0.9793,
+     "pace_ratio": 0.8927,
+     "duration_s": 31.7067,
+     "reasons": {}
+    },
+    {
+     "prompt": "shehbaz/30_prosody-pause",
+     "takes": 5,
+     "gate_fail": 0,
+     "bad": 0,
+     "wer": 0.2824,
+     "cer_nospace": 0.1197,
+     "sim_prompt_large": 0.792,
+     "sim_prompt_base": 0.9832,
+     "pace_ratio": 1.0412,
+     "duration_s": 31.088,
+     "reasons": {}
+    },
+    {
+     "prompt": "shehbaz/31_prosody-long_pause",
+     "takes": 6,
+     "gate_fail": 4,
+     "bad": 4,
+     "wer": 0.3577,
+     "cer_nospace": 0.2145,
+     "sim_prompt_large": 0.7999,
+     "sim_prompt_base": 0.9791,
+     "pace_ratio": 0.9197,
+     "duration_s": 27.0533,
+     "reasons": {
+      "del_run>=8": 4,
+      "bad:char_ratio<0.88": 4,
+      "bad:del_run>=6": 4,
+      "char_ratio<0.85": 3
+     }
+    },
+    {
+     "prompt": "shehbaz/32_style-singing",
+     "takes": 6,
+     "gate_fail": 2,
+     "bad": 3,
+     "wer": 0.3767,
+     "cer_nospace": 0.1753,
+     "sim_prompt_large": 0.785,
+     "sim_prompt_base": 0.9852,
+     "pace_ratio": 0.9497,
+     "duration_s": 32.68,
+     "reasons": {
+      "bad:char_ratio<0.88": 1,
+      "bad:del_run>=6": 3,
+      "del_run>=8": 2
+     }
+    },
+    {
+     "prompt": "shehbaz/33_style-shouting",
+     "takes": 5,
+     "gate_fail": 1,
+     "bad": 2,
+     "wer": 0.3121,
+     "cer_nospace": 0.1646,
+     "sim_prompt_large": 0.7881,
+     "sim_prompt_base": 0.9856,
+     "pace_ratio": 0.9792,
+     "duration_s": 33.152,
+     "reasons": {
+      "repeat_excess>=6": 1,
+      "bad:repeat_excess>=5": 1,
+      "bad:del_run>=6": 1,
+      "bad:long_word>2": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/34_style-whispering",
+     "takes": 6,
+     "gate_fail": 0,
+     "bad": 0,
+     "wer": 0.3038,
+     "cer_nospace": 0.1231,
+     "sim_prompt_large": 0.7748,
+     "sim_prompt_base": 0.9854,
+     "pace_ratio": 0.9375,
+     "duration_s": 33.4,
+     "reasons": {}
+    },
+    {
+     "prompt": "shehbaz/35_sfx-cough",
+     "takes": 6,
+     "gate_fail": 2,
+     "bad": 2,
+     "wer": 0.404,
+     "cer_nospace": 0.1951,
+     "sim_prompt_large": 0.7916,
+     "sim_prompt_base": 0.9842,
+     "pace_ratio": 0.9387,
+     "duration_s": 31.7733,
+     "reasons": {
+      "char_ratio<0.85": 2,
+      "del_run>=8": 2,
+      "bad:char_ratio<0.88": 2,
+      "bad:del_run>=6": 2
+     }
+    },
+    {
+     "prompt": "shehbaz/36_sfx-laughter",
+     "takes": 6,
+     "gate_fail": 4,
+     "bad": 4,
+     "wer": 0.4835,
+     "cer_nospace": 0.2576,
+     "sim_prompt_large": 0.7729,
+     "sim_prompt_base": 0.9823,
+     "pace_ratio": 0.8393,
+     "duration_s": 32.4267,
+     "reasons": {
+      "char_ratio<0.85": 4,
+      "del_run>=8": 4,
+      "repeat_excess>=6": 3,
+      "bad:char_ratio<0.88": 4,
+      "bad:del_run>=6": 4,
+      "bad:repeat_excess>=5": 4,
+      "bad:cer_nospace>0.3": 2
+     }
+    },
+    {
+     "prompt": "shehbaz/37_sfx-crying",
+     "takes": 6,
+     "gate_fail": 0,
+     "bad": 0,
+     "wer": 0.4276,
+     "cer_nospace": 0.1836,
+     "sim_prompt_large": 0.7349,
+     "sim_prompt_base": 0.9775,
+     "pace_ratio": 0.9167,
+     "duration_s": 33.0533,
+     "reasons": {}
+    },
+    {
+     "prompt": "shehbaz/38_sfx-screaming",
+     "takes": 4,
+     "gate_fail": 0,
+     "bad": 0,
+     "wer": 0.4031,
+     "cer_nospace": 0.1843,
+     "sim_prompt_large": 0.7605,
+     "sim_prompt_base": 0.9759,
+     "pace_ratio": 0.9763,
+     "duration_s": 35.88,
+     "reasons": {}
+    },
+    {
+     "prompt": "shehbaz/39_sfx-burping",
+     "takes": 6,
+     "gate_fail": 0,
+     "bad": 1,
+     "wer": 0.3504,
+     "cer_nospace": 0.1557,
+     "sim_prompt_large": 0.7866,
+     "sim_prompt_base": 0.9864,
+     "pace_ratio": 0.9553,
+     "duration_s": 32.3333,
+     "reasons": {
+      "bad:char_ratio<0.88": 1,
+      "bad:del_run>=6": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/40_sfx-humming",
+     "takes": 5,
+     "gate_fail": 3,
+     "bad": 3,
+     "wer": 0.5621,
+     "cer_nospace": 0.3214,
+     "sim_prompt_large": 0.747,
+     "sim_prompt_base": 0.9793,
+     "pace_ratio": 0.935,
+     "duration_s": 32.48,
+     "reasons": {
+      "cer_nospace>0.35": 2,
+      "char_ratio<0.85": 2,
+      "del_run>=8": 2,
+      "bad:cer_nospace>0.3": 2,
+      "bad:char_ratio<0.88": 2,
+      "bad:del_run>=6": 2,
+      "repeat_excess>=6": 2,
+      "token_run>=4": 1,
+      "bad:repeat_excess>=5": 2,
+      "bad:token_run>=4": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/41_sfx-sigh",
+     "takes": 5,
+     "gate_fail": 0,
+     "bad": 0,
+     "wer": 0.3386,
+     "cer_nospace": 0.1507,
+     "sim_prompt_large": 0.7753,
+     "sim_prompt_base": 0.984,
+     "pace_ratio": 0.9656,
+     "duration_s": 30.864,
+     "reasons": {}
+    },
+    {
+     "prompt": "shehbaz/42_sfx-sniff",
+     "takes": 6,
+     "gate_fail": 1,
+     "bad": 1,
+     "wer": 0.5393,
+     "cer_nospace": 0.312,
+     "sim_prompt_large": 0.7943,
+     "sim_prompt_base": 0.9828,
+     "pace_ratio": 1.0027,
+     "duration_s": 32.28,
+     "reasons": {
+      "cer_nospace>0.35": 1,
+      "char_ratio<0.85": 1,
+      "del_run>=8": 1,
+      "word_gap>2": 1,
+      "bad:cer_nospace>0.3": 1,
+      "bad:char_ratio<0.88": 1,
+      "bad:del_run>=6": 1,
+      "bad:word_gap>1.5": 1
+     }
+    },
+    {
+     "prompt": "shehbaz/43_sfx-sneeze",
+     "takes": 6,
+     "gate_fail": 3,
+     "bad": 4,
+     "wer": 0.4236,
+     "cer_nospace": 0.2438,
+     "sim_prompt_large": 0.793,
+     "sim_prompt_base": 0.9836,
+     "pace_ratio": 0.9293,
+     "duration_s": 31.6667,
+     "reasons": {
+      "char_ratio<0.85": 1,
+      "del_run>=8": 3,
+      "bad:cer_nospace>0.3": 2,
+      "bad:char_ratio<0.88": 1,
+      "bad:del_run>=6": 3
+     }
+    }
+   ]
+  }
+ }
+}

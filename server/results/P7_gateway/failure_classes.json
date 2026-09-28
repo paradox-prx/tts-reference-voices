@@ -1,0 +1,529 @@
+{
+ "phase": "P7_gateway",
+ "runs": {
+  "direct_shehbaz_long_c32_n64_nonstream_inline [shehbaz]": {
+   "n": 64,
+   "runaways": 0,
+   "severe": {
+    "k": 3,
+    "rate": 0.0469,
+    "ci95": [
+     0.0161,
+     0.129
+    ]
+   },
+   "moderate": {
+    "k": 6,
+    "rate": 0.0938,
+    "ci95": [
+     0.0437,
+     0.1898
+    ]
+   },
+   "clean": {
+    "k": 55,
+    "rate": 0.8594,
+    "ci95": [
+     0.7538,
+     0.9242
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 9,
+    "rate": 0.1406,
+    "ci95": [
+     0.0758,
+     0.2462
+    ]
+   },
+   "reasons": {
+    "char_ratio": 5,
+    "skip_phrase": 4,
+    "repeat": 2,
+    "garbled": 2,
+    "char_ratio<0.8": 2,
+    "loop_long_word": 1,
+    "skip": 1,
+    "voiced_gap": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3549,
+    "cer_nospace": 0.1502,
+    "sim_prompt_large": 0.7961,
+    "sim_prompt_base": 0.9791,
+    "sim_heldout_large": 0.8355
+   }
+  },
+  "direct_shehbaz_short_c16_n32_nonstream_inline [shehbaz]": {
+   "n": 32,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.1072
+    ]
+   },
+   "moderate": {
+    "k": 6,
+    "rate": 0.1875,
+    "ci95": [
+     0.0889,
+     0.3531
+    ]
+   },
+   "clean": {
+    "k": 26,
+    "rate": 0.8125,
+    "ci95": [
+     0.6469,
+     0.9111
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 6,
+    "rate": 0.1875,
+    "ci95": [
+     0.0889,
+     0.3531
+    ]
+   },
+   "reasons": {
+    "char_ratio": 4,
+    "cer_nospace": 2
+   },
+   "non_severe_means": {
+    "wer": 0.3774,
+    "cer_nospace": 0.1614,
+    "sim_prompt_large": 0.711,
+    "sim_prompt_base": 0.9614,
+    "sim_heldout_large": 0.7475
+   }
+  },
+  "direct_shehbaz_short_c1_n8_nonstream_inline [shehbaz]": {
+   "n": 8,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "clean": {
+    "k": 8,
+    "rate": 1.0,
+    "ci95": [
+     0.6756,
+     1.0
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "reasons": {},
+   "non_severe_means": {
+    "wer": 0.3286,
+    "cer_nospace": 0.1479,
+    "sim_prompt_large": 0.7298,
+    "sim_prompt_base": 0.9662,
+    "sim_heldout_large": 0.7661
+   }
+  },
+  "direct_trump_short_c16_n32_nonstream_inline [trump]": {
+   "n": 32,
+   "runaways": 0,
+   "severe": {
+    "k": 1,
+    "rate": 0.0312,
+    "ci95": [
+     0.0055,
+     0.1574
+    ]
+   },
+   "moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.1072
+    ]
+   },
+   "clean": {
+    "k": 31,
+    "rate": 0.9688,
+    "ci95": [
+     0.8426,
+     0.9945
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 1,
+    "rate": 0.0312,
+    "ci95": [
+     0.0055,
+     0.1574
+    ]
+   },
+   "reasons": {
+    "pace": 1
+   },
+   "non_severe_means": {
+    "wer": 0.006,
+    "cer_nospace": 0.0035,
+    "sim_prompt_large": 0.6918,
+    "sim_prompt_base": 0.9471,
+    "sim_heldout_large": 0.0
+   }
+  },
+  "direct_trump_short_c1_n8_nonstream_inline [trump]": {
+   "n": 8,
+   "runaways": 0,
+   "severe": {
+    "k": 1,
+    "rate": 0.125,
+    "ci95": [
+     0.0224,
+     0.4709
+    ]
+   },
+   "moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "clean": {
+    "k": 7,
+    "rate": 0.875,
+    "ci95": [
+     0.5291,
+     0.9776
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 1,
+    "rate": 0.125,
+    "ci95": [
+     0.0224,
+     0.4709
+    ]
+   },
+   "reasons": {
+    "pace": 1
+   },
+   "non_severe_means": {
+    "wer": 0.0,
+    "cer_nospace": 0.0,
+    "sim_prompt_large": 0.7894,
+    "sim_prompt_base": 0.9692,
+    "sim_heldout_large": 0.0
+   }
+  },
+  "gw_r0_shehbaz_short_c16_n32_nonstream_server [shehbaz]": {
+   "n": 32,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.1072
+    ]
+   },
+   "moderate": {
+    "k": 3,
+    "rate": 0.0938,
+    "ci95": [
+     0.0324,
+     0.2422
+    ]
+   },
+   "clean": {
+    "k": 29,
+    "rate": 0.9062,
+    "ci95": [
+     0.7578,
+     0.9676
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 3,
+    "rate": 0.0938,
+    "ci95": [
+     0.0324,
+     0.2422
+    ]
+   },
+   "reasons": {
+    "char_ratio": 2,
+    "cer_nospace": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3774,
+    "cer_nospace": 0.1574,
+    "sim_prompt_large": 0.6967,
+    "sim_prompt_base": 0.9541,
+    "sim_heldout_large": 0.7329
+   }
+  },
+  "gw_r0_shehbaz_short_c1_n8_nonstream_server [shehbaz]": {
+   "n": 8,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "moderate": {
+    "k": 1,
+    "rate": 0.125,
+    "ci95": [
+     0.0224,
+     0.4709
+    ]
+   },
+   "clean": {
+    "k": 7,
+    "rate": 0.875,
+    "ci95": [
+     0.5291,
+     0.9776
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 1,
+    "rate": 0.125,
+    "ci95": [
+     0.0224,
+     0.4709
+    ]
+   },
+   "reasons": {
+    "cer_nospace": 1
+   },
+   "non_severe_means": {
+    "wer": 0.371,
+    "cer_nospace": 0.1815,
+    "sim_prompt_large": 0.7002,
+    "sim_prompt_base": 0.9644,
+    "sim_heldout_large": 0.7321
+   }
+  },
+  "gw_r0_trump_short_c16_n32_nonstream_server [trump]": {
+   "n": 32,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.1072
+    ]
+   },
+   "moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.1072
+    ]
+   },
+   "clean": {
+    "k": 32,
+    "rate": 1.0,
+    "ci95": [
+     0.8928,
+     1.0
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.1072
+    ]
+   },
+   "reasons": {},
+   "non_severe_means": {
+    "wer": 0.0058,
+    "cer_nospace": 0.0034,
+    "sim_prompt_large": 0.7198,
+    "sim_prompt_base": 0.9616,
+    "sim_heldout_large": 0.0
+   }
+  },
+  "gw_r0_trump_short_c1_n8_nonstream_server [trump]": {
+   "n": 8,
+   "runaways": 0,
+   "severe": {
+    "k": 1,
+    "rate": 0.125,
+    "ci95": [
+     0.0224,
+     0.4709
+    ]
+   },
+   "moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "clean": {
+    "k": 7,
+    "rate": 0.875,
+    "ci95": [
+     0.5291,
+     0.9776
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 1,
+    "rate": 0.125,
+    "ci95": [
+     0.0224,
+     0.4709
+    ]
+   },
+   "reasons": {
+    "pace": 1
+   },
+   "non_severe_means": {
+    "wer": 0.0,
+    "cer_nospace": 0.0,
+    "sim_prompt_large": 0.7687,
+    "sim_prompt_base": 0.9739,
+    "sim_heldout_large": 0.0
+   }
+  },
+  "gw_r1_shehbaz_long_c32_n64_nonstream_server [shehbaz]": {
+   "n": 64,
+   "runaways": 0,
+   "severe": {
+    "k": 3,
+    "rate": 0.0469,
+    "ci95": [
+     0.0161,
+     0.129
+    ]
+   },
+   "moderate": {
+    "k": 1,
+    "rate": 0.0156,
+    "ci95": [
+     0.0028,
+     0.0833
+    ]
+   },
+   "clean": {
+    "k": 60,
+    "rate": 0.9375,
+    "ci95": [
+     0.85,
+     0.9754
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 4,
+    "rate": 0.0625,
+    "ci95": [
+     0.0246,
+     0.15
+    ]
+   },
+   "reasons": {
+    "skip": 3,
+    "char_ratio<0.8": 3,
+    "repeat": 1,
+    "garbled": 1,
+    "voiced_gap": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3361,
+    "cer_nospace": 0.1342,
+    "sim_prompt_large": 0.7917,
+    "sim_prompt_base": 0.9795,
+    "sim_heldout_large": 0.8312
+   }
+  },
+  "ALL": {
+   "n": 288,
+   "runaways": 0,
+   "severe": {
+    "k": 9,
+    "rate": 0.0312,
+    "ci95": [
+     0.0165,
+     0.0583
+    ]
+   },
+   "moderate": {
+    "k": 17,
+    "rate": 0.059,
+    "ci95": [
+     0.0372,
+     0.0925
+    ]
+   },
+   "clean": {
+    "k": 262,
+    "rate": 0.9097,
+    "ci95": [
+     0.871,
+     0.9376
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 26,
+    "rate": 0.0903,
+    "ci95": [
+     0.0624,
+     0.129
+    ]
+   },
+   "reasons": {
+    "char_ratio": 11,
+    "char_ratio<0.8": 5,
+    "cer_nospace": 4,
+    "skip_phrase": 4,
+    "skip": 4,
+    "pace": 3,
+    "repeat": 3,
+    "garbled": 3,
+    "voiced_gap": 2,
+    "loop_long_word": 1
+   },
+   "non_severe_means": {
+    "wer": 0.2591,
+    "cer_nospace": 0.109,
+    "sim_prompt_large": 0.7481,
+    "sim_prompt_base": 0.9676,
+    "sim_heldout_large": 0.5771
+   }
+  }
+ }
+}

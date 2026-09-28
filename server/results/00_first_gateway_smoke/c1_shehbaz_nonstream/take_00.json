@@ -1,0 +1,24 @@
+{
+ "tag": "c1",
+ "voice": "shehbaz",
+ "stream": false,
+ "i": 0,
+ "status": 200,
+ "total_s": 1.215,
+ "ttfa_s": 1.214,
+ "audio_s": 6.48,
+ "text": "آج ہم ایک نئے دور کا آغاز کر رہے ہیں جس میں ترقی اور خوشحالی سب کے لیے ہوگی۔",
+ "headers": {
+  "x-request-id": "b425c91c04004d05b41a36e2fdf23392",
+  "x-ai-generated": "true",
+  "x-tts-voice": "shehbaz",
+  "x-tts-retries": "0",
+  "x-tts-queue-ms": "0",
+  "x-tts-sample-rate": "24000",
+  "x-tts-audio-seconds": "6.480",
+  "x-tts-suspect": "0",
+  "x-tts-engine-ms": "1212",
+  "x-tts-qc": "off",
+  "x-tts-pace-ratio": "1.292"
+ }
+}

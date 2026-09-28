@@ -1,0 +1,20 @@
+=== 2026-09-25T09:49:08+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --size prompts -c 16 --timeout 900 --voice-mode server --url http://127.0.0.1:8090 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P8_quality_guard_fast --gpus 0 --tag guardfast --meta phase=P8_quality_guard_fast --meta via=gateway --meta 'engine=vllm-omni custom_voices (engine) --stage-overrides {"0": {"gpu_memory_utilization": 0.40}}' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta 'gateway={"TTS_QC_TIMEOUT_S": "120", "TTS_RETRY_MAX": "2", "TTS_RETRY_ON": "suspect,engine_error,qc"}' --meta qc=true
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x; voice='trump'
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='shehbaz'
+  server voice 'trump': listed by GET /v1/audio/voices
+warmup trump 1: 0.57s ok
+warmup trump 2: 0.96s ok
+trump prompts (trump_en.json): trump 43 texts
+  guardfast_trump_prompts_c16_n43_nonstream_server: ok 43/43 err 0 suspect 0 (short 0, long 0; pace x0.996) | lat p50=36.202s p90=54.198s p99=63.464s | 12.47x realtime (p90-wall 11.98x, stragglers 0), 0.39 req/s | gpu 20681 MiB 99.6%
+  server voice 'shehbaz': listed by GET /v1/audio/voices
+warmup shehbaz 1: 1.10s ok
+warmup shehbaz 2: 3.40s ok
+shehbaz prompts (shehbaz_ur.json): shehbaz 43 texts
+  guardfast_shehbaz_prompts_c16_n43_nonstream_server: ok 43/43 err 0 suspect 0 (short 0, long 0; pace x0.965) | lat p50=125.741s p90=188.246s p99=269.398s | 3.86x realtime (p90-wall 3.74x, stragglers 0), 0.11 req/s | gpu 22889 MiB 99.6%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P8_quality_guard_fast
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| guardfast_trump_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 36.202 | 54.198 | 63.464 | – | – | 32.15 | 12.47 | 11.98 | 0 | 1.101 | 0.39 | 20681 | 99.6 |
+| guardfast_shehbaz_prompts_c16_n43_nonstream_server | 43 | 43 | 0 | 0 | 125.741 | 188.246 | 269.398 | – | – | 34.01 | 3.86 | 3.74 | 0 | 3.643 | 0.11 | 22889 | 99.6 |
+

@@ -1,0 +1,11 @@
+run,tag,voice,size,c,n,stream,ok,errors,suspect,retried,wall_s,lat_mean,lat_p50,lat_p90,lat_p95,lat_p99,lat_max,ttfa_p50,ttfa_p90,ttfa_p99,audio_s,throughput_x_realtime,req_per_s,rtf_p50,rtf_p90,mean_words,gpu_mem_peak_mib,gpu_util_mean
+e03_async_trump_long_c1_n8,e03_async,trump,long,1,8,False,8,0,0,0,23.53,2.94,2.997,3.116,3.207,3.207,3.207,,,,130.6,5.55,0.34,0.18,0.18,57.5,19156,97.5
+e03_async_trump_long_c8_n16,e03_async,trump,long,8,16,False,16,0,0,0,13.52,6.351,6.502,6.795,6.795,7.163,7.163,,,,257.1,19.01,1.18,0.401,0.416,58.9,19186,98.2
+e03_async_trump_long_c32_n64,e03_async,trump,long,32,64,False,64,0,0,0,30.12,14.088,13.973,16.971,17.675,17.986,18.539,,,,1038.3,34.48,2.13,0.88,0.922,57.7,19337,99.0
+e03_async_stream_trump_long_c1_n8_stream,e03_async_stream,trump,long,1,8,True,8,0,0,0,23.1,2.886,2.892,3.072,3.528,3.528,3.528,0.115,0.135,0.141,127.9,5.54,0.35,0.181,0.181,57.5,19339,98.9
+e03_async_stream_trump_long_c8_n16_stream,e03_async_stream,trump,long,8,16,True,16,0,0,0,13.58,6.216,6.119,7.457,7.457,7.726,7.726,0.333,0.646,0.648,257.4,18.95,1.18,0.396,0.406,58.9,19339,96.8
+e03_async_shehbaz_long_c1_n8,e03_async,shehbaz,long,1,8,False,8,0,0,0,32.77,4.095,4.051,4.784,4.88,4.88,4.88,,,,179.8,5.49,0.24,0.182,0.186,61.6,19642,94.6
+e03_async_shehbaz_long_c8_n16,e03_async,shehbaz,long,8,16,False,16,0,0,0,19.68,8.793,8.702,10.235,10.235,10.365,10.365,,,,360.2,18.3,0.81,0.402,0.41,61.7,19643,96.7
+e03_async_shehbaz_long_c32_n64,e03_async,shehbaz,long,32,64,False,64,0,0,0,65.18,19.402,18.757,21.892,23.276,24.192,65.057,,,,1407.8,21.6,0.98,0.871,0.906,60.3,19647,97.5
+e03_async_stream_shehbaz_long_c1_n8_stream,e03_async_stream,shehbaz,long,1,8,True,8,0,0,0,34.34,4.291,4.217,4.643,4.761,4.761,4.761,0.136,0.142,0.144,186.5,5.43,0.23,0.184,0.185,61.6,19639,95.4
+e03_async_stream_shehbaz_long_c8_n16_stream,e03_async_stream,shehbaz,long,8,16,True,16,0,0,0,19.06,8.815,9.128,9.642,9.642,9.801,9.801,0.416,0.731,0.738,363.4,19.07,0.84,0.397,0.404,61.7,19643,98.2

@@ -1,0 +1,5 @@
+=== 2026-09-25T05:24:02+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/bench/verify_knobs.py --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X2_language/knobs --voices-dir /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices --spec '{"name": "language", "via": "engine", "voice": "trump", "fails": {"urdu": {"language": "Urdu"}}, "succeeds": {"auto": {"language": "Auto"}}}'
+  base_a: HTTP 200 5.2 s 
+  fails_urdu: HTTP 400 - s refused HTTP 400: {"error":{"message":"Invalid language 'Urdu'. Supported: Auto, Chinese, English, French, German, Italian, Japa
+  succeeds_auto: HTTP 200 5.6 s accepted
+knob check language: OK

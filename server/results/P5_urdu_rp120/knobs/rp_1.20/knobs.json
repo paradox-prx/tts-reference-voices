@@ -1,0 +1,93 @@
+{
+ "name": "rp_1.20",
+ "url": "http://127.0.0.1:8091",
+ "voice": "shehbaz",
+ "text": "میرے پیارے بہنو اور بھائیو، جب میں آپ کے درمیان آتا ہوں تو میرا دل خوشی سے بھر جاتا ہے۔",
+ "seed": null,
+ "spec": {
+  "name": "rp_1.20",
+  "via": "engine",
+  "voice": "shehbaz",
+  "fails": {
+   "extra_rp_neg": {
+    "extra_params": {
+     "repetition_penalty": -1
+    }
+   }
+  },
+  "succeeds": {
+   "extra_rp_1.20": {
+    "extra_params": {
+     "repetition_penalty": 1.2
+    }
+   }
+  }
+ },
+ "deterministic_base": false,
+ "takes": [
+  {
+   "label": "base_a",
+   "status": 200,
+   "error": null,
+   "latency_s": 1.541,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto"
+   },
+   "headers": {
+    "x-vllm-omni-input-tokens": "409",
+    "x-vllm-omni-output-tokens": "103",
+    "x-vllm-omni-total-tokens": "512",
+    "x-vllm-omni-input-text-tokens": "58",
+    "x-vllm-omni-input-audio-tokens": "351"
+   },
+   "audio_s": 8.16,
+   "pcm_sha256": "fd2e223b8c43eca0c3b0f063d5abbbb56cd6aa8624ce4db71d3842edc4919576",
+   "file": "base_a.wav"
+  },
+  {
+   "label": "fails_extra_rp_neg",
+   "status": 400,
+   "error": "HTTP 400: {\"error\":{\"message\":\"extra_params.repetition_penalty must be a finite number > 0\",\"type\":\"BadRequestError\",\"param\":null,\"code\":400}}",
+   "latency_s": 0.011,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto",
+    "extra_params": {
+     "repetition_penalty": -1
+    }
+   },
+   "headers": {},
+   "verdict": "refused"
+  },
+  {
+   "label": "succeeds_extra_rp_1.20",
+   "status": 200,
+   "error": null,
+   "latency_s": 1.401,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto",
+    "extra_params": {
+     "repetition_penalty": 1.2
+    }
+   },
+   "headers": {
+    "x-vllm-omni-input-tokens": "409",
+    "x-vllm-omni-output-tokens": "95",
+    "x-vllm-omni-total-tokens": "504",
+    "x-vllm-omni-input-text-tokens": "58",
+    "x-vllm-omni-input-audio-tokens": "351"
+   },
+   "audio_s": 7.52,
+   "pcm_sha256": "eebc7bd3aea234f30b0f268e159d3b2b837e20fca097157e515c5ddc59ceb955",
+   "file": "succeeds_extra_rp_1.20.wav",
+   "verdict": "accepted"
+  }
+ ],
+ "problems": [],
+ "ok": true
+}

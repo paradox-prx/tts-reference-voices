@@ -1,0 +1,39 @@
+{
+ "url": "http://127.0.0.1:8090",
+ "voice": [
+  "shehbaz"
+ ],
+ "size": [
+  "long"
+ ],
+ "n": 96,
+ "c": 48,
+ "sweep": null,
+ "matrix": false,
+ "stream": false,
+ "format": "wav",
+ "pcm_rate": 24000,
+ "language": null,
+ "voice_mode": "inline",
+ "voice_name": null,
+ "consent": "benchmark",
+ "param": [
+  "voice=shehbaz",
+  "ref_audio=null",
+  "ref_text=null"
+ ],
+ "pools": null,
+ "takes": 1,
+ "seed": null,
+ "gpus": "0",
+ "tag": "gw_retry1_cap",
+ "timeout": null,
+ "warmup": 2,
+ "out": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/02_probe_gateway_urdu_c48",
+ "no_audio": false,
+ "params": {
+  "voice": "shehbaz",
+  "ref_audio": null,
+  "ref_text": null
+ }
+}

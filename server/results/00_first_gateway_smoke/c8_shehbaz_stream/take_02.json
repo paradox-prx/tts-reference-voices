@@ -1,0 +1,19 @@
+{
+ "tag": "c8",
+ "voice": "shehbaz",
+ "stream": true,
+ "i": 2,
+ "status": 200,
+ "total_s": 2.156,
+ "ttfa_s": 0.632,
+ "audio_s": 4.88,
+ "text": "ہم اپنے کسانوں کو ہر ممکن سہولت فراہم کریں گے تاکہ ملک خود کفیل ہو سکے۔",
+ "headers": {
+  "x-request-id": "00c414accb1c4644ac13117c1f29b84e",
+  "x-ai-generated": "true",
+  "x-tts-voice": "shehbaz",
+  "x-tts-retries": "0",
+  "x-tts-queue-ms": "0",
+  "x-tts-sample-rate": "24000"
+ }
+}

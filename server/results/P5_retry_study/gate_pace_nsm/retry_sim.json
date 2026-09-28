@@ -1,0 +1,135 @@
+{
+ "scores": [
+  "results/P5_retry_study/gate_pace/nsm.jsonl"
+ ],
+ "cost": "audio_s",
+ "n_boot": 2000,
+ "setting_mode": "run",
+ "bad_source": "score_run's bad label",
+ "settings": {
+  "nsm_rp1.05_shehbaz_prompts_c16_n43_k6_nonstream_inline [shehbaz]": {
+   "n_prompts": 43,
+   "takes_per_prompt": [
+    6
+   ],
+   "n_takes": 258,
+   "take_bad": {
+    "k": 20,
+    "n": 258,
+    "rate": 0.0775,
+    "ci95": [
+     0.0507,
+     0.1167
+    ]
+   },
+   "take_gate_fail": {
+    "k": 5,
+    "n": 258,
+    "rate": 0.0194,
+    "ci95": [
+     0.0083,
+     0.0446
+    ]
+   },
+   "gate_recall": {
+    "k": 5,
+    "n": 20,
+    "rate": 0.25,
+    "ci95": [
+     0.1119,
+     0.4687
+    ]
+   },
+   "gate_precision": {
+    "k": 5,
+    "n": 5,
+    "rate": 1.0,
+    "ci95": [
+     0.5655,
+     1.0
+    ]
+   },
+   "false_reject": {
+    "k": 0,
+    "n": 238,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.0159
+    ]
+   },
+   "prompts_with_any_bad": 15,
+   "prompts_all_bad": 0,
+   "retry": [
+    {
+     "R": 0,
+     "final_bad_rate": 0.0775,
+     "ci95": [
+      0.0426,
+      0.1163
+     ],
+     "mean_attempts": 1.0,
+     "extra_compute": 0.0,
+     "extra_compute_ci95": [
+      -0.0,
+      0.0
+     ],
+     "shipped_gate_fail": 0.0194,
+     "iid_prediction": 0.0775
+    },
+    {
+     "R": 1,
+     "final_bad_rate": 0.0581,
+     "ci95": [
+      0.0271,
+      0.0969
+     ],
+     "mean_attempts": 1.019,
+     "extra_compute": 0.0196,
+     "extra_compute_ci95": [
+      0.0042,
+      0.0356
+     ],
+     "shipped_gate_fail": 0.0,
+     "iid_prediction": 0.006
+    },
+    {
+     "R": 2,
+     "final_bad_rate": 0.0581,
+     "ci95": [
+      0.0271,
+      0.0969
+     ],
+     "mean_attempts": 1.019,
+     "extra_compute": 0.0196,
+     "extra_compute_ci95": [
+      0.0042,
+      0.0356
+     ],
+     "shipped_gate_fail": 0.0,
+     "iid_prediction": 0.0005
+    }
+   ],
+   "best_of": [
+    {
+     "best_of": 2,
+     "final_bad_rate": 0.0295,
+     "ci95": [
+      0.0078,
+      0.0558
+     ],
+     "extra_compute": 1.0
+    },
+    {
+     "best_of": 3,
+     "final_bad_rate": 0.0209,
+     "ci95": [
+      0.0023,
+      0.0442
+     ],
+     "extra_compute": 2.0
+    }
+   ]
+  }
+ }
+}

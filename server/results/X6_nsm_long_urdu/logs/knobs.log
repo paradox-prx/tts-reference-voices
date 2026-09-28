@@ -1,0 +1,5 @@
+=== 2026-09-25T08:16:01+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/bench/verify_knobs.py --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X6_nsm_long_urdu/knobs --voices-dir /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices --spec '{"name": "non_streaming_mode", "via": "engine", "voice": "shehbaz", "fails": {"nsm_invalid": {"non_streaming_mode": "x"}}, "succeeds": {"nsm_true": {"non_streaming_mode": true}}}'
+  base_a: HTTP 200 7.44 s 
+  fails_nsm_invalid: HTTP 400 - s refused HTTP 400: {"error":{"message":"1 validation error:\n  {'type': 'bool_parsing', 'loc': ('body', 'non_streaming_mode'), 'm
+  succeeds_nsm_true: HTTP 200 6.72 s accepted
+knob check non_streaming_mode: OK

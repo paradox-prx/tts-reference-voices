@@ -1,0 +1,368 @@
+{
+ "phase": "P9_baseline_nocache",
+ "note": "qwen-tts baseline, prompt cache off (reference re-encoded per request): short + xlong at c=1,8",
+ "status": "done",
+ "started": "2026-09-25T06:02:21+05:00",
+ "stub": false,
+ "argv": [
+  "bench/run_plan.py",
+  "--only",
+  "P2_matrix,P3_stream,P4_voice_cache,P5_urdu_rp105,P5_urdu_rp110,P5_urdu_rp115,P5_urdu_rp120,P6_auralis,P7_gateway,X1_nsm,X2_language,X3_custom_voice,X4_length_cap,X5_mixed_voices,P8_quality_raw,P8_quality_guard,P9_baseline_b8,P9_baseline_b1,P9_baseline_nocache"
+ ],
+ "plan": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/bench/plan.py",
+ "plan_sha256": "dbcd6f3d96e7bb0a0cb22792af0038fab258c856d866bc58373deba86ff4e96e",
+ "spec": {
+  "engine": {
+   "kind": "qwentts",
+   "variant": "",
+   "venv": "engine",
+   "args": [
+    "--max-batch",
+    "8",
+    "--no-prompt-cache"
+   ]
+  },
+  "gateway": null,
+  "qc": false,
+  "kind": "perf",
+  "optional": false,
+  "fresh_engine": false,
+  "checks": [],
+  "bench": [
+   {
+    "args": [
+     "--voice",
+     "trump",
+     "shehbaz",
+     "--size",
+     "short",
+     "--sweep",
+     "1,8",
+     "--n-rule",
+     "8:2",
+     "--timeout",
+     "1800",
+     "--extra-param",
+     "temperature=0.9",
+     "--extra-param",
+     "top_k=50",
+     "--max-new-tokens",
+     "auto"
+    ],
+    "via": "engine",
+    "tag": "",
+    "timeout_s": null
+   },
+   {
+    "args": [
+     "--voice",
+     "trump",
+     "shehbaz",
+     "--size",
+     "xlong",
+     "--sweep",
+     "1,8",
+     "--n-rule",
+     "4:1",
+     "--timeout",
+     "2400",
+     "--extra-param",
+     "temperature=0.9",
+     "--extra-param",
+     "top_k=50",
+     "--max-new-tokens",
+     "auto"
+    ],
+    "via": "engine",
+    "tag": "",
+    "timeout_s": null
+   }
+  ]
+ },
+ "estimate": {
+  "audio_h": 0.28,
+  "audio_gb": 0.05,
+  "requests": 80,
+  "runs": 8,
+  "gpu_min": 11.9
+ },
+ "host": {
+  "hostname": "vector",
+  "os": "Ubuntu 25.04",
+  "kernel": "6.14.0-37-generic",
+  "cpu": "Intel(R) Core(TM) i9-14900K",
+  "cpus": 32,
+  "mem_total": "32037216 kB",
+  "cpu_governor": "powersave",
+  "cpu_epp": "balance_performance",
+  "no_turbo": "0",
+  "tz": "PKT +0500",
+  "gpu": "index, name, uuid, driver_version, vbios_version, power.limit [W], clocks.max.sm [MHz], clocks.max.memory [MHz], pcie.link.gen.max, pcie.link.width.max, memory.total [MiB]\n0, NVIDIA GeForce RTX 3090, GPU-b4c11581-9cbf-cde4-a29c-4c9ceb006495, 580.95.05, 94.02.42.00.F1, 370.00 W, 2115 MHz, 9751 MHz, 4, 16, 24576 MiB"
+ },
+ "git": {
+  "head": "dc8e9ee1e88fe22f6320d807f50b27181d8574a3",
+  "branch": "qwen3-omni-bench",
+  "dirty_files": []
+ },
+ "sources": {
+  "bench_tts.py": "db5a949b28d034cf5a4dfc1f89d61679adcb629fa84e06c59736f30df23de71d",
+  "run_plan.py": "26d654c366d1aa9355b48ca0d47700bd808875668b8452c57b53b0092a04c29d",
+  "verify_knobs.py": "bd3841f03395e9af83a755333e50f04b6936873d5c9bee8233aea8fc8a9e30d4",
+  "gateway": "bf1d6eff518f524fa47cef9d17824fc00a98ff6865083df069a9916f7035a2fb",
+  "engine_patches": "4510f04e5730b0acf5bced11ea2872c89440943096783bd8d10edae81713f797",
+  "run_engine.sh": "bacdeb2639b70a6b9c4b225cd5db70156d9f5b4cf56ef27efbf8d5367eee88d8",
+  "baseline": "35954bca154518d580ce9383ac1fc3e80b2453b7b3194829be1283b4bdeb8e78",
+  "qc": "0db1f2edaa4e3f111ed8a847ef1c66f56e8aa79ea5bd483024833df4d6aa0ec7",
+  "pace.json": "abfde2d92735078ab46eff89e41045522857ba9c62633a29d4fb7bada66d735e"
+ },
+ "gpu": {
+  "index": "0",
+  "phase_start_mib": 311,
+  "phase_start_apps": [],
+  "baseline_mib": 311,
+  "baseline_apps": [],
+  "engine_ready_mib": 5809,
+  "engine_ready_apps": [
+   {
+    "pid": 302294,
+    "name": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/qwentts/bin/python",
+    "mib": 5486
+   }
+  ],
+  "engine_stopped_with": "SIGINT",
+  "engine_started_in": "P9_baseline_nocache",
+  "released": true,
+  "after_stop_mib": 311,
+  "after_stop_apps": []
+ },
+ "disk": {
+  "free_gb_before": 9.35,
+  "free_gb_after": 9.3,
+  "phase_bytes": 43981974
+ },
+ "knob_checks": [],
+ "bench": [
+  {
+   "i": 1,
+   "via": "engine",
+   "tag": "",
+   "cmd": [
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py",
+    "--voice",
+    "trump",
+    "shehbaz",
+    "--size",
+    "short",
+    "--sweep",
+    "1,8",
+    "--n-rule",
+    "8:2",
+    "--timeout",
+    "1800",
+    "--extra-param",
+    "temperature=0.9",
+    "--extra-param",
+    "top_k=50",
+    "--max-new-tokens",
+    "auto",
+    "--url",
+    "http://127.0.0.1:8091",
+    "--out",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P9_baseline_nocache",
+    "--gpus",
+    "0",
+    "--meta",
+    "phase=P9_baseline_nocache",
+    "--meta",
+    "via=engine",
+    "--meta",
+    "engine=qwen-tts baseline --max-batch 8 --no-prompt-cache",
+    "--meta",
+    "engine_kind=qwentts",
+    "--meta",
+    "variant=",
+    "--meta",
+    "venv=",
+    "--meta",
+    "gateway=",
+    "--meta",
+    "qc=false"
+   ],
+   "log": "bench_01_engine.log",
+   "exit_code": 0,
+   "timeout_s": 1800.0,
+   "duration_s": 76.1,
+   "estimate_audio_s": 184.3,
+   "runs": [
+    "trump_short_c1_n8_nonstream_inline",
+    "trump_short_c8_n16_nonstream_inline",
+    "shehbaz_short_c1_n8_nonstream_inline",
+    "shehbaz_short_c8_n16_nonstream_inline"
+   ]
+  },
+  {
+   "i": 2,
+   "via": "engine",
+   "tag": "",
+   "cmd": [
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py",
+    "--voice",
+    "trump",
+    "shehbaz",
+    "--size",
+    "xlong",
+    "--sweep",
+    "1,8",
+    "--n-rule",
+    "4:1",
+    "--timeout",
+    "2400",
+    "--extra-param",
+    "temperature=0.9",
+    "--extra-param",
+    "top_k=50",
+    "--max-new-tokens",
+    "auto",
+    "--url",
+    "http://127.0.0.1:8091",
+    "--out",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P9_baseline_nocache",
+    "--gpus",
+    "0",
+    "--meta",
+    "phase=P9_baseline_nocache",
+    "--meta",
+    "via=engine",
+    "--meta",
+    "engine=qwen-tts baseline --max-batch 8 --no-prompt-cache",
+    "--meta",
+    "engine_kind=qwentts",
+    "--meta",
+    "variant=",
+    "--meta",
+    "venv=",
+    "--meta",
+    "gateway=",
+    "--meta",
+    "qc=false"
+   ],
+   "log": "bench_02_engine.log",
+   "exit_code": 0,
+   "timeout_s": 2826.228225677628,
+   "duration_s": 251.4,
+   "estimate_audio_s": 834.7,
+   "runs": [
+    "trump_xlong_c1_n4_nonstream_inline",
+    "trump_xlong_c8_n8_nonstream_inline",
+    "shehbaz_xlong_c1_n4_nonstream_inline",
+    "shehbaz_xlong_c8_n8_nonstream_inline"
+   ]
+  }
+ ],
+ "engine": {
+  "kind": "qwentts",
+  "variant": "",
+  "venv": null,
+  "args": [
+   "--max-batch",
+   "8",
+   "--no-prompt-cache"
+  ],
+  "describe": "qwen-tts baseline --max-batch 8 --no-prompt-cache",
+  "cmd": [
+   "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/qwentts/bin/python",
+   "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/baseline/qwen_tts_server.py",
+   "--host",
+   "127.0.0.1",
+   "--port",
+   "8091",
+   "--max-batch",
+   "8",
+   "--no-prompt-cache"
+  ],
+  "cwd": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server",
+  "url": "http://127.0.0.1:8091",
+  "log": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/logs/engine_P9_baseline_nocache.log",
+  "env": {
+   "CUDA_VISIBLE_DEVICES": "0",
+   "HF_HUB_OFFLINE": "1",
+   "TRANSFORMERS_OFFLINE": "1",
+   "TTS_ENGINE_GPU": "0"
+  },
+  "gpu_baseline_mib": 311,
+  "gpu_baseline_apps": [],
+  "log_offset": 0,
+  "ready_s": 6.0,
+  "ready_mib": 5809,
+  "ready_apps": [
+   {
+    "pid": 302294,
+    "name": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/qwentts/bin/python",
+    "mib": 5486
+   }
+  ],
+  "voices": {
+   "status": 200,
+   "body": {
+    "voices": [
+     "shehbaz",
+     "trump"
+    ],
+    "uploaded_voices": []
+   }
+  },
+  "log_findings": {
+   "kv_cache": [],
+   "preemption": 0,
+   "builtin_retries": 0,
+   "errors": 0,
+   "error_samples": []
+  }
+ },
+ "versions": {
+  "runner_python": "3.12.6",
+  "gateway": {
+   "python": "3.12.6",
+   "packages": {
+    "fastapi": "0.141.1",
+    "uvicorn": "0.53.0",
+    "starlette": "1.7.0",
+    "httpx": "0.28.1",
+    "pydantic": "2.13.5",
+    "pydantic-settings": "2.15.0",
+    "numpy": "2.5.3",
+    "soundfile": "0.14.0"
+   }
+  },
+  "qwentts": {
+   "python": "3.12.6",
+   "packages": {
+    "qwen-tts": "0.1.1",
+    "torch": "2.13.0",
+    "torchaudio": "2.11.0",
+    "transformers": "4.57.3",
+    "accelerate": "1.12.0",
+    "numpy": "2.3.5"
+   }
+  },
+  "nvidia_driver": "580.95.05"
+ },
+ "gateway": {
+  "enabled": false
+ },
+ "finished": "2026-09-25T06:07:56+05:00",
+ "duration_s": 335.1,
+ "audio": {
+  "runs": 8,
+  "wav_files": 71,
+  "seconds": 907.3,
+  "hours": 0.252
+ },
+ "commands": [
+  "cd /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server && CUDA_VISIBLE_DEVICES=0 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 TTS_ENGINE_GPU=0 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/qwentts/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/baseline/qwen_tts_server.py --host 127.0.0.1 --port 8091 --max-batch 8 --no-prompt-cache >> /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/logs/engine_P9_baseline_nocache.log 2>&1 &",
+  "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --size short --sweep 1,8 --n-rule 8:2 --timeout 1800 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P9_baseline_nocache --gpus 0 --meta phase=P9_baseline_nocache --meta via=engine --meta 'engine=qwen-tts baseline --max-batch 8 --no-prompt-cache' --meta engine_kind=qwentts --meta variant= --meta venv= --meta gateway= --meta qc=false",
+  "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --size xlong --sweep 1,8 --n-rule 4:1 --timeout 2400 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P9_baseline_nocache --gpus 0 --meta phase=P9_baseline_nocache --meta via=engine --meta 'engine=qwen-tts baseline --max-batch 8 --no-prompt-cache' --meta engine_kind=qwentts --meta variant= --meta venv= --meta gateway= --meta qc=false"
+ ]
+}

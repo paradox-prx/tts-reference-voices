@@ -3,12 +3,16 @@
 **Model:** Qwen/Qwen3-TTS-12Hz-1.7B-Base (voice clone, 24 kHz). **Voices:** `trump` (English), `shehbaz` (Urdu,
 language "Auto"). **Hardware:** one RTX 3090 24 GB that also drives a desktop. **Engine:** vLLM-Omni 0.28.0 behind our
 gateway (`server/gateway`). Measured 2026-09-24/25 on the machine `vector`. Every number below comes from
-`server/results/` (local, gitignored; every take is kept there with its numbers) via `bench/collect.py` and
+`server/results/` (every take's numbers in git; its audio in the release, see
+[`results/README.md`](results/README.md)) via `bench/collect.py` and
 `bench/report_extract.py`; the experiment-by-experiment log is [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md).
 
-> All generated audio is AI-generated imitation of real people, labelled in every file. The benchmark's takes stay
-> local (`server/results/`, gitignored); the only published audio is 40 labelled takes (20 best, 10 typical, 10 worst
-> failures) requested by the repository owner, in [`samples/qwen3-tts/`](../samples/qwen3-tts/README.md).
+> All generated audio is AI-generated imitation of real people, labelled in every file. At the repository owner's
+> request it is published: 40 sorted samples (20 best, 10 typical, 10 worst) in
+> [`samples/qwen3-tts/`](../samples/qwen3-tts/README.md), the final server run with its audio in
+> [`results/13_final_server/`](results/13_final_server/), and every other phase's audio as labelled FLAC in the GitHub
+> release `bench-audio-2026-09-28`; takes whose text reads as political or official are left out
+> ([`results/README.md`](results/README.md)).
 
 ## 1. Summary
 
@@ -334,6 +338,15 @@ Installed with `deploy/install_units.sh --enable --with-qc` as systemd user unit
 
 The units run while the user is logged in (lingering is off on this machine); `loginctl enable-linger $USER` makes
 them start at boot and survive logout.
+
+**End to end on the deployed service (E13, [`results/13_final_server/`](results/13_final_server/README.md), 834 takes
+through the gateway):**
+- 0 errors; streaming first audio 0.11-0.12 s; 17-29x realtime at 16-32 concurrent.
+- English: WER 0.5%, 0 severe failures in 417 takes.
+- Urdu: CER-nospace 14%, severe failures 3.1% of takes (2.3% on the ~30 s prompts), still 16% on ~60 s texts.
+- With 16 concurrent ~60 s texts, p90 latency is 70-89 s. The split parts of requests that arrive after the first 7-8
+  run one after another, because the gateway picks up extra slots only when a request starts; see the E13 notes for
+  the candidate fixes.
 
 ## 10. Caveats
 

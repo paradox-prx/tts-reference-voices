@@ -1,0 +1,11 @@
+run,tag,voice,size,c,n,stream,ok,errors,suspect,retried,wall_s,lat_mean,lat_p50,lat_p90,lat_p95,lat_p99,lat_max,ttfa_p50,ttfa_p90,ttfa_p99,audio_s,throughput_x_realtime,req_per_s,rtf_p50,rtf_p90,mean_words,gpu_mem_peak_mib,gpu_util_mean
+e03_noasync_trump_long_c1_n8,e03_noasync,trump,long,1,8,False,8,0,0,0,24.03,3.003,3.06,3.377,3.384,3.384,3.384,,,,126.4,5.26,0.33,0.19,0.191,57.5,22817,93.3
+e03_noasync_trump_long_c8_n16,e03_noasync,trump,long,8,16,False,16,0,0,0,15.32,6.886,7.276,8.021,8.021,8.024,8.024,,,,253.0,16.51,1.04,0.427,0.501,58.9,22817,94.8
+e03_noasync_trump_long_c32_n64,e03_noasync,trump,long,32,64,False,64,0,0,0,36.0,15.457,15.924,19.848,19.874,20.467,20.482,,,,1028.2,28.56,1.78,0.931,1.187,57.7,22965,95.2
+e03_noasync_stream_trump_long_c1_n8_stream,e03_noasync_stream,trump,long,1,8,True,8,0,0,0,26.03,3.252,3.449,3.521,3.629,3.629,3.629,3.447,3.52,3.627,129.2,4.96,0.31,0.203,0.208,57.5,22967,91.3
+e03_noasync_stream_trump_long_c8_n16_stream,e03_noasync_stream,trump,long,8,16,True,16,0,0,0,15.66,7.035,7.239,7.987,7.987,7.989,7.989,7.236,7.984,7.987,254.9,16.27,1.02,0.431,0.495,58.9,22968,90.6
+e03_noasync_shehbaz_long_c1_n8,e03_noasync,shehbaz,long,1,8,False,8,0,0,0,35.59,4.447,4.488,4.914,4.918,4.918,4.918,,,,174.6,4.9,0.22,0.205,0.206,61.6,23187,88.5
+e03_noasync_shehbaz_long_c8_n16,e03_noasync,shehbaz,long,8,16,False,16,0,0,0,21.13,9.567,9.693,11.321,11.321,11.345,11.345,,,,362.2,17.14,0.76,0.428,0.46,61.7,23186,90.6
+e03_noasync_shehbaz_long_c32_n64,e03_noasync,shehbaz,long,32,64,False,64,0,0,0,76.06,20.971,21.809,24.043,25.888,25.899,75.995,,,,1397.9,18.38,0.84,0.947,1.033,60.3,23193,91.5
+e03_noasync_stream_shehbaz_long_c1_n8_stream,e03_noasync_stream,shehbaz,long,1,8,True,8,0,0,0,34.55,4.317,4.53,4.961,5.568,5.568,5.568,4.528,4.958,5.565,169.8,4.91,0.23,0.203,0.209,61.6,23186,88.1
+e03_noasync_stream_shehbaz_long_c8_n16_stream,e03_noasync_stream,shehbaz,long,8,16,True,16,0,0,0,22.02,9.472,9.561,10.932,10.932,11.044,11.044,9.559,10.927,11.041,358.4,16.28,0.73,0.442,0.45,61.7,23188,93.0

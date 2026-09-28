@@ -1,0 +1,13 @@
+{
+ "model": "faster-whisper-large-v3 int8 cpu beam5 forced lang",
+ "transcripts": {
+  "shehbaz_inline_nonstream": "پاکستان کی مجد کو مضبوط بنانے کے لیے ہم سب کو مل کر محنت کرنا ہوگی",
+  "shehbaz_inline_stream": "پاکستان کی معاہشت کو مضبوط بنانے کے لیے ہم سب کو ملک اور مہند کرنا ہوگی",
+  "shehbaz_registered_nonstream": "فاکستان کی معیشت کو مضبوط بنانے کے لیے ہم سب کو ملکر محنت کرنا ہوگی",
+  "shehbaz_registered_stream": "پاکستان کی معیشت کو مضبوط بنانے کے لیے ہم سب کو مل کر محنت کرنا ہوگی",
+  "trump_inline_nonstream": "We are going to build the greatest speech system anybody has ever seen, believe me.",
+  "trump_inline_stream": "We are going to build the greatest speech system anybody has ever seen, believe me.",
+  "trump_registered_nonstream": "We are going to build the greatest speech system anybody has ever seen, believe me.",
+  "trump_registered_stream": "We are going to build the greatest speech system anybody has ever seen, believe me."
+ }
+}

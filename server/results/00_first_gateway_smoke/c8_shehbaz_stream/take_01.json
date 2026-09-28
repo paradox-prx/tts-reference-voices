@@ -1,0 +1,19 @@
+{
+ "tag": "c8",
+ "voice": "shehbaz",
+ "stream": true,
+ "i": 1,
+ "status": 200,
+ "total_s": 2.093,
+ "ttfa_s": 0.631,
+ "audio_s": 4.72,
+ "text": "حکومت نے تعلیم اور صحت کے شعبوں میں بڑی سرمایہ کاری کا فیصلہ کیا ہے۔",
+ "headers": {
+  "x-request-id": "507a98c30a2c406fa77eeaca7accecec",
+  "x-ai-generated": "true",
+  "x-tts-voice": "shehbaz",
+  "x-tts-retries": "0",
+  "x-tts-queue-ms": "0",
+  "x-tts-sample-rate": "24000"
+ }
+}

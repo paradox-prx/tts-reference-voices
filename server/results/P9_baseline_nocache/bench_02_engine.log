@@ -1,0 +1,27 @@
+=== 2026-09-25T06:03:44+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --size xlong --sweep 1,8 --n-rule 4:1 --timeout 2400 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P9_baseline_nocache --gpus 0 --meta phase=P9_baseline_nocache --meta via=engine --meta 'engine=qwen-tts baseline --max-batch 8 --no-prompt-cache' --meta engine_kind=qwentts --meta variant= --meta venv= --meta gateway= --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x
+warmup trump 1: 1.20s ok
+warmup trump 2: 2.44s ok
+trump xlong (en.json): trump 43 texts
+  trump_xlong_c1_n4_nonstream_inline: ok 4/4 err 0 suspect 0 (short 0, long 0; pace x1.028) | lat p50=19.104s p90=21.534s p99=21.534s | 1.69x realtime (p90-wall 1.69x, stragglers 0), 0.05 req/s | gpu 14966 MiB 56.5%
+  trump_xlong_c8_n8_nonstream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x0.973) | lat p50=21.403s p90=21.408s p99=21.409s | 11.63x realtime (p90-wall 11.63x, stragglers 0), 0.37 req/s | gpu 18881 MiB 61.7%
+warmup shehbaz 1: 2.69s ok
+warmup shehbaz 2: 3.13s ok
+shehbaz xlong (ur.json): shehbaz 43 texts
+  shehbaz_xlong_c1_n4_nonstream_inline: ok 4/4 err 0 suspect 0 (short 0, long 0; pace x0.846) | lat p50=17.867s p90=17.882s p99=17.882s | 1.68x realtime (p90-wall 1.68x, stragglers 0), 0.06 req/s | gpu 18884 MiB 55.6%
+  shehbaz_xlong_c8_n8_nonstream_inline: ok 7/8 err 1 suspect 0 (short 0, long 0; pace x0.853) | lat p50=53.567s p90=74.245s p99=74.249s | 3.03x realtime (p90-wall 3.03x, stragglers 0), 0.09 req/s | gpu 19119 MiB 63.1%
+    ERR[shehbaz 3] HTTP 500: {"error":{"message":"Qwen3-TTS Base did not emit codec EOS before its token budget (964/964 codec tokens); the generated audio is incomplete.","type":"InternalServerError","param":null,"code":500}}
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P9_baseline_nocache
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| trump_short_c1_n8_nonstream_inline | 8 | 8 | 0 | 1 | 2.58 | 3.265 | 3.487 | – | – | 3.93 | 1.6 | 1.6 | 0 | 0.636 | 0.41 | 5817 | 56.1 |
+| trump_short_c8_n16_nonstream_inline | 16 | 16 | 0 | 0 | 4.529 | 5.607 | 5.61 | – | – | 2.83 | 4.47 | 3.95 | 0 | 2.191 | 1.58 | 14903 | 60.8 |
+| shehbaz_short_c1_n8_nonstream_inline | 8 | 8 | 0 | 0 | 3.065 | 3.745 | 4.325 | – | – | 4.83 | 1.61 | 1.61 | 0 | 0.624 | 0.33 | 14917 | 56.1 |
+| shehbaz_short_c8_n16_nonstream_inline | 16 | 16 | 0 | 0 | 4.388 | 10.363 | 10.367 | – | – | 4.52 | 4.94 | 4.45 | 0 | 1.504 | 1.09 | 14919 | 59.1 |
+| trump_xlong_c1_n4_nonstream_inline | 4 | 4 | 0 | 0 | 19.104 | 21.534 | 21.534 | – | – | 32.46 | 1.69 | 1.69 | 0 | 0.593 | 0.05 | 14966 | 56.5 |
+| trump_xlong_c8_n8_nonstream_inline | 8 | 8 | 0 | 0 | 21.403 | 21.408 | 21.409 | – | – | 31.13 | 11.63 | 11.63 | 0 | 0.688 | 0.37 | 18881 | 61.7 |
+| shehbaz_xlong_c1_n4_nonstream_inline | 4 | 4 | 0 | 0 | 17.867 | 17.882 | 17.882 | – | – | 28.98 | 1.68 | 1.68 | 0 | 0.597 | 0.06 | 18884 | 55.6 |
+| shehbaz_xlong_c8_n8_nonstream_inline | 8 | 7 | 1 | 0 | 53.567 | 74.245 | 74.249 | – | – | 32.15 | 3.03 | 3.03 | 0 | 1.849 | 0.09 | 19119 | 63.1 |
+

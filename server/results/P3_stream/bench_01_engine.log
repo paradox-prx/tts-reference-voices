@@ -1,0 +1,38 @@
+=== 2026-09-25T04:42:36+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --size short --sweep 1,2,4,8,16,32 --n-rule 8:2 --stream --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P3_stream --gpus 0 --meta phase=P3_stream --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0795 s/letter (file); suspect outside 0.6-1.8 x
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.0880 s/letter (file); suspect outside 0.6-1.8 x
+warmup trump 1: 0.43s ok
+warmup trump 2: 0.65s ok
+trump short (en.json): trump 393 texts
+  trump_short_c1_n8_stream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x0.981) | lat p50=0.726s p90=0.994s p99=1.0s | ttfa p50=0.116s p90=0.126s | 5.01x realtime (p90-wall 5.01x, stragglers 0), 1.38 req/s | gpu 20258 MiB 97.5%
+  trump_short_c2_n8_stream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x0.989) | lat p50=0.55s p90=1.079s p99=1.245s | ttfa p50=0.169s p90=0.19s | 7.85x realtime (p90-wall 7.85x, stragglers 0), 2.95 req/s | gpu 20262 MiB 98.2%
+  trump_short_c4_n8_stream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.044) | lat p50=0.907s p90=1.234s p99=1.413s | ttfa p50=0.358s p90=0.361s | 10.17x realtime (p90-wall 10.17x, stragglers 0), 3.54 req/s | gpu 20262 MiB 99.5%
+  trump_short_c8_n16_stream_inline: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x1.045) | lat p50=1.453s p90=2.624s p99=3.252s | ttfa p50=0.43s p90=0.659s | 13.87x realtime (p90-wall 12.37x, stragglers 0), 4.39 req/s | gpu 20271 MiB 99.0%
+  trump_short_c16_n32_stream_inline: ok 32/32 err 0 suspect 0 (short 0, long 0; pace x0.948) | lat p50=2.305s p90=3.736s p99=4.417s | ttfa p50=0.807s p90=1.257s | 16.74x realtime (p90-wall 15.6x, stragglers 0), 5.7 req/s | gpu 20276 MiB 98.3%
+  trump_short_c32_n64_stream_inline: ok 64/64 err 0 suspect 0 (short 0, long 0; pace x0.99) | lat p50=3.763s p90=6.413s p99=7.142s | ttfa p50=1.768s p90=2.456s | 20.64x realtime (p90-wall 18.52x, stragglers 0), 6.86 req/s | gpu 20276 MiB 98.8%
+warmup shehbaz 1: 0.80s ok
+warmup shehbaz 2: 0.95s ok
+shehbaz short (ur.json): shehbaz 345 texts
+  shehbaz_short_c1_n8_stream_inline: ok 8/8 err 0 suspect 1 (short 0, long 1; pace x1.434) | lat p50=1.06s p90=1.306s p99=1.538s | ttfa p50=0.121s p90=0.123s | 5.15x realtime (p90-wall 5.15x, stragglers 0), 0.97 req/s | gpu 20271 MiB 98.4%
+  shehbaz_short_c2_n8_stream_inline: ok 8/8 err 0 suspect 0 (short 0, long 0; pace x1.292) | lat p50=0.917s p90=1.129s p99=1.138s | ttfa p50=0.142s p90=0.195s | 8.03x realtime (p90-wall 8.03x, stragglers 0), 2.26 req/s | gpu 20266 MiB 98.9%
+  shehbaz_short_c4_n8_stream_inline: ok 8/8 err 0 suspect 1 (short 0, long 1; pace x1.348) | lat p50=1.563s p90=2.076s p99=2.535s | ttfa p50=0.365s p90=0.371s | 11.68x realtime (p90-wall 11.68x, stragglers 0), 2.17 req/s | gpu 20266 MiB 98.4%
+  shehbaz_short_c8_n16_stream_inline: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x1.393) | lat p50=1.905s p90=2.9s p99=3.241s | ttfa p50=0.37s p90=0.695s | 14.68x realtime (p90-wall 14.06x, stragglers 0), 3.61 req/s | gpu 20266 MiB 99.2%
+  shehbaz_short_c16_n32_stream_inline: ok 32/32 err 0 suspect 1 (short 0, long 1; pace x1.347) | lat p50=2.614s p90=4.433s p99=5.748s | ttfa p50=0.46s p90=1.298s | 19.16x realtime (p90-wall 17.07x, stragglers 0), 4.58 req/s | gpu 20274 MiB 99.1%
+  shehbaz_short_c32_n64_stream_inline: ok 64/64 err 0 suspect 1 (short 0, long 1; pace x1.318) | lat p50=4.432s p90=7.413s p99=9.023s | ttfa p50=1.016s p90=2.531s | 22.57x realtime (p90-wall 21.37x, stragglers 0), 5.51 req/s | gpu 20276 MiB 99.7%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P3_stream
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| trump_short_c1_n8_stream_inline | 8 | 8 | 0 | 0 | 0.726 | 0.994 | 1.0 | 0.116 | 0.126 | 3.62 | 5.01 | 5.01 | 0 | 0.204 | 1.38 | 20258 | 97.5 |
+| trump_short_c2_n8_stream_inline | 8 | 8 | 0 | 0 | 0.55 | 1.079 | 1.245 | 0.169 | 0.19 | 2.66 | 7.85 | 7.85 | 0 | 0.258 | 2.95 | 20262 | 98.2 |
+| trump_short_c4_n8_stream_inline | 8 | 8 | 0 | 0 | 0.907 | 1.234 | 1.413 | 0.358 | 0.361 | 2.87 | 10.17 | 10.17 | 0 | 0.376 | 3.54 | 20262 | 99.5 |
+| trump_short_c8_n16_stream_inline | 16 | 16 | 0 | 0 | 1.453 | 2.624 | 3.252 | 0.43 | 0.659 | 3.16 | 13.87 | 12.37 | 0 | 0.513 | 4.39 | 20271 | 99.0 |
+| trump_short_c16_n32_stream_inline | 32 | 32 | 0 | 0 | 2.305 | 3.736 | 4.417 | 0.807 | 1.257 | 2.94 | 16.74 | 15.6 | 0 | 0.857 | 5.7 | 20276 | 98.3 |
+| trump_short_c32_n64_stream_inline | 64 | 64 | 0 | 0 | 3.763 | 6.413 | 7.142 | 1.768 | 2.456 | 3.01 | 20.64 | 18.52 | 0 | 1.434 | 6.86 | 20276 | 98.8 |
+| shehbaz_short_c1_n8_stream_inline | 8 | 8 | 0 | 1 | 1.06 | 1.306 | 1.538 | 0.121 | 0.123 | 5.29 | 5.15 | 5.15 | 0 | 0.197 | 0.97 | 20271 | 98.4 |
+| shehbaz_short_c2_n8_stream_inline | 8 | 8 | 0 | 0 | 0.917 | 1.129 | 1.138 | 0.142 | 0.195 | 3.56 | 8.03 | 8.03 | 0 | 0.243 | 2.26 | 20266 | 98.9 |
+| shehbaz_short_c4_n8_stream_inline | 8 | 8 | 0 | 1 | 1.563 | 2.076 | 2.535 | 0.365 | 0.371 | 5.38 | 11.68 | 11.68 | 0 | 0.299 | 2.17 | 20266 | 98.4 |
+| shehbaz_short_c8_n16_stream_inline | 16 | 16 | 0 | 0 | 1.905 | 2.9 | 3.241 | 0.37 | 0.695 | 4.06 | 14.68 | 14.06 | 0 | 0.506 | 3.61 | 20266 | 99.2 |
+| shehbaz_short_c16_n32_stream_inline | 32 | 32 | 0 | 1 | 2.614 | 4.433 | 5.748 | 0.46 | 1.298 | 4.19 | 19.16 | 17.07 | 0 | 0.762 | 4.58 | 20274 | 99.1 |
+| shehbaz_short_c32_n64_stream_inline | 64 | 64 | 0 | 1 | 4.432 | 7.413 | 9.023 | 1.016 | 2.531 | 4.1 | 22.57 | 21.37 | 0 | 1.272 | 5.51 | 20276 | 99.7 |
+

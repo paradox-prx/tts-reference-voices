@@ -1,0 +1,12 @@
+=== 2026-09-25T04:16:01+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/bench/verify_knobs.py --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P0_knobs/knobs --voices-dir /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices --spec '{"name": "request_fields", "via": "engine", "voice": "shehbaz", "fails": {"extra_rp_neg": {"extra_params": {"repetition_penalty": -1}}, "extra_temperature_neg": {"extra_params": {"temperature": -1}}, "nsm_invalid": {"non_streaming_mode": "x"}, "language_urdu": {"language": "Urdu"}, "cap40": {"max_new_tokens": 40}}, "succeeds": {"toplevel_rp_neg_ignored": {"repetition_penalty": -1}, "toplevel_temperature_neg_ignored": {"temperature": -1}, "custom_voice_avg": {"voice": "shehbaz-avg", "ref_audio": null, "ref_text": null}}, "listed": ["trump-avg", "trump-prompt", "shehbaz-avg", "shehbaz-prompt"]}'
+  listed: HTTP 200 - s listed
+  base_a: HTTP 200 8.0 s 
+  fails_extra_rp_neg: HTTP 400 - s refused HTTP 400: {"error":{"message":"extra_params.repetition_penalty must be a finite number > 0","type":"BadRequestError","pa
+  fails_extra_temperature_neg: HTTP 400 - s refused HTTP 400: {"error":{"message":"Speech generation failed: temperature must be non-negative, got -1. (parameter=temperatur
+  fails_nsm_invalid: HTTP 400 - s refused HTTP 400: {"error":{"message":"1 validation error:\n  {'type': 'bool_parsing', 'loc': ('body', 'non_streaming_mode'), 'm
+  fails_language_urdu: HTTP 400 - s refused HTTP 400: {"error":{"message":"Invalid language 'Urdu'. Supported: Auto, Chinese, English, French, German, Italian, Japa
+  fails_cap40: HTTP 500 - s refused HTTP 500: {"error": {"message": "Qwen3-TTS Base did not emit codec EOS before its token budget (40/40 codec tokens); the
+  succeeds_toplevel_rp_neg_ignored: HTTP 200 7.44 s accepted
+  succeeds_toplevel_temperature_neg_ignored: HTTP 200 7.36 s accepted
+  succeeds_custom_voice_avg: HTTP 200 7.2 s accepted
+knob check request_fields: OK

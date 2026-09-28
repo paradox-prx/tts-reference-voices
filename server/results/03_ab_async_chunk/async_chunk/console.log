@@ -1,0 +1,65 @@
+voice trump (en): ref qwen3-tts.wav, pools en.json: short=393, medium=186, long=68, xlong=43
+warmup 1: 1.30s ok
+warmup 2: 0.69s ok
+  e03_async_trump_long_c1_n8: ok 8/8 err 0 suspect 0 | lat p50=2.997s p90=3.116s p99=3.207s | 5.55x realtime, 0.34 req/s | gpu 19156 MiB 97.5%
+  e03_async_trump_long_c8_n16: ok 16/16 err 0 suspect 0 | lat p50=6.502s p90=6.795s p99=7.163s | 19.01x realtime, 1.18 req/s | gpu 19186 MiB 98.2%
+  e03_async_trump_long_c32_n64: ok 64/64 err 0 suspect 0 | lat p50=13.973s p90=16.971s p99=17.986s | 34.48x realtime, 2.13 req/s | gpu 19337 MiB 99.0%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/03_ab_async_chunk/async_chunk
+| tag | voice | size | c | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | x realtime | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| e03_async | trump | long | 1 | 8 | 8 | 0 | 0 | 2.997 | 3.116 | 3.207 | – | – | 5.55 | 0.34 | 19156 | 97.5 |
+| e03_async | trump | long | 8 | 16 | 16 | 0 | 0 | 6.502 | 6.795 | 7.163 | – | – | 19.01 | 1.18 | 19186 | 98.2 |
+| e03_async | trump | long | 32 | 64 | 64 | 0 | 0 | 13.973 | 16.971 | 17.986 | – | – | 34.48 | 2.13 | 19337 | 99.0 |
+
+voice trump (en): ref qwen3-tts.wav, pools en.json: short=393, medium=186, long=68, xlong=43
+  e03_async_stream_trump_long_c1_n8_stream: ok 8/8 err 0 suspect 0 | lat p50=2.892s p90=3.072s p99=3.528s | ttfa p50=0.115s p90=0.135s | 5.54x realtime, 0.35 req/s | gpu 19339 MiB 98.9%
+  e03_async_stream_trump_long_c8_n16_stream: ok 16/16 err 0 suspect 0 | lat p50=6.119s p90=7.457s p99=7.726s | ttfa p50=0.333s p90=0.646s | 18.95x realtime, 1.18 req/s | gpu 19339 MiB 96.8%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/03_ab_async_chunk/async_chunk
+| tag | voice | size | c | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | x realtime | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| e03_async | trump | long | 1 | 8 | 8 | 0 | 0 | 2.997 | 3.116 | 3.207 | – | – | 5.55 | 0.34 | 19156 | 97.5 |
+| e03_async | trump | long | 8 | 16 | 16 | 0 | 0 | 6.502 | 6.795 | 7.163 | – | – | 19.01 | 1.18 | 19186 | 98.2 |
+| e03_async | trump | long | 32 | 64 | 64 | 0 | 0 | 13.973 | 16.971 | 17.986 | – | – | 34.48 | 2.13 | 19337 | 99.0 |
+| e03_async_stream | trump | long | 1 | 8 | 8 | 0 | 0 | 2.892 | 3.072 | 3.528 | 0.115 | 0.135 | 5.54 | 0.35 | 19339 | 98.9 |
+| e03_async_stream | trump | long | 8 | 16 | 16 | 0 | 0 | 6.119 | 7.457 | 7.726 | 0.333 | 0.646 | 18.95 | 1.18 | 19339 | 96.8 |
+
+voice shehbaz (ur): ref qwen3-tts.wav, pools ur.json: short=345, medium=145, long=43, xlong=43
+warmup 1: 0.73s ok
+warmup 2: 0.74s ok
+  e03_async_shehbaz_long_c1_n8: ok 8/8 err 0 suspect 0 | lat p50=4.051s p90=4.784s p99=4.88s | 5.49x realtime, 0.24 req/s | gpu 19642 MiB 94.6%
+  e03_async_shehbaz_long_c8_n16: ok 16/16 err 0 suspect 0 | lat p50=8.702s p90=10.235s p99=10.365s | 18.3x realtime, 0.81 req/s | gpu 19643 MiB 96.7%
+  note: 64 requests > 43 long texts, so some repeat within this run
+  e03_async_shehbaz_long_c32_n64: ok 64/64 err 0 suspect 0 | lat p50=18.757s p90=21.892s p99=24.192s | 21.6x realtime, 0.98 req/s | gpu 19647 MiB 97.5%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/03_ab_async_chunk/async_chunk
+| tag | voice | size | c | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | x realtime | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| e03_async | trump | long | 1 | 8 | 8 | 0 | 0 | 2.997 | 3.116 | 3.207 | – | – | 5.55 | 0.34 | 19156 | 97.5 |
+| e03_async | trump | long | 8 | 16 | 16 | 0 | 0 | 6.502 | 6.795 | 7.163 | – | – | 19.01 | 1.18 | 19186 | 98.2 |
+| e03_async | trump | long | 32 | 64 | 64 | 0 | 0 | 13.973 | 16.971 | 17.986 | – | – | 34.48 | 2.13 | 19337 | 99.0 |
+| e03_async_stream | trump | long | 1 | 8 | 8 | 0 | 0 | 2.892 | 3.072 | 3.528 | 0.115 | 0.135 | 5.54 | 0.35 | 19339 | 98.9 |
+| e03_async_stream | trump | long | 8 | 16 | 16 | 0 | 0 | 6.119 | 7.457 | 7.726 | 0.333 | 0.646 | 18.95 | 1.18 | 19339 | 96.8 |
+| e03_async | shehbaz | long | 1 | 8 | 8 | 0 | 0 | 4.051 | 4.784 | 4.88 | – | – | 5.49 | 0.24 | 19642 | 94.6 |
+| e03_async | shehbaz | long | 8 | 16 | 16 | 0 | 0 | 8.702 | 10.235 | 10.365 | – | – | 18.3 | 0.81 | 19643 | 96.7 |
+| e03_async | shehbaz | long | 32 | 64 | 64 | 0 | 0 | 18.757 | 21.892 | 24.192 | – | – | 21.6 | 0.98 | 19647 | 97.5 |
+
+voice shehbaz (ur): ref qwen3-tts.wav, pools ur.json: short=345, medium=145, long=43, xlong=43
+  e03_async_stream_shehbaz_long_c1_n8_stream: ok 8/8 err 0 suspect 0 | lat p50=4.217s p90=4.643s p99=4.761s | ttfa p50=0.136s p90=0.142s | 5.43x realtime, 0.23 req/s | gpu 19639 MiB 95.4%
+  e03_async_stream_shehbaz_long_c8_n16_stream: ok 16/16 err 0 suspect 0 | lat p50=9.128s p90=9.642s p99=9.801s | ttfa p50=0.416s p90=0.731s | 19.07x realtime, 0.84 req/s | gpu 19643 MiB 98.2%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/03_ab_async_chunk/async_chunk
+| tag | voice | size | c | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | x realtime | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| e03_async | trump | long | 1 | 8 | 8 | 0 | 0 | 2.997 | 3.116 | 3.207 | – | – | 5.55 | 0.34 | 19156 | 97.5 |
+| e03_async | trump | long | 8 | 16 | 16 | 0 | 0 | 6.502 | 6.795 | 7.163 | – | – | 19.01 | 1.18 | 19186 | 98.2 |
+| e03_async | trump | long | 32 | 64 | 64 | 0 | 0 | 13.973 | 16.971 | 17.986 | – | – | 34.48 | 2.13 | 19337 | 99.0 |
+| e03_async_stream | trump | long | 1 | 8 | 8 | 0 | 0 | 2.892 | 3.072 | 3.528 | 0.115 | 0.135 | 5.54 | 0.35 | 19339 | 98.9 |
+| e03_async_stream | trump | long | 8 | 16 | 16 | 0 | 0 | 6.119 | 7.457 | 7.726 | 0.333 | 0.646 | 18.95 | 1.18 | 19339 | 96.8 |
+| e03_async | shehbaz | long | 1 | 8 | 8 | 0 | 0 | 4.051 | 4.784 | 4.88 | – | – | 5.49 | 0.24 | 19642 | 94.6 |
+| e03_async | shehbaz | long | 8 | 16 | 16 | 0 | 0 | 8.702 | 10.235 | 10.365 | – | – | 18.3 | 0.81 | 19643 | 96.7 |
+| e03_async | shehbaz | long | 32 | 64 | 64 | 0 | 0 | 18.757 | 21.892 | 24.192 | – | – | 21.6 | 0.98 | 19647 | 97.5 |
+| e03_async_stream | shehbaz | long | 1 | 8 | 8 | 0 | 0 | 4.217 | 4.643 | 4.761 | 0.136 | 0.142 | 5.43 | 0.23 | 19639 | 95.4 |
+| e03_async_stream | shehbaz | long | 8 | 16 | 16 | 0 | 0 | 9.128 | 9.642 | 9.801 | 0.416 | 0.731 | 19.07 | 0.84 | 19643 | 98.2 |
+

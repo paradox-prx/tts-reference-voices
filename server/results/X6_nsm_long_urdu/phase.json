@@ -1,0 +1,585 @@
+{
+ "phase": "X6_nsm_long_urdu",
+ "note": "P2 found 31/68 shehbaz xxlong (~200 words, ~55 s) takes without EOS (hit the cap) vs 1/38 at xlong and 0 for English. Hypothesis: with non_streaming_mode=false the text beyond the reference is fed one token per frame (12.5/s) and Urdu needs ~3.2 tokens/word, so the feed barely stays ahead of the speech. Paired arms, same 43 xxlong texts, c=16: non_streaming_mode false (default) vs true; plus xlong true",
+ "status": "done",
+ "started": "2026-09-25T08:16:00+05:00",
+ "stub": false,
+ "argv": [
+  "bench/run_plan.py",
+  "--only",
+  "X6_nsm_long_urdu,X7_split_off,X7_split_60,P2_high_c"
+ ],
+ "plan": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/bench/plan.py",
+ "plan_sha256": "736f5829ddb2a64e9d17244fed0fb75a0032ce2f7fd4b05740012786d99dc40e",
+ "spec": {
+  "engine": {
+   "kind": "vllm",
+   "variant": "custom_voices",
+   "venv": "engine",
+   "args": []
+  },
+  "gateway": null,
+  "qc": false,
+  "kind": "quality",
+  "optional": false,
+  "fresh_engine": false,
+  "checks": [
+   {
+    "name": "non_streaming_mode",
+    "via": "engine",
+    "voice": "shehbaz",
+    "fails": {
+     "nsm_invalid": {
+      "non_streaming_mode": "x"
+     }
+    },
+    "succeeds": {
+     "nsm_true": {
+      "non_streaming_mode": true
+     }
+    }
+   }
+  ],
+  "bench": [
+   {
+    "args": [
+     "--voice",
+     "shehbaz",
+     "--size",
+     "xxlong",
+     "-n",
+     "43",
+     "-c",
+     "16",
+     "--timeout",
+     "900",
+     "--extra-param",
+     "temperature=0.9",
+     "--extra-param",
+     "top_k=50",
+     "--max-new-tokens",
+     "auto"
+    ],
+    "via": "engine",
+    "tag": "nsm_false",
+    "timeout_s": null
+   },
+   {
+    "args": [
+     "--voice",
+     "shehbaz",
+     "--size",
+     "xxlong",
+     "-n",
+     "43",
+     "-c",
+     "16",
+     "--param",
+     "non_streaming_mode=true",
+     "--timeout",
+     "900",
+     "--extra-param",
+     "temperature=0.9",
+     "--extra-param",
+     "top_k=50",
+     "--max-new-tokens",
+     "auto"
+    ],
+    "via": "engine",
+    "tag": "nsm_true",
+    "timeout_s": null
+   },
+   {
+    "args": [
+     "--voice",
+     "trump",
+     "--size",
+     "xxlong",
+     "-n",
+     "43",
+     "-c",
+     "16",
+     "--param",
+     "non_streaming_mode=true",
+     "--timeout",
+     "900",
+     "--extra-param",
+     "temperature=0.9",
+     "--extra-param",
+     "top_k=50",
+     "--max-new-tokens",
+     "auto"
+    ],
+    "via": "engine",
+    "tag": "nsm_true",
+    "timeout_s": null
+   }
+  ]
+ },
+ "estimate": {
+  "audio_h": 2.45,
+  "audio_gb": 0.42,
+  "requests": 135,
+  "runs": 3,
+  "gpu_min": 11.1
+ },
+ "host": {
+  "hostname": "vector",
+  "os": "Ubuntu 25.04",
+  "kernel": "6.14.0-37-generic",
+  "cpu": "Intel(R) Core(TM) i9-14900K",
+  "cpus": 32,
+  "mem_total": "32037216 kB",
+  "cpu_governor": "powersave",
+  "cpu_epp": "balance_performance",
+  "no_turbo": "0",
+  "tz": "PKT +0500",
+  "gpu": "index, name, uuid, driver_version, vbios_version, power.limit [W], clocks.max.sm [MHz], clocks.max.memory [MHz], pcie.link.gen.max, pcie.link.width.max, memory.total [MiB]\n0, NVIDIA GeForce RTX 3090, GPU-b4c11581-9cbf-cde4-a29c-4c9ceb006495, 580.95.05, 94.02.42.00.F1, 370.00 W, 2115 MHz, 9751 MHz, 4, 16, 24576 MiB"
+ },
+ "git": {
+  "head": "dc8e9ee1e88fe22f6320d807f50b27181d8574a3",
+  "branch": "qwen3-omni-bench",
+  "dirty_files": [
+   "erver/bench/plan.py"
+  ]
+ },
+ "sources": {
+  "bench_tts.py": "db5a949b28d034cf5a4dfc1f89d61679adcb629fa84e06c59736f30df23de71d",
+  "run_plan.py": "26d654c366d1aa9355b48ca0d47700bd808875668b8452c57b53b0092a04c29d",
+  "verify_knobs.py": "bd3841f03395e9af83a755333e50f04b6936873d5c9bee8233aea8fc8a9e30d4",
+  "gateway": "bf1d6eff518f524fa47cef9d17824fc00a98ff6865083df069a9916f7035a2fb",
+  "engine_patches": "4510f04e5730b0acf5bced11ea2872c89440943096783bd8d10edae81713f797",
+  "run_engine.sh": "bacdeb2639b70a6b9c4b225cd5db70156d9f5b4cf56ef27efbf8d5367eee88d8",
+  "baseline": "35954bca154518d580ce9383ac1fc3e80b2453b7b3194829be1283b4bdeb8e78",
+  "qc": "0db1f2edaa4e3f111ed8a847ef1c66f56e8aa79ea5bd483024833df4d6aa0ec7",
+  "pace.json": "abfde2d92735078ab46eff89e41045522857ba9c62633a29d4fb7bada66d735e"
+ },
+ "gpu": {
+  "index": "0",
+  "phase_start_mib": 20407,
+  "phase_start_apps": [
+   {
+    "pid": 307319,
+    "name": "VLLM::StageEngineCoreProc_stage0_replica0_DP0",
+    "mib": 16206
+   },
+   {
+    "pid": 307972,
+    "name": "VLLM::StageEngineCoreProc_stage1_replica0_DP0",
+    "mib": 3872
+   }
+  ],
+  "baseline_mib": 329,
+  "baseline_apps": [],
+  "engine_ready_mib": 19129,
+  "engine_started_in": "P2_high_c",
+  "engine_kept_for_next_phase": true
+ },
+ "disk": {
+  "free_gb_before": 11.54,
+  "free_gb_after": 11.19,
+  "phase_bytes": 347263759
+ },
+ "knob_checks": [
+  {
+   "name": "non_streaming_mode",
+   "via": "engine",
+   "exit_code": 0,
+   "ok": true,
+   "problems": [],
+   "deterministic_base": false,
+   "verdicts": {
+    "base_a": null,
+    "fails_nsm_invalid": "refused",
+    "succeeds_nsm_true": "accepted"
+   },
+   "enforced": true
+  }
+ ],
+ "bench": [
+  {
+   "i": 1,
+   "via": "engine",
+   "tag": "nsm_false",
+   "cmd": [
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py",
+    "--voice",
+    "shehbaz",
+    "--size",
+    "xxlong",
+    "-n",
+    "43",
+    "-c",
+    "16",
+    "--timeout",
+    "900",
+    "--extra-param",
+    "temperature=0.9",
+    "--extra-param",
+    "top_k=50",
+    "--max-new-tokens",
+    "auto",
+    "--url",
+    "http://127.0.0.1:8091",
+    "--out",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X6_nsm_long_urdu",
+    "--gpus",
+    "0",
+    "--tag",
+    "nsm_false",
+    "--meta",
+    "phase=X6_nsm_long_urdu",
+    "--meta",
+    "via=engine",
+    "--meta",
+    "engine=vllm-omni custom_voices (engine)",
+    "--meta",
+    "engine_kind=vllm",
+    "--meta",
+    "variant=custom_voices",
+    "--meta",
+    "venv=engine",
+    "--meta",
+    "gateway=",
+    "--meta",
+    "qc=false"
+   ],
+   "log": "bench_01_engine.log",
+   "exit_code": 0,
+   "timeout_s": 1800.0,
+   "duration_s": 148.5,
+   "estimate_audio_s": 3030.8,
+   "runs": [
+    "nsm_false_shehbaz_xxlong_c16_n43_nonstream_inline"
+   ]
+  },
+  {
+   "i": 2,
+   "via": "engine",
+   "tag": "nsm_true",
+   "cmd": [
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py",
+    "--voice",
+    "shehbaz",
+    "--size",
+    "xxlong",
+    "-n",
+    "43",
+    "-c",
+    "16",
+    "--param",
+    "non_streaming_mode=true",
+    "--timeout",
+    "900",
+    "--extra-param",
+    "temperature=0.9",
+    "--extra-param",
+    "top_k=50",
+    "--max-new-tokens",
+    "auto",
+    "--url",
+    "http://127.0.0.1:8091",
+    "--out",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X6_nsm_long_urdu",
+    "--gpus",
+    "0",
+    "--tag",
+    "nsm_true",
+    "--meta",
+    "phase=X6_nsm_long_urdu",
+    "--meta",
+    "via=engine",
+    "--meta",
+    "engine=vllm-omni custom_voices (engine)",
+    "--meta",
+    "engine_kind=vllm",
+    "--meta",
+    "variant=custom_voices",
+    "--meta",
+    "venv=engine",
+    "--meta",
+    "gateway=",
+    "--meta",
+    "qc=false"
+   ],
+   "log": "bench_02_engine.log",
+   "exit_code": 0,
+   "timeout_s": 1800.0,
+   "duration_s": 111.3,
+   "estimate_audio_s": 3030.8,
+   "runs": [
+    "nsm_true_shehbaz_xxlong_c16_n43_nonstream_inline"
+   ]
+  },
+  {
+   "i": 3,
+   "via": "engine",
+   "tag": "nsm_true",
+   "cmd": [
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py",
+    "--voice",
+    "trump",
+    "--size",
+    "xxlong",
+    "-n",
+    "43",
+    "-c",
+    "16",
+    "--param",
+    "non_streaming_mode=true",
+    "--timeout",
+    "900",
+    "--extra-param",
+    "temperature=0.9",
+    "--extra-param",
+    "top_k=50",
+    "--max-new-tokens",
+    "auto",
+    "--url",
+    "http://127.0.0.1:8091",
+    "--out",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X6_nsm_long_urdu",
+    "--gpus",
+    "0",
+    "--tag",
+    "nsm_true",
+    "--meta",
+    "phase=X6_nsm_long_urdu",
+    "--meta",
+    "via=engine",
+    "--meta",
+    "engine=vllm-omni custom_voices (engine)",
+    "--meta",
+    "engine_kind=vllm",
+    "--meta",
+    "variant=custom_voices",
+    "--meta",
+    "venv=engine",
+    "--meta",
+    "gateway=",
+    "--meta",
+    "qc=false"
+   ],
+   "log": "bench_03_engine.log",
+   "exit_code": 0,
+   "timeout_s": 1800.0,
+   "duration_s": 101.9,
+   "estimate_audio_s": 2772.6,
+   "runs": [
+    "nsm_true_trump_xxlong_c16_n43_nonstream_inline"
+   ]
+  }
+ ],
+ "engine": {
+  "kind": "vllm",
+  "variant": "custom_voices",
+  "venv": "engine",
+  "args": [],
+  "describe": "vllm-omni custom_voices (engine)",
+  "cmd": [
+   "bash",
+   "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/run_engine.sh",
+   "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/deploy/variants/custom_voices.yaml",
+   "8091",
+   "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine"
+  ],
+  "cwd": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server",
+  "url": "http://127.0.0.1:8091",
+  "log": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/logs/engine_P2_high_c.log",
+  "env": {
+   "CUDA_VISIBLE_DEVICES": "0",
+   "TTS_ENGINE_GPU": "0",
+   "VLLM_USE_FLASHINFER_SAMPLER": "0"
+  },
+  "yaml_path": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/deploy/variants/custom_voices.yaml",
+  "yaml_sha256": "d9ac9b2ef1a6d2b025cf6011803989d059711f967204394fb6914e3c31a49e1d",
+  "yaml": "# GENERATED by engine/make_variant.py - do not edit, regenerate instead.\n# variant:   custom_voices: production + the precomputed voices of engine/precompute_voices.py (<id>-avg: averaged speaker embedding + ICL, <id>-prompt: prompt-clip embedding + ICL)\n# base:      engine/deploy/qwen3_tts_prod.yaml (sha256 b34b6bd96f2b7237)\n# overrides: --custom-voice-dir state/custom_voices\nasync_chunk: true\nconnectors:\n  connector_of_shared_memory:\n    name: SharedMemoryConnector\n    extra:\n      codec_streaming: true\n      connector_get_sleep_s: 0.01\n      connector_get_max_wait_first_chunk: 3000\n      connector_get_max_wait: 300\n      codec_chunk_frames: 25\n      codec_left_context_frames: 72\n      initial_codec_chunk_frames: 1\n      decode_batch_max_size: 4\nstages:\n- stage_id: 0\n  max_num_seqs: 64\n  gpu_memory_utilization: 0.6\n  trust_remote_code: true\n  enable_prefix_caching: false\n  async_scheduling: true\n  max_num_batched_tokens: 32768\n  max_model_len: 4096\n  enforce_eager: false\n  devices: '0'\n  output_connectors:\n    to_stage_1: connector_of_shared_memory\n  default_sampling_params:\n    temperature: 0.9\n    top_k: 50\n    max_tokens: 4096\n    min_tokens: 2\n    repetition_penalty: 1.05\n  silence_ban_frames: 0\n  subtalker_sampling_params:\n    do_sample: true\n    temperature: 0.9\n    top_k: 50\n    top_p: 1.0\n- stage_id: 1\n  max_num_seqs: 64\n  gpu_memory_utilization: 0.18\n  enforce_eager: false\n  trust_remote_code: true\n  enable_prefix_caching: false\n  async_scheduling: true\n  max_num_batched_tokens: 65536\n  max_model_len: 65536\n  devices: '0'\n  input_connectors:\n    from_stage_0: connector_of_shared_memory\n  default_sampling_params:\n    temperature: 0.0\n    top_p: 1.0\n    top_k: -1\n    max_tokens: 65536\n    repetition_penalty: 1.0\nplatforms:\n  rocm:\n    stages:\n    - stage_id: 1\n      enforce_eager: true\n  npu:\n    stages:\n    - stage_id: 0\n      enforce_eager: false\n      compilation_config:\n        cudagraph_mode: PIECEWISE\n    - stage_id: 1\n      compilation_config:\n        cudagraph_mode: PIECEWISE\ncustom_voice_dir: state/custom_voices\n",
+  "patches": {
+   "all_applied": true,
+   "exit_code": 0,
+   "output": "rep_penalty: applied (/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni)"
+  },
+  "gpu_baseline_mib": 329,
+  "gpu_baseline_apps": [],
+  "log_offset": 6701396,
+  "ready_s": 100.0,
+  "wait_ready": {
+   "cmd": [
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/wait_ready.py",
+    "http://127.0.0.1:8091",
+    "--timeout",
+    "1700",
+    "--voices-dir",
+    "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices"
+   ],
+   "output": "ready: /health after 0 s; 2.00 s of audio in 0.95 s (inline:trump, ? codec frames)"
+  },
+  "ready_mib": 19129,
+  "ready_apps": [
+   {
+    "pid": 307319,
+    "name": "VLLM::StageEngineCoreProc_stage0_replica0_DP0",
+    "mib": 15324
+   },
+   {
+    "pid": 307972,
+    "name": "VLLM::StageEngineCoreProc_stage1_replica0_DP0",
+    "mib": 3474
+   }
+  ],
+  "voices": {
+   "status": 200,
+   "body": {
+    "voices": [
+     "bench-shehbaz",
+     "bench-trump",
+     "default",
+     "shehbaz-80c2b47dfc",
+     "shehbaz-avg",
+     "shehbaz-prompt",
+     "smoke-shehbaz",
+     "smoke-trump",
+     "trump-avg",
+     "trump-cc1c00d5e5",
+     "trump-prompt"
+    ],
+    "uploaded_voices": [
+     {
+      "name": "bench-shehbaz",
+      "consent": "benchmark",
+      "created_at": 1790293937,
+      "file_size": 1346132,
+      "mime_type": "audio/wav",
+      "embedding_source": "audio",
+      "embedding_dim": null,
+      "ref_text": "اور حملوں کے جواب میں ہماری بہادر افواج، ہمارے پُرعزم اور بہادر سپہ سالار سید عاصم منیر کی لیڈرشپ میں وطنِ عزیز کی سلامتی اور خود مختاری کے تحفظ بسم اللہ الرحمن الرحیم۔ عزیز اہلِ وطن، السلام علیکم۔"
+     },
+     {
+      "name": "bench-trump",
+      "consent": "benchmark",
+      "created_at": 1790293922,
+      "file_size": 1114156,
+      "mime_type": "audio/wav",
+      "embedding_source": "audio",
+      "embedding_dim": null,
+      "ref_text": "Almost every one of these countries wrote me a letter of thank you. The Prime Minister of Pakistan, terrific man, said that Donald Trump was responsible for saving thirty million lives and probably many more than that. The President of Azerbaijan said President Trump in six months did a miracle. It was an absolute miracle that nobody thought could be done."
+     },
+     {
+      "name": "shehbaz-80c2b47dfc",
+      "consent": "tts-gateway:shehbaz",
+      "created_at": 1790288326,
+      "file_size": 1346132,
+      "mime_type": "audio/wav",
+      "embedding_source": "audio",
+      "embedding_dim": null,
+      "ref_text": "اور حملوں کے جواب میں ہماری بہادر افواج، ہمارے پُرعزم اور بہادر سپہ سالار سید عاصم منیر کی لیڈرشپ میں وطنِ عزیز کی سلامتی اور خود مختاری کے تحفظ بسم اللہ الرحمن الرحیم۔ عزیز اہلِ وطن، السلام علیکم۔"
+     },
+     {
+      "name": "smoke-shehbaz",
+      "consent": "smoke",
+      "created_at": 1790288274,
+      "file_size": 1346132,
+      "mime_type": "audio/wav",
+      "embedding_source": "audio",
+      "embedding_dim": null,
+      "ref_text": "اور حملوں کے جواب میں ہماری بہادر افواج، ہمارے پُرعزم اور بہادر سپہ سالار سید عاصم منیر کی لیڈرشپ میں وطنِ عزیز کی سلامتی اور خود مختاری کے تحفظ بسم اللہ الرحمن الرحیم۔ عزیز اہلِ وطن، السلام علیکم۔"
+     },
+     {
+      "name": "smoke-trump",
+      "consent": "smoke",
+      "created_at": 1790288269,
+      "file_size": 1114156,
+      "mime_type": "audio/wav",
+      "embedding_source": "audio",
+      "embedding_dim": null,
+      "ref_text": "Almost every one of these countries wrote me a letter of thank you. The Prime Minister of Pakistan, terrific man, said that Donald Trump was responsible for saving thirty million lives and probably many more than that. The President of Azerbaijan said President Trump in six months did a miracle. It was an absolute miracle that nobody thought could be done."
+     },
+     {
+      "name": "trump-cc1c00d5e5",
+      "consent": "tts-gateway:trump",
+      "created_at": 1790288327,
+      "file_size": 1114156,
+      "mime_type": "audio/wav",
+      "embedding_source": "audio",
+      "embedding_dim": null,
+      "ref_text": "Almost every one of these countries wrote me a letter of thank you. The Prime Minister of Pakistan, terrific man, said that Donald Trump was responsible for saving thirty million lives and probably many more than that. The President of Azerbaijan said President Trump in six months did a miracle. It was an absolute miracle that nobody thought could be done."
+     }
+    ]
+   }
+  },
+  "log_findings": {
+   "kv_cache": [],
+   "preemption": 0,
+   "builtin_retries": 0,
+   "errors": 16,
+   "error_samples": [
+    "APIServer pid=307115) ERROR 09-25 08:17:24 [serving_speech.py:3699] [SpeechE2E] request_id=speech-ab64b43b74205b12 stream=False status=invalid_generation total_ms=78836.66 error=Qwen3-TTS Base did not emit codec EOS before its token budget (1872/1872 codec tokens); the generated audio is incomplete.",
+    "APIServer pid=307115) ERROR 09-25 08:17:25 [serving_speech.py:3699] [SpeechE2E] request_id=speech-a19277f5306e2c7c stream=False status=invalid_generation total_ms=79320.74 error=Qwen3-TTS Base did not emit codec EOS before its token budget (1881/1881 codec tokens); the generated audio is incomplete.",
+    "APIServer pid=307115) ERROR 09-25 08:17:25 [serving_speech.py:3699] [SpeechE2E] request_id=speech-b202424b25fb1723 stream=False status=invalid_generation total_ms=79623.22 error=Qwen3-TTS Base did not emit codec EOS before its token budget (1887/1887 codec tokens); the generated audio is incomplete.",
+    "APIServer pid=307115) ERROR 09-25 08:17:25 [serving_speech.py:3699] [SpeechE2E] request_id=speech-90732567a541b080 stream=False status=invalid_generation total_ms=79740.47 error=Qwen3-TTS Base did not emit codec EOS before its token budget (1890/1890 codec tokens); the generated audio is incomplete.",
+    "APIServer pid=307115) ERROR 09-25 08:17:27 [serving_speech.py:3699] [SpeechE2E] request_id=speech-8848da4072ac8dd8 stream=False status=invalid_generation total_ms=81593.42 error=Qwen3-TTS Base did not emit codec EOS before its token budget (1929/1929 codec tokens); the generated audio is incomplete.",
+    "APIServer pid=307115) ERROR 09-25 08:17:29 [serving_speech.py:3699] [SpeechE2E] request_id=speech-9780cf3356dfc3e9 stream=False status=invalid_generation total_ms=83580.22 error=Qwen3-TTS Base did not emit codec EOS before its token budget (1977/1977 codec tokens); the generated audio is incomplete.",
+    "APIServer pid=307115) ERROR 09-25 08:17:30 [serving_speech.py:3699] [SpeechE2E] request_id=speech-ba0ffc33abd94d37 stream=False status=invalid_generation total_ms=84730.28 error=Qwen3-TTS Base did not emit codec EOS before its token budget (2004/2004 codec tokens); the generated audio is incomplete.",
+    "APIServer pid=307115) ERROR 09-25 08:17:30 [serving_speech.py:3699] [SpeechE2E] request_id=speech-80372ae1ec9b765d stream=False status=invalid_generation total_ms=85103.84 error=Qwen3-TTS Base did not emit codec EOS before its token budget (2010/2010 codec tokens); the generated audio is incomplete.",
+    "APIServer pid=307115) ERROR 09-25 08:18:04 [serving_speech.py:3699] [SpeechE2E] request_id=speech-b5bf2cb1e708f8a1 stream=False status=invalid_generation total_ms=77921.18 error=Qwen3-TTS Base did not emit codec EOS before its token budget (1896/1896 codec tokens); the generated audio is incomplete.",
+    "APIServer pid=307115) ERROR 09-25 08:18:15 [serving_speech.py:3699] [SpeechE2E] request_id=speech-94740c903d58ce5f stream=False status=invalid_generation total_ms=68969.21 error=Qwen3-TTS Base did not emit codec EOS before its token budget (1791/1791 codec tokens); the generated audio is incomplete."
+   ]
+  },
+  "reused_from": "P2_high_c"
+ },
+ "versions": {
+  "runner_python": "3.12.6",
+  "gateway": {
+   "python": "3.12.6",
+   "packages": {
+    "fastapi": "0.141.1",
+    "uvicorn": "0.53.0",
+    "starlette": "1.7.0",
+    "httpx": "0.28.1",
+    "pydantic": "2.13.5",
+    "pydantic-settings": "2.15.0",
+    "numpy": "2.5.3",
+    "soundfile": "0.14.0"
+   }
+  },
+  "engine": {
+   "python": "3.12.6",
+   "packages": {
+    "vllm": "0.28.0",
+    "vllm-omni": "0.28.0",
+    "torch": "2.13.0",
+    "torchaudio": "2.11.0",
+    "transformers": "5.14.1",
+    "flashinfer-python": "0.6.16.post3",
+    "triton": "3.7.1",
+    "nvidia-cudnn-cu13": "9.20.0.48",
+    "nvidia-nccl-cu13": "2.29.7",
+    "safetensors": "0.8.0",
+    "numpy": "2.3.5"
+   }
+  },
+  "nvidia_driver": "580.95.05"
+ },
+ "gateway": {
+  "enabled": false
+ },
+ "finished": "2026-09-25T08:22:05+05:00",
+ "duration_s": 365.0,
+ "audio": {
+  "runs": 3,
+  "wav_files": 115,
+  "seconds": 7167.8,
+  "hours": 1.991
+ },
+ "commands": [
+  "# engine: reused, started in phase P2_high_c",
+  "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/bench/verify_knobs.py --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X6_nsm_long_urdu/knobs --voices-dir /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices --spec '{\"name\": \"non_streaming_mode\", \"via\": \"engine\", \"voice\": \"shehbaz\", \"fails\": {\"nsm_invalid\": {\"non_streaming_mode\": \"x\"}}, \"succeeds\": {\"nsm_true\": {\"non_streaming_mode\": true}}}'",
+  "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice shehbaz --size xxlong -n 43 -c 16 --timeout 900 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X6_nsm_long_urdu --gpus 0 --tag nsm_false --meta phase=X6_nsm_long_urdu --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false",
+  "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice shehbaz --size xxlong -n 43 -c 16 --param non_streaming_mode=true --timeout 900 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X6_nsm_long_urdu --gpus 0 --tag nsm_true --meta phase=X6_nsm_long_urdu --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false",
+  "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump --size xxlong -n 43 -c 16 --param non_streaming_mode=true --timeout 900 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X6_nsm_long_urdu --gpus 0 --tag nsm_true --meta phase=X6_nsm_long_urdu --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false"
+ ]
+}

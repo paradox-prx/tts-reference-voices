@@ -1,0 +1,24 @@
+{
+ "tag": "c1",
+ "voice": "trump",
+ "stream": false,
+ "i": 0,
+ "status": 200,
+ "total_s": 0.955,
+ "ttfa_s": 0.954,
+ "audio_s": 4.72,
+ "text": "Thank you very much. It's a great honor to be here with so many incredible people tonight.",
+ "headers": {
+  "x-request-id": "b2b35963892942c98b2327faeb350ff3",
+  "x-ai-generated": "true",
+  "x-tts-voice": "trump",
+  "x-tts-retries": "0",
+  "x-tts-queue-ms": "0",
+  "x-tts-sample-rate": "24000",
+  "x-tts-audio-seconds": "4.720",
+  "x-tts-suspect": "0",
+  "x-tts-engine-ms": "934",
+  "x-tts-qc": "off",
+  "x-tts-pace-ratio": "0.836"
+ }
+}

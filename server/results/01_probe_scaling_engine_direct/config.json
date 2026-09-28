@@ -1,0 +1,31 @@
+{
+ "url": "http://127.0.0.1:8091",
+ "voice": [
+  "shehbaz"
+ ],
+ "size": [
+  "long"
+ ],
+ "n": null,
+ "c": 8,
+ "sweep": "1,4,8,16,32,48,64",
+ "matrix": false,
+ "stream": false,
+ "format": "wav",
+ "pcm_rate": 24000,
+ "language": null,
+ "voice_mode": "inline",
+ "voice_name": null,
+ "consent": "benchmark",
+ "param": [],
+ "pools": null,
+ "takes": 1,
+ "seed": null,
+ "gpus": "0",
+ "tag": "probe_prod045",
+ "timeout": null,
+ "warmup": 2,
+ "out": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/01_probe_scaling_engine_direct",
+ "no_audio": false,
+ "params": {}
+}

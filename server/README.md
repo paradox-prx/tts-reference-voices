@@ -214,7 +214,9 @@ venvs/gateway/bin/python bench/collect.py                         # results/INDE
 ```
 
 Ad-hoc load tests: `venvs/gateway/bin/python ../bench/bench_tts.py --help` (see `../bench/README.md`). Every run writes
-its AI-labelled audio and its numbers into its own folder under `results/<phase>/<run>/` (gitignored; never publish).
+its AI-labelled audio and its numbers into its own folder under `results/<phase>/<run>/`. The numbers are in git; the
+audio is not (labelled FLAC copies are in the GitHub release, see [`results/README.md`](results/README.md);
+`bench/export_audio.py` writes them).
 
 ## Troubleshooting
 

@@ -1,0 +1,16 @@
+=== 2026-09-25T05:26:00+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice shehbaz --size prompts -c 16 --voice-mode server --voice-name '{voice}-avg' --timeout 900 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X3_custom_voice --gpus 0 --tag avg --meta phase=X3_custom_voice --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x; voice='shehbaz-avg'
+  server voice 'shehbaz-avg': listed by GET /v1/audio/voices
+warmup shehbaz 1: 0.74s ok
+warmup shehbaz 2: 0.94s ok
+shehbaz prompts (shehbaz_ur.json): shehbaz 43 texts
+  avg_shehbaz_prompts_c16_n43_nonstream_server-avg: ok 41/43 err 2 suspect 0 (short 0, long 0; pace x0.953) | lat p50=17.561s p90=19.451s p99=20.933s | 22.53x realtime (p90-wall 24.72x, stragglers 0), 0.67 req/s | gpu 19829 MiB 98.9%
+    ERR[shehbaz 16] HTTP 500: {"error": {"message": "Qwen3-TTS Base did not emit codec EOS before its token budget (970/970 codec tokens); the generated audio is incomplete.", "type": "server_error", "param": null, "code": 500}}
+    ERR[shehbaz 37] HTTP 500: {"error": {"message": "Qwen3-TTS Base did not emit codec EOS before its token budget (1018/1018 codec tokens); the generated audio is incomplete.", "type": "server_error", "param": null, "code": 500}}
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X3_custom_voice
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| prompt_shehbaz_prompts_c16_n43_nonstream_server-prompt | 43 | 42 | 1 | 0 | 17.592 | 20.23 | 21.764 | – | – | 33.6 | 23.61 | 25.41 | 0 | 0.532 | 0.7 | 19829 | 99.2 |
+| avg_shehbaz_prompts_c16_n43_nonstream_server-avg | 43 | 41 | 2 | 0 | 17.561 | 19.451 | 20.933 | – | – | 33.4 | 22.53 | 24.72 | 0 | 0.534 | 0.67 | 19829 | 98.9 |
+

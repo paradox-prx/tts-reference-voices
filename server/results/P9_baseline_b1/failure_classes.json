@@ -1,0 +1,422 @@
+{
+ "phase": "P9_baseline_b1",
+ "runs": {
+  "shehbaz_short_c1_n8_nonstream_inline [shehbaz]": {
+   "n": 8,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "clean": {
+    "k": 8,
+    "rate": 1.0,
+    "ci95": [
+     0.6756,
+     1.0
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "reasons": {},
+   "non_severe_means": {
+    "wer": 0.3633,
+    "cer_nospace": 0.1794,
+    "sim_prompt_large": 0.7094,
+    "sim_prompt_base": 0.9683,
+    "sim_heldout_large": 0.7387
+   }
+  },
+  "shehbaz_short_c4_n8_nonstream_inline [shehbaz]": {
+   "n": 8,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "moderate": {
+    "k": 1,
+    "rate": 0.125,
+    "ci95": [
+     0.0224,
+     0.4709
+    ]
+   },
+   "clean": {
+    "k": 7,
+    "rate": 0.875,
+    "ci95": [
+     0.5291,
+     0.9776
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 1,
+    "rate": 0.125,
+    "ci95": [
+     0.0224,
+     0.4709
+    ]
+   },
+   "reasons": {
+    "cer_nospace": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3008,
+    "cer_nospace": 0.139,
+    "sim_prompt_large": 0.6625,
+    "sim_prompt_base": 0.9606,
+    "sim_heldout_large": 0.7001
+   }
+  },
+  "shehbaz_xlong_c1_n4_nonstream_inline [shehbaz]": {
+   "n": 4,
+   "runaways": 0,
+   "severe": {
+    "k": 2,
+    "rate": 0.5,
+    "ci95": [
+     0.15,
+     0.85
+    ]
+   },
+   "moderate": {
+    "k": 1,
+    "rate": 0.25,
+    "ci95": [
+     0.0456,
+     0.6994
+    ]
+   },
+   "clean": {
+    "k": 1,
+    "rate": 0.25,
+    "ci95": [
+     0.0456,
+     0.6994
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 3,
+    "rate": 0.75,
+    "ci95": [
+     0.3006,
+     0.9544
+    ]
+   },
+   "reasons": {
+    "skip": 2,
+    "char_ratio<0.8": 2,
+    "repeat": 1,
+    "pace": 1,
+    "garbled": 1,
+    "voiced_gap": 1,
+    "unaligned_tail": 1,
+    "wrong_speaker": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3201,
+    "cer_nospace": 0.1353,
+    "sim_prompt_large": 0.764,
+    "sim_prompt_base": 0.986,
+    "sim_heldout_large": 0.8055
+   }
+  },
+  "shehbaz_xlong_c4_n4_nonstream_inline [shehbaz]": {
+   "n": 4,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.4899
+    ]
+   },
+   "moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.4899
+    ]
+   },
+   "clean": {
+    "k": 4,
+    "rate": 1.0,
+    "ci95": [
+     0.5101,
+     1.0
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.4899
+    ]
+   },
+   "reasons": {},
+   "non_severe_means": {
+    "wer": 0.3634,
+    "cer_nospace": 0.1457,
+    "sim_prompt_large": 0.7228,
+    "sim_prompt_base": 0.9832,
+    "sim_heldout_large": 0.7733
+   }
+  },
+  "trump_short_c1_n8_nonstream_inline [trump]": {
+   "n": 8,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "clean": {
+    "k": 8,
+    "rate": 1.0,
+    "ci95": [
+     0.6756,
+     1.0
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "reasons": {},
+   "non_severe_means": {
+    "wer": 0.0,
+    "cer_nospace": 0.0,
+    "sim_prompt_large": 0.753,
+    "sim_prompt_base": 0.9631,
+    "sim_heldout_large": 0.0
+   }
+  },
+  "trump_short_c4_n8_nonstream_inline [trump]": {
+   "n": 8,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "clean": {
+    "k": 8,
+    "rate": 1.0,
+    "ci95": [
+     0.6756,
+     1.0
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "reasons": {},
+   "non_severe_means": {
+    "wer": 0.0208,
+    "cer_nospace": 0.0066,
+    "sim_prompt_large": 0.7048,
+    "sim_prompt_base": 0.9596,
+    "sim_heldout_large": 0.0
+   }
+  },
+  "trump_xlong_c1_n4_nonstream_inline [trump]": {
+   "n": 4,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.4899
+    ]
+   },
+   "moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.4899
+    ]
+   },
+   "clean": {
+    "k": 4,
+    "rate": 1.0,
+    "ci95": [
+     0.5101,
+     1.0
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.4899
+    ]
+   },
+   "reasons": {},
+   "non_severe_means": {
+    "wer": 0.0104,
+    "cer_nospace": 0.0083,
+    "sim_prompt_large": 0.8541,
+    "sim_prompt_base": 0.9847,
+    "sim_heldout_large": 0.0
+   }
+  },
+  "trump_xlong_c4_n4_nonstream_inline [trump]": {
+   "n": 4,
+   "runaways": 0,
+   "severe": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.4899
+    ]
+   },
+   "moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.4899
+    ]
+   },
+   "clean": {
+    "k": 4,
+    "rate": 1.0,
+    "ci95": [
+     0.5101,
+     1.0
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 0,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.4899
+    ]
+   },
+   "reasons": {},
+   "non_severe_means": {
+    "wer": 0.0,
+    "cer_nospace": 0.0,
+    "sim_prompt_large": 0.8472,
+    "sim_prompt_base": 0.988,
+    "sim_heldout_large": 0.0
+   }
+  },
+  "ALL": {
+   "n": 48,
+   "runaways": 0,
+   "severe": {
+    "k": 2,
+    "rate": 0.0417,
+    "ci95": [
+     0.0115,
+     0.1398
+    ]
+   },
+   "moderate": {
+    "k": 2,
+    "rate": 0.0417,
+    "ci95": [
+     0.0115,
+     0.1398
+    ]
+   },
+   "clean": {
+    "k": 44,
+    "rate": 0.9167,
+    "ci95": [
+     0.8045,
+     0.9671
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 4,
+    "rate": 0.0833,
+    "ci95": [
+     0.0329,
+     0.1955
+    ]
+   },
+   "reasons": {
+    "skip": 2,
+    "char_ratio<0.8": 2,
+    "cer_nospace": 1,
+    "repeat": 1,
+    "pace": 1,
+    "garbled": 1,
+    "voiced_gap": 1,
+    "unaligned_tail": 1,
+    "wrong_speaker": 1
+   },
+   "non_severe_means": {
+    "wer": 0.1655,
+    "cer_nospace": 0.0758,
+    "sim_prompt_large": 0.7361,
+    "sim_prompt_base": 0.9698,
+    "sim_heldout_large": 0.3525
+   }
+  }
+ }
+}

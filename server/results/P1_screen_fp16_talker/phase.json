@@ -1,0 +1,200 @@
+{
+ "phase": "P1_screen_fp16_talker",
+ "note": "variant screen fp16_talker (engine): both voices, medium, c=1,8,32 (n=8,16,32), non-stream",
+ "status": "failed",
+ "started": "2026-09-25T04:02:23+05:00",
+ "stub": false,
+ "argv": [
+  "bench/run_plan.py",
+  "--only",
+  "P1_screen_*"
+ ],
+ "plan": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/bench/plan.py",
+ "plan_sha256": "c341ee6c0de9e6f3b495dfc48297e574300d0f5585cd9767e3b6186de16aea34",
+ "spec": {
+  "engine": {
+   "kind": "vllm",
+   "variant": "fp16_talker",
+   "venv": "engine",
+   "args": []
+  },
+  "gateway": null,
+  "qc": false,
+  "kind": "perf",
+  "optional": false,
+  "fresh_engine": false,
+  "checks": [],
+  "bench": [
+   {
+    "args": [
+     "--voice",
+     "trump",
+     "shehbaz",
+     "--size",
+     "medium",
+     "--sweep",
+     "1,8,32",
+     "--n-rule",
+     "8:2:32",
+     "--extra-param",
+     "temperature=0.9",
+     "--extra-param",
+     "top_k=50",
+     "--max-new-tokens",
+     "auto"
+    ],
+    "via": "engine",
+    "tag": "",
+    "timeout_s": null
+   }
+  ]
+ },
+ "estimate": {
+  "audio_h": 0.24,
+  "audio_gb": 0.04,
+  "requests": 116,
+  "runs": 6,
+  "gpu_min": 5.9
+ },
+ "host": {
+  "hostname": "vector",
+  "os": "Ubuntu 25.04",
+  "kernel": "6.14.0-37-generic",
+  "cpu": "Intel(R) Core(TM) i9-14900K",
+  "cpus": 32,
+  "mem_total": "32037216 kB",
+  "cpu_governor": "powersave",
+  "cpu_epp": "balance_performance",
+  "no_turbo": "0",
+  "tz": "PKT +0500",
+  "gpu": "index, name, uuid, driver_version, vbios_version, power.limit [W], clocks.max.sm [MHz], clocks.max.memory [MHz], pcie.link.gen.max, pcie.link.width.max, memory.total [MiB]\n0, NVIDIA GeForce RTX 3090, GPU-b4c11581-9cbf-cde4-a29c-4c9ceb006495, 580.95.05, 94.02.42.00.F1, 370.00 W, 2115 MHz, 9751 MHz, 4, 16, 24576 MiB"
+ },
+ "git": {
+  "head": "82f73945a8993f90e59e03c82a7549fac06a2ef0",
+  "branch": "qwen3-omni-bench",
+  "dirty_files": [
+   "erver/eval/lab/auto_vs_forced.py",
+   "server/eval/lab/refs_manifest.jsonl",
+   "server/eval/lab/sim_eval.py",
+   "server/eval/lab/test_checks.py",
+   "server/eval/lab/test_checks3.py",
+   "server/eval/lab/test_norm.py",
+   "server/eval/lab/test_norm2.py",
+   "server/eval/lab/word_timing.py",
+   "server/baseline/",
+   "server/eval/README.md",
+   "server/eval/calibration/",
+   "server/eval/calibration_report.py",
+   "server/eval/fetch_models.py",
+   "server/eval/gpu_check.py",
+   "server/eval/make_synth.py",
+   "server/eval/qc_latency.py",
+   "server/eval/requirements-eval.txt",
+   "server/eval/retry_sim.py",
+   "server/eval/run.sh",
+   "server/eval/score_run.py",
+   "server/eval/sim_eval.py",
+   "server/eval/stats.py",
+   "server/eval/takes.py",
+   "server/eval/tests/",
+   "server/qc/"
+  ]
+ },
+ "sources": {
+  "bench_tts.py": "db5a949b28d034cf5a4dfc1f89d61679adcb629fa84e06c59736f30df23de71d",
+  "run_plan.py": "26d654c366d1aa9355b48ca0d47700bd808875668b8452c57b53b0092a04c29d",
+  "verify_knobs.py": "bd3841f03395e9af83a755333e50f04b6936873d5c9bee8233aea8fc8a9e30d4",
+  "gateway": "1cf22a6da296a6815d836ec2e337da8bbb84738de5d9d98793141b8ce73b63ee",
+  "engine_patches": "4510f04e5730b0acf5bced11ea2872c89440943096783bd8d10edae81713f797",
+  "run_engine.sh": "bacdeb2639b70a6b9c4b225cd5db70156d9f5b4cf56ef27efbf8d5367eee88d8",
+  "baseline": "35954bca154518d580ce9383ac1fc3e80b2453b7b3194829be1283b4bdeb8e78",
+  "qc": "473a2d6bf3292069c20c7fd8d87361a7e574ba410f11ad143fa1ad49082bf30c",
+  "pace.json": "de05f2fc5ba3c099da8148b9fb226edf30e4318e3f128583a9636974c0ab3538"
+ },
+ "gpu": {
+  "index": "0",
+  "phase_start_mib": 321,
+  "phase_start_apps": [],
+  "baseline_mib": 321,
+  "baseline_apps": [],
+  "engine_stopped_with": "SIGINT",
+  "engine_started_in": "P1_screen_fp16_talker",
+  "released": true,
+  "after_stop_mib": 320,
+  "after_stop_apps": []
+ },
+ "disk": {
+  "free_gb_before": 14.93,
+  "free_gb_after": 14.6,
+  "phase_bytes": 125878
+ },
+ "knob_checks": [],
+ "bench": [],
+ "engine": {
+  "kind": "vllm",
+  "variant": "fp16_talker",
+  "venv": "engine",
+  "args": [],
+  "describe": "vllm-omni fp16_talker (engine)",
+  "cmd": [
+   "bash",
+   "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/run_engine.sh",
+   "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/deploy/variants/fp16_talker.yaml",
+   "8091",
+   "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine"
+  ],
+  "cwd": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server",
+  "url": "http://127.0.0.1:8091",
+  "log": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/logs/engine_P1_screen_fp16_talker.log",
+  "env": {
+   "CUDA_VISIBLE_DEVICES": "0",
+   "TTS_ENGINE_GPU": "0",
+   "VLLM_USE_FLASHINFER_SAMPLER": "0"
+  },
+  "yaml_path": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/deploy/variants/fp16_talker.yaml",
+  "yaml_sha256": "f311877370962813753d4f8f76ce308ab9aec0256620c48f3078b551c0143711",
+  "yaml": "# GENERATED by engine/make_variant.py - do not edit, regenerate instead.\n# variant:   fp16_talker: talker + code predictor in fp16\n# base:      engine/deploy/qwen3_tts_prod.yaml (sha256 b34b6bd96f2b7237)\n# overrides: --talker-dtype float16\nasync_chunk: true\nconnectors:\n  connector_of_shared_memory:\n    name: SharedMemoryConnector\n    extra:\n      codec_streaming: true\n      connector_get_sleep_s: 0.01\n      connector_get_max_wait_first_chunk: 3000\n      connector_get_max_wait: 300\n      codec_chunk_frames: 25\n      codec_left_context_frames: 72\n      initial_codec_chunk_frames: 1\n      decode_batch_max_size: 4\nstages:\n- stage_id: 0\n  max_num_seqs: 64\n  gpu_memory_utilization: 0.6\n  trust_remote_code: true\n  enable_prefix_caching: false\n  async_scheduling: true\n  max_num_batched_tokens: 32768\n  max_model_len: 4096\n  enforce_eager: false\n  devices: '0'\n  output_connectors:\n    to_stage_1: connector_of_shared_memory\n  default_sampling_params:\n    temperature: 0.9\n    top_k: 50\n    max_tokens: 4096\n    min_tokens: 2\n    repetition_penalty: 1.05\n  silence_ban_frames: 0\n  subtalker_sampling_params:\n    do_sample: true\n    temperature: 0.9\n    top_k: 50\n    top_p: 1.0\n  dtype: float16\n- stage_id: 1\n  max_num_seqs: 64\n  gpu_memory_utilization: 0.18\n  enforce_eager: false\n  trust_remote_code: true\n  enable_prefix_caching: false\n  async_scheduling: true\n  max_num_batched_tokens: 65536\n  max_model_len: 65536\n  devices: '0'\n  input_connectors:\n    from_stage_0: connector_of_shared_memory\n  default_sampling_params:\n    temperature: 0.0\n    top_p: 1.0\n    top_k: -1\n    max_tokens: 65536\n    repetition_penalty: 1.0\nplatforms:\n  rocm:\n    stages:\n    - stage_id: 1\n      enforce_eager: true\n  npu:\n    stages:\n    - stage_id: 0\n      enforce_eager: false\n      compilation_config:\n        cudagraph_mode: PIECEWISE\n    - stage_id: 1\n      compilation_config:\n        cudagraph_mode: PIECEWISE\n",
+  "patches": {
+   "all_applied": true,
+   "exit_code": 0,
+   "output": "rep_penalty: applied (/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni)"
+  },
+  "gpu_baseline_mib": 321,
+  "gpu_baseline_apps": [],
+  "log_offset": 0,
+  "ready_s": 171.1,
+  "log_findings": {
+   "kv_cache": [
+    "(StageEngineCoreProc_stage0_replica0 pid=108415) INFO 09-25 04:02:59 [kv_cache_utils.py:1869] GPU KV cache size: 91,120 tokens, Maximum concurrency for 4,096 tokens per request: 22.25x"
+   ],
+   "preemption": 2,
+   "builtin_retries": 0,
+   "errors": 19,
+   "error_samples": [
+    "(StageEngineCoreProc_stage0_replica0 pid=108415) ERROR 09-25 04:05:15 [stage_engine_core_proc.py:193] Traceback (most recent call last):",
+    "(APIServer pid=108200) ERROR 09-25 04:05:15 [stage_pool.py:1184] [StagePool] _poll_stage_raw failed for stage-0 replica-0",
+    "(APIServer pid=108200) ERROR 09-25 04:05:15 [stage_pool.py:1184] Traceback (most recent call last):",
+    "(APIServer pid=108200) ERROR 09-25 04:05:15 [stage_pool.py:1184]   File \"/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni/engine/stage_pool.py\", line 1175, in poll_llm_raw_output",
+    "(APIServer pid=108200) ERROR 09-25 04:05:15 [stage_pool.py:1184]     return await asyncio.wait_for(",
+    "(APIServer pid=108200) ERROR 09-25 04:05:15 [stage_pool.py:1184]            ^^^^^^^^^^^^^^^^^^^^^^^",
+    "(APIServer pid=108200) ERROR 09-25 04:05:15 [stage_pool.py:1184]   File \"/home/vector/.pyenv/versions/3.12.6/lib/python3.12/asyncio/tasks.py\", line 520, in wait_for",
+    "(APIServer pid=108200) ERROR 09-25 04:05:15 [stage_pool.py:1184]     return await fut",
+    "(APIServer pid=108200) ERROR 09-25 04:05:15 [stage_pool.py:1184]            ^^^^^^^^^",
+    "(APIServer pid=108200) ERROR 09-25 04:05:15 [stage_pool.py:1184]   File \"/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni/engine/stage_pool.py\", line 1122, in _poll_stage_raw"
+   ]
+  }
+ },
+ "error": "wait_ready.py failed (2): error: speech -> 500: b'{\"error\":{\"message\":\"EngineCore encountered an issue. See stack trace (above) for the root cause.\",\"type\":\"InternalServerError\",\"param\":null,\"code\":500,\"request_id\":\"speech-831e1c93a3845181\",\"error_stage_id\":0}}'",
+ "finished": "2026-09-25T04:05:16+05:00",
+ "duration_s": 173.0,
+ "audio": {
+  "runs": 0,
+  "wav_files": 0,
+  "seconds": 0.0,
+  "hours": 0.0
+ },
+ "commands": [
+  "cd /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server && CUDA_VISIBLE_DEVICES=0 TTS_ENGINE_GPU=0 VLLM_USE_FLASHINFER_SAMPLER=0 bash /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/run_engine.sh /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/deploy/variants/fp16_talker.yaml 8091 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine >> /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/logs/engine_P1_screen_fp16_talker.log 2>&1 &",
+  "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/wait_ready.py http://127.0.0.1:8091 --timeout 1629 --voices-dir /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices"
+ ]
+}

@@ -1,0 +1,97 @@
+{
+ "name": "custom_voices",
+ "url": "http://127.0.0.1:8091",
+ "voice": "shehbaz",
+ "text": "میرے پیارے بہنو اور بھائیو، جب میں آپ کے درمیان آتا ہوں تو میرا دل خوشی سے بھر جاتا ہے۔",
+ "seed": null,
+ "spec": {
+  "name": "custom_voices",
+  "via": "engine",
+  "voice": "shehbaz",
+  "base": {
+   "voice": "shehbaz-prompt",
+   "ref_audio": null,
+   "ref_text": null
+  },
+  "succeeds": {
+   "avg": {
+    "voice": "shehbaz-avg"
+   }
+  },
+  "listed": [
+   "trump-avg",
+   "trump-prompt",
+   "shehbaz-avg",
+   "shehbaz-prompt"
+  ]
+ },
+ "deterministic_base": false,
+ "takes": [
+  {
+   "label": "listed",
+   "status": 200,
+   "error": null,
+   "listed": [
+    "bench-shehbaz",
+    "bench-trump",
+    "default",
+    "shehbaz-80c2b47dfc",
+    "shehbaz-avg",
+    "shehbaz-prompt",
+    "smoke-shehbaz",
+    "smoke-trump",
+    "trump-avg",
+    "trump-cc1c00d5e5",
+    "trump-prompt"
+   ],
+   "verdict": "listed"
+  },
+  {
+   "label": "base_a",
+   "status": 200,
+   "error": null,
+   "latency_s": 1.36,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto",
+    "voice": "shehbaz-prompt"
+   },
+   "headers": {
+    "x-vllm-omni-input-tokens": "409",
+    "x-vllm-omni-output-tokens": "92",
+    "x-vllm-omni-total-tokens": "501",
+    "x-vllm-omni-input-text-tokens": "58",
+    "x-vllm-omni-input-audio-tokens": "351"
+   },
+   "audio_s": 7.28,
+   "pcm_sha256": "c38e1bdfcb98e57d9275c47fac6ce6962751eb3968dd0c4fa3fc82df24bfd2cc",
+   "file": "base_a.wav"
+  },
+  {
+   "label": "succeeds_avg",
+   "status": 200,
+   "error": null,
+   "latency_s": 1.699,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto",
+    "voice": "shehbaz-avg"
+   },
+   "headers": {
+    "x-vllm-omni-input-tokens": "409",
+    "x-vllm-omni-output-tokens": "117",
+    "x-vllm-omni-total-tokens": "526",
+    "x-vllm-omni-input-text-tokens": "58",
+    "x-vllm-omni-input-audio-tokens": "351"
+   },
+   "audio_s": 9.28,
+   "pcm_sha256": "d1bca94b692ef72b763e8301fff77461e7b3e2ead9dadc3c8e738b01d55cf0fc",
+   "file": "succeeds_avg.wav",
+   "verdict": "accepted"
+  }
+ ],
+ "problems": [],
+ "ok": true
+}

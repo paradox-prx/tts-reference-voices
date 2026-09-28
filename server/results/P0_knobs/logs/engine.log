@@ -1,0 +1,770 @@
+
+=== 2026-09-25T04:15:14+05:00 run_plan: cd /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server && CUDA_VISIBLE_DEVICES=0 TTS_ENGINE_GPU=0 VLLM_USE_FLASHINFER_SAMPLER=0 bash /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/run_engine.sh /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/deploy/variants/custom_voices.yaml 8091 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine
+run_engine: GPU 0, port 8091, /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/engine/deploy/variants/custom_voices.yaml, venv /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine, model /home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3, nvcc 13.4, flashinfer sampler 0, voices /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/state/custom_voices, auth off
+INFO 09-25 04:15:19 [patch.py:252] NVFP4 W4A4 weight_scale NaN-clamp: installed.
+INFO 09-25 04:15:19 [patch.py:503] inductor factorable-divisibility patch: installed.
+INFO 09-25 04:15:19 [patch.py:568] [cumem-cuda] CuMemAllocator._python_free_callback patched: asleep guard extended to all platforms.
+INFO 09-25 04:15:20 [main.py:54] Delegating entrypoint handling to vllm-omni
+INFO 09-25 04:15:20 [logo.py:52]        [97m█     █     █▄   ▄█[0m    [34m   ▄▀▀[38;5;208m▀▀▄ [0m[97m█▄   ▄█ █▄    █ ▀█▀ [0m
+INFO 09-25 04:15:20 [logo.py:52]  [38;5;208m▄▄[0m [34m▄█[0m [97m█     █     █ ▀▄▀ █[0m[97m  ▄▄▄ [0m[34m █    [38;5;208m█ [0m[97m█ ▀▄▀ █ █ ▀▄  █  █  [0m
+INFO 09-25 04:15:20 [logo.py:52]   [38;5;208m█[0m[34m▄█▀[0m [97m█     █     █     █[0m[97m      [0m[34m █    [38;5;208m█ [0m[97m█     █ █   ▀▄█  █  [0m
+INFO 09-25 04:15:20 [logo.py:52]    [34m▀▀[0m  [97m▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀[0m      [35m  ▀▀▀▀  [0m[97m▀     ▀ ▀     ▀ ▀▀▀ [0m
+INFO 09-25 04:15:20 [logo.py:52] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [api_utils.py:333] vLLM server version 0.28.0, serving model /home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [api_utils.py:272] non-default args: {'model_tag': '/home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3', 'host': '127.0.0.1', 'port': 8091, 'disable_access_log_for_endpoints': '/health,/metrics', 'model': '/home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3', 'trust_remote_code': True, 'served_model_name': ['Qwen/Qwen3-TTS-12Hz-1.7B-Base']}
+[0;36m(APIServer pid=123108)[0;0m /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/transformers/modeling_rope_utils.py:1036: FutureWarning: `rope_config_validation` is deprecated and has been removed. Its functionality has been moved to RotaryEmbeddingConfigMixin.validate_rope method. PreTrainedConfig inherits this class, so please call self.validate_rope() instead. Also, make sure to use the new rope_parameters syntax. You can call self.standardize_rope_params() in the meantime.
+[0;36m(APIServer pid=123108)[0;0m   warnings.warn(
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] Model config: codec_eos_token_id must be `None` or an integer within the vocabulary (between 0 and 3071), got 4198. This may result in unexpected behavior.
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [omni_base.py:205] [AsyncOmni] Initializing with model /home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [async_omni_engine.py:160] [AsyncOmniEngine] Initializing with model /home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'mrope_section', 'interleaved'}
+[0;36m(APIServer pid=123108)[0;0m [transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'mrope_section', 'interleaved'}
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [async_omni_engine.py:259] [AsyncOmniEngine] Launching Orchestrator thread with 2 stages
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [initialization.py:356] Loaded OmniTransferConfig with 1 connector configurations
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'mrope_section', 'interleaved'}
+[0;36m(APIServer pid=123108)[0;0m [transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'mrope_section', 'interleaved'}
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [model.py:672] Resolved architecture: Qwen3TTSTalkerForConditionalGeneration
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [model.py:1965] Using max model len 4096
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [scheduler.py:242] Chunked prefill is enabled with max_num_batched_tokens=32768.
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [kernel.py:308] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [model.py:672] Resolved architecture: Qwen3TTSCode2Wav
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [model.py:1965] Using max model len 65536
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [scheduler.py:242] Chunked prefill is enabled with max_num_batched_tokens=65536.
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:20 [kernel.py:308] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:21 [stage_utils.py:174] Stage 0 logical-to-physical device mapping: 0->0
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:21 [stage_runtime.py:559] [stage_init] Stage-0 set runtime devices: 0
+[32mINFO[0m [90m09-25 04:15:25[0m [90m[patch.py:252][0m NVFP4 W4A4 weight_scale NaN-clamp: installed.
+[32mINFO[0m [90m09-25 04:15:25[0m [90m[patch.py:503][0m inductor factorable-divisibility patch: installed.
+[32mINFO[0m [90m09-25 04:15:25[0m [90m[patch.py:568][0m [cumem-cuda] CuMemAllocator._python_free_callback patched: asleep guard extended to all platforms.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:26[0m [90m[core.py:122][0m Initializing a V1 LLM engine (v0.28.0) with config: model='/home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3', speculative_config=None, tokenizer='/home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=4096, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=Qwen/Qwen3-TTS-12Hz-1.7B-Base, enable_prefix_caching=False, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::qwen_gdn_attention_core', 'vllm::qwen_gdn_attention_core_fused_norm_packed', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::hpc_rope_norm_forward', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [32768], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 128, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_jit_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto')
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:27[0m [90m[parallel_state.py:1638][0m world_size=1 rank=0 local_rank=0 distributed_init_method=file:///tmp/vllm_dist_0b964228881747e2842e0cecd82bfe87 backend=nccl
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:27[0m [90m[parallel_state.py:1982][0m rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [33mWARNING[0m [90m09-25 04:15:27[0m [90m[gpu_ar_worker.py:118][0m OMNI GPUARWorker forces v1 model runner for omni hooks.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:27[0m [90m[topk_topp_sampler.py:46][0m FlashInfer top-p/top-k sampling disabled via VLLM_USE_FLASHINFER_SAMPLER=0.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:27[0m [90m[factory.py:46][0m Created connector: SharedMemoryConnector
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [33mWARNING[0m [90m09-25 04:15:27[0m [90m[base.py:193][0m [LLM Worker 0] Sleep Mode DISABLED.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [33mWARNING[0m [90m09-25 04:15:27[0m [90m[base.py:193][0m [LLM Worker 0] Sleep Mode DISABLED.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:27[0m [90m[gpu_model_runner.py:5419][0m Starting to load model /home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3...
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:28[0m [90m[cuda.py:486][0m Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:28[0m [90m[flash_attn.py:866][0m Using FlashAttention version 2
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:28[0m [90m[configuration_qwen3_tts_tokenizer_v2.py:156][0m encoder_config is None. Initializing encoder with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:28[0m [90m[configuration_qwen3_tts_tokenizer_v2.py:159][0m decoder_config is None. Initializing decoder with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:28[0m [90m[speaker_cache.py:239][0m Speaker cache ready (max_bytes=536870912)
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:28[0m [90m[qwen3_tts_talker.py:558][0m Loaded 4 precomputed Qwen3-TTS custom voice profile(s) from state/custom_voices
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:28[0m [90m[weight_utils.py:858][0m Filesystem type for checkpoints: EXT4. Checkpoint size: 3.59 GiB. Available RAM: 21.56 GiB.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:28[0m [90m[weight_utils.py:881][0m Auto-prefetch is disabled because the filesystem (EXT4) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:00<00:00,  2.60it/s]
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:00<00:00,  2.60it/s]
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m 
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:28[0m [90m[weight_utils.py:858][0m Filesystem type for checkpoints: EXT4. Checkpoint size: 0.64 GiB. Available RAM: 21.54 GiB.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:00<00:00, 31.43it/s]
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m 
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:28[0m [90m[weight_utils.py:858][0m Filesystem type for checkpoints: EXT4. Checkpoint size: 0.64 GiB. Available RAM: 21.53 GiB.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:00<00:00, 63.04it/s]
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m 
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:28[0m [90m[qwen3_tts_talker.py:1133][0m Loaded 606 weights for Qwen3TTSTalkerForConditionalGeneration
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:28[0m [90m[default_loader.py:430][0m Loading weights took 0.58 seconds
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:29[0m [90m[gpu_model_runner.py:5515][0m Model loading took 3.89 GiB memory and 1.116319 seconds
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:29[0m [90m[configuration_qwen3_tts.py:483][0m talker_config is None. Initializing talker model with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:29[0m [90m[configuration_qwen3_tts.py:486][0m speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/transformers/modeling_rope_utils.py:1036: FutureWarning: `rope_config_validation` is deprecated and has been removed. Its functionality has been moved to RotaryEmbeddingConfigMixin.validate_rope method. PreTrainedConfig inherits this class, so please call self.validate_rope() instead. Also, make sure to use the new rope_parameters syntax. You can call self.standardize_rope_params() in the meantime.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m   warnings.warn(
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:29[0m [90m[configuration_qwen3_tts.py:437][0m code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [transformers] Model config: codec_eos_token_id must be `None` or an integer within the vocabulary (between 0 and 3071), got 4198. This may result in unexpected behavior.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:29[0m [90m[configuration_qwen3_tts.py:437][0m code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:29[0m [90m[configuration_qwen3_tts.py:437][0m code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:30[0m [90m[caching.py:343][0m reconstructed serializable fn from standalone compile artifacts. num_artifacts=4 num_submods=29
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:30[0m [90m[decorators.py:311][0m Directly load AOT compilation from path /home/vector/.cache/vllm/torch_compile_cache/torch_aot_compile/91e98fe9db3c61bf32b40587c7451b7111e94d96d8f071c40e899c6ab041cfe1/rank_0_0/model
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:30[0m [90m[monitor.py:53][0m torch.compile took 0.43 s in total
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:30[0m [90m[monitor.py:81][0m Initial profiling/warmup run took 0.18 s
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:31[0m [90m[base.py:147][0m Available KV cache memory: 9.73 GiB (process-scoped)
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:31[0m [90m[kv_cache_utils.py:1869][0m GPU KV cache size: 91,120 tokens, Maximum concurrency for 4,096 tokens per request: 22.25x
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [33mWARNING[0m [90m09-25 04:15:31[0m [90m[base.py:193][0m [LLM Worker 0] Sleep Mode DISABLED.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:32[0m [90m[gpu_model_runner.py:7002][0m Rank 0: Torch profiler disabled for CUDA graph capture
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/19 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  26%|██▋       | 5/19 [00:00<00:00, 49.67it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  63%|██████▎   | 12/19 [00:00<00:00, 57.87it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 19/19 [00:00<00:00, 61.81it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 19/19 [00:00<00:00, 59.95it/s]
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m Capturing CUDA graphs (decode, FULL):   0%|          | 0/11 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL):  73%|███████▎  | 8/11 [00:00<00:00, 73.09it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 11/11 [00:00<00:00, 75.17it/s]
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:33[0m [90m[gpu_model_runner.py:7048][0m Graph capturing finished in 1 secs, took 0.17 GiB
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:33[0m [90m[gpu_ar_model_runner.py:546][0m Capturing talker_mtp graphs for sizes [128, 120, 112, 104, 96, 88, 80, 72, 64, 56, 48, 40, 32, 24, 16, 8, 4, 2, 1]
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:39[0m [90m[qwen3_code_predictor.py:901][0m code_predictor: warmup done for buckets [1, 2, 4, 8, 16, 32, 64]
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:39[0m [90m[qwen3_code_predictor.py:765][0m code_predictor: torch.compile (dynamic=False, no epilogue fusion)
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:46[0m [90m[gpu_ar_model_runner.py:583][0m Captured talker_mtp graphs for 19 sizes
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:46[0m [90m[gpu_worker.py:804][0m Free memory on device (22.98/23.56 GiB) on startup. Desired GPU memory utilization is (0.6, 14.14 GiB). Actual usage is 4.15 GiB for consumed memory (weights + non-torch), 1.5 GiB for peak activation, and 0.17 GiB for CUDAGraph memory. Replace gpu_memory_utilization config with `--kv-cache-memory=8764404532` (8.16 GiB) to fit into requested memory, or `--kv-cache-memory=18258919424` (17.0 GiB) to fully utilize gpu memory. Current kv cache memory in use is 9.73 GiB.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:47[0m [90m[jit_monitor.py:85][0m Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:47[0m [90m[torch_utils.py:262][0m Reducing Torch threads from 24 to 1 for serving. Set OMP_NUM_THREADS in the external environment to override.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:47[0m [90m[core.py:347][0m init engine (profile, create kv cache, warmup model) took 18.09 s (compilation: 0.43 s)
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/transformers/modeling_rope_utils.py:1036: FutureWarning: `rope_config_validation` is deprecated and has been removed. Its functionality has been moved to RotaryEmbeddingConfigMixin.validate_rope method. PreTrainedConfig inherits this class, so please call self.validate_rope() instead. Also, make sure to use the new rope_parameters syntax. You can call self.standardize_rope_params() in the meantime.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m   warnings.warn(
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:47[0m [90m[configuration_qwen3_tts.py:483][0m talker_config is None. Initializing talker model with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:47[0m [90m[configuration_qwen3_tts.py:486][0m speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:47[0m [90m[configuration_qwen3_tts.py:437][0m code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:47[0m [90m[configuration_qwen3_tts.py:437][0m code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'mrope_section', 'interleaved'}
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'mrope_section', 'interleaved'}
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [33mWARNING[0m [90m09-25 04:15:47[0m [90m[scheduler.py:182][0m Using custom scheduler class vllm_omni.core.sched.omni_ar_scheduler.OmniARAsyncScheduler. This scheduler interface is not public and compatibility may not be maintained. If you have subclassed Scheduler instead of AsyncScheduler, you will see degraded performance due to async scheduling being disabled.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:47[0m [90m[factory.py:46][0m Created connector: SharedMemoryConnector
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:15:47[0m [90m[kernel.py:308][0m Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:47 [stage_runtime.py:595] [StageRuntime] Stage 0 engine startup completed
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:47 [stage_engine_core_client.py:158] [StageEngineCoreClient] stage-0 [rep-0] initializing EngineCore
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:47 [stage_engine_core_client.py:214] [StageEngineCoreClient] stage-0 [rep-0] EngineCore running
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:47 [stage_runtime.py:610] [StageRuntime] Stage 0 initialized
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:47 [stage_utils.py:174] Stage 1 logical-to-physical device mapping: 0->0
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:47 [stage_runtime.py:559] [stage_init] Stage-1 set runtime devices: 0
+[32mINFO[0m [90m09-25 04:15:52[0m [90m[patch.py:252][0m NVFP4 W4A4 weight_scale NaN-clamp: installed.
+[32mINFO[0m [90m09-25 04:15:52[0m [90m[patch.py:503][0m inductor factorable-divisibility patch: installed.
+[32mINFO[0m [90m09-25 04:15:52[0m [90m[patch.py:568][0m [cumem-cuda] CuMemAllocator._python_free_callback patched: asleep guard extended to all platforms.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:53[0m [90m[core.py:122][0m Initializing a V1 LLM engine (v0.28.0) with config: model='/home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3', speculative_config=None, tokenizer='/home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=65536, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=Qwen/Qwen3-TTS-12Hz-1.7B-Base, enable_prefix_caching=False, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::qwen_gdn_attention_core', 'vllm::qwen_gdn_attention_core_fused_norm_packed', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::hpc_rope_norm_forward', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [65536], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 128, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_jit_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto')
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:53[0m [90m[parallel_state.py:1638][0m world_size=1 rank=0 local_rank=0 distributed_init_method=file:///tmp/vllm_dist_97cc71ac6eca4dd5842a24285d1de2ef backend=nccl
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:53[0m [90m[parallel_state.py:1982][0m rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:54[0m [90m[gpu_generation_worker.py:101][0m OMNI GPUGenerationWorker forces v1 model runner for omni hooks.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:54[0m [90m[topk_topp_sampler.py:46][0m FlashInfer top-p/top-k sampling disabled via VLLM_USE_FLASHINFER_SAMPLER=0.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:54[0m [90m[factory.py:46][0m Created connector: SharedMemoryConnector
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:54[0m [90m[base.py:193][0m [LLM Worker 0] Sleep Mode DISABLED.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:54[0m [90m[base.py:193][0m [LLM Worker 0] Sleep Mode DISABLED.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:54[0m [90m[gpu_model_runner.py:5419][0m Starting to load model /home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3...
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:54[0m [90m[configuration_qwen3_tts_tokenizer_v2.py:156][0m encoder_config is None. Initializing encoder with default values
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:54[0m [90m[configuration_qwen3_tts_tokenizer_v2.py:159][0m decoder_config is None. Initializing decoder with default values
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:54[0m [90m[vllm.py:2635][0m `torch.compile` is turned on, but the model /home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3 does not support it. Please open an issue on GitHub if you want it to be supported.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:54[0m [90m[weight_utils.py:858][0m Filesystem type for checkpoints: EXT4. Checkpoint size: 3.59 GiB. Available RAM: 19.64 GiB.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:54[0m [90m[weight_utils.py:881][0m Auto-prefetch is disabled because the filesystem (EXT4) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:00<00:00, 204.30it/s]
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m 
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:54[0m [90m[weight_utils.py:858][0m Filesystem type for checkpoints: EXT4. Checkpoint size: 0.64 GiB. Available RAM: 19.64 GiB.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:00<00:00, 18.13it/s]
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m 
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:54[0m [90m[modeling_qwen3_tts_tokenizer_v2.py:865][0m Precomputed exp caches for 29 SnakeBeta activations
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:54[0m [90m[segmented_graph_wrapper.py:326][0m Captured ICL prefix CUDA Graph for batch=1
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:55[0m [90m[segmented_graph_wrapper.py:331][0m Captured xvec prefix CUDA Graph for batch=1
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:55[0m [90m[segmented_graph_wrapper.py:335][0m Starting CUDA Graph warmup for 4 shapes: batch_sizes=[1] seq_lens=[26, 51, 76, 97]
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:55[0m [90m[segmented_graph_wrapper.py:346][0m Captured combined suffix CUDA Graph for batch=1 size=26
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:55[0m [90m[segmented_graph_wrapper.py:346][0m Captured combined suffix CUDA Graph for batch=1 size=51
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:55[0m [90m[segmented_graph_wrapper.py:346][0m Captured combined suffix CUDA Graph for batch=1 size=76
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:55[0m [90m[segmented_graph_wrapper.py:346][0m Captured combined suffix CUDA Graph for batch=1 size=97
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:55[0m [90m[segmented_graph_wrapper.py:361][0m Captured xvec suffix CUDA Graph for batch=1 size=26
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:55[0m [90m[segmented_graph_wrapper.py:361][0m Captured xvec suffix CUDA Graph for batch=1 size=51
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:55[0m [90m[segmented_graph_wrapper.py:361][0m Captured xvec suffix CUDA Graph for batch=1 size=76
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:55[0m [90m[segmented_graph_wrapper.py:361][0m Captured xvec suffix CUDA Graph for batch=1 size=97
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:55[0m [90m[modeling_qwen3_tts_tokenizer_v2.py:909][0m CUDA Graph enabled for decoder: batch_sizes=[1] seq_lens=[26, 51, 76, 97]
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:55[0m [90m[qwen3_tts_code2wav.py:201][0m Code2Wav decoder CUDA Graph enabled
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:55[0m [90m[default_loader.py:430][0m Loading weights took 0.94 seconds
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:55[0m [90m[gpu_model_runner.py:5515][0m Model loading took 0.48 GiB memory and 1.018022 seconds
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:55[0m [90m[base.py:193][0m [LLM Worker 0] Sleep Mode DISABLED.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:56[0m [90m[gpu_model_runner.py:7002][0m Rank 0: Torch profiler disabled for CUDA graph capture
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/19 [00:00<?, ?it/s][0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:56[0m [90m[qwen3_tts_code2wav.py:426][0m Code2Wav codec: frames=8 q=16 uniq=1 range=[0,0] batch=1
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:56[0m [90m[qwen3_tts_code2wav.py:360][0m Code2Wav input_ids length 120 not divisible by num_quantizers 16; skipping malformed request and suppressing repeats for this length.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:56[0m [90m[qwen3_tts_code2wav.py:360][0m Code2Wav input_ids length 104 not divisible by num_quantizers 16; skipping malformed request and suppressing repeats for this length.
+Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  26%|██▋       | 5/19 [00:00<00:00, 49.55it/s][0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:56[0m [90m[qwen3_tts_code2wav.py:360][0m Code2Wav input_ids length 88 not divisible by num_quantizers 16; skipping malformed request and suppressing repeats for this length.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:56[0m [90m[qwen3_tts_code2wav.py:360][0m Code2Wav input_ids length 72 not divisible by num_quantizers 16; skipping malformed request and suppressing repeats for this length.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:56[0m [90m[qwen3_tts_code2wav.py:360][0m Code2Wav input_ids length 56 not divisible by num_quantizers 16; skipping malformed request and suppressing repeats for this length.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:56[0m [90m[qwen3_tts_code2wav.py:360][0m Code2Wav input_ids length 40 not divisible by num_quantizers 16; skipping malformed request and suppressing repeats for this length.
+Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  68%|██████▊   | 13/19 [00:00<00:00, 64.31it/s][0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:56[0m [90m[qwen3_tts_code2wav.py:360][0m Code2Wav input_ids length 24 not divisible by num_quantizers 16; skipping malformed request and suppressing repeats for this length.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:56[0m [90m[qwen3_tts_code2wav.py:360][0m Code2Wav input_ids length 8 not divisible by num_quantizers 16; skipping malformed request and suppressing repeats for this length.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:56[0m [90m[qwen3_tts_code2wav.py:360][0m Code2Wav input_ids length 4 not divisible by num_quantizers 16; skipping malformed request and suppressing repeats for this length.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:56[0m [90m[qwen3_tts_code2wav.py:360][0m Code2Wav input_ids length 2 not divisible by num_quantizers 16; skipping malformed request and suppressing repeats for this length.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:56[0m [90m[qwen3_tts_code2wav.py:360][0m Code2Wav input_ids length 1 not divisible by num_quantizers 16; skipping malformed request and suppressing repeats for this length.
+Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 19/19 [00:00<00:00, 87.81it/s]
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m Capturing CUDA graphs (decode, FULL):   0%|          | 0/11 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 11/11 [00:00<00:00, 191.52it/s]
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:56[0m [90m[gpu_model_runner.py:7048][0m Graph capturing finished in 1 secs, took 0.12 GiB
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:56[0m [90m[gpu_generation_model_runner.py:554][0m Dummy sampler run is not implemented for generation model
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:57[0m [90m[jit_monitor.py:85][0m Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:57[0m [90m[torch_utils.py:262][0m Reducing Torch threads from 24 to 1 for serving. Set OMP_NUM_THREADS in the external environment to override.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:57[0m [90m[core.py:354][0m init engine (profile, create kv cache, warmup model) took 1.69 s
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/transformers/modeling_rope_utils.py:1036: FutureWarning: `rope_config_validation` is deprecated and has been removed. Its functionality has been moved to RotaryEmbeddingConfigMixin.validate_rope method. PreTrainedConfig inherits this class, so please call self.validate_rope() instead. Also, make sure to use the new rope_parameters syntax. You can call self.standardize_rope_params() in the meantime.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m   warnings.warn(
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:57[0m [90m[configuration_qwen3_tts.py:483][0m talker_config is None. Initializing talker model with default values
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:57[0m [90m[configuration_qwen3_tts.py:486][0m speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:57[0m [90m[configuration_qwen3_tts.py:437][0m code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [transformers] Model config: codec_eos_token_id must be `None` or an integer within the vocabulary (between 0 and 3071), got 4198. This may result in unexpected behavior.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:57[0m [90m[configuration_qwen3_tts.py:437][0m code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'mrope_section', 'interleaved'}
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'mrope_section', 'interleaved'}
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:57[0m [90m[scheduler.py:182][0m Using custom scheduler class vllm_omni.core.sched.omni_generation_scheduler.OmniGenerationScheduler. This scheduler interface is not public and compatibility may not be maintained. If you have subclassed Scheduler instead of AsyncScheduler, you will see degraded performance due to async scheduling being disabled.
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [33mWARNING[0m [90m09-25 04:15:57[0m [90m[core.py:154][0m Disabling chunked prefill for model without KVCache
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:57[0m [90m[factory.py:46][0m Created connector: SharedMemoryConnector
+[0;36m(StageEngineCoreProc_stage1_replica0 pid=123728)[0;0m [32mINFO[0m [90m09-25 04:15:57[0m [90m[kernel.py:308][0m Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:57 [stage_runtime.py:595] [StageRuntime] Stage 1 engine startup completed
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:57 [stage_engine_core_client.py:158] [StageEngineCoreClient] stage-1 [rep-0] initializing EngineCore
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:58 [stage_engine_core_client.py:214] [StageEngineCoreClient] stage-1 [rep-0] EngineCore running
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:58 [stage_runtime.py:610] [StageRuntime] Stage 1 initialized
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:58 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:58 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:58 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:58 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'mrope_section', 'interleaved'}
+[0;36m(APIServer pid=123108)[0;0m [transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'mrope_section', 'interleaved'}
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [orchestrator.py:610] [Orchestrator] Starting event loop
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [async_omni_engine.py:291] [AsyncOmniEngine] Orchestrator ready with 2 stages
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [omni_base.py:225] [AsyncOmni] AsyncOmniEngine initialized in 38.75 seconds
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [omni_base.py:245] [AsyncOmni] Initialized with 2 stages for model /home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [api_server.py:867] Supported tasks: {'generate', 'speech'}
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/transformers/modeling_rope_utils.py:1036: FutureWarning: `rope_config_validation` is deprecated and has been removed. Its functionality has been moved to RotaryEmbeddingConfigMixin.validate_rope method. PreTrainedConfig inherits this class, so please call self.validate_rope() instead. Also, make sure to use the new rope_parameters syntax. You can call self.standardize_rope_params() in the meantime.
+[0;36m(APIServer pid=123108)[0;0m   warnings.warn(
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m WARNING 09-25 04:15:59 [model.py:1713] Default vLLM sampling parameters have been overridden by the model's `generation_config.json`: `{'repetition_penalty': 1.05, 'temperature': 0.9, 'top_k': 50, 'top_p': 1.0, 'max_tokens': 8192}`. If this is not intended, please relaunch vLLM instance with `--generation-config vllm`.
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [hf.py:551] Detected the chat template content format to be 'string'. You can set `--chat-template-content-format` to override this.
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [speaker_cache.py:239] Speaker cache ready (max_bytes=536870912)
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [serving_speech.py:393] Restored 6 uploaded voice(s) from /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/state/speakers
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [serving_speech.py:316] Speaker storage: dir=/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/state/speakers, max_speakers=1000, restored=6
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [serving_speech.py:462] Resolved TTS serving adapter: Qwen3TTSAdapter
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [capabilities.py:98] Loaded 4 precomputed qwen3_tts voice profile(s) from state/custom_voices
+[0;36m(APIServer pid=123108)[0;0m WARNING 09-25 04:15:59 [capabilities.py:32] No speakers found in config (checked spk_id and speaker_id)
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [capabilities.py:52] Loaded codec frame rate: 12.5 Hz (output_sample_rate=24000, encode_downsample_rate=1920)
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [serving_speech.py:468] Loaded 10 supported speakers: ['bench-shehbaz', 'bench-trump', 'shehbaz-80c2b47dfc', 'shehbaz-avg', 'shehbaz-prompt', 'smoke-shehbaz', 'smoke-trump', 'trump-avg', 'trump-cc1c00d5e5', 'trump-prompt']
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [serving.py:45] OpenAIServingRealtime initialized for task: realtime
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [serving_video.py:103] Video response frame conversion pool configured: workers=8
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [api_server.py:574] Starting vLLM API server 0 on http://127.0.0.1:8091
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:51] Available routes are:
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /openapi.json, Methods: HEAD, GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /docs, Methods: HEAD, GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /docs/oauth2-redirect, Methods: HEAD, GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /redoc, Methods: HEAD, GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /load, Methods: GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /version, Methods: GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /health, Methods: GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /metrics, Methods: GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /tokenize, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /detokenize, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /ping, Methods: GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /ping, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /invocations, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/responses, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/responses/{response_id}, Methods: GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/responses/{response_id}/cancel, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/completions, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/messages, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/messages/count_tokens, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /generative_scoring, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /scale_elastic_ep, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /is_scaling_elastic_ep, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/chat/completions/render, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/completions/render, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/chat/completions/derender, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/completions/derender, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /inference/v1/generate, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/chat/completions, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/chat/completions/batch, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/audio/speech, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/audio/speech/batch, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/audio/generate, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/audio/voices, Methods: GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/audio/voices, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/audio/voices/{name}, Methods: DELETE
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /health, Methods: GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/models, Methods: GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/images/generations, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/images/edits, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/videos, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/videos/sync, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/videos, Methods: GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/videos/{video_id}, Methods: GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/videos/{video_id}, Methods: DELETE
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/videos/{video_id}/content, Methods: GET
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/omni/sleep, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:60] Route: /v1/omni/wakeup, Methods: POST
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:71] Route: /v1/audio/speech/stream, Endpoint: streaming_speech
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:71] Route: /v1/video/chat/stream, Endpoint: streaming_video_chat
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:71] Route: /v1/realtime/video, Endpoint: streaming_video_output
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:71] Route: /v1/realtime, Endpoint: realtime_websocket
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:71] Route: /v1/realtime/robot/openpi, Endpoint: realtime_robot_openpi
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:15:59 [launcher.py:71] Route: /v1/duplex, Endpoint: duplex_websocket
+[0;36m(APIServer pid=123108)[0;0m INFO:     Started server process [123108]
+[0;36m(APIServer pid=123108)[0;0m INFO:     Waiting for application startup.
+[0;36m(APIServer pid=123108)[0;0m INFO:     Application startup complete.
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:00 [configuration_qwen3_tts.py:483] talker_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:00 [configuration_qwen3_tts.py:486] speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:00 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:00 [configuration_qwen3_tts.py:437] code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:00 [serving_speech.py:3070] TTS speech request speech-8779928935aa9410: model=Base
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:16:00[0m [90m[configuration_qwen3_tts.py:483][0m talker_config is None. Initializing talker model with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:16:00[0m [90m[configuration_qwen3_tts.py:486][0m speaker_encoder_config is None. Initializing talker model with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:16:00[0m [90m[configuration_qwen3_tts.py:437][0m code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [transformers] `layer_type_validation` is deprecated and will be removed in v5.20. Use `PreTrainedConfig.validate_layer_type` instead
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:16:00[0m [90m[configuration_qwen3_tts.py:437][0m code_predictor_config is None. Initializing code_predictor model with default values
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [33mWARNING[0m [90m09-25 04:16:00[0m [90m[jit_monitor.py:141][0m Triton kernel JIT compilation during inference: _bmm_outer_product_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [33mWARNING[0m [90m09-25 04:16:01[0m [90m[sampling_utils.py:57][0m min_tokens: dropped stop token ids [151645] that exceed the logits vocabulary (3072); the model head cannot emit them.
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:16:01[0m [90m[qwen3_tts.py:330][0m Qwen3-TTS async chunk uses the last 72/291 ref_code frames as bounded Code2Wav context.
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:811] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:811] [Overall Summary]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:811] +-----------------------------+---------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:811] | Field                       |   Value |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:811] +-----------------------------+---------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:811] | e2e_requests                |       1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:811] | e2e_wall_time_ms            | 684.296 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:811] | e2e_total_tokens            |     323 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:811] | e2e_avg_time_per_request_ms | 684.296 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:811] | e2e_avg_tokens_per_s        | 472.018 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:811] | input_preprocess_time_ms    |   6.376 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:811] | e2e_stage_0_wall_time_ms    | 648.147 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:811] | e2e_stage_1_wall_time_ms    | 674.182 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:811] +-----------------------------+---------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:837] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:837] [RequestE2EStats [request_id=speech-8779928935aa9410-b6f2f904]]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:837] +------------------+---------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:837] | Field            |   Value |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:837] +------------------+---------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:837] | e2e_total_ms     | 677.806 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:837] | e2e_total_tokens |     323 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:837] +------------------+---------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:878] [OmniTiming] req=speech-8779928935aa9410-b6f2f904 total=0.68s preprocess=0.01s engine=0.67s stages=[0:0.65s,1:0.67s] transfers=[0->1=0.00ms]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] [StageRequestStats [request_id=speech-8779928935aa9410-b6f2f904]]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | Field                           |             0 |             1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | audio_duration_s                |         0.000 |         1.680 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | audio_generated_frames          |             0 |        40,320 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | audio_sample_rate               |             0 |        24,000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | batch_id                        |             1 |             1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | batch_size                      |             1 |             1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | inter_output_latencies_ms       |               |               |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | num_tokens_in                   |           301 |             0 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | num_tokens_out                  |            22 |             0 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | output_unit_count               |            22 |        40,320 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | output_unit_type                |        stream |         audio |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | serving_time_to_first_output_ms |       654.001 |       683.198 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | stage_gen_time_ms               |       647.454 |       673.205 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | time_per_output_unit_ms         |         0.003 |         0.000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | vllm_itl_ms                     |        14.985 |       260.282 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | vllm_itls_ms                    | 14.985 (n=21) | 260.282 (n=1) |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | vllm_tpot_ms                    |        14.985 |         0.000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] | vllm_ttft_ms                    |       338.371 |       256.215 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [serving_speech.py:3646] [SpeechE2E] request_id=speech-8779928935aa9410 stream=false status=ok total_ms=841.40 response_bytes=80684
+[0;36m(APIServer pid=123108)[0;0m INFO:     127.0.0.1:47954 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+[0;36m(APIServer pid=123108)[0;0m INFO:     127.0.0.1:47956 - "GET /v1/audio/voices HTTP/1.1" 200 OK
+[0;36m(APIServer pid=123108)[0;0m INFO:     127.0.0.1:47970 - "GET /v1/audio/voices HTTP/1.1" 200 OK
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:01 [serving_speech.py:3070] TTS speech request speech-8c32eacb84b6564d: model=Base
+[0;36m(StageEngineCoreProc_stage0_replica0 pid=123331)[0;0m [32mINFO[0m [90m09-25 04:16:01[0m [90m[qwen3_tts.py:330][0m Qwen3-TTS async chunk uses the last 72/351 ref_code frames as bounded Code2Wav context.
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] [Overall Summary]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] +-----------------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | Field                       |     Value |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] +-----------------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | e2e_requests                |         1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | e2e_wall_time_ms            | 1,525.663 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | e2e_total_tokens            |       461 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | e2e_avg_time_per_request_ms | 1,525.663 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | e2e_avg_tokens_per_s        |   302.164 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | input_preprocess_time_ms    |     0.069 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | e2e_stage_0_wall_time_ms    | 1,496.356 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | e2e_stage_1_wall_time_ms    | 1,522.618 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] +-----------------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] [RequestE2EStats [request_id=speech-8c32eacb84b6564d-94427cd2]]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] +------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] | Field            |     Value |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] +------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] | e2e_total_ms     | 1,525.460 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] | e2e_total_tokens |       461 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] +------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:878] [OmniTiming] req=speech-8c32eacb84b6564d-94427cd2 total=1.53s preprocess=0.00s engine=1.53s stages=[0:1.50s,1:1.52s] transfers=[0->1=0.00ms]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] [StageRequestStats [request_id=speech-8c32eacb84b6564d-94427cd2]]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] +---------------------------------+----------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | Field                           |              0 |             1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] +---------------------------------+----------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | audio_duration_s                |          0.000 |         8.000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | audio_generated_frames          |              0 |       192,000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | audio_sample_rate               |              0 |        24,000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | batch_id                        |              2 |             2 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | batch_size                      |              1 |             1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | inter_output_latencies_ms       |                |               |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | num_tokens_in                   |            360 |             0 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | num_tokens_out                  |            101 |             0 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | output_unit_count               |            101 |       192,000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | output_unit_type                |         stream |         audio |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | serving_time_to_first_output_ms |      1,495.637 |     1,524.948 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | stage_gen_time_ms               |      1,495.418 |     1,522.007 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | time_per_output_unit_ms         |          0.000 |         0.000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | vllm_itl_ms                     |         13.980 |       312.138 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | vllm_itls_ms                    | 13.980 (n=100) | 312.138 (n=4) |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | vllm_tpot_ms                    |         13.980 |         0.000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | vllm_ttft_ms                    |        197.066 |        83.382 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] +---------------------------------+----------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [serving_speech.py:3646] [SpeechE2E] request_id=speech-8c32eacb84b6564d stream=false status=ok total_ms=1548.64 response_bytes=384044
+[0;36m(APIServer pid=123108)[0;0m INFO:     127.0.0.1:47970 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [serving_speech.py:3070] TTS speech request speech-92ad8599cba30031: model=Base
+[0;36m(APIServer pid=123108)[0;0m WARNING 09-25 04:16:03 [serving_speech.py:3689] [SpeechE2E] request_id=speech-92ad8599cba30031 stream=False status=bad_request total_ms=4.35 error=extra_params.repetition_penalty must be a finite number > 0
+[0;36m(APIServer pid=123108)[0;0m INFO:     127.0.0.1:47970 - "POST /v1/audio/speech HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [serving_speech.py:3070] TTS speech request speech-bf6a7f6702b95a8f: model=Base
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [serving_speech.py:3100] Applied extra_params: {'temperature': -1}
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [async_omni.py:1225] [AsyncOmni] Aborted request(s) 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [async_omni.py:675] [AsyncOmni] Request speech-bf6a7f6702b95a8f-982d1317 failed (input error): temperature must be non-negative, got -1. (parameter=temperature, value=-1)
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709] [SpeechE2E] request_id=speech-bf6a7f6702b95a8f stream=False status=error total_ms=4.24 error=temperature must be non-negative, got -1. (parameter=temperature, value=-1)
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709] Traceback (most recent call last):
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]   File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni/entrypoints/openai/serving_speech.py", line 3617, in create_speech
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]     audio_bytes, media_type = await self._generate_audio_bytes(
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]   File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni/entrypoints/openai/serving_speech.py", line 3220, in _generate_audio_bytes
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]     async for res in generator:
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]   File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni/entrypoints/async_omni.py", line 579, in generate
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]     sampling_params_list = self.resolve_sampling_params_list(
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]   File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni/entrypoints/omni_base.py", line 358, in resolve_sampling_params_list
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]     self._apply_sampling_constraints(params, constraints)
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]   File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni/entrypoints/omni_base.py", line 394, in _apply_sampling_constraints
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]     return type(params)(**{**values, **constraints})
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]   File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm/sampling_params.py", line 519, in __post_init__
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]     self._verify_args()
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]   File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm/sampling_params.py", line 564, in _verify_args
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709]     raise VLLMValidationError(
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3709] vllm.exceptions.VLLMValidationError: temperature must be non-negative, got -1. (parameter=temperature, value=-1)
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716] Speech generation failed: temperature must be non-negative, got -1. (parameter=temperature, value=-1)
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716] Traceback (most recent call last):
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]   File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni/entrypoints/openai/serving_speech.py", line 3617, in create_speech
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]     audio_bytes, media_type = await self._generate_audio_bytes(
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]   File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni/entrypoints/openai/serving_speech.py", line 3220, in _generate_audio_bytes
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]     async for res in generator:
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]   File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni/entrypoints/async_omni.py", line 579, in generate
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]     sampling_params_list = self.resolve_sampling_params_list(
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]   File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni/entrypoints/omni_base.py", line 358, in resolve_sampling_params_list
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]     self._apply_sampling_constraints(params, constraints)
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]   File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm_omni/entrypoints/omni_base.py", line 394, in _apply_sampling_constraints
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]     return type(params)(**{**values, **constraints})
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]   File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm/sampling_params.py", line 519, in __post_init__
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]     self._verify_args()
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]   File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/engine/lib/python3.12/site-packages/vllm/sampling_params.py", line 564, in _verify_args
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716]     raise VLLMValidationError(
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3716] vllm.exceptions.VLLMValidationError: temperature must be non-negative, got -1. (parameter=temperature, value=-1)
+[0;36m(APIServer pid=123108)[0;0m INFO:     127.0.0.1:47970 - "POST /v1/audio/speech HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=123108)[0;0m INFO:     127.0.0.1:47970 - "POST /v1/audio/speech HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=123108)[0;0m WARNING 09-25 04:16:03 [serving_speech.py:3689] [SpeechE2E] request_id=speech-bacfb7bb642d3314 stream=False status=bad_request total_ms=0.12 error=Invalid language 'Urdu'. Supported: Auto, Chinese, English, French, German, Italian, Japanese, Korean, Portuguese, Russian, Spanish
+[0;36m(APIServer pid=123108)[0;0m INFO:     127.0.0.1:47970 - "POST /v1/audio/speech HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [serving_speech.py:3070] TTS speech request speech-9631b0e2ac22193e: model=Base
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] [Overall Summary]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] +-----------------------------+---------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | Field                       |   Value |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] +-----------------------------+---------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | e2e_requests                |       1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | e2e_wall_time_ms            | 600.300 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | e2e_total_tokens            |     400 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | e2e_avg_time_per_request_ms | 600.300 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | e2e_avg_tokens_per_s        | 666.334 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | input_preprocess_time_ms    |   0.057 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | e2e_stage_0_wall_time_ms    | 582.418 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] | e2e_stage_1_wall_time_ms    | 599.997 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:811] +-----------------------------+---------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] [RequestE2EStats [request_id=speech-9631b0e2ac22193e-8a03d411]]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] +------------------+---------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] | Field            |   Value |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] +------------------+---------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] | e2e_total_ms     | 600.165 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] | e2e_total_tokens |     400 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:837] +------------------+---------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:878] [OmniTiming] req=speech-9631b0e2ac22193e-8a03d411 total=0.60s preprocess=0.00s engine=0.60s stages=[0:0.58s,1:0.60s] transfers=[0->1=0.00ms]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] [StageRequestStats [request_id=speech-9631b0e2ac22193e-8a03d411]]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | Field                           |             0 |             1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | audio_duration_s                |         0.000 |         3.120 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | audio_generated_frames          |             0 |        74,880 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | audio_sample_rate               |             0 |        24,000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | batch_id                        |             3 |             3 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | batch_size                      |             1 |             1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | inter_output_latencies_ms       |               |               |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | num_tokens_in                   |           360 |             0 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | num_tokens_out                  |            40 |             0 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | output_unit_count               |            40 |        74,880 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | output_unit_type                |        stream |         audio |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | serving_time_to_first_output_ms |       582.418 |       599.421 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | stage_gen_time_ms               |       582.256 |       599.200 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | time_per_output_unit_ms         |         0.001 |         0.000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | vllm_itl_ms                     |        14.220 |       247.443 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | vllm_itls_ms                    | 14.220 (n=39) | 247.443 (n=2) |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | vllm_tpot_ms                    |        14.220 |         0.000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] | vllm_ttft_ms                    |        30.457 |       102.753 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:03 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m ERROR 09-25 04:16:03 [serving_speech.py:3699] [SpeechE2E] request_id=speech-9631b0e2ac22193e stream=False status=invalid_generation total_ms=608.12 error=Qwen3-TTS Base did not emit codec EOS before its token budget (40/40 codec tokens); the generated audio is incomplete.
+[0;36m(APIServer pid=123108)[0;0m INFO:     127.0.0.1:47970 - "POST /v1/audio/speech HTTP/1.1" 500 Internal Server Error
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:04 [serving_speech.py:3070] TTS speech request speech-8dc5f7ed1c728f43: model=Base
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:811] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:811] [Overall Summary]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:811] +-----------------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:811] | Field                       |     Value |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:811] +-----------------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:811] | e2e_requests                |         1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:811] | e2e_wall_time_ms            | 1,351.290 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:811] | e2e_total_tokens            |       454 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:811] | e2e_avg_time_per_request_ms | 1,351.290 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:811] | e2e_avg_tokens_per_s        |   335.975 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:811] | input_preprocess_time_ms    |     0.052 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:811] | e2e_stage_0_wall_time_ms    | 1,325.151 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:811] | e2e_stage_1_wall_time_ms    | 1,350.922 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:811] +-----------------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:837] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:837] [RequestE2EStats [request_id=speech-8dc5f7ed1c728f43-a88071b8]]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:837] +------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:837] | Field            |     Value |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:837] +------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:837] | e2e_total_ms     | 1,351.048 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:837] | e2e_total_tokens |       454 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:837] +------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:878] [OmniTiming] req=speech-8dc5f7ed1c728f43-a88071b8 total=1.35s preprocess=0.00s engine=1.35s stages=[0:1.32s,1:1.35s] transfers=[0->1=0.00ms]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] [StageRequestStats [request_id=speech-8dc5f7ed1c728f43-a88071b8]]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | Field                           |             0 |             1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | audio_duration_s                |         0.000 |         7.440 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | audio_generated_frames          |             0 |       178,560 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | audio_sample_rate               |             0 |        24,000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | batch_id                        |             4 |             4 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | batch_size                      |             1 |             1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | inter_output_latencies_ms       |               |               |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | num_tokens_in                   |           360 |             0 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | num_tokens_out                  |            94 |             0 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | output_unit_count               |            94 |       178,560 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | output_unit_type                |        stream |         audio |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | serving_time_to_first_output_ms |     1,324.857 |     1,350.612 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | stage_gen_time_ms               |     1,324.620 |     1,350.331 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | time_per_output_unit_ms         |         0.001 |         0.000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | vllm_itl_ms                     |        13.937 |       311.786 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | vllm_itls_ms                    | 13.937 (n=93) | 311.786 (n=4) |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | vllm_tpot_ms                    |        13.937 |         0.000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] | vllm_ttft_ms                    |        27.561 |       104.874 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [serving_speech.py:3646] [SpeechE2E] request_id=speech-8dc5f7ed1c728f43 stream=false status=ok total_ms=1358.60 response_bytes=357164
+[0;36m(APIServer pid=123108)[0;0m INFO:     127.0.0.1:47970 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:05 [serving_speech.py:3070] TTS speech request speech-926ceabffb1b3f28: model=Base
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:811] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:811] [Overall Summary]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:811] +-----------------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:811] | Field                       |     Value |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:811] +-----------------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:811] | e2e_requests                |         1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:811] | e2e_wall_time_ms            | 1,338.489 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:811] | e2e_total_tokens            |       453 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:811] | e2e_avg_time_per_request_ms | 1,338.489 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:811] | e2e_avg_tokens_per_s        |   338.441 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:811] | input_preprocess_time_ms    |     0.055 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:811] | e2e_stage_0_wall_time_ms    | 1,308.072 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:811] | e2e_stage_1_wall_time_ms    | 1,338.161 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:811] +-----------------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:837] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:837] [RequestE2EStats [request_id=speech-926ceabffb1b3f28-896e6eab]]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:837] +------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:837] | Field            |     Value |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:837] +------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:837] | e2e_total_ms     | 1,338.353 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:837] | e2e_total_tokens |       453 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:837] +------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:878] [OmniTiming] req=speech-926ceabffb1b3f28-896e6eab total=1.34s preprocess=0.00s engine=1.34s stages=[0:1.31s,1:1.34s] transfers=[0->1=0.00ms]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] [StageRequestStats [request_id=speech-926ceabffb1b3f28-896e6eab]]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | Field                           |             0 |             1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | audio_duration_s                |         0.000 |         7.360 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | audio_generated_frames          |             0 |       176,640 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | audio_sample_rate               |             0 |        24,000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | batch_id                        |             5 |             5 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | batch_size                      |             1 |             1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | inter_output_latencies_ms       |               |               |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | num_tokens_in                   |           360 |             0 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | num_tokens_out                  |            93 |             0 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | output_unit_count               |            93 |       176,640 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | output_unit_type                |        stream |         audio |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | serving_time_to_first_output_ms |     1,308.080 |     1,337.479 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | stage_gen_time_ms               |     1,307.888 |     1,337.250 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | time_per_output_unit_ms         |         0.001 |         0.000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | vllm_itl_ms                     |        13.907 |       308.136 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | vllm_itls_ms                    | 13.907 (n=92) | 308.136 (n=4) |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | vllm_tpot_ms                    |        13.907 |         0.000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] | vllm_ttft_ms                    |        27.768 |       104.050 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [serving_speech.py:3646] [SpeechE2E] request_id=speech-926ceabffb1b3f28 stream=false status=ok total_ms=1346.90 response_bytes=353324
+[0;36m(APIServer pid=123108)[0;0m INFO:     127.0.0.1:47970 - "POST /v1/audio/speech HTTP/1.1" 200 OK
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [serving_speech.py:2541] Using precomputed Qwen3-TTS custom voice profile: shehbaz-avg (mode=icl)
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:06 [serving_speech.py:3070] TTS speech request speech-87873e749b47e105: model=Base
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:811] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:811] [Overall Summary]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:811] +-----------------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:811] | Field                       |     Value |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:811] +-----------------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:811] | e2e_requests                |         1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:811] | e2e_wall_time_ms            | 1,330.130 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:811] | e2e_total_tokens            |       451 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:811] | e2e_avg_time_per_request_ms | 1,330.130 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:811] | e2e_avg_tokens_per_s        |   339.065 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:811] | input_preprocess_time_ms    |     0.077 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:811] | e2e_stage_0_wall_time_ms    | 1,299.484 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:811] | e2e_stage_1_wall_time_ms    | 1,329.512 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:811] +-----------------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:837] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:837] [RequestE2EStats [request_id=speech-87873e749b47e105-9bacbb8b]]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:837] +------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:837] | Field            |     Value |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:837] +------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:837] | e2e_total_ms     | 1,329.756 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:837] | e2e_total_tokens |       451 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:837] +------------------+-----------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:878] [OmniTiming] req=speech-87873e749b47e105-9bacbb8b total=1.33s preprocess=0.00s engine=1.33s stages=[0:1.30s,1:1.33s] transfers=[0->1=0.00ms]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] 
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] [StageRequestStats [request_id=speech-87873e749b47e105-9bacbb8b]]
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | Field                           |             0 |             1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | audio_duration_s                |         0.000 |         7.200 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | audio_generated_frames          |             0 |       172,800 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | audio_sample_rate               |             0 |        24,000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | batch_id                        |             6 |             6 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | batch_size                      |             1 |             1 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | inter_output_latencies_ms       |               |               |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | num_tokens_in                   |           360 |             0 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | num_tokens_out                  |            91 |             0 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | output_unit_count               |            91 |       172,800 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | output_unit_type                |        stream |         audio |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | serving_time_to_first_output_ms |     1,299.512 |     1,329.232 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | stage_gen_time_ms               |     1,299.101 |     1,328.728 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | time_per_output_unit_ms         |         0.001 |         0.000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | vllm_itl_ms                     |        14.127 |       305.624 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | vllm_itls_ms                    | 14.127 (n=90) | 305.624 (n=4) |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | vllm_tpot_ms                    |        14.127 |         0.000 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] | vllm_ttft_ms                    |        27.054 |       103.065 |
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [stats.py:920] +---------------------------------+---------------+---------------+
+[0;36m(APIServer pid=123108)[0;0m INFO 09-25 04:16:08 [serving_speech.py:3646] [SpeechE2E] request_id=speech-87873e749b47e105 stream=false status=ok total_ms=1333.40 response_bytes=345644
+[0;36m(APIServer pid=123108)[0;0m INFO:     127.0.0.1:47970 - "POST /v1/audio/speech HTTP/1.1" 200 OK

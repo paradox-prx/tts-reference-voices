@@ -1,0 +1,15 @@
+=== 2026-09-25T05:11:48+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice shehbaz --size prompts --takes 6 -c 16 --extra-param repetition_penalty=1.20 --timeout 900 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P5_urdu_rp120 --gpus 0 --tag rp1.20 --meta phase=P5_urdu_rp120 --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.1110 s/letter (file); suspect outside 0.6-1.8 x
+warmup shehbaz 1: 0.67s ok
+warmup shehbaz 2: 0.74s ok
+shehbaz prompts (shehbaz_ur.json): shehbaz 43 texts
+  rp1.20_shehbaz_prompts_c16_n43_k6_nonstream_inline: ok 246/258 err 12 suspect 1 (short 1, long 0; pace x0.949) | lat p50=17.754s p90=19.74s p99=21.964s | 26.4x realtime (p90-wall 26.15x, stragglers 0), 0.8 req/s | gpu 19829 MiB 99.3%
+    ERR[shehbaz 2] HTTP 500: {"error": {"message": "Qwen3-TTS Base did not emit codec EOS before its token budget (979/979 codec tokens); the generated audio is incomplete.", "type": "server_error", "param": null, "code": 500}}
+    ERR[shehbaz 3] HTTP 500: {"error": {"message": "Qwen3-TTS Base did not emit codec EOS before its token budget (976/976 codec tokens); the generated audio is incomplete.", "type": "server_error", "param": null, "code": 500}}
+    ERR[shehbaz 3] HTTP 500: {"error": {"message": "Qwen3-TTS Base did not emit codec EOS before its token budget (976/976 codec tokens); the generated audio is incomplete.", "type": "server_error", "param": null, "code": 500}}
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P5_urdu_rp120
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| rp1.20_shehbaz_prompts_c16_n43_k6_nonstream_inline | 258 | 246 | 12 | 1 | 17.754 | 19.74 | 21.964 | – | – | 33.13 | 26.4 | 26.15 | 0 | 0.536 | 0.8 | 19829 | 99.3 |
+

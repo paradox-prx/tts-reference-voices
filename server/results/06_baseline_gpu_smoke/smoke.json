@@ -1,0 +1,601 @@
+{
+ "url": "http://127.0.0.1:8093",
+ "started": "2026-09-25T04:22:18+05:00",
+ "steps": {
+  "health": {
+   "status": 200,
+   "body": "{\"status\":\"healthy\"}",
+   "latency_s": 0.005,
+   "ok": true
+  },
+  "voices": {
+   "status": 200,
+   "voices": [
+    "shehbaz",
+    "trump"
+   ],
+   "ok": true
+  },
+  "english": {
+   "name": "english_trump",
+   "started": "2026-09-25T04:22:18+05:00",
+   "status": 200,
+   "latency_s": 2.445,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "input": "Good morning. This is a short test of the baseline voice clone server.",
+    "voice": "trump",
+    "language": "English"
+   },
+   "headers": {
+    "x-request-id": "a5dc273e9415460093dd687bfc7fe397",
+    "x-ai-generated": "true",
+    "x-baseline-batch-size": "1",
+    "x-baseline-batch-id": "2",
+    "x-baseline-queue-ms": "20.4",
+    "x-baseline-prompt-ms": "0.4",
+    "x-baseline-gen-ms": "2421.9",
+    "x-baseline-codec-frames": "48",
+    "x-baseline-text-tokens": "15",
+    "x-baseline-max-new-tokens": "192",
+    "x-baseline-batch-max-new-tokens": "192",
+    "x-baseline-finish-reason": "stop",
+    "x-baseline-prompt-cache": "hit",
+    "x-baseline-retries": "0",
+    "x-baseline-sample-rate": "24000"
+   },
+   "ok": true,
+   "bytes": 184452,
+   "sample_rate": 24000,
+   "channels": 1,
+   "bits": 16,
+   "audio_s": 3.84,
+   "rtf": 0.637,
+   "wav_label_ok": true,
+   "header_label_ok": true,
+   "saved": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/06_baseline_gpu_smoke/english_trump.wav",
+   "frames_match_audio": true
+  },
+  "urdu": {
+   "name": "urdu_shehbaz",
+   "started": "2026-09-25T04:22:21+05:00",
+   "status": 200,
+   "latency_s": 3.49,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "input": "آج موسم بہت خوشگوار ہے، اور ہم شام کو پارک میں سیر کے لیے جائیں گے۔",
+    "voice": "shehbaz",
+    "language": "Auto"
+   },
+   "headers": {
+    "x-request-id": "b4dd50a159d74febad15d6acbb2d10f9",
+    "x-ai-generated": "true",
+    "x-baseline-batch-size": "1",
+    "x-baseline-batch-id": "3",
+    "x-baseline-queue-ms": "20.3",
+    "x-baseline-prompt-ms": "0.2",
+    "x-baseline-gen-ms": "3468.4",
+    "x-baseline-codec-frames": "70",
+    "x-baseline-text-tokens": "45",
+    "x-baseline-max-new-tokens": "540",
+    "x-baseline-batch-max-new-tokens": "540",
+    "x-baseline-finish-reason": "stop",
+    "x-baseline-prompt-cache": "hit",
+    "x-baseline-retries": "0",
+    "x-baseline-sample-rate": "24000"
+   },
+   "ok": true,
+   "bytes": 268932,
+   "sample_rate": 24000,
+   "channels": 1,
+   "bits": 16,
+   "audio_s": 5.6,
+   "rtf": 0.623,
+   "wav_label_ok": true,
+   "header_label_ok": true,
+   "saved": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/06_baseline_gpu_smoke/urdu_shehbaz.wav",
+   "frames_match_audio": true
+  },
+  "inline": {
+   "name": "inline_trump_ref",
+   "started": "2026-09-25T04:22:24+05:00",
+   "status": 200,
+   "latency_s": 2.657,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "input": "The inline reference path should sound just like the registered voice.",
+    "ref_audio": "<data URL, 1485566 chars>",
+    "ref_text": "Almost every one of these countries wrote me a letter of thank you. The Prime Minister of Pakistan, terrific man, said that Donald Trump was responsible for saving thirty million lives and probably many more than that. The President of Azerbaijan said President Trump in six months did a miracle. It was an absolute miracle that nobody thought could be done.",
+    "language": "English"
+   },
+   "headers": {
+    "x-request-id": "b83a01fa29cb412dbe4e128f6d5ff4cf",
+    "x-ai-generated": "true",
+    "x-baseline-batch-size": "1",
+    "x-baseline-batch-id": "4",
+    "x-baseline-queue-ms": "20.3",
+    "x-baseline-prompt-ms": "0.3",
+    "x-baseline-gen-ms": "2629.0",
+    "x-baseline-codec-frames": "52",
+    "x-baseline-text-tokens": "12",
+    "x-baseline-max-new-tokens": "192",
+    "x-baseline-batch-max-new-tokens": "192",
+    "x-baseline-finish-reason": "stop",
+    "x-baseline-prompt-cache": "hit",
+    "x-baseline-retries": "0",
+    "x-baseline-sample-rate": "24000"
+   },
+   "ok": true,
+   "bytes": 199812,
+   "sample_rate": 24000,
+   "channels": 1,
+   "bits": 16,
+   "audio_s": 4.16,
+   "rtf": 0.639,
+   "wav_label_ok": true,
+   "header_label_ok": true,
+   "saved": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/06_baseline_gpu_smoke/inline_trump_ref.wav",
+   "frames_match_audio": true
+  },
+  "concurrent": {
+   "requests": [
+    {
+     "name": "concurrent_0_trump",
+     "started": "2026-09-25T04:22:27+05:00",
+     "status": 200,
+     "latency_s": 3.348,
+     "request": {
+      "task_type": "Base",
+      "response_format": "wav",
+      "input": "We will review the numbers again on Friday afternoon.",
+      "voice": "trump",
+      "language": "English"
+     },
+     "headers": {
+      "x-request-id": "7a97c5f3f66f4a55927bac6e5a0437b1",
+      "x-ai-generated": "true",
+      "x-baseline-batch-size": "4",
+      "x-baseline-batch-id": "5",
+      "x-baseline-queue-ms": "20.4",
+      "x-baseline-prompt-ms": "0.5",
+      "x-baseline-gen-ms": "3325.8",
+      "x-baseline-codec-frames": "44",
+      "x-baseline-text-tokens": "10",
+      "x-baseline-max-new-tokens": "192",
+      "x-baseline-batch-max-new-tokens": "456",
+      "x-baseline-finish-reason": "stop",
+      "x-baseline-prompt-cache": "hit",
+      "x-baseline-retries": "0",
+      "x-baseline-sample-rate": "24000"
+     },
+     "ok": true,
+     "bytes": 169092,
+     "sample_rate": 24000,
+     "channels": 1,
+     "bits": 16,
+     "audio_s": 3.52,
+     "rtf": 0.951,
+     "wav_label_ok": true,
+     "header_label_ok": true,
+     "saved": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/06_baseline_gpu_smoke/concurrent_0_trump.wav",
+     "frames_match_audio": true
+    },
+    {
+     "name": "concurrent_1_shehbaz",
+     "started": "2026-09-25T04:22:27+05:00",
+     "status": 200,
+     "latency_s": 3.348,
+     "request": {
+      "task_type": "Base",
+      "response_format": "wav",
+      "input": "پاکستان کی معیشت میں بہتری کے آثار نظر آ رہے ہیں۔",
+      "voice": "shehbaz",
+      "language": "Auto"
+     },
+     "headers": {
+      "x-request-id": "c80177936d784dce9c765c2047a9969b",
+      "x-ai-generated": "true",
+      "x-baseline-batch-size": "4",
+      "x-baseline-batch-id": "5",
+      "x-baseline-queue-ms": "20.5",
+      "x-baseline-prompt-ms": "0.5",
+      "x-baseline-gen-ms": "3325.8",
+      "x-baseline-codec-frames": "44",
+      "x-baseline-text-tokens": "31",
+      "x-baseline-max-new-tokens": "372",
+      "x-baseline-batch-max-new-tokens": "456",
+      "x-baseline-finish-reason": "stop",
+      "x-baseline-prompt-cache": "hit",
+      "x-baseline-retries": "0",
+      "x-baseline-sample-rate": "24000"
+     },
+     "ok": true,
+     "bytes": 169092,
+     "sample_rate": 24000,
+     "channels": 1,
+     "bits": 16,
+     "audio_s": 3.52,
+     "rtf": 0.951,
+     "wav_label_ok": true,
+     "header_label_ok": true,
+     "saved": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/06_baseline_gpu_smoke/concurrent_1_shehbaz.wav",
+     "frames_match_audio": true
+    },
+    {
+     "name": "concurrent_2_trump",
+     "started": "2026-09-25T04:22:27+05:00",
+     "status": 200,
+     "latency_s": 3.349,
+     "request": {
+      "task_type": "Base",
+      "response_format": "wav",
+      "input": "Thank you all for coming here today, it means a great deal.",
+      "voice": "trump",
+      "language": "English"
+     },
+     "headers": {
+      "x-request-id": "7d91a432c88b498eaf75917f7e82b6ca",
+      "x-ai-generated": "true",
+      "x-baseline-batch-size": "4",
+      "x-baseline-batch-id": "5",
+      "x-baseline-queue-ms": "20.3",
+      "x-baseline-prompt-ms": "0.5",
+      "x-baseline-gen-ms": "3325.8",
+      "x-baseline-codec-frames": "42",
+      "x-baseline-text-tokens": "14",
+      "x-baseline-max-new-tokens": "192",
+      "x-baseline-batch-max-new-tokens": "456",
+      "x-baseline-finish-reason": "stop",
+      "x-baseline-prompt-cache": "hit",
+      "x-baseline-retries": "0",
+      "x-baseline-sample-rate": "24000"
+     },
+     "ok": true,
+     "bytes": 161412,
+     "sample_rate": 24000,
+     "channels": 1,
+     "bits": 16,
+     "audio_s": 3.36,
+     "rtf": 0.997,
+     "wav_label_ok": true,
+     "header_label_ok": true,
+     "saved": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/06_baseline_gpu_smoke/concurrent_2_trump.wav",
+     "frames_match_audio": true
+    },
+    {
+     "name": "concurrent_3_shehbaz",
+     "started": "2026-09-25T04:22:27+05:00",
+     "status": 200,
+     "latency_s": 3.349,
+     "request": {
+      "task_type": "Base",
+      "response_format": "wav",
+      "input": "ہم سب کو مل کر اپنے ملک کی ترقی کے لیے کام کرنا ہوگا۔",
+      "voice": "shehbaz",
+      "language": "Auto"
+     },
+     "headers": {
+      "x-request-id": "f04a0542f25b45d89ddbed225306af80",
+      "x-ai-generated": "true",
+      "x-baseline-batch-size": "4",
+      "x-baseline-batch-id": "5",
+      "x-baseline-queue-ms": "20.2",
+      "x-baseline-prompt-ms": "0.5",
+      "x-baseline-gen-ms": "3325.8",
+      "x-baseline-codec-frames": "52",
+      "x-baseline-text-tokens": "38",
+      "x-baseline-max-new-tokens": "456",
+      "x-baseline-batch-max-new-tokens": "456",
+      "x-baseline-finish-reason": "stop",
+      "x-baseline-prompt-cache": "hit",
+      "x-baseline-retries": "0",
+      "x-baseline-sample-rate": "24000"
+     },
+     "ok": true,
+     "bytes": 199812,
+     "sample_rate": 24000,
+     "channels": 1,
+     "bits": 16,
+     "audio_s": 4.16,
+     "rtf": 0.805,
+     "wav_label_ok": true,
+     "header_label_ok": true,
+     "saved": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/06_baseline_gpu_smoke/concurrent_3_shehbaz.wav",
+     "frames_match_audio": true
+    }
+   ],
+   "wall_s": 3.35,
+   "audio_s_total": 14.56,
+   "throughput_x_realtime": 4.346,
+   "batch_sizes": [
+    "4",
+    "4",
+    "4",
+    "4"
+   ],
+   "batch_ids": [
+    "5",
+    "5",
+    "5",
+    "5"
+   ],
+   "ok": true
+  }
+ },
+ "server_info_before": {
+  "ready": true,
+  "error": null,
+  "config": {
+   "host": "127.0.0.1",
+   "port": 8093,
+   "model": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+   "device": "cuda:0",
+   "dtype": "bfloat16",
+   "attn": "sdpa",
+   "voices_dir": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices",
+   "max_batch": 8,
+   "batch_window_ms": 20.0,
+   "no_prompt_cache": false,
+   "prompt_cache_size": 256,
+   "avg_embedding": false,
+   "length_policy": "error",
+   "no_length_retry": false,
+   "qwen_regex": false,
+   "max_queue": 512,
+   "threads": 0,
+   "no_warmup": false,
+   "log_level": "INFO",
+   "log_tz": "Asia/Karachi"
+  },
+  "versions": {
+   "qwen-tts": "0.1.1",
+   "transformers": "4.57.3",
+   "torch": "2.13.0",
+   "torchaudio": "2.11.0",
+   "accelerate": "1.12.0",
+   "tokenizers": "0.22.2",
+   "fastapi": "0.136.3",
+   "uvicorn": "0.53.0",
+   "numpy": "2.3.5",
+   "soundfile": "0.14.0",
+   "librosa": "1.0.0",
+   "torch_cuda": "13.0",
+   "python": "3.12.6"
+  },
+  "startup": {
+   "model": {
+    "model_path": "/home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3",
+    "revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+    "tokenizer_regex": "stock (fix_mistral_regex=True)",
+    "load_s": 1.25,
+    "attn_implementation": "sdpa",
+    "cuda_mem_after_load_gib": 3.913
+   },
+   "generation_config": {
+    "do_sample": true,
+    "repetition_penalty": 1.05,
+    "temperature": 0.9,
+    "top_p": 1.0,
+    "top_k": 50,
+    "subtalker_dosample": true,
+    "subtalker_temperature": 0.9,
+    "subtalker_top_p": 1.0,
+    "subtalker_top_k": 50,
+    "max_new_tokens": 8192
+   },
+   "languages": [
+    "Auto",
+    "Chinese",
+    "English",
+    "French",
+    "German",
+    "Italian",
+    "Japanese",
+    "Korean",
+    "Portuguese",
+    "Russian",
+    "Spanish"
+   ],
+   "samples_per_frame": 1920,
+   "voices": [
+    {
+     "voice": "shehbaz",
+     "language": "Auto",
+     "ref_seconds": 28.044,
+     "ref_sha256_ok": true,
+     "prompt_ms": 637.5,
+     "ref_code_frames": 351,
+     "spk_embedding_norm": 17.2391
+    },
+    {
+     "voice": "trump",
+     "language": "English",
+     "ref_seconds": 23.211,
+     "ref_sha256_ok": true,
+     "prompt_ms": 42.4,
+     "ref_code_frames": 291,
+     "spk_embedding_norm": 17.3856
+    }
+   ],
+   "warmup": {
+    "ms": 577.4,
+    "voice": "shehbaz",
+    "codec_frames": 5,
+    "finish_reason": "stop"
+   },
+   "ready_s": 4.95
+  },
+  "engine": {
+   "stats": {
+    "prompts_created": 2,
+    "prompt_hits": 1,
+    "generate_calls": 1,
+    "batches": 1,
+    "rows": 1
+   },
+   "defaults": {
+    "temperature": 0.9,
+    "top_k": 50,
+    "top_p": 1.0,
+    "repetition_penalty": 1.05
+   },
+   "prompt_cache_entries": 0,
+   "pinned_prompts": 2
+  },
+  "batcher": {
+   "stats": {},
+   "pending": 0,
+   "busy": false,
+   "batch_sizes": {}
+  },
+  "cuda": {
+   "allocated_gib": 3.952,
+   "max_allocated_gib": 4.642,
+   "reserved_gib": 5.043
+  }
+ },
+ "server_info_after": {
+  "ready": true,
+  "error": null,
+  "config": {
+   "host": "127.0.0.1",
+   "port": 8093,
+   "model": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+   "device": "cuda:0",
+   "dtype": "bfloat16",
+   "attn": "sdpa",
+   "voices_dir": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/voices",
+   "max_batch": 8,
+   "batch_window_ms": 20.0,
+   "no_prompt_cache": false,
+   "prompt_cache_size": 256,
+   "avg_embedding": false,
+   "length_policy": "error",
+   "no_length_retry": false,
+   "qwen_regex": false,
+   "max_queue": 512,
+   "threads": 0,
+   "no_warmup": false,
+   "log_level": "INFO",
+   "log_tz": "Asia/Karachi"
+  },
+  "versions": {
+   "qwen-tts": "0.1.1",
+   "transformers": "4.57.3",
+   "torch": "2.13.0",
+   "torchaudio": "2.11.0",
+   "accelerate": "1.12.0",
+   "tokenizers": "0.22.2",
+   "fastapi": "0.136.3",
+   "uvicorn": "0.53.0",
+   "numpy": "2.3.5",
+   "soundfile": "0.14.0",
+   "librosa": "1.0.0",
+   "torch_cuda": "13.0",
+   "python": "3.12.6"
+  },
+  "startup": {
+   "model": {
+    "model_path": "/home/vector/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/fd4b254389122332181a7c3db7f27e918eec64e3",
+    "revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+    "tokenizer_regex": "stock (fix_mistral_regex=True)",
+    "load_s": 1.25,
+    "attn_implementation": "sdpa",
+    "cuda_mem_after_load_gib": 3.913
+   },
+   "generation_config": {
+    "do_sample": true,
+    "repetition_penalty": 1.05,
+    "temperature": 0.9,
+    "top_p": 1.0,
+    "top_k": 50,
+    "subtalker_dosample": true,
+    "subtalker_temperature": 0.9,
+    "subtalker_top_p": 1.0,
+    "subtalker_top_k": 50,
+    "max_new_tokens": 8192
+   },
+   "languages": [
+    "Auto",
+    "Chinese",
+    "English",
+    "French",
+    "German",
+    "Italian",
+    "Japanese",
+    "Korean",
+    "Portuguese",
+    "Russian",
+    "Spanish"
+   ],
+   "samples_per_frame": 1920,
+   "voices": [
+    {
+     "voice": "shehbaz",
+     "language": "Auto",
+     "ref_seconds": 28.044,
+     "ref_sha256_ok": true,
+     "prompt_ms": 637.5,
+     "ref_code_frames": 351,
+     "spk_embedding_norm": 17.2391
+    },
+    {
+     "voice": "trump",
+     "language": "English",
+     "ref_seconds": 23.211,
+     "ref_sha256_ok": true,
+     "prompt_ms": 42.4,
+     "ref_code_frames": 291,
+     "spk_embedding_norm": 17.3856
+    }
+   ],
+   "warmup": {
+    "ms": 577.4,
+    "voice": "shehbaz",
+    "codec_frames": 5,
+    "finish_reason": "stop"
+   },
+   "ready_s": 4.95
+  },
+  "engine": {
+   "stats": {
+    "prompts_created": 2,
+    "prompt_hits": 8,
+    "generate_calls": 5,
+    "batches": 5,
+    "rows": 8
+   },
+   "defaults": {
+    "temperature": 0.9,
+    "top_k": 50,
+    "top_p": 1.0,
+    "repetition_penalty": 1.05
+   },
+   "prompt_cache_entries": 0,
+   "pinned_prompts": 2
+  },
+  "batcher": {
+   "stats": {
+    "submitted": 7,
+    "max_pending": 4,
+    "completed": 7
+   },
+   "pending": 0,
+   "busy": false,
+   "batch_sizes": {
+    "1": 3,
+    "4": 1
+   }
+  },
+  "cuda": {
+   "allocated_gib": 3.952,
+   "max_allocated_gib": 6.71,
+   "reserved_gib": 8.916
+  }
+ },
+ "finished": "2026-09-25T04:22:30+05:00",
+ "ok": true
+}

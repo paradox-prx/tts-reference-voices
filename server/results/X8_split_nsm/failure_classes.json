@@ -1,0 +1,105 @@
+{
+ "phase": "X8_split_nsm",
+ "runs": {
+  "split60_nsm_shehbaz_xxlong_c8_n43_nonstream_server [shehbaz]": {
+   "n": 43,
+   "runaways": 0,
+   "severe": {
+    "k": 5,
+    "rate": 0.1163,
+    "ci95": [
+     0.0507,
+     0.2448
+    ]
+   },
+   "moderate": {
+    "k": 8,
+    "rate": 0.186,
+    "ci95": [
+     0.0974,
+     0.3262
+    ]
+   },
+   "clean": {
+    "k": 30,
+    "rate": 0.6977,
+    "ci95": [
+     0.5489,
+     0.814
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 13,
+    "rate": 0.3023,
+    "ci95": [
+     0.186,
+     0.4511
+    ]
+   },
+   "reasons": {
+    "repeat": 7,
+    "voiced_gap": 5,
+    "skip": 4,
+    "char_ratio<0.8": 1,
+    "skip_phrase": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3332,
+    "cer_nospace": 0.1408,
+    "sim_prompt_large": 0.8626,
+    "sim_prompt_base": 0.9892,
+    "sim_heldout_large": 0.8939
+   }
+  },
+  "ALL": {
+   "n": 43,
+   "runaways": 0,
+   "severe": {
+    "k": 5,
+    "rate": 0.1163,
+    "ci95": [
+     0.0507,
+     0.2448
+    ]
+   },
+   "moderate": {
+    "k": 8,
+    "rate": 0.186,
+    "ci95": [
+     0.0974,
+     0.3262
+    ]
+   },
+   "clean": {
+    "k": 30,
+    "rate": 0.6977,
+    "ci95": [
+     0.5489,
+     0.814
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 13,
+    "rate": 0.3023,
+    "ci95": [
+     0.186,
+     0.4511
+    ]
+   },
+   "reasons": {
+    "repeat": 7,
+    "voiced_gap": 5,
+    "skip": 4,
+    "char_ratio<0.8": 1,
+    "skip_phrase": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3332,
+    "cer_nospace": 0.1408,
+    "sim_prompt_large": 0.8626,
+    "sim_prompt_base": 0.9892,
+    "sim_heldout_large": 0.8939
+   }
+  }
+ }
+}

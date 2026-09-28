@@ -1,0 +1,20 @@
+=== 2026-09-25T03:56:28+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump shehbaz --size short -n 1 -c 1 --warmup 0 --voice-mode upload --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P0_smoke --gpus 0 --tag direct --meta phase=P0_smoke --meta via=engine --meta 'engine=vllm-omni default (engine)' --meta engine_kind=vllm --meta variant=default --meta venv=engine --meta gateway= --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0795 s/letter (file); suspect outside 0.6-1.8 x; voice='bench-trump'
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.0880 s/letter (file); suspect outside 0.6-1.8 x; voice='bench-shehbaz'
+voice upload 'bench-trump': HTTP 200 {"success":true,"voice":{"name":"bench-trump","consent":"benchmark","created_at":1790290588,"mime_type":"audio/wav","file_size":1114156,"ref_text":"Almost every
+trump short (en.json): trump 393 texts
+  direct_trump_short_c1_n1_nonstream_upload: ok 1/1 err 0 suspect 0 (short 0, long 0; pace x0.913) | lat p50=0.754s p90=0.754s p99=0.754s | 5.2x realtime (p90-wall 5.2x, stragglers 0), 1.33 req/s | gpu 19450 MiB 98.0%
+voice upload 'bench-shehbaz': HTTP 200 {"success":true,"voice":{"name":"bench-shehbaz","consent":"benchmark","created_at":1790290589,"mime_type":"audio/wav","file_size":1346132,"ref_text":"اور حملوں 
+shehbaz short (ur.json): shehbaz 345 texts
+  direct_shehbaz_short_c1_n1_nonstream_upload: ok 1/1 err 0 suspect 0 (short 0, long 0; pace x1.143) | lat p50=1.238s p90=1.238s p99=1.238s | 5.36x realtime (p90-wall 5.36x, stragglers 0), 0.81 req/s | gpu 19450 MiB 99.0%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P0_smoke
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| direct_trump_short_c1_n1_nonstream_inline | 1 | 1 | 0 | 0 | 0.782 | 0.782 | 0.782 | – | – | 4.0 | 5.11 | 5.11 | 0 | 0.196 | 1.28 | 19455 | 99.0 |
+| direct_shehbaz_short_c1_n1_nonstream_inline | 1 | 1 | 0 | 0 | 1.383 | 1.383 | 1.383 | – | – | 7.52 | 5.43 | 5.44 | 0 | 0.184 | 0.72 | 19452 | 99.0 |
+| direct_trump_short_c1_n1_stream_inline | 1 | 1 | 0 | 0 | 0.646 | 0.646 | 0.646 | 0.124 | 0.124 | 3.2 | 4.95 | 4.95 | 0 | 0.202 | 1.55 | 19452 | 99.0 |
+| direct_shehbaz_short_c1_n1_stream_inline | 1 | 1 | 0 | 0 | 1.54 | 1.54 | 1.54 | 0.119 | 0.119 | 8.32 | 5.4 | 5.4 | 0 | 0.185 | 0.65 | 19452 | 98.7 |
+| direct_trump_short_c1_n1_nonstream_upload | 1 | 1 | 0 | 0 | 0.754 | 0.754 | 0.754 | – | – | 3.92 | 5.2 | 5.2 | 0 | 0.192 | 1.33 | 19450 | 98.0 |
+| direct_shehbaz_short_c1_n1_nonstream_upload | 1 | 1 | 0 | 0 | 1.238 | 1.238 | 1.238 | – | – | 6.64 | 5.36 | 5.36 | 0 | 0.186 | 0.81 | 19450 | 99.0 |
+

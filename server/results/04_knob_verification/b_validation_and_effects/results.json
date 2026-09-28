@@ -1,0 +1,193 @@
+{
+ "when": "2026-09-25T03:53:57.842146+05:00",
+ "validation": [
+  {
+   "case": "extra rp=-1",
+   "status": 400,
+   "expected": 400,
+   "pass": true,
+   "error": "{\"error\":{\"message\":\"extra_params.repetition_penalty must be a finite number > 0\",\"type\":\"BadRequestError\",\"param\":null,\"code\":400}}"
+  },
+  {
+   "case": "toplevel rp=-1",
+   "status": 200,
+   "expected": 200,
+   "pass": true,
+   "error": null
+  },
+  {
+   "case": "extra temperature=-1",
+   "status": 400,
+   "expected": 400,
+   "pass": true,
+   "error": "{\"error\":{\"message\":\"Speech generation failed: temperature must be non-negative, got -1. (parameter=temperature, value=-1)\",\"type\":\"BadRequestError\",\"param\":null,\"code\":400}}"
+  },
+  {
+   "case": "toplevel temperature=-1",
+   "status": 200,
+   "expected": 200,
+   "pass": true,
+   "error": null
+  },
+  {
+   "case": "extra top_k=0 (invalid)",
+   "status": 200,
+   "expected": 400,
+   "pass": false,
+   "error": null
+  },
+  {
+   "case": "language Urdu (unsupported)",
+   "status": 400,
+   "expected": 400,
+   "pass": true,
+   "error": "{\"error\":{\"message\":\"Invalid language 'Urdu'. Supported: Auto, Chinese, English, French, German, Italian, Japanese, Korean, Portuguese, Russian, Spanish\",\"type\":\"BadRequestError\",\"param\":null,\"code\":4"
+  },
+  {
+   "case": "non_streaming_mode='x' (bad type)",
+   "status": 400,
+   "expected": 400,
+   "pass": true,
+   "error": "{\"error\":{\"message\":\"1 validation error:\\n  {'type': 'bool_parsing', 'loc': ('body', 'non_streaming_mode'), 'msg': 'Input should be a valid boolean, unable to interpret input', 'input': 'x'}\",\"type\":\""
+  },
+  {
+   "case": "voice unknown",
+   "status": 400,
+   "expected": 400,
+   "pass": true,
+   "error": "{\"error\":{\"message\":\"Base task with built-in speaker 'nobody-here' requires 'ref_audio' for voice cloning\",\"type\":\"BadRequestError\",\"param\":null,\"code\":400}}"
+  }
+ ],
+ "effects": [
+  {
+   "tag": "default",
+   "extra": {},
+   "n": 8,
+   "audio_s_mean": 5.19,
+   "audio_s_sd": 0.206,
+   "audio_s_min": 4.8,
+   "audio_s_max": 5.44,
+   "frames": [
+    66,
+    63,
+    67,
+    66,
+    69,
+    66,
+    69,
+    61
+   ]
+  },
+  {
+   "tag": "rp_3.0",
+   "extra": {
+    "extra_params": {
+     "repetition_penalty": 3.0
+    }
+   },
+   "n": 8,
+   "audio_s_mean": 4.89,
+   "audio_s_sd": 0.189,
+   "audio_s_min": 4.64,
+   "audio_s_max": 5.2,
+   "frames": [
+    59,
+    63,
+    65,
+    62,
+    66,
+    62,
+    61,
+    59
+   ]
+  },
+  {
+   "tag": "temp_0.05",
+   "extra": {
+    "extra_params": {
+     "temperature": 0.05
+    }
+   },
+   "n": 8,
+   "audio_s_mean": 5.25,
+   "audio_s_sd": 0.302,
+   "audio_s_min": 4.88,
+   "audio_s_max": 5.92,
+   "frames": [
+    66,
+    75,
+    67,
+    65,
+    62,
+    66,
+    63,
+    69
+   ]
+  },
+  {
+   "tag": "temp_1.5",
+   "extra": {
+    "extra_params": {
+     "temperature": 1.5
+    }
+   },
+   "n": 8,
+   "audio_s_mean": 4.98,
+   "audio_s_sd": 0.373,
+   "audio_s_min": 4.08,
+   "audio_s_max": 5.28,
+   "frames": [
+    67,
+    52,
+    63,
+    65,
+    67,
+    67,
+    63,
+    62
+   ]
+  },
+  {
+   "tag": "nsm_true",
+   "extra": {
+    "non_streaming_mode": true
+   },
+   "n": 8,
+   "audio_s_mean": 4.99,
+   "audio_s_sd": 0.468,
+   "audio_s_min": 4.32,
+   "audio_s_max": 5.92,
+   "frames": [
+    55,
+    59,
+    75,
+    63,
+    58,
+    66,
+    64,
+    67
+   ]
+  },
+  {
+   "tag": "lang_auto",
+   "extra": {
+    "language": "Auto"
+   },
+   "n": 8,
+   "audio_s_mean": 5.13,
+   "audio_s_sd": 0.172,
+   "audio_s_min": 4.8,
+   "audio_s_max": 5.44,
+   "frames": [
+    61,
+    69,
+    66,
+    64,
+    65,
+    66,
+    64,
+    66
+   ]
+  }
+ ]
+}

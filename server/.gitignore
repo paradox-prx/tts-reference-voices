@@ -4,13 +4,18 @@ wheels-extra/
 ops/upstream/
 *.whl
 *.part
-# generated audio and run output (AI-generated audio: never publish)
-results/
+# benchmark output: results/ numbers and logs are in git; its audio is not (AI-generated voice clones). Labelled FLAC
+# copies are in the GitHub release (results/README.md), and the final server run's FLACs are in git.
+results/_samples*/
+results/**/*.lock
+*.pcm
 *.wav
 *.flac
 *.mp3
 *.opus
 logs/
+!results/*/logs/
+!results/13_final_server/**/*.flac
 state/
 # secrets
 .env

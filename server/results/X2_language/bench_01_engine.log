@@ -1,0 +1,12 @@
+=== 2026-09-25T05:24:04+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice trump --size prompts -c 16 --language Auto --extra-param repetition_penalty=1.05 --timeout 900 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X2_language --gpus 0 --tag lang_auto --meta phase=X2_language --meta via=engine --meta 'engine=vllm-omni custom_voices (engine)' --meta engine_kind=vllm --meta variant=custom_voices --meta venv=engine --meta gateway= --meta qc=false
+voice trump (en): ref qwen3-tts.wav 23.21 s / 292 letters; expected pace 0.0700 s/letter (file); suspect outside 0.6-1.8 x
+warmup trump 1: 0.37s ok
+warmup trump 2: 0.68s ok
+trump prompts (trump_en.json): trump 43 texts
+  lang_auto_trump_prompts_c16_n43_nonstream_inline: ok 43/43 err 0 suspect 0 (short 0, long 0; pace x1.015) | lat p50=16.711s p90=19.089s p99=26.056s | 27.96x realtime (p90-wall 25.9x, stragglers 0), 0.86 req/s | gpu 19829 MiB 99.1%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/X2_language
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| lang_auto_trump_prompts_c16_n43_nonstream_inline | 43 | 43 | 0 | 0 | 16.711 | 19.089 | 26.056 | – | – | 32.52 | 27.96 | 25.9 | 0 | 0.53 | 0.86 | 19829 | 99.1 |
+

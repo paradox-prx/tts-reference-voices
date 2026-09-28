@@ -1,0 +1,85 @@
+{
+ "name": "non_streaming_mode",
+ "url": "http://127.0.0.1:8091",
+ "voice": "shehbaz",
+ "text": "میرے پیارے بہنو اور بھائیو، جب میں آپ کے درمیان آتا ہوں تو میرا دل خوشی سے بھر جاتا ہے۔",
+ "seed": null,
+ "spec": {
+  "name": "non_streaming_mode",
+  "via": "engine",
+  "voice": "shehbaz",
+  "fails": {
+   "nsm_invalid": {
+    "non_streaming_mode": "x"
+   }
+  },
+  "succeeds": {
+   "nsm_true": {
+    "non_streaming_mode": true
+   }
+  }
+ },
+ "deterministic_base": false,
+ "takes": [
+  {
+   "label": "base_a",
+   "status": 200,
+   "error": null,
+   "latency_s": 1.657,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto"
+   },
+   "headers": {
+    "x-vllm-omni-input-tokens": "409",
+    "x-vllm-omni-output-tokens": "113",
+    "x-vllm-omni-total-tokens": "522",
+    "x-vllm-omni-input-text-tokens": "58",
+    "x-vllm-omni-input-audio-tokens": "351"
+   },
+   "audio_s": 8.96,
+   "pcm_sha256": "8b8506eaa171afde8ec68606f6a28e47ae69b94196a9465bf095bf40ea3115ba",
+   "file": "base_a.wav"
+  },
+  {
+   "label": "fails_nsm_invalid",
+   "status": 400,
+   "error": "HTTP 400: {\"error\":{\"message\":\"1 validation error:\\n  {'type': 'bool_parsing', 'loc': ('body', 'non_streaming_mode'), 'msg': 'Input should be a valid boolean, unable to interpret input', 'input': 'x'}\",\"type\":\"",
+   "latency_s": 0.01,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto",
+    "non_streaming_mode": "x"
+   },
+   "headers": {},
+   "verdict": "refused"
+  },
+  {
+   "label": "succeeds_nsm_true",
+   "status": 200,
+   "error": null,
+   "latency_s": 1.454,
+   "request": {
+    "task_type": "Base",
+    "response_format": "wav",
+    "language": "Auto",
+    "non_streaming_mode": true
+   },
+   "headers": {
+    "x-vllm-omni-input-tokens": "409",
+    "x-vllm-omni-output-tokens": "97",
+    "x-vllm-omni-total-tokens": "506",
+    "x-vllm-omni-input-text-tokens": "58",
+    "x-vllm-omni-input-audio-tokens": "351"
+   },
+   "audio_s": 7.68,
+   "pcm_sha256": "19cd24842bc3676f06c08f2f5f6635b3777233a8efa4306ef1918f10940bb10d",
+   "file": "succeeds_nsm_true.wav",
+   "verdict": "accepted"
+  }
+ ],
+ "problems": [],
+ "ok": true
+}

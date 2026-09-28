@@ -1,0 +1,12 @@
+=== 2026-09-25T03:59:16+05:00 /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/venvs/gateway/bin/python /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/bench/bench_tts.py --voice shehbaz --size medium -c 8 -n 16 --extra-param temperature=0.9 --extra-param top_k=50 --max-new-tokens auto --url http://127.0.0.1:8091 --out /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P1_screen_no_async_chunk --gpus 0 --meta phase=P1_screen_no_async_chunk --meta via=engine --meta 'engine=vllm-omni no_async_chunk (engine)' --meta engine_kind=vllm --meta variant=no_async_chunk --meta venv=engine --meta gateway= --meta qc=false
+voice shehbaz (ur): ref qwen3-tts.wav 28.04 s / 153 letters; expected pace 0.0880 s/letter (file); suspect outside 0.6-1.8 x
+warmup shehbaz 1: 0.90s ok
+warmup shehbaz 2: 1.06s ok
+shehbaz medium (ur.json): shehbaz 145 texts
+  shehbaz_medium_c8_n16_nonstream_inline: ok 16/16 err 0 suspect 0 (short 0, long 0; pace x1.273) | lat p50=4.954s p90=6.07s p99=7.902s | 14.53x realtime (p90-wall 14.38x, stragglers 0), 1.35 req/s | gpu 23102 MiB 96.5%
+
+results: /home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/P1_screen_no_async_chunk
+| run | n | ok | err | suspect | lat p50 | lat p90 | lat p99 | TTFA p50 | TTFA p90 | audio s/req | x realtime | x realtime (p90 wall) | stragglers | RTF p50 | req/s | GPU MiB | GPU % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| shehbaz_medium_c8_n16_nonstream_inline | 16 | 16 | 0 | 0 | 4.954 | 6.07 | 7.902 | – | – | 10.73 | 14.53 | 14.38 | 0 | 0.451 | 1.35 | 23102 | 96.5 |
+

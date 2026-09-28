@@ -1,0 +1,31 @@
+{
+ "url": "http://127.0.0.1:8091",
+ "voice": [
+  "shehbaz"
+ ],
+ "size": [
+  "long"
+ ],
+ "n": null,
+ "c": 8,
+ "sweep": "1,8",
+ "matrix": false,
+ "stream": true,
+ "format": "wav",
+ "pcm_rate": 24000,
+ "language": null,
+ "voice_mode": "inline",
+ "voice_name": null,
+ "consent": "benchmark",
+ "param": [],
+ "pools": null,
+ "takes": 1,
+ "seed": null,
+ "gpus": "0",
+ "tag": "e03_async_stream",
+ "timeout": null,
+ "warmup": 0,
+ "out": "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/server/results/03_ab_async_chunk/async_chunk",
+ "no_audio": false,
+ "params": {}
+}

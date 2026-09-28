@@ -1,0 +1,168 @@
+{
+ "phase": "X3_custom_voice",
+ "runs": {
+  "avg_shehbaz_prompts_c16_n43_nonstream_server-avg [shehbaz]": {
+   "n": 43,
+   "runaways": 2,
+   "severe": {
+    "k": 7,
+    "rate": 0.1628,
+    "ci95": [
+     0.0812,
+     0.2997
+    ]
+   },
+   "moderate": {
+    "k": 5,
+    "rate": 0.1163,
+    "ci95": [
+     0.0507,
+     0.2448
+    ]
+   },
+   "clean": {
+    "k": 31,
+    "rate": 0.7209,
+    "ci95": [
+     0.5731,
+     0.8325
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 12,
+    "rate": 0.2791,
+    "ci95": [
+     0.1675,
+     0.4269
+    ]
+   },
+   "reasons": {
+    "skip": 5,
+    "repeat": 3,
+    "skip_phrase": 2,
+    "char_ratio<0.8": 2,
+    "runaway": 2,
+    "garbled": 1,
+    "voiced_gap": 1,
+    "char_ratio": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3464,
+    "cer_nospace": 0.1508,
+    "sim_prompt_large": 0.7693,
+    "sim_prompt_base": 0.982,
+    "sim_heldout_large": 0.8119
+   }
+  },
+  "prompt_shehbaz_prompts_c16_n43_nonstream_server-prompt [shehbaz]": {
+   "n": 43,
+   "runaways": 1,
+   "severe": {
+    "k": 5,
+    "rate": 0.1163,
+    "ci95": [
+     0.0507,
+     0.2448
+    ]
+   },
+   "moderate": {
+    "k": 6,
+    "rate": 0.1395,
+    "ci95": [
+     0.0656,
+     0.2726
+    ]
+   },
+   "clean": {
+    "k": 32,
+    "rate": 0.7442,
+    "ci95": [
+     0.5976,
+     0.8507
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 11,
+    "rate": 0.2558,
+    "ci95": [
+     0.1493,
+     0.4024
+    ]
+   },
+   "reasons": {
+    "skip_phrase": 5,
+    "skip": 3,
+    "char_ratio<0.8": 3,
+    "char_ratio": 2,
+    "unaligned_tail": 1,
+    "repeat": 1,
+    "loop_long_word": 1,
+    "runaway": 1,
+    "garbled": 1,
+    "voiced_gap": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3532,
+    "cer_nospace": 0.1575,
+    "sim_prompt_large": 0.7741,
+    "sim_prompt_base": 0.9825,
+    "sim_heldout_large": 0.8166
+   }
+  },
+  "ALL": {
+   "n": 86,
+   "runaways": 3,
+   "severe": {
+    "k": 12,
+    "rate": 0.1395,
+    "ci95": [
+     0.0817,
+     0.2282
+    ]
+   },
+   "moderate": {
+    "k": 11,
+    "rate": 0.1279,
+    "ci95": [
+     0.0729,
+     0.2147
+    ]
+   },
+   "clean": {
+    "k": 63,
+    "rate": 0.7326,
+    "ci95": [
+     0.6305,
+     0.8147
+    ]
+   },
+   "severe_or_moderate": {
+    "k": 23,
+    "rate": 0.2674,
+    "ci95": [
+     0.1853,
+     0.3695
+    ]
+   },
+   "reasons": {
+    "skip": 8,
+    "skip_phrase": 7,
+    "char_ratio<0.8": 5,
+    "repeat": 4,
+    "char_ratio": 3,
+    "runaway": 3,
+    "garbled": 2,
+    "voiced_gap": 2,
+    "unaligned_tail": 1,
+    "loop_long_word": 1
+   },
+   "non_severe_means": {
+    "wer": 0.3499,
+    "cer_nospace": 0.1542,
+    "sim_prompt_large": 0.7718,
+    "sim_prompt_base": 0.9822,
+    "sim_heldout_large": 0.8143
+   }
+  }
+ }
+}
