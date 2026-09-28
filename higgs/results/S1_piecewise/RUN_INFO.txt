@@ -1,0 +1,4 @@
+screen S1_piecewise started 2026-09-28T19:05:05+05:00 url=http://127.0.0.1:8095 extra: --meta deploy=piecewise.yaml
+name, driver_version, memory.used [MiB], memory.total [MiB]
+NVIDIA GeForce RTX 3090, 580.95.05, 15603 MiB, 24576 MiB
+== bench --tag ur_ns --voice shehbaz --size short long xlong --sweep 1,4,8,16 --n-rule 8:2

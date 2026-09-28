@@ -30,6 +30,15 @@ class Settings(BaseSettings):
     engine_api_key: SecretStr | None = None
     # the engine runs with engine/patches rep_penalty applied, so extra_params.repetition_penalty reaches the talker
     engine_per_request_rp: bool = False
+    # Which model the vLLM-Omni engine serves decides the request shape. Qwen3-TTS (default): task_type "Base", a
+    # language field ("English" / "Auto"), codec 12.5 frames/s, reference clip references.json["qwen3-tts"].
+    # Higgs TTS 3 (higgs/): TTS_ENGINE_TASK_TYPE=none, TTS_ENGINE_LANGUAGE=0 (it detects the language and takes
+    # neither field), TTS_CODEC_HZ=25 (max_new_tokens is in codec frames), TTS_REFERENCE_KEY=qwen3-tts or another
+    # 1-30 s entry of references.json.
+    engine_task_type: str | None = "Base"
+    engine_language: bool = True
+    codec_hz: float = Field(12.5, gt=0)
+    reference_key: str = "qwen3-tts"
     voices_dir: Path = REPO_ROOT / "voices"
     # registered: upload each voice to the engine once, then send its name; inline: send the reference clip with
     # every request; precomputed: the engine loaded the voices at startup (custom_voice_dir, e.g. with an averaged

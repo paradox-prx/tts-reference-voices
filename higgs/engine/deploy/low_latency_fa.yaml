@@ -1,0 +1,70 @@
+# low_latency_fa.yaml: low_latency.yaml with FLASH_ATTN (FlashInfer JIT fails on this venv, see flash_attn.yaml); Higgs TTS 3 (bosonai/higgs-tts-3-4b) on one RTX 3090, derived from vllm-omni 0.28.0's
+# vllm_omni/deploy/higgs_multimodal_qwen3_low_latency.yaml by higgs/engine/make_deploy.py. Differences from upstream:
+#   - stage-0 sampling: temperature 0.8, top_k 50, top_p 1.0 (Boson's voice-clone recommendation, model card
+#     "Voice cloning": temperature 0.8, top_k 50; SGLang-Omni's default top_p is null) instead of 1.0 / 50 / 0.95;
+#   - no fixed `seed: 42` on either stage (upstream pins it, so every take of a prompt would come out identical and
+#     retries could never help; vLLM-Omni honours a per-request seed when a client wants one);
+#   - everything else (memory split 0.60 / 0.25, max_num_seqs, FLASHINFER attention with the TRT-LLM XQA path off,
+#     chunking 25 frames = 1 s at the 25 fps codec, first chunk 1 frame, max_tokens 2048 = 82 s of audio) is upstream.
+async_chunk: true
+connectors:
+  connector_of_shared_memory:
+    name: SharedMemoryConnector
+    extra:
+      codec_streaming: true
+      codec_chunk_frames: 25
+      codec_left_context_frames: 25
+      codec_right_holdback_frames: 4
+      initial_codec_chunk_frames: 1
+      connector_get_sleep_s: 0.01
+      connector_get_max_wait_first_chunk: 5000
+      connector_get_max_wait: 500
+stages:
+- stage_id: 0
+  max_num_seqs: 16
+  gpu_memory_utilization: 0.6
+  enforce_eager: false
+  attention_backend: FLASH_ATTN
+  attention_config:
+    use_trtllm_attention: false
+  trust_remote_code: true
+  enable_prefix_caching: true
+  async_scheduling: false
+  compilation_config:
+    cudagraph_capture_sizes:
+    - 1
+    - 2
+    - 4
+    - 8
+    - 16
+    cudagraph_mode: FULL_DECODE_ONLY
+    cudagraph_num_of_warmups: 1
+  max_num_batched_tokens: 4096
+  max_model_len: 8192
+  devices: '0'
+  output_connectors:
+    to_stage_1: connector_of_shared_memory
+  default_sampling_params:
+    temperature: 0.8
+    top_p: 1.0
+    top_k: 50
+    max_tokens: 2048
+    repetition_penalty: 1.0
+- stage_id: 1
+  max_num_seqs: 16
+  gpu_memory_utilization: 0.25
+  enforce_eager: true
+  trust_remote_code: true
+  enable_prefix_caching: false
+  async_scheduling: false
+  max_num_batched_tokens: 65536
+  max_model_len: 65536
+  devices: '0'
+  input_connectors:
+    from_stage_0: connector_of_shared_memory
+  default_sampling_params:
+    temperature: 0.0
+    top_p: 1.0
+    top_k: -1
+    max_tokens: 65536
+    repetition_penalty: 1.0

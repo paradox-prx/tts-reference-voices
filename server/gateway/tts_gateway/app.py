@@ -321,7 +321,7 @@ class Gateway:
 
     async def _warm(self, voice: Voice) -> None:
         text = WARMUP_TEXT.get(voice.lang, WARMUP_TEXT["en"])
-        cap = max_new_tokens_for(count_words(text)) if self.settings.length_cap else None
+        cap = max_new_tokens_for(count_words(text), self.settings.codec_hz) if self.settings.length_cap else None
         req = SynthesisRequest(text=text, voice=voice, language=voice.language, max_new_tokens=cap,
                                request_id=f"warmup-{voice.id}")
         start = time.perf_counter()
@@ -479,9 +479,10 @@ class Gateway:
 
     def _length_cap(self, check: Check) -> int:
         """The NOTES words formula, tightened to the voice's expected pace when there is a band."""
-        cap = max_new_tokens_for(check.words)
+        cap = max_new_tokens_for(check.words, self.settings.codec_hz)
         if check.band is not None:
-            cap = min(cap, pace_cap(check.band, check.words, check.letters, self.settings.length_cap_headroom))
+            cap = min(cap, pace_cap(check.band, check.words, check.letters, self.settings.length_cap_headroom,
+                                    self.settings.codec_hz))
         return cap
 
     async def _acquire(self, log: RequestLog) -> Slot:
@@ -647,7 +648,8 @@ def create_app(settings: Settings | None = None, *, voices: VoiceRegistry | None
                backend: TTSBackend | None = None) -> FastAPI:
     settings = settings or Settings()
     if voices is None:
-        voices = VoiceRegistry.load(settings.voices_dir, load_pace(settings.pace_file, settings.pace))
+        voices = VoiceRegistry.load(settings.voices_dir, load_pace(settings.pace_file, settings.pace),
+                                    settings.reference_key)
     if not len(voices) and not settings.allow_inline_ref:
         raise RuntimeError(f"no valid voices under {settings.voices_dir} and inline cloning is disabled")
     gw = Gateway(settings, voices, backend or create_backend(settings, voices))

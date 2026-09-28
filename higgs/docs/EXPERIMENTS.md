@@ -13,7 +13,9 @@ its `summary.json`, the per-request rows (latency, time to first audio, audio se
 | H01 | first start, upstream profile (FLASHINFER attention) | FAILED: FlashInfer JIT (nvcc 13.4 vs CUDA 13.0 headers), same root cause as the Qwen sampler |
 | H02 | start with FLASH_ATTN; first clone requests | engine up in 30 s; plain TTS ok; every clone request HTTP 400 "Token id -100 is out of vocabulary" (vllm-omni #6837) |
 | H03 | backport of PR #7065; smoke | clone works: c=1 RTF ~0.4, TTFA 0.22 s, Urdu WER 5 % / English 0 %, SIM-L 0.77 |
-| B0 | baseline, `flash_attn.yaml` (upstream default profile) | running from 18:23 |
+| B0 | baseline, `flash_attn.yaml` (upstream default profile) | 648 takes, 3.5 h audio, 0 errors: Urdu 2.5x realtime at c=1, 12-20x at c=16, TTFA 0.34 s; Urdu WER 1-6 % up to ~65 words, SIM-L 0.84-0.86; 43 % of ~100-word and 100 % of ~200-word texts truncated |
+| S1a | `low_latency.yaml` / `low_latency_fa.yaml` (FULL_DECODE_ONLY CUDA graphs) | FAILED: FlashInfer JIT; then `cudaErrorStreamCaptureUnsupported` during graph capture |
+| S1 | `piecewise.yaml` (PIECEWISE CUDA graphs, FLASH_ATTN) | engine up (5 graphs captured in 1 s); screen running from 19:05 |
 
 ## H00 setup (2026-09-28 17:3x-18:xx)
 
@@ -77,4 +79,33 @@ Quality (`results/00_smoke/scores_summary.md`; Whisper large-v3 int8 on CPU, for
 SIM vs the prompt clip, wavlm-base-plus-sv as the secondary): English WER 0.000 on 6 takes; Urdu corpus WER 0.053,
 CER-nospace 0.016 on 6 takes (the only edit: بہنو/بھائیو transcribed with the plural-vocative ں, a spelling
 variant); SIM-large 0.77 (shehbaz 0.76, trump 0.78), SIM-base 0.956; gate fail 0/12, bad 0/12. For scale, the Qwen3-TTS
-takes of this speaker score WER ~0.37 in Urdu (accented) at SIM-large ~0.8 (`server/REPORT.md` §5).
+takes of this speaker score WER 0.34-0.38 in Urdu (accented) at SIM-large 0.70 (short) - 0.79 (`server/REPORT.md`
+§5.1), and Whisper transcribes the speaker's real recordings at WER 0.12.
+
+## B0 baseline (`results/B0_baseline_flash_attn`, 18:23-18:51, scored 19:01 on the GPU)
+
+`higgs/bench/baseline.sh` on `flash_attn.yaml`: shehbaz short/medium/long/xlong/xxlong x c=1,2,4,8,16 non-streaming;
+shehbaz short/long/xlong x c=1,4,8,16 streaming; trump short/xlong x c=1,8 both ways. 45 runs, 648 takes, 3.49 h of
+audio, 0 HTTP errors, 83 pace-suspect takes (72 of them the xxlong truncations). Full tables: `COMPARE.md` (against
+the Qwen matrix), `QUALITY.md`, and `REPORT.md` §3-4. Headlines: Urdu 2.5x realtime at c=1 (RTF 0.38-0.41), 12-20x at
+c=16; TTFA 0.34 s at c=1, 1.9-2.5 s at c=16; GPU peak 18.3 GB; Urdu WER 0.034-0.052 on medium/long texts (SIM-L
+0.84-0.86), 0.14 on ~98-word texts (43 % `bad`, mostly deletion runs), 0.83 on ~200-word texts (every take stops at
+15-20 s); English WER 0.004 short, 0.064 on 155-word texts (67 % `bad`, deletions). Two runaways in 648 takes. Scoring
+took 9.5 min on the GPU (engine stopped meanwhile). Samples: `samples/higgs-tts-3/` (26 labelled WAVs, best / mid /
+worst per voice, political texts skipped).
+
+## S1a low-latency profile: two failures (`logs/engine_low_latency.log`, `logs/engine_low_latency_fa.log`)
+
+Upstream's `higgs_multimodal_qwen3_low_latency.yaml` (stage 0 `enforce_eager: false`, `cudagraph_mode:
+FULL_DECODE_ONLY`, capture sizes 1-16) first died in FlashInfer's JIT like H01; with FLASH_ATTN it loaded the model
+(same 44,928-token KV cache) and died while capturing the first decode graph: `torch.AcceleratorError: CUDA error:
+operation not permitted when stream is capturing (cudaErrorStreamCaptureUnsupported)` inside
+`gpu_model_runner.capture_model`, so something in the Higgs talker's decode step (upstream calls this graph path
+experimental) issues a non-capturable call on this stack. Not pursued further today.
+
+## S1 `piecewise.yaml` (vLLM's default PIECEWISE graphs, FLASH_ATTN)
+
+Starts: "Capturing CUDA graphs (mixed prefill-decode, PIECEWISE) 5/5, finished in 1 s, 0.02 GiB"; "Inductor
+compilation was disabled by user settings" (the Higgs config turns torch.compile off, so the piecewise graphs wrap
+uncompiled ops). Plain TTS smoke ok. Screen `results/S1_piecewise` running (short/long/xlong x c=1,4,8,16; streaming
+short/xlong x c=1,4,8; trump xlong c=1,8).

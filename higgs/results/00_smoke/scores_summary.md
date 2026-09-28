@@ -1,6 +1,6 @@
 # Scores: ../higgs/results/00_smoke
 
-Scored 2026-09-28T18:23:42+05:00; gate SIM model `base`, bad SIM model `large`. Rates: k/n with 95 % Wilson CI. Means over takes; corpus = total edits / total reference length.
+Scored 2026-09-28T19:00:56+05:00; gate SIM model `base`, bad SIM model `large`. Rates: k/n with 95 % Wilson CI. Means over takes; corpus = total edits / total reference length.
 
 | run | takes | prompts | WER mean | CER-ns mean | corpus WER | corpus CER-ns | SIM-L prompt | SIM-L heldout | SIM-B prompt | pace ratio | gate fail | bad | bad (take 0) | bad among gate-pass |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|

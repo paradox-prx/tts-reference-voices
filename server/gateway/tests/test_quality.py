@@ -4,17 +4,19 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import json
 import logging
 from collections.abc import Callable
 from datetime import datetime
+from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
 import httpx
 import pytest
 
-from conftest import Start, make_wav
+from conftest import Start, make_wav, write_voice
 from tts_gateway import logs
 from tts_gateway.backends.stub import StubBackend
 from tts_gateway.qc import QCClient
@@ -186,3 +188,45 @@ def test_log_timestamps_are_local_time_with_offset(monkeypatch: pytest.MonkeyPat
     monkeypatch.setattr(logs, "_tz", ZoneInfo("UTC"))
     stamp = datetime.fromisoformat(json.loads(logs.JsonFormatter().format(record))["ts"])
     assert stamp.utcoffset().total_seconds() == 0
+
+
+# ------------------------------------------------------------------------------------------------ engine profiles
+
+async def test_higgs_engine_profile_changes_the_request_shape(tmp_path: Path) -> None:
+    """Higgs TTS 3 behind the same backend: no task_type / language fields, caps in 25 fps frames, another reference
+    entry of references.json (`higgs/`)."""
+    from tts_gateway.backends.base import SynthesisRequest
+    from tts_gateway.backends.vllm_omni import VllmOmniBackend
+    from tts_gateway.config import Settings
+    from tts_gateway.textproc import max_new_tokens_for
+    from tts_gateway.voices import VoiceRegistry, load_pace
+
+    root = tmp_path / "voices"
+    folder = write_voice(root, "alice", "en", "The Qwen reference sentence.", seconds=2.0)
+    wav = make_wav(3.0)
+    (folder / "references" / "other.wav").write_bytes(wav)
+    refs = json.loads((folder / "references" / "references.json").read_text())
+    refs["higgs-v3"] = {"file": "other.wav", "text": "The Higgs reference sentence, a longer one.",
+                        "sha256": hashlib.sha256(wav).hexdigest()}
+    (folder / "references" / "references.json").write_text(json.dumps(refs))
+
+    higgs = Settings(auth_disabled=True, voices_dir=root, engine_task_type="none", engine_language=False,
+                     codec_hz=25, reference_key="higgs-v3", voice_mode="inline")
+    voices = VoiceRegistry.load(root, load_pace(None), higgs.reference_key)
+    alice = voices.get("alice")
+    assert alice and alice.ref_path.name == "other.wav" and alice.ref_seconds == 3.0
+    backend = VllmOmniBackend(higgs, voices)
+    req = SynthesisRequest(text="Hello there.", voice=alice, language="English", request_id="r1", max_new_tokens=None)
+    payload = await backend._payload(req, stream=False)
+    assert "task_type" not in payload and "language" not in payload
+    assert payload["ref_text"] == alice.ref_text and payload["ref_audio"].startswith("data:audio/wav;base64,")
+    await backend.close()
+
+    qwen = Settings(auth_disabled=True, voices_dir=root, voice_mode="inline")
+    backend = VllmOmniBackend(qwen, VoiceRegistry.load(root))
+    payload = await backend._payload(req, stream=False)
+    assert payload["task_type"] == "Base" and payload["language"] == "English"
+    await backend.close()
+
+    assert max_new_tokens_for(10, 25) == 2 * max_new_tokens_for(10) - 60  # frames scale with the codec rate
+    assert Settings(auth_disabled=True, engine_task_type=None).engine_task_type is None

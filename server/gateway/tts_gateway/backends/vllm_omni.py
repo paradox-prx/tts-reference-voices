@@ -276,8 +276,11 @@ class VllmOmniBackend:
         """The /v1/audio/speech body (protocol/audio.py:57-205). The engine ignores unknown fields silently, so only
         fields it reads are sent."""
         s = self._settings
-        payload: dict[str, Any] = {"input": req.text, "task_type": "Base", "language": req.language,
-                                   "response_format": "pcm"}
+        payload: dict[str, Any] = {"input": req.text, "response_format": "pcm"}
+        if s.engine_task_type and s.engine_task_type.lower() != "none":
+            payload["task_type"] = s.engine_task_type  # Qwen3-TTS: "Base" = voice clone; Higgs TTS 3 takes none
+        if s.engine_language:
+            payload["language"] = req.language
         if req.voice is None:
             if not req.ref_audio or not req.ref_text:
                 raise EngineBadRequest("inline cloning needs ref_audio and ref_text")

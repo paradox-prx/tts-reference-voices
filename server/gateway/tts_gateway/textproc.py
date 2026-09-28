@@ -43,9 +43,9 @@ def detect_lang(text: str) -> str:
     return "und"
 
 
-def max_new_tokens_for(words: int) -> int:
+def max_new_tokens_for(words: int, codec_hz: float = CODEC_HZ) -> int:
     """Codec-frame budget: 2.5 words/s, 2.4x headroom, +60 frames, clamped to 96..4096."""
-    frames = math.ceil(words / 2.5 * CODEC_HZ * 2.4 + 60)
+    frames = math.ceil(words / 2.5 * codec_hz * 2.4 + 60)
     return max(MIN_NEW_TOKENS, min(MAX_NEW_TOKENS, frames))
 
 
@@ -77,13 +77,13 @@ class PaceBand:
         return abs(math.log(ratio)) if ratio > 0 else math.inf
 
 
-def pace_cap(band: PaceBand, words: int, letters: int, headroom: float) -> int:
+def pace_cap(band: PaceBand, words: int, letters: int, headroom: float, codec_hz: float = CODEC_HZ) -> int:
     """Codec-frame budget from the expected pace: `headroom` x the band's upper edge x the expected duration, plus
     2 s. A take longer than the band's edge is suspect anyway, so generating further only burns batch time: an Urdu
     runaway left to the engine's own cap (12 frames per text token, ~190 s for a 60-word text) held a batch slot for
     minutes under load (results/01_probe_scaling_engine_direct)."""
     units = letters if band.unit == "letter" else words
-    frames = math.ceil(CODEC_HZ * (headroom * band.hi * band.expected * max(1, units) + 2.0))
+    frames = math.ceil(codec_hz * (headroom * band.hi * band.expected * max(1, units) + 2.0))
     return max(MIN_NEW_TOKENS, min(MAX_NEW_TOKENS, frames))
 
 

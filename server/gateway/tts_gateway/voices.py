@@ -60,8 +60,8 @@ class Voice:
         return engine_language(self.lang)
 
 
-def load_voice(folder: Path) -> Voice:
-    """Read and validate one voice folder; raises VoiceError with the reason."""
+def load_voice(folder: Path, ref_key: str = REFERENCE_KEY) -> Voice:
+    """Read and validate one voice folder (its references.json entry `ref_key`); raises VoiceError with the reason."""
     if not _VOICE_ID.fullmatch(folder.name):
         raise VoiceError("folder name must be a lowercase id: [a-z0-9][a-z0-9_-]{0,63}")
     try:
@@ -72,9 +72,9 @@ def load_voice(folder: Path) -> Voice:
     lang = meta.get("language")
     if not isinstance(lang, str) or not lang:
         raise VoiceError("voice.json has no language")
-    ref = refs.get(REFERENCE_KEY)
+    ref = refs.get(ref_key)
     if not isinstance(ref, dict) or not all(isinstance(ref.get(k), str) and ref[k] for k in ("file", "text", "sha256")):
-        raise VoiceError(f"references.json has no complete {REFERENCE_KEY!r} entry (file, text, sha256)")
+        raise VoiceError(f"references.json has no complete {ref_key!r} entry (file, text, sha256)")
     path = folder / "references" / ref["file"]
     mime = _AUDIO_MIME.get(path.suffix.lower())
     if mime is None or path.parent != folder / "references":
@@ -123,14 +123,15 @@ class VoiceRegistry:
         self.errors = errors or {}
 
     @classmethod
-    def load(cls, root: Path, pace: dict[str, tuple[float, str]] | None = None) -> VoiceRegistry:
-        """Every valid voice folder under root, with its calibrated pace when `pace` has one; invalid folders are
-        logged and skipped."""
+    def load(cls, root: Path, pace: dict[str, tuple[float, str]] | None = None,
+             ref_key: str = REFERENCE_KEY) -> VoiceRegistry:
+        """Every valid voice folder under root (reference entry `ref_key`), with its calibrated pace when `pace` has
+        one; invalid folders are logged and skipped."""
         voices, errors = [], {}
         folders = sorted(p for p in root.iterdir() if p.is_dir()) if root.is_dir() else []
         for folder in folders:
             try:
-                voice = load_voice(folder)
+                voice = load_voice(folder, ref_key)
             except VoiceError as exc:
                 errors[folder.name] = str(exc)
                 logs.event("voice_invalid", logging.ERROR, voice=folder.name, error=str(exc))
