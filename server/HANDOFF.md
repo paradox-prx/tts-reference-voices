@@ -80,9 +80,10 @@
 > `journalctl _SYSTEMD_USER_UNIT=qwen3-tts-gateway.service` (the user journal is not persistent here).
 >
 > **Published samples (user decision, 2026-09-28):** the user asked to push the best English and Urdu samples to the
-> public branch and, asked about it explicitly, chose "public branch, labelled". Ten labelled FLAC takes are in
-> `samples/qwen3-tts/` (README with AI-generated disclaimer, texts, metrics, source runs). Everything else under
-> `server/results/` stays local and unpublished.
+> public branch and, asked about it explicitly, chose "public branch, labelled"; then asked for ~40 sorted by quality.
+> 40 labelled FLAC takes are in `samples/qwen3-tts/{best,mid,worst}/` (20 / 10 / 10; README with AI-generated
+> disclaimer, texts, metrics, failure type, source runs), picked and written by `eval/pick_samples.py` (skips texts
+> that read as political statements or official announcements). Everything else under `server/results/` stays local.
 >
 > **Tests (all green):** gateway 124, engine 30 (+4 skipped: no ops/upstream here), QC 71, eval 8, baseline 86.
 

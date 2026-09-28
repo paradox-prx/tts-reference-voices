@@ -32,7 +32,7 @@ client ──HTTP──▶ gateway :8090  (server/gateway, FastAPI)            a
 | QC sidecar | `qc/tts_qc` (`eval/run.sh -m tts_qc`) | `venvs/eval` |
 | units | `deploy/` (systemd user units, env file, watchdog) | – |
 | benchmark | `../bench/bench_tts.py`, `bench/run_plan.py`, `bench/collect.py` | `venvs/gateway` |
-| offline quality | `eval/score_run.py`, `eval/retry_sim.py` | `venvs/eval` |
+| offline quality | `eval/score_run.py`, `eval/retry_sim.py`, `eval/pick_samples.py` (published samples) | `venvs/eval` |
 | baseline | `baseline/qwen_tts_server.py` (plain qwen-tts, for comparison only) | `venvs/qwentts` |
 
 ## Requirements

@@ -19,7 +19,7 @@ bench/
   pools/{en,ur}.json            de-duplicated short / medium / long / xlong text pools
 NOTES.md                        everything learned so far: settings, measured numbers, failure modes, vLLM-Omni API
 server/                         the Qwen3-TTS server, its benchmark plan, quality eval and REPORT.md
-samples/qwen3-tts/              ten labelled AI-generated samples (best takes of the benchmark, English + Urdu)
+samples/qwen3-tts/              40 labelled AI-generated samples, English + Urdu: best/ (20), mid/ (10), worst/ (10)
 ```
 
 **Setting up a server? Read `NOTES.md` first, then `bench/README.md`.**

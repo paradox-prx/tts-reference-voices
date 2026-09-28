@@ -7,8 +7,8 @@ gateway (`server/gateway`). Measured 2026-09-24/25 on the machine `vector`. Ever
 `bench/report_extract.py`; the experiment-by-experiment log is [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md).
 
 > All generated audio is AI-generated imitation of real people, labelled in every file. The benchmark's takes stay
-> local (`server/results/`, gitignored); the only published audio is ten labelled best-take samples chosen by the
-> repository owner, in [`samples/qwen3-tts/`](../samples/qwen3-tts/README.md).
+> local (`server/results/`, gitignored); the only published audio is 40 labelled takes (20 best, 10 typical, 10 worst
+> failures) requested by the repository owner, in [`samples/qwen3-tts/`](../samples/qwen3-tts/README.md).
 
 ## 1. Summary
 
