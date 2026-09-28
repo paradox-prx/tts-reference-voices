@@ -9,8 +9,8 @@ engine (e.g. Higgs Audio v3) can be added later.
 **Benchmark results and the recommended production configuration are in [REPORT.md](REPORT.md).** Every experiment and
 its numbers are logged in [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md); the architecture is in [docs/DESIGN.md](docs/DESIGN.md).
 
-> Everything this service produces is AI-generated speech imitating real people. Never publish it or present it as a
-> real recording. Every file carries an AI-generated label (WAV LIST/INFO comment, FLAC/Opus Vorbis comment, MP3 ID3
+> Everything this service produces is AI-generated speech imitating real people. Never present it as a real recording,
+> and publish it only labelled as AI-generated (as in [`../samples/qwen3-tts/`](../samples/qwen3-tts/README.md)). Every file carries an AI-generated label (WAV LIST/INFO comment, FLAC/Opus Vorbis comment, MP3 ID3
 > comment) and every response the header `X-AI-Generated: true`.
 
 ## How it fits together

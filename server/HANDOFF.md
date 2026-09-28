@@ -79,6 +79,11 @@
 > Operate: `XDG_RUNTIME_DIR=/run/user/$(id -u) systemctl --user status qwen3-tts-gateway`, logs via
 > `journalctl _SYSTEMD_USER_UNIT=qwen3-tts-gateway.service` (the user journal is not persistent here).
 >
+> **Published samples (user decision, 2026-09-28):** the user asked to push the best English and Urdu samples to the
+> public branch and, asked about it explicitly, chose "public branch, labelled". Ten labelled FLAC takes are in
+> `samples/qwen3-tts/` (README with AI-generated disclaimer, texts, metrics, source runs). Everything else under
+> `server/results/` stays local and unpublished.
+>
 > **Tests (all green):** gateway 124, engine 30 (+4 skipped: no ops/upstream here), QC 71, eval 8, baseline 86.
 
 # Session 1 record (pb-ai-pc1, state as of 2026-09-24 ~19:00 PKT)
