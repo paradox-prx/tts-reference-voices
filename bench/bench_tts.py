@@ -346,7 +346,8 @@ def prompt_texts(args, voice: Voice) -> tuple[list[tuple[str, str | None]], Path
     data = json.loads(path.read_text(encoding="utf-8"))
     if data.get("voice") not in (None, voice.id):
         print(f"  note: {path.name} was written for voice {data.get('voice')!r}, used here for {voice.id!r}")
-    return [(s["plain_text"].strip(), s.get("id")) for s in data["samples"]], path
+    field = getattr(args, "prompt_field", "plain_text")
+    return [((s.get(field) or s["plain_text"]).strip(), s.get("id")) for s in data["samples"]], path
 
 
 def texts_for(args, voice: Voice, size: str) -> tuple[list[tuple[str, str | None]], str]:
@@ -870,6 +871,10 @@ def build_parser() -> argparse.ArgumentParser:
     ap.add_argument("--voices-dir", type=Path, default=Path(os.environ.get("TTS_VOICES_DIR") or REPO / "voices"),
                     help="voice-server/v1 folders (default $TTS_VOICES_DIR or <repo>/voices)")
     ap.add_argument("--size", nargs="+", choices=SIZES, default=["short"], help="text sizes (see above)")
+    ap.add_argument("--prompt-field", default="plain_text",
+                    help="which text of a benchmark prompt to send (default plain_text; higgs_text carries the Higgs TTS "
+                         "inline control tags of benchmarks/*_expressive.json; a prompt without the field falls back "
+                         "to plain_text)")
     ap.add_argument("--prompts-file", type=Path, default=None,
                     help="benchmark JSON for --size prompts (default: benchmarks/trump_en.json for trump, "
                          "benchmarks/shehbaz_ur.json for shehbaz; e.g. benchmarks/shehbaz_ur_expressive.json)")

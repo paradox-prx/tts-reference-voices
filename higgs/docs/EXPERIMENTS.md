@@ -15,7 +15,8 @@ its `summary.json`, the per-request rows (latency, time to first audio, audio se
 | H03 | backport of PR #7065; smoke | clone works: c=1 RTF ~0.4, TTFA 0.22 s, Urdu WER 5 % / English 0 %, SIM-L 0.77 |
 | B0 | baseline, `flash_attn.yaml` (upstream default profile) | 648 takes, 3.5 h audio, 0 errors: Urdu 2.5x realtime at c=1, 12-20x at c=16, TTFA 0.34 s; Urdu WER 1-6 % up to ~65 words, SIM-L 0.84-0.86; 43 % of ~100-word and 100 % of ~200-word texts truncated |
 | S1a | `low_latency.yaml` / `low_latency_fa.yaml` (FULL_DECODE_ONLY CUDA graphs) | FAILED: FlashInfer JIT; then `cudaErrorStreamCaptureUnsupported` during graph capture |
-| S1 | `piecewise.yaml` (PIECEWISE CUDA graphs, FLASH_ATTN) | engine up (5 graphs captured in 1 s); screen running from 19:05 |
+| S1 | `piecewise.yaml` (PIECEWISE CUDA graphs, FLASH_ATTN) | SLOWER than eager: c=1 1.5x vs 2.5x realtime, c=16 17x vs 19x (8 runs, stopped early) |
+| S2 | `mem080_seqs32.yaml` (stage-0 0.80 -> KV 79,232 tokens, max_num_seqs 32) | c=32: short 17x, long 32.7x, xlong 26.4x realtime; GPU 23.5 GB peak |
 
 ## H00 setup (2026-09-28 17:3x-18:xx)
 
@@ -107,5 +108,37 @@ experimental) issues a non-capturable call on this stack. Not pursued further to
 
 Starts: "Capturing CUDA graphs (mixed prefill-decode, PIECEWISE) 5/5, finished in 1 s, 0.02 GiB"; "Inductor
 compilation was disabled by user settings" (the Higgs config turns torch.compile off, so the piecewise graphs wrap
-uncompiled ops). Plain TTS smoke ok. Screen `results/S1_piecewise` running (short/long/xlong x c=1,4,8,16; streaming
-short/xlong x c=1,4,8; trump xlong c=1,8).
+uncompiled ops). Plain TTS smoke ok. Screen `results/S1_piecewise`, stopped after 8 runs because the trend was clear:
+
+| run (shehbaz) | piecewise lat p50 s | piecewise xRT | eager (B0) lat p50 s | eager xRT |
+|---|---|---|---|---|
+| short c=1 | 3.50 | 1.5 | 2.53 | 2.5 |
+| short c=4 | 3.36 | 3.2 | 3.91 | 4.2 |
+| short c=8 | 5.55 | 7.6 | 2.71 | 9.2 |
+| short c=16 | 6.01 | 10.2 | 4.35 | 12.0 |
+| long c=1 | 15.65 | 1.6 | 9.75 | 2.6 |
+| long c=4 | 16.40 | 5.8 | 11.50 | 7.8 |
+| long c=8 | 19.25 | 9.8 | 13.39 | 13.0 |
+| long c=16 | 21.23 | 17.4 | 18.17 | 19.4 |
+
+Reason (upstream README_higgs_audio_v3.md): with `enforce_eager: false` the talker switches off its own local MLP
+CUDA graph, and vLLM's piecewise graphs without torch.compile don't make up for it. The eager profile is the fastest
+talker available on this stack; a real decode graph would need the FULL_DECODE capture fixed for sm_86.
+
+## S2 `mem080_seqs32.yaml` (`results/S2_mem080_seqs32`, from 19:12)
+
+Stage 0 `gpu_memory_utilization` 0.80 (KV cache 11 GiB = 79,232 tokens, "9.67x for 8,192-token requests"), stage 1
+0.08, `max_num_seqs` 32, otherwise `flash_attn.yaml`. shehbaz short/long/xlong at c=16 and c=32 (n = 32 / 64):
+
+| size | c | lat p50 / p90 / p99 s | xRT (p90-wall) | req/s | suspects | GPU peak MiB | Qwen c=32 xRT |
+|---|---|---|---|---|---|---|---|
+| short | 16 | 4.57 / 6.97 / 16.6 | 13.4 (one 16 s straggler) | 1.43 | 2 | 23,090 | 17.8 (c=16) |
+| short | 32 | 7.18 / 11.50 / 13.2 | 16.2 | 3.44 | 5 | 23,211 | 21.4 |
+| long | 16 | 17.73 / 21.00 / 22.9 | 19.6 | 0.84 | 0 | 23,386 | 26.0 (c=16) |
+| long | 32 | 22.34 / 24.83 / 26.6 | 31.4 | 1.27 | 0 | 23,388 | 31.8 |
+| xlong | 16 | 23.23 / 27.66 / 33.8 | 19.5 | 0.58 | 0 | 23,522 | 26.1 (c=16) |
+| xlong | 32 | 31.02 / 34.91 / 41.8 | 28.8 | 0.78 | 5 (4 short) | 23,524 | 33.3 |
+
+At 32 in flight Higgs reaches 31 x realtime on ~25 s texts, the same as Qwen at c=32, at the cost of 22-31 s p50
+latency; the card is full (23.5 GB of 24 GB peak, desktop included), so 32 is the ceiling on this GPU. Streaming
+c=16/32 and trump c=32 rows: the run folder.

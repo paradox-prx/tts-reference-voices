@@ -9,6 +9,12 @@
 The analysis is in [`../REPORT.md`](../REPORT.md) and the experiment-by-experiment log in
 [`../docs/EXPERIMENTS.md`](../docs/EXPERIMENTS.md); [`INDEX.md`](INDEX.md) indexes the phases (`bench/collect.py`).
 
+> **Local audio format (2026-09-28):** the WAV takes under this folder were converted to FLAC in place
+> (`server/bench/wav_to_flac.py`: lossless, every file decoded and compared sample for sample before the WAV was
+> removed, the AI-generated label carried into the FLAC COMMENT tag, and the `file` fields of every `requests*.jsonl`,
+> `scores.jsonl` and `takes_all.jsonl` rewritten from `.wav` to `.flac`). 15,908 files, 5.0 GB freed for the Higgs TTS 3
+> benchmark (`higgs/`). Nothing was deleted: every take is still here, and the eval tools read FLAC directly.
+
 ## What is where
 
 | what | where |

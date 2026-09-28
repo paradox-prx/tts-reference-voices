@@ -1,0 +1,11 @@
+{
+ "_doc": "Expected Higgs TTS 3 output pace per voice, seconds per letter (str.isalnum letters), calibrated from the clean takes of higgs/results/B0_baseline_flash_attn (median audio_s/letters of takes that passed the gate and are not `bad`). Used by bench_tts.py --pace-file and the gateway's TTS_PACE_FILE for Higgs runs; the Qwen calibration is server/calibration/pace.json.",
+ "shehbaz": {
+  "s_per_letter": 0.1219,
+  "source": "B0 baseline: median of 275 clean medium/long/xlong takes (p10 0.1084, p90 0.1379); the Qwen calibration is 0.111"
+ },
+ "trump": {
+  "s_per_letter": 0.081,
+  "source": "B0 baseline: median of 57 clean xlong/short takes (p10 0.0673, p90 0.0996); the Qwen calibration is 0.07"
+ }
+}
