@@ -125,3 +125,30 @@ Identical speed to the production model (REPORT §4). The first attempt failed b
 `tokenizer_config.json` (fixed in model_utils.save_checkpoint; the file list is now generation/preprocessor/tokenizer
 configs + vocab + merges). The later `score` stage of this window ran out of GPU memory because the engine had not
 released the card yet; scoring was redone on CPU (V11).
+
+## V11: baseline of the pretrained model (what the fine-tune has to beat)
+
+`synth_eval` with the pretrained Base model, voice clone with an in-context reference (another clip of the same
+speaker, `non_streaming_mode`, language Auto): 3 clips per f50 eval speaker (7 speakers), 3 of the held-out speaker-8,
+4 Urdu sentences on the Shehbaz reference and 3 English on the Trump reference. 31/31 generated, 9.0 s per clip
+through the HF generator. Scored with Whisper large-v3 (beam 5, fp16, GPU) and WavLM-base-plus-sv similarity to the
+real recording of the same speaker; the ground-truth recordings were transcribed the same way (gt).
+
+| set | clips | CER mean / median | gt CER mean / median | WER median | SIM mean | pace | severe (CER > 0.5) |
+|---|---|---|---|---|---|---|---|
+| f50 eval (seen speakers) | 21 | 0.172 / 0.144 | 0.068 / 0.030 | 0.35 | 0.956 | 0.98 | 4.8% (1) |
+| f50 holdout speaker-8 (unseen) | 3 | 0.287 / 0.197 | 0.138 / 0.054 | 0.38 | 0.969 | 0.94 | 33% (1) |
+| external: Shehbaz (ur) + Trump (en) | 7 | 0.114 / 0.122 | – | 0.22 | 0.939 | – | 0 |
+| all | 31 | 0.170 / 0.144 | 0.077 / 0.038 | 0.36 | 0.954 | 0.97 | 6.5% (2) |
+
+Reading: on these speakers the pretrained model's Urdu is 2.5-5x further from the transcript than the real
+recordings are (Whisper's own error on the real clips is 0.03-0.05 median), with 1 in 15 clips severely wrong,
+while the timbre already matches (SIM 0.95-0.97, real same-speaker pairs score ≥ 0.975 on this scale). The fine-tune's
+job is the first column; the third column must not fall. Numbers are noisy at 3 clips per speaker: the real
+evaluation uses `--per-speaker 20`.
+
+## Incident: orphaned engine workers
+
+The first `serve_check.sh` killed only the engine's parent process; its two vLLM stage workers survived, held 19 GB,
+made the scoring OOM and the production engine fail to start after the window. Fixed: the engine now runs in its own
+process group, the trap kills the group and waits until the card is released. The orphans were killed by PID.
