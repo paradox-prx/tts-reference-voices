@@ -126,11 +126,15 @@ def main(argv=None) -> int:
     ap.add_argument("--speaker-prefix", action="store_true",
                     help="prefix speaker names with the folder tag (when the same label means different people)")
     ap.add_argument("--speaker", default=None, help="constant speaker name for every row (single-speaker folders)")
+    ap.add_argument("--speaker-map", default=None,
+                    help="assignments.jsonl from `qwen_train.speakers cluster`: speakers re-tagged by voice (keyed by audio path)")
+    ap.add_argument("--keep-multi-voice", action="store_true", help="keep clips the speaker map flags as containing 2+ voices")
     ap.add_argument("--min-dur", type=float, default=0.8)
     ap.add_argument("--max-dur", type=float, default=30.0)
     ap.add_argument("--min-chars", type=int, default=3)
     ap.add_argument("--max-chars", type=int, default=500)
-    ap.add_argument("--min-urdu-frac", type=float, default=0.7, help="drop texts with fewer Arabic-script letters than this")
+    ap.add_argument("--min-urdu-frac", type=float, default=0.0,
+                    help="drop texts with a smaller share of Arabic-script letters (default 0: keep Latin / English rows too)")
     ap.add_argument("--allow-sr", default="", help="comma list of sample rates to keep (default: any)")
     ap.add_argument("--no-spell-numbers", action="store_true")
     ap.add_argument("--eval-frac", type=float, default=0.02)
@@ -145,6 +149,12 @@ def main(argv=None) -> int:
     allow_sr = {int(x) for x in a.allow_sr.split(",") if x.strip()}
     holdout = {clean_speaker(s) for s in a.holdout_speakers.split(",") if s.strip()}
     t0 = time.time()
+    spk_map = {}
+    if a.speaker_map:
+        for l in open(a.speaker_map, encoding="utf-8"):
+            m = json.loads(l)
+            spk_map[str(Path(m["audio"]).resolve())] = m
+        print(f"speaker map: {len(spk_map)} clips re-tagged by voice")
     kept, dropped = [], []
     seen_paths: set[str] = set()
     reasons = collections.Counter()
@@ -176,6 +186,15 @@ def main(argv=None) -> int:
                 spk = clean_speaker(spk)
                 if a.speaker_prefix:
                     spk = f"{tag}:{spk}"
+                ref_ok = True
+                if spk_map:
+                    m = spk_map.get(path)
+                    if m is None:
+                        reasons["not_in_speaker_map"] += 1; dropped.append(row | {"reason": "not_in_speaker_map"}); continue
+                    if m["multi_voice"] and not a.keep_multi_voice:
+                        reasons["multi_voice"] += 1; dropped.append(row | {"reason": "multi_voice"}); continue
+                    row["orig_speaker"] = spk
+                    spk, ref_ok = m["speaker"], bool(m["ref_ok"])
                 text = normalize_urdu(text_raw.translate(JUNK), spell_numbers=not a.no_spell_numbers)
                 prof = script_profile(text)
                 if len(text) < a.min_chars or len(text) > a.max_chars:
@@ -191,7 +210,7 @@ def main(argv=None) -> int:
                 if dur < a.min_dur or dur > a.max_dur:
                     reasons["duration"] += 1; dropped.append(row | {"reason": "duration", "duration": round(dur, 2)}); continue
                 seen_paths.add(path)
-                kept.append(row | {"text": text, "speaker": spk, "duration": round(dur, 3), "sr": sr, "channels": ch,
+                kept.append(row | {"text": text, "speaker": spk, "ref_ok": ref_ok, "duration": round(dur, 3), "sr": sr, "channels": ch,
                                    "chars": len(text), "urdu_frac": round(prof["urdu"] / prof["letters"], 3)})
 
     # splits

@@ -33,6 +33,8 @@ class DataConfig:
     train_on_ref: bool = False
     language_id: int | None = None
     language_p: float = 0.8
+    english_id: int | None = 2050   # tag for rows that are mostly Latin script (urdu_frac < latin_threshold)
+    latin_threshold: float = 0.5
     stream_p: float = 0.0
     max_frames: int = 400          # drop utterances longer than this (32 s at 12.5 Hz)
     max_seq: int = 1400            # drop examples whose layout is longer (ref + target)
@@ -77,9 +79,10 @@ class TTSDataset(Dataset):
         self.store, self.proc, self.ids, self.cfg, self.seed, self.deterministic = store, processor, ids, cfg, seed, deterministic
         self.rows = [r for r in rows if r["id"] in store and len(store.codes[r["id"]]) <= cfg.max_frames]
         skipped = len(rows) - len(self.rows)
-        self.by_speaker: dict[str, list[int]] = {}
+        self.by_speaker: dict[str, list[int]] = {}   # reference pool: clips whose speaker label is trusted
         for i, r in enumerate(self.rows):
-            self.by_speaker.setdefault(r["speaker"], []).append(i)
+            if r.get("ref_ok", True):
+                self.by_speaker.setdefault(r["speaker"], []).append(i)
         role_full = self._tok(TEMPLATE.format(text="x"))
         self.role_ids = role_full[:3]
         self.text_ids = [self._tok(TEMPLATE.format(text=r["text"]))[3:-5] for r in self.rows]
@@ -105,11 +108,16 @@ class TTSDataset(Dataset):
         key = f"{self.seed}:{0 if self.deterministic else self.epoch}:{idx}"
         return random.Random(int(hashlib.md5(key.encode()).hexdigest()[:12], 16))
 
+    def _language(self, r: dict) -> int | None:
+        if self.cfg.english_id is not None and r.get("urdu_frac", 1.0) < self.cfg.latin_threshold:
+            return self.cfg.english_id
+        return self.cfg.language_id
+
     def _pick_ref(self, idx: int, rng: random.Random, min_s: float, max_s: float) -> int:
-        cands = [j for j in self.by_speaker[self.rows[idx]["speaker"]]
-                 if j != idx and min_s <= self.store.seconds[self.rows[j]["id"]] <= max_s]
+        pool = self.by_speaker.get(self.rows[idx]["speaker"], [])
+        cands = [j for j in pool if j != idx and min_s <= self.store.seconds[self.rows[j]["id"]] <= max_s]
         if not cands:
-            cands = [j for j in self.by_speaker[self.rows[idx]["speaker"]] if j != idx] or [idx]
+            cands = [j for j in pool if j != idx] or [idx]  # no trusted clip of this voice: its own x-vector only
         return rng.choice(cands)
 
     def __getitem__(self, idx: int) -> Layout:
@@ -120,12 +128,14 @@ class TTSDataset(Dataset):
         ref = idx if self.cfg.ref_self else self._pick_ref(idx, rng, self.cfg.ref_min_s, self.cfg.ref_max_s)
         ref_id = self.rows[ref]["id"]
         ex = Example(role_ids=self.role_ids, text_ids=self.text_ids[idx], codes=codes, id=r["id"],
-                     language_id=self.cfg.language_id if rng.random() < self.cfg.language_p else None,
+                     language_id=self._language(r) if rng.random() < self.cfg.language_p else None,
                      streaming=rng.random() < self.cfg.stream_p, train_on_ref=self.cfg.train_on_ref)
         if self.instruct_ids is not None:
             ex.instruct_ids = self.instruct_ids[idx]  # VoiceDesign: the instruction conditions the voice, no x-vector
         else:
             ex.xvec = torch.from_numpy(self.store.xvec[ref_id].astype(np.float32))
+        if ref == idx and not self.cfg.ref_self:
+            icl = False  # the clip's own audio as its "reference" would leak the answer
         if icl and self.instruct_ids is None:
             ex.ref_text_ids = self.ref_text_ids[ref]
             ex.ref_codes = torch.from_numpy(self.store.codes[ref_id].astype(np.int64))

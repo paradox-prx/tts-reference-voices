@@ -168,3 +168,26 @@ repetitions and restarts that the speakers really produce, so `qc --apply` no lo
 (`--max-cer 0` = off). The default filters are the audio checks and a per-speaker pace check (letters per second,
 robust z > 3.5): on the sample it flags 12 of 4,184 clips (0.3%), including aud-4216, with no flags among the 274
 clips Whisper agrees with. Whisper remains the intelligibility metric for generated speech (score.py).
+
+## V13: who is actually speaking (voice analysis of the 4 labelled folders, 35,037 clips, 126.3 h)
+
+Analysis only, nothing applied to the data (user's instruction). `speakers embed` (WavLM-base-plus-sv, 3 s windows for
+two-voice detection) and `speakers embed --backend large` (seed-tts-eval WavLM-Large + ECAPA, batched without padding,
+TF32; equal to one-clip-at-a-time to cos 1.00000 on clips ≥ 10 s), then `speakers cluster --embeddings large`.
+
+- The base model cannot separate these voices: it merged all 8 female-50 speakers into one. On 20 test clips the
+  Large model scores same-folder pairs 0.77 (min 0.62) and different-folder pairs 0.33 (max 0.52).
+- **~40 distinct voices.** The count is flat across thresholds (0.20: 41, 0.25-0.35: 40, 0.40: 39, then 34 / 29 / 17
+  at 0.45 / 0.5 / 0.6): a real plateau, not a threshold artefact. Same-clip 3 s windows: cos p5 0.894, p50 0.954.
+- 51 clips (0.1%) contain two voices; 39 are uncertain (cos < 0.6 to every speaker).
+
+| group | voices | hours | finding |
+|---|---|---|---|
+| female-50 (8 folders) | 8 | 46.2 | each folder is one voice; the `speaker_name` column relabels them 1:1 (folder speaker-2 = @Speaker-5 ...) |
+| batch2 (8 folders, all labelled @Speaker-1) | 8 | 35.0 | each folder is one voice; 7 are **the same women as female-50** under other numbers (batch2/speaker-3 = female-50/speaker-2, ...); batch2/speaker-2 is new |
+| agri (2 folders) | 5 | 32.5 | folder speaker-1 (@Speaker-2) is 2 people, folder speaker-2 (@Speaker-1) is 3 |
+| audio_samples_dataset (1 folder, "one speaker") | 26 | 12.6 | 26 different voices, 45-312 clips (0.16-1.07 h) each, in contiguous file-number ranges |
+
+So the 14 main voices (2.6-22.9 h each) hold 107 h; the sample set adds 26 small ones. Closest pairs of different
+voices (cos 0.61-0.65; same person across sessions would usually be ≥ 0.75): agri spk_005/spk_007, spk_007/spk_009,
+and sample-set spk_015/034, 016/031, 017/020, 023/028, 023/034. `listen/spk_NNN/` holds 5 typical clips per voice.
