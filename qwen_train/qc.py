@@ -8,9 +8,14 @@ Per utterance (written to qc.jsonl next to the manifest, resumable):
     max_sil_s (longest internal silence), dc_offset, nan
     asr_text, cer (character error rate, whitespace and punctuation removed), wer   (with --asr)
 
---apply writes manifest_qc.jsonl = the manifest minus rows over the thresholds (reasons in dropped_qc.jsonl). The ASR
-is faster-whisper (stock Whisper large-v3, language ur). Whisper's own error on correct Urdu transcripts of this kind
-of speech is ~0.10-0.20 CER, so --max-cer 0.5 removes wrong transcripts, not accented ones.
+--apply writes manifest_qc.jsonl = the manifest minus rows over the thresholds (reasons in dropped_qc.jsonl):
+audio checks plus a per-speaker pace check (Arabic-script letters per second, robust z-score over the speaker's clips;
+it flags transcripts far too short or long for their audio, e.g. a truncated transcript). Both are free.
+
+The ASR agreement (--asr) is a diagnostic, NOT a default filter: on this project's Gemini-made transcripts Whisper
+was the wrong side in 5 of the 6 worst disagreements (it collapses repeated phrases and restarts that the speaker
+really says, and hallucinates on some clips; docs/EXPERIMENTS.md V12). Only use --max-cer if the transcripts come
+from a weaker source than Whisper.
 """
 from __future__ import annotations
 
@@ -103,7 +108,9 @@ def main(argv=None) -> int:
     ap.add_argument("--workers", type=int, default=8, help="threads for the audio measurements")
     ap.add_argument("--limit", type=int, default=0, help="only the first N utterances not yet checked")
     ap.add_argument("--apply", action="store_true", help="write manifest_qc.jsonl with the thresholds below")
-    ap.add_argument("--max-cer", type=float, default=0.5)
+    ap.add_argument("--max-cer", type=float, default=0.0, help="drop rows with ASR CER above this (0 = off, default)")
+    ap.add_argument("--max-pace-z", type=float, default=3.5,
+                    help="drop rows whose letters/second is further than this many robust SDs from the speaker's median (0 = off)")
     ap.add_argument("--max-clip", type=float, default=0.01)
     ap.add_argument("--max-lead", type=float, default=2.0)
     ap.add_argument("--max-trail", type=float, default=2.5)
@@ -162,6 +169,19 @@ def main(argv=None) -> int:
             print(f"  {k:12s} p10 {pct(xs, 10)} p50 {pct(xs, 50)} p90 {pct(xs, 90)} max {max(xs)}")
 
     if a.apply:
+        import statistics
+        letters = lambda t: len(re.findall(r"[\u0600-\u06FF]", t))  # noqa: E731
+        pace_z = {}
+        if a.max_pace_z:
+            by_spk = {}
+            for r in rows:
+                if r.get("duration"):
+                    by_spk.setdefault(r["speaker"], []).append((r["id"], letters(r["text"]) / r["duration"]))
+            for spk, vals in by_spk.items():
+                med = statistics.median(v for _, v in vals)
+                mad = statistics.median(abs(v - med) for _, v in vals) or 1e-6
+                for uid, v in vals:
+                    pace_z[uid] = (v - med) / (1.4826 * mad)
         kept, dropped = [], []
         for r in rows:
             q = done.get(r["id"])
@@ -181,8 +201,10 @@ def main(argv=None) -> int:
                     why.append("internal_silence")
                 if q.get("rms_dbfs", 0) < a.min_rms:
                     why.append("too_quiet")
-                if "cer" in q and q["cer"] > a.max_cer:
+                if a.max_cer and "cer" in q and q["cer"] > a.max_cer:
                     why.append("transcript_mismatch")
+                if a.max_pace_z and abs(pace_z.get(r["id"], 0.0)) > a.max_pace_z:
+                    why.append("pace_outlier")
             (dropped if why else kept).append((r, why, q))
         with open(manifest.with_name("manifest_qc.jsonl"), "w", encoding="utf-8") as f:
             for r, _, q in kept:

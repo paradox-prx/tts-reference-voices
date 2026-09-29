@@ -36,7 +36,7 @@ to 2%, which prepare.py clips.)
 CER p10/p50/p90/max = 0.016 / 0.095 / 0.309 / 0.670, WER p50 0.233. Whisper's own error on correct transcripts of
 accented Urdu is ~0.10, so the median is what a correct transcript looks like. The worst clip is a **label error**:
 the transcript repeats a phrase ("تحصیل نصرتی میں چنا دال کے تحصیل نصرتی میں چنا دال کے لیے...") that the audio
-says once. `qc --apply --max-cer 0.5` removes such rows. Full 300-clip run: see V8.
+says once. **Corrected in V12: the speaker really repeats it; Whisper collapses the repetition.** Full 300-clip run: V9.
 
 ## V4: codec extraction (`qwen_train.prepare`, 12 Hz tokenizer + the model's speaker encoder, next to production)
 
@@ -106,8 +106,7 @@ references) is ~4.8 h on this card; an A100/H100 should be 3-5x faster. Memory l
 ## V9: transcript agreement, 300 clips (Whisper large-v3 fp16, beam 1, GPU)
 
 CER p10/p50/p90/p95/max = 0.035 / 0.094 / 0.271 / 0.375 / 0.745; WER p50 0.239. 6 of 300 (2%) exceed CER 0.5
-and 26 (8.7%) exceed 0.3. The >0.5 rows are label errors of the kind found in V3 (duplicated phrases, missing
-sentences); `qc --apply --max-cer 0.5` removes them. Audio measures of the same 300 clips match V2.
+and 26 (8.7%) exceed 0.3. **V12 shows most of these are Whisper errors, not transcript errors.** Audio measures of the same 300 clips match V2.
 
 ## V10: serving check (vLLM-Omni 0.28.0, the production engine script, on the smoke checkpoint)
 
@@ -152,3 +151,20 @@ evaluation uses `--per-speaker 20`.
 The first `serve_check.sh` killed only the engine's parent process; its two vLLM stage workers survived, held 19 GB,
 made the scoring OOM and the production engine fail to start after the window. Fixed: the engine now runs in its own
 process group, the trap kills the group and waits until the card is released. The orphans were killed by PID.
+
+## V12: who is wrong when Whisper and the transcript disagree (sample, the 6 clips with CER > 0.5)
+
+| clip | duration | pace z | transcript vs Whisper | verdict |
+|---|---|---|---|---|
+| aud-4063 | 15.3 s | -1.1 | transcript repeats "تحصیل نصرتی میں چنا دال کے..." 4x; Whisper once | speaker repeats it (15 s of speech, internal silences < 0.5 s): **Whisper wrong** |
+| aud-113 | 16.9 s | -0.1 | transcript has 3 restarts of the question; Whisper one | **Whisper wrong** |
+| aud-4052 | 12.8 s | -1.1 | transcript repeats "تیمرگرہ سب ڈویژن میں پیڈی اری کے لیے" 3x; Whisper once | **Whisper wrong** |
+| aud-4223 | 11.3 s | 0.0 | Whisper outputs an unrelated sentence twice | **Whisper hallucination** |
+| aud-3809 | 14.3 s | -0.9 | Whisper loops "حساب مرچ کا" | **Whisper hallucination** |
+| aud-4216 | 17.5 s | -3.8 | both transcripts short for 17.5 s | transcript probably truncated |
+
+The transcripts (Gemini multimodal) beat Whisper on this data. A Whisper-disagreement filter would remove natural
+repetitions and restarts that the speakers really produce, so `qc --apply` no longer uses it by default
+(`--max-cer 0` = off). The default filters are the audio checks and a per-speaker pace check (letters per second,
+robust z > 3.5): on the sample it flags 12 of 4,184 clips (0.3%), including aud-4216, with no flags among the 274
+clips Whisper agrees with. Whisper remains the intelligibility metric for generated speech (score.py).
