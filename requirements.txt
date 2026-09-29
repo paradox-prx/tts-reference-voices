@@ -1,0 +1,18 @@
+# Python 3.12. Install torch for your CUDA first (see setup.sh), then the rest.
+qwen-tts==0.1.1
+transformers==4.57.3
+accelerate>=1.4
+peft==0.21.1
+torch-optimi==0.3.3
+tensorboard
+librosa>=0.10
+soundfile>=0.12
+soxr
+numpy
+pyyaml
+tqdm
+huggingface_hub
+safetensors
+# evaluation (score.py / qc.py --asr): stock Whisper large-v3 via faster-whisper, WavLM similarity via transformers
+faster-whisper>=1.1
+pytest

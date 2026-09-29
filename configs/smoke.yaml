@@ -1,0 +1,19 @@
+# Smoke test: a few optimizer steps on the sample set, to prove the loop, the memory budget and the checkpoint export.
+model: Qwen/Qwen3-TTS-12Hz-1.7B-Base
+data_dir: data/sample
+out_dir: runs/smoke
+mode: full
+precision: bf16
+lr: 5.0e-6
+warmup_steps: 5
+max_steps: 30
+max_tokens: 6000
+max_batch: 6
+grad_accum: 2
+eval_every: 15
+eval_max_batches: 10
+save_every: 30
+keep_last: 1
+save_optimizer: false
+log_every: 5
+num_workers: 2
