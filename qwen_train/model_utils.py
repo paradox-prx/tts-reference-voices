@@ -214,8 +214,8 @@ def save_checkpoint(core, out_dir: str | Path, extra_config: dict | None = None,
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     src = core.config._model_dir
-    for f in glob.glob(os.path.join(src, "*")):
-        if f.endswith((".json", ".txt")) and not f.endswith("config.json"):
+    for f in glob.glob(os.path.join(src, "*")):  # tokenizer + generation + preprocessor files; config.json is rewritten
+        if f.endswith((".json", ".txt")) and os.path.basename(f) != "config.json":
             shutil.copy(f, out / os.path.basename(f))
     tok_src = Path(src) / "speech_tokenizer"  # the codec (Code2Wav) the wrapper and vLLM-Omni load from the model dir
     if tok_src.exists():

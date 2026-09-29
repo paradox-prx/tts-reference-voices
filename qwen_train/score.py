@@ -29,6 +29,11 @@ def load_16k(path: str) -> np.ndarray:
     if sr == 16000:
         return x
     try:
+        import soxr
+        return soxr.resample(x, sr, 16000, quality="HQ").astype(np.float32)
+    except ImportError:
+        pass
+    try:
         import librosa
         return librosa.resample(x, orig_sr=sr, target_sr=16000)
     except ImportError:
