@@ -1,0 +1,19 @@
+# local settings and state
+.env
+data/
+data.log
+# venvs / builds
+.venv/
+engine/.venv/
+web/node_modules/
+web/dist/
+web/tsconfig.tsbuildinfo
+__pycache__/
+.pytest_cache/
+# voice references (people's voices) stay local; only the folder conventions are versioned
+voices/*
+!voices/README.md
+# e2e / experiment outputs: numbers are versioned, audio is not
+results/**/*.wav
+results/**/*.mp3
+results/**/*.zip

@@ -1,0 +1,174 @@
+{
+ "url": "http://127.0.0.1:8100",
+ "started": "2026-10-07 19:04:40",
+ "customer": [
+  {
+   "label": "en",
+   "language": "en",
+   "voice": "trump",
+   "text": "Thanks for calling. Your new plan is active, and you'll see the change on your next bill.",
+   "text_sent": "Thanks for calling. Your new plan is active, and you'll see the change on your next bill.",
+   "seed": 704360674,
+   "parts": 1,
+   "est_s": 5.5,
+   "wall_s": 2.27,
+   "state": "done",
+   "error": "",
+   "seconds": 4.8,
+   "sample_rate": 24000,
+   "qc_ok": true,
+   "qc_reasons": [],
+   "pace_ratio": [
+    0.873
+   ],
+   "live_pcm_s": 4.8,
+   "first_audio_s": 0.25
+  },
+  {
+   "label": "ur_tags",
+   "language": "ur",
+   "voice": "callagent",
+   "text": "<|emotion:enthusiasm|>السلام علیکم! آپ کے نمبر کے لیے ایک خاص پیکج دستیاب ہے۔ <|prosody:speed_slow|>اس میں ہر روز دو جی بی انٹرنیٹ شامل ہے۔",
+   "text_sent": "<|emotion:enthusiasm|>السلام علیکم! آپ کے نمبر کے لیے ایک خاص پیکج دستیاب ہے۔ <|prosody:speed_slow|>اس میں ہر روز دو جی بی انٹرنیٹ شامل ہے۔",
+   "seed": 1027119720,
+   "parts": 1,
+   "est_s": 6.5,
+   "wall_s": 2.53,
+   "state": "done",
+   "error": "",
+   "seconds": 6.16,
+   "sample_rate": 24000,
+   "qc_ok": true,
+   "qc_reasons": [],
+   "pace_ratio": [
+    0.955
+   ]
+  },
+  {
+   "label": "ps",
+   "language": "ps",
+   "voice": "asad",
+   "text": "سلام ورور، ستاسو لپاره نن یو ځانګړی پیکج شته چې ډېر ارزانه انټرنیټ لري.",
+   "text_sent": "سلام ورور، ستاسو لپاره نن یو ځانګړی پیکج شته چې ډېر ارزانه انټرنیټ لري.",
+   "seed": 1417887075,
+   "parts": 1,
+   "est_s": 6.5,
+   "wall_s": 2.54,
+   "state": "done",
+   "error": "",
+   "seconds": 6.02,
+   "sample_rate": 24000,
+   "qc_ok": true,
+   "qc_reasons": [],
+   "pace_ratio": [
+    0.929
+   ]
+  },
+  {
+   "label": "pa",
+   "language": "pa",
+   "voice": "hammad",
+   "text": "سلام جی، اج تہاڈے لئی اک نواں پیکج آیا اے، جیہدے وچ بہت سستا انٹرنیٹ اے۔",
+   "text_sent": "سلام جی، اج تہاڈے لئی اک نواں پیکج آیا اے، جیہدے وچ بہت سستا انٹرنیٹ اے۔",
+   "seed": 1374336566,
+   "parts": 1,
+   "est_s": 5.5,
+   "wall_s": 2.54,
+   "state": "done",
+   "error": "",
+   "seconds": 5.84,
+   "sample_rate": 24000,
+   "qc_ok": true,
+   "qc_reasons": [],
+   "pace_ratio": [
+    1.052
+   ]
+  },
+  {
+   "label": "sd",
+   "language": "sd",
+   "voice": "chandiyo",
+   "text": "سلام سائين، اڄ توهان لاءِ هڪ نئون پيڪيج آهي جنهن ۾ سستو انٽرنيٽ آهي.",
+   "text_sent": "سلام سائين، اڄ توهان لاءِ هڪ نئون پيڪيج آهي جنهن ۾ سستو انٽرنيٽ آهي.",
+   "seed": 977799898,
+   "parts": 1,
+   "est_s": 7.6,
+   "wall_s": 3.03,
+   "state": "done",
+   "error": "",
+   "seconds": 7.6,
+   "sample_rate": 24000,
+   "qc_ok": true,
+   "qc_reasons": [],
+   "pace_ratio": [
+    1.004
+   ]
+  },
+  {
+   "label": "ur_upload",
+   "language": "ur",
+   "voice": "upload",
+   "text": "آج کی اہم خبروں میں، شہر میں بارش کے بعد موسم خوشگوار ہو گیا ہے۔",
+   "text_sent": "<|emotion:contentment|>آج کی اہم خبروں میں، شہر میں بارش کے بعد موسم خوشگوار ہو گیا ہے۔",
+   "seed": 2033732993,
+   "parts": 1,
+   "est_s": 5.6,
+   "wall_s": 2.53,
+   "state": "done",
+   "error": "",
+   "seconds": 6.48,
+   "sample_rate": 24000,
+   "qc_ok": true,
+   "qc_reasons": [],
+   "pace_ratio": [
+    1.149
+   ]
+  }
+ ],
+ "job": {
+  "id": "20261007-190456-2460ac",
+  "status": "done",
+  "counts": {
+   "done": 20
+  },
+  "per_speaker": {
+   "callagent": {
+    "total": 7,
+    "done": 7,
+    "flagged": 0
+   },
+   "hammad": {
+    "total": 7,
+    "done": 7,
+    "flagged": 0
+   },
+   "trump": {
+    "total": 6,
+    "done": 6,
+    "flagged": 0
+   }
+  },
+  "audio_s": 76.8,
+  "rtf_x": 18.56,
+  "errors": [],
+  "wall_s": 6.1,
+  "distribution_preview": {
+   "callagent": 7,
+   "trump": 6,
+   "hammad": 7
+  }
+ },
+ "zip": {
+  "bytes": 7127853,
+  "files": 30,
+  "metadata_rows": 20,
+  "rejected": 0,
+  "per_speaker": {
+   "hammad": 7,
+   "callagent": 7,
+   "trump": 6
+  },
+  "rejected_reasons": []
+ },
+ "fails": []
+}
