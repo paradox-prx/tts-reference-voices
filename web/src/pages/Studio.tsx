@@ -259,11 +259,13 @@ export default function Studio({ cfg }: { cfg: Config }) {
 
         <div className="gen-bar">
           <button className="btn primary big" onClick={() => generate()} disabled={busy}>
-            {busy ? "Sending…" : anyRunning ? "Generate again" : "Generate"} <span className="kbd" style={{ color: "inherit", borderColor: "currentColor" }}>Ctrl ↵</span>
+            {busy ? "Sending…" : nTakes > 1 ? `Generate ${nTakes} takes` : anyRunning ? "Generate again" : "Generate"} <span className="kbd" style={{ color: "inherit", borderColor: "currentColor" }}>Ctrl ↵</span>
           </button>
-          <label className="row small muted">Variations
-            <Seg label="Number of variations" value={String(nTakes)} options={[["1", "1"], ["2", "2"], ["3", "3"]]} onChange={(v) => setNTakes(+v)} />
-          </label>
+          <div className="row small muted" title="How many versions to generate side by side, each with its own seed">Takes
+            <Seg label="Number of takes" value={String(nTakes)} options={[["1", "1"], ["2", "2"], ["3", "3"]]} onChange={(v) => setNTakes(+v)} />
+          </div>
+          {takes.length > 0 && !anyRunning && nTakes !== takes.length &&
+            <span className="small warn">Press Generate to make {nTakes} take{nTakes > 1 ? "s" : ""} (showing {takes.length}).</span>}
           <label className="row small muted"><input type="checkbox" checked={stream} onChange={(e) => setStream(e.target.checked)} /> Stream</label>
           {error && <div className="error-box small" role="alert">{error}</div>}
         </div>
