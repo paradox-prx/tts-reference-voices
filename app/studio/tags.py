@@ -16,11 +16,12 @@ VOCAB: dict[str, tuple[str, ...]] = {
     "prosody": ("speed_very_slow", "speed_slow", "speed_fast", "speed_very_fast", "pitch_low", "pitch_high",
                 "expressive_high", "expressive_low", "pause", "long_pause"),
     "style": ("singing", "shouting", "whispering"),
-    "sfx": ("cough", "laughter", "crying", "screaming", "burping", "humming", "sigh", "sniff", "sneeze"),
+    # the model also knows sfx:sniff and sfx:sneeze; removed from the consoles on request (2026-10-08)
+    "sfx": ("cough", "laughter", "crying", "screaming", "burping", "humming", "sigh"),
 }
 # default onomatopoeia inserted after an sfx tag (the user edits it)
 SFX_SOUND = {"cough": "Ahem", "laughter": "Haha", "crying": "Huhuhu", "screaming": "Aaah", "burping": "Burp",
-             "humming": "Hmm hmm", "sigh": "Haah", "sniff": "Sniff", "sneeze": "Achoo"}
+             "humming": "Hmm hmm", "sigh": "Haah"}
 # prosody tags that describe a state (carried into later parts); pause / long_pause are one-off events
 PROSODY_GROUPS = {"speed": ("speed_very_slow", "speed_slow", "speed_fast", "speed_very_fast"),
                   "pitch": ("pitch_low", "pitch_high"), "expressive": ("expressive_high", "expressive_low")}
