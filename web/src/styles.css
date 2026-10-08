@@ -185,3 +185,7 @@ td.text-cell { max-width: 520px; }
   .studio-side, .dev-left { border: 0; border-top: 1px solid var(--line); }
   .studio-main { padding: 14px; }
 }
+.tagtok { font: 600 11px/1.6 var(--font); padding: 0 6px; margin: 0 2px; border-radius: 999px; border: 1px solid var(--line2);
+  color: var(--muted); white-space: nowrap; }
+.check { display: flex; gap: 8px; align-items: flex-start; }
+.check input { margin-top: 3px; flex: none; }

@@ -9,6 +9,12 @@ type JobSummary = { id: string; name: string; status: string; total: number; cou
   finished: number; per_speaker: Record<string, { total: number; done: number; flagged: number }>; audio_s: number;
   active_s: number; rtf_x: number | null; eta_s: number | null; errors: { t: number; msg: string }[] };
 
+/** Raw text with <|cat:val|> tokens shown as isolated left-to-right chips, so bidi never scrambles them in RTL text. */
+function withTags(text: string) {
+  return text.split(/(<\|[^|<>]*\|>)/).map((part, i) =>
+    i % 2 ? <bdi key={i} className="tagtok" dir="ltr">{part.slice(2, -2)}</bdi> : part);
+}
+
 const STATUS_CLASS: Record<string, string> = { running: "ok", done: "ok", paused: "warn", queued: "", cancelled: "bad", error: "bad" };
 const COLORS = ["#7c6cff", "#ff7ab6", "#3ccf91", "#f2b84b", "#6cc6ff", "#c39bff", "#ff8f6b", "#4fd1c5"];
 
@@ -306,12 +312,12 @@ export default function Dev({ cfg }: { cfg: Config }) {
         <details className="panel">
           <summary>7 · QC <span className="small faint">{conf.qc.enabled ? "on" : "off"}</span></summary>
           <div className="body">
-            <label className="row small"><input type="checkbox" checked={conf.qc.enabled} onChange={(e) => set("qc.enabled", e.target.checked)} /> QC enabled</label>
-            <label className="row small"><input type="checkbox" checked={conf.qc.duration} disabled={!conf.qc.enabled} onChange={(e) => set("qc.duration", e.target.checked)} /> Duration sanity (vs words/s estimate from the reference's pace)</label>
-            <label className="row small"><input type="checkbox" checked={conf.qc.silence} disabled={!conf.qc.enabled} onChange={(e) => set("qc.silence", e.target.checked)} /> Silence (gaps &gt; 2.5 s, near-silent takes)</label>
-            <label className="row small"><input type="checkbox" checked={conf.qc.clipping} disabled={!conf.qc.enabled} onChange={(e) => set("qc.clipping", e.target.checked)} /> Clipping</label>
+            <label className="check small"><input type="checkbox" checked={conf.qc.enabled} onChange={(e) => set("qc.enabled", e.target.checked)} /> QC enabled</label>
+            <label className="check small"><input type="checkbox" checked={conf.qc.duration} disabled={!conf.qc.enabled} onChange={(e) => set("qc.duration", e.target.checked)} /> Duration sanity (vs words/s estimate from the reference's pace)</label>
+            <label className="check small"><input type="checkbox" checked={conf.qc.silence} disabled={!conf.qc.enabled} onChange={(e) => set("qc.silence", e.target.checked)} /> Silence (gaps &gt; 2.5 s, near-silent takes)</label>
+            <label className="check small"><input type="checkbox" checked={conf.qc.clipping} disabled={!conf.qc.enabled} onChange={(e) => set("qc.clipping", e.target.checked)} /> Clipping</label>
             <Num label="Retries with a new seed" min={0} max={5} value={conf.qc.retries} onChange={(v) => set("qc.retries", v)} />
-            <label className="row small"><input type="checkbox" checked={conf.qc.include_flagged} onChange={(e) => set("qc.include_flagged", e.target.checked)} /> Include flagged rows in the zip</label>
+            <label className="check small"><input type="checkbox" checked={conf.qc.include_flagged} onChange={(e) => set("qc.include_flagged", e.target.checked)} /> Include flagged rows in the zip</label>
             <div className="small faint">No ASR check: Whisper is not part of this deployment.</div>
           </div>
         </details>
@@ -408,7 +414,7 @@ export default function Dev({ cfg }: { cfg: Config }) {
                     <span className={`badge ${s.status === "done" ? "ok" : "warn"}`} title={s.qc?.reasons?.join("\n")}>{s.status === "done" ? "QC pass" : "flagged"}</span>
                   </div>
                   <Player url={s.audio_url} small label={s.id} />
-                  <div className={`txt ${rtl ? "rtl" : ""}`} dir={rtl ? "rtl" : "ltr"}>{s.text}</div>
+                  <div className={`txt ${rtl ? "rtl" : ""}`} dir={rtl ? "rtl" : "ltr"}>{withTags(s.text)}</div>
                   <div className="kv"><span>seed {s.seed}</span><span>{s.seconds?.toFixed(1)}s</span>{s.tags && <span>{s.tags}</span>}
                     <span>attempts {s.attempts}</span>{s.qc?.reasons?.length > 0 && <span className="warn">{s.qc.reasons[0]}</span>}</div>
                   <button className="btn sm" disabled={regen === s.idx} onClick={async () => {
