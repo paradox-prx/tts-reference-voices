@@ -232,7 +232,8 @@ export default function Studio({ cfg }: { cfg: Config }) {
                     </button>
                   ))}
                   <div className="small faint" style={{ width: "100%" }}>
-                    {g.cat === "sfx" ? "Inserted with a sound placeholder: edit the word after the chip." :
+                    {g.cat === "sfx" ? "Inserted at the cursor with a sound placeholder: edit the word after the chip." :
+                      g.cat === "prosody" ? "Speed, pitch and expressiveness go at the start of the sentence under the cursor; pauses go at the cursor." :
                       "Inserted at the start of the sentence under the cursor (Higgs reads tags there)."}
                   </div>
                 </div>

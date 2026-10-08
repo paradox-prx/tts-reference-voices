@@ -36,14 +36,17 @@ export function sentenceStart(text: string, pos: number) {
   return start;
 }
 
-/** insert a tag at the start of the sentence under `pos`, after the sentence's existing tags; a tag of the same slot
- *  there is replaced. sfx tags get an onomatopoeia placeholder. Returns [text, caret]. */
+/** Insert a tag. sfx and pause tags are events: they go exactly at the cursor (an sfx with its onomatopoeia
+ *  placeholder). State tags (emotion, speed, pitch, expressiveness, style) go at the start of the sentence under the
+ *  cursor, after that sentence's existing tags; a tag of the same slot there is replaced. Returns [text, caret]. */
 export function insertTag(text: string, pos: number, cat: string, val: string, sound?: string): [string, number] {
   const tok = `<|${cat}:${val}|>`;
-  if (cat === "sfx") {
-    const ins = tok + (sound ?? "") + " ";
-    const at = sentenceStart(text, pos);
-    return [text.slice(0, at) + ins + text.slice(at), at + ins.length];
+  if (cat === "sfx" || (cat === "prosody" && !slotOf(cat, val))) {
+    const before = pos > 0 && !/\s/.test(text[pos - 1]) ? " " : "";
+    const after = pos < text.length && !/\s/.test(text[pos]) ? " " : "";
+    const ins = before + tok + (cat === "sfx" ? (sound ?? "") : "") + after;
+    const caret = pos + ins.length - after.length;
+    return [text.slice(0, pos) + ins + text.slice(pos), caret];
   }
   let at = sentenceStart(text, pos);
   const slot = slotOf(cat, val);

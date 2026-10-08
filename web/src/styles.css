@@ -104,7 +104,9 @@ label.field { display: grid; gap: 4px; font-size: 12px; color: var(--muted); }
 .editor-wrap { position: relative; }
 .editor { min-height: 260px; max-height: 52vh; overflow: auto; padding: 18px 20px; border-radius: 14px;
   background: var(--panel); border: 1px solid var(--line); font-size: 19px; line-height: 2.1; outline: none;
-  white-space: pre-wrap; word-break: break-word; unicode-bidi: plaintext; }
+  white-space: pre-wrap; word-break: break-word; }
+/* direction comes from the language (dir attr), never from the first letter: a leading tag chip or English word
+   must not flip an Urdu line to left-to-right */
 .editor:focus { border-color: var(--line2); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
 .editor[data-empty="true"]::before { content: attr(data-placeholder); color: var(--faint); pointer-events: none; }
 .editor.urdu { font-family: var(--font-urdu); font-size: 21px; line-height: 2.6; }
@@ -165,14 +167,14 @@ details.panel > .body { padding: 4px 12px 12px; display: grid; gap: 8px; }
 table.t { width: 100%; border-collapse: collapse; font-size: 12px; }
 table.t th, table.t td { text-align: start; padding: 4px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
 table.t th { color: var(--faint); font-weight: 500; }
-td.text-cell { unicode-bidi: plaintext; max-width: 520px; }
+td.text-cell { max-width: 520px; }
 .bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--line); }
 .bar > div { height: 100%; }
 .job { padding: 10px 12px; display: grid; gap: 8px; cursor: pointer; }
 .job[aria-selected="true"] { border-color: var(--accent); }
 .samples { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 10px; }
 .sample { padding: 10px; display: grid; gap: 7px; }
-.sample .txt { unicode-bidi: plaintext; font-size: 13px; max-height: 66px; overflow: auto; }
+.sample .txt { font-size: 13px; max-height: 66px; overflow: auto; }
 .sample .txt.rtl { font-family: var(--font-naskh); font-size: 15px; }
 .kv { display: flex; gap: 10px; flex-wrap: wrap; font-size: 11px; color: var(--muted); }
 .log { font: 11px/1.4 ui-monospace, monospace; max-height: 160px; overflow: auto; background: var(--panel2);

@@ -206,7 +206,7 @@ export default function Dev({ cfg }: { cfg: Config }) {
                 listed as errors), e.g. {rows.tag_errors[0].id}: {rows.tag_errors[0].errors[0]}</div>}
               <div style={{ maxHeight: 160, overflow: "auto" }}>
                 <table className="t"><thead><tr><th>id</th><th>text</th><th>spk</th></tr></thead><tbody>
-                  {rows.preview.slice(0, 8).map((r) => <tr key={r.id}><td>{r.id}</td><td className="text-cell">{r.text}</td><td>{r.speaker ?? ""}</td></tr>)}
+                  {rows.preview.slice(0, 8).map((r) => <tr key={r.id}><td>{r.id}</td><td className="text-cell" dir={/[\u0600-\u06FF]/.test(r.text) ? "rtl" : "ltr"}>{r.text}</td><td>{r.speaker ?? ""}</td></tr>)}
                 </tbody></table>
               </div>
             </>}
@@ -408,7 +408,7 @@ export default function Dev({ cfg }: { cfg: Config }) {
                     <span className={`badge ${s.status === "done" ? "ok" : "warn"}`} title={s.qc?.reasons?.join("\n")}>{s.status === "done" ? "QC pass" : "flagged"}</span>
                   </div>
                   <Player url={s.audio_url} small label={s.id} />
-                  <div className={`txt ${rtl ? "rtl" : ""}`} dir="auto">{s.text}</div>
+                  <div className={`txt ${rtl ? "rtl" : ""}`} dir={rtl ? "rtl" : "ltr"}>{s.text}</div>
                   <div className="kv"><span>seed {s.seed}</span><span>{s.seconds?.toFixed(1)}s</span>{s.tags && <span>{s.tags}</span>}
                     <span>attempts {s.attempts}</span>{s.qc?.reasons?.length > 0 && <span className="warn">{s.qc.reasons[0]}</span>}</div>
                   <button className="btn sm" disabled={regen === s.idx} onClick={async () => {
