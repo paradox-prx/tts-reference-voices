@@ -1,0 +1,15 @@
+{
+  "requests": 1929,
+  "ok": 0,
+  "errors": 1929,
+  "audio_s_mean": 0.0,
+  "latency_p50": null,
+  "latency_p90": null,
+  "latency_p95": null,
+  "latency_p99": null,
+  "ttfa_p50": null,
+  "ttfa_p90": null,
+  "ttfa_p95": null,
+  "ttfa_p99": null,
+  "total_wall_s": 2.166662526999062
+}

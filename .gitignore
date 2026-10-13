@@ -17,3 +17,5 @@ voices/*
 results/**/*.wav
 results/**/*.mp3
 results/**/*.zip
+# engine/eval_higgs.py load-test output: numbers are versioned, audio is not
+engine/results/**/*.wav

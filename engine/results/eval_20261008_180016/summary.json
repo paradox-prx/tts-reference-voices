@@ -1,0 +1,16 @@
+{
+  "requests": 1917,
+  "ok": 1917,
+  "errors": 0,
+  "audio_s_mean": 24.34013562858633,
+  "latency_p50": 17.070717468999646,
+  "latency_p90": 24.393084841001837,
+  "latency_p95": 26.6996731299987,
+  "latency_p99": 39.505891965000046,
+  "ttfa_p50": 17.06941036399803,
+  "ttfa_p90": 24.39070727299986,
+  "ttfa_p95": 26.6972447320004,
+  "ttfa_p99": 39.50176302899854,
+  "total_wall_s": 2812.4984046149984,
+  "audio_dir": "/home/vector/Documents/abdullah_workspace/qwen-server/higgs-studio/engine/results/eval_20261008_180016/audio"
+}
