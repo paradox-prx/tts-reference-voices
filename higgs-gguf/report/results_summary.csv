@@ -1,0 +1,4 @@
+condition,weights_format,weights_size_gib,tensor_check,engine_start_s,weights_vram_gib,takes_ok,seq_mean_latency_s,seq_mean_rtf,burst8_wall_s_run_a,burst8_wall_s_run_b,seq_takes_identical_to_production,wer_all,wer_ur,wer_en,mean_cer,takes_wer_gt_0.3,qc_bad_takes,mean_audio_s,max_audio_s
+safetensors (production),safetensors (HF snapshot 239f63f),7.91,reference,,7.61 (same model),26/26,3.013,0.527,23.39,4.12,10/10,0.11,0.086,0.172,0.073,3,3,8.35,58.2
+gguf_bf16,GGUF BF16,7.92,929/929 bit-identical,43,7.61,26/26,2.714,0.464,4.67,4.28,10/10,0.047,0.065,0.0,0.021,0,0,6.12,9.32
+gguf_q8_0,GGUF Q8_0,4.41,"675 exact + 254 Q8_0, rel RMS err max 0.60%",39,7.61,26/26,2.476,0.45,5.71,4.95,0/10,0.062,0.086,0.0,0.027,0,1,6.35,11.96

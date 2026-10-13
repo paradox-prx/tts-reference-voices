@@ -1,0 +1,26 @@
+  50/927 tensors, 0s
+  100/927 tensors, 0s
+  150/927 tensors, 1s
+  200/927 tensors, 1s
+  250/927 tensors, 1s
+  300/927 tensors, 2s
+  350/927 tensors, 2s
+  400/927 tensors, 2s
+  450/927 tensors, 2s
+  500/927 tensors, 2s
+  550/927 tensors, 2s
+  600/927 tensors, 2s
+  650/927 tensors, 2s
+  700/927 tensors, 2s
+  750/927 tensors, 2s
+  800/927 tensors, 2s
+  850/927 tensors, 2s
+  900/927 tensors, 2s
+  927/927 tensors, 2s
+wrote /home/vector/Documents/abdullah_workspace/qwen-server/higgs-gguf/weights/higgs-tts-3-4b-BF16/model.gguf (7.92 GiB, 927 tensors, tied heads stored as aliases: ['tied.head.modality_heads.0.weight', 'tied.head.text_head.weight']) in 3s
+  BF16    540 tensors   7.91 GiB
+  F32     387 tensors   0.00 GiB
+  side file config.json
+  side file tokenizer.json
+  side file tokenizer_config.json
+  side file chat_template.jinja

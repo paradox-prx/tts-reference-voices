@@ -1,0 +1,3 @@
+weights/higgs-tts-3-4b-BF16/model.gguf: 927 GGUF tensors, 929 checkpoint tensors, 2 stored as aliases, 6s
+  exact (BF16/F32): 929/929
+PASS

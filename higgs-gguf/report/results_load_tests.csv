@@ -1,0 +1,5 @@
+attempt,engine,weights,deploy,verdict,seconds,tensors_loaded,weights_vram_gib,stage0_gpu_mib,stage1_gpu_mib,root_cause
+stock_auto,vLLM-Omni 0.28.0 stock (no harness),GGUF Q8_0,"higgs_3090_32.yaml (production, load_format auto)",REJECTED,26,0,,,,RuntimeError: Cannot find any model weights
+stock_gguf,vLLM-Omni 0.28.0 stock (no harness),GGUF Q8_0,stock_load_format_gguf.yaml (load_format gguf),REJECTED,26,0,,,,ValueError: Load format `gguf` is not supported
+harness_bf16,vLLM-Omni 0.28.0 + higgs_gguf harness,GGUF BF16,higgs_gguf_3090_32.yaml,ACCEPTED (healthy),43,929,7.61,17454,730,talker params loaded: 291; weight load 7.451266 s
+harness_q8_0,vLLM-Omni 0.28.0 + higgs_gguf harness,GGUF Q8_0,higgs_gguf_3090_32.yaml,ACCEPTED (healthy),39,929,7.61,17454,730,talker params loaded: 291; weight load 6.120223 s

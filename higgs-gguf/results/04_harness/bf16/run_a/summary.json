@@ -1,0 +1,16 @@
+{
+ "url": "http://127.0.0.1:8096",
+ "label": "GGUF via higgs_gguf harness: /home/vector/Documents/abdullah_workspace/qwen-server/higgs-gguf/weights/higgs-tts-3-4b-BF16",
+ "time": "2026-10-09 16:10:05",
+ "takes": 13,
+ "ok": 13,
+ "failed": 0,
+ "audio_s_total": 80.72,
+ "sequential_mean_rtf": 0.524,
+ "burst": 8,
+ "burst_wall_s": 4.67,
+ "reference": {
+  "voice": "callagent",
+  "seconds": 27.1
+ }
+}

@@ -1,0 +1,4 @@
+weights/higgs-tts-3-4b-Q8_0/model.gguf: 927 GGUF tensors, 929 checkpoint tensors, 2 stored as aliases, 36s
+  exact (BF16/F32): 675/675
+  quantised: 254 tensors, rel RMS error median 0.00390, max 0.00597, max abs 0.00467
+PASS

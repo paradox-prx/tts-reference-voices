@@ -1,0 +1,20 @@
+== stock_auto: /home/vector/Documents/abdullah_workspace/qwen-server/higgs-gguf/weights/higgs-tts-3-4b-Q8_0 with higgs_3090_32.yaml
+   REJECTED (exit 1) after 26s
+   | [0;36m(APIServer pid=15874)[0;0m ERROR 10-09 16:08:19 [async_omni_engine.py:442]     raise RuntimeError(
+   | [0;36m(APIServer pid=15874)[0;0m ERROR 10-09 16:08:19 [async_omni_engine.py:442] RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+   | [0;36m(APIServer pid=15874)[0;0m ERROR 10-09 16:08:19 [stage_runtime.py:254]     raise RuntimeError(
+   | [0;36m(APIServer pid=15874)[0;0m ERROR 10-09 16:08:19 [stage_runtime.py:254] RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+   | [0;36m(APIServer pid=15874)[0;0m Exception in thread orchestrator:
+   | [0;36m(APIServer pid=15874)[0;0m     raise RuntimeError(
+   | [0;36m(APIServer pid=15874)[0;0m RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+   | [0;36m(APIServer pid=15874)[0;0m RuntimeError: Orchestrator initialization failed: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+== stock_gguf: /home/vector/Documents/abdullah_workspace/qwen-server/higgs-gguf/weights/higgs-tts-3-4b-Q8_0 with stock_load_format_gguf.yaml
+   REJECTED (exit 1) after 26s
+   | [0;36m(APIServer pid=16504)[0;0m ERROR 10-09 16:08:44 [async_omni_engine.py:442]     raise RuntimeError(
+   | [0;36m(APIServer pid=16504)[0;0m ERROR 10-09 16:08:44 [async_omni_engine.py:442] RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+   | [0;36m(APIServer pid=16504)[0;0m ERROR 10-09 16:08:44 [stage_runtime.py:254]     raise RuntimeError(
+   | [0;36m(APIServer pid=16504)[0;0m ERROR 10-09 16:08:44 [stage_runtime.py:254] RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+   | [0;36m(APIServer pid=16504)[0;0m Exception in thread orchestrator:
+   | [0;36m(APIServer pid=16504)[0;0m     raise RuntimeError(
+   | [0;36m(APIServer pid=16504)[0;0m RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+   | [0;36m(APIServer pid=16504)[0;0m RuntimeError: Orchestrator initialization failed: Engine core initialization failed. See root cause above. Failed core proc(s): {}

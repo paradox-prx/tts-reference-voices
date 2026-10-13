@@ -1,0 +1,245 @@
+================================================================================================
+ HIGGS TTS 3 -> GGUF: CONVERSION AND vLLM-OMNI LOADING REPORT
+================================================================================================
+ Date        : 2026-10-09
+ Machine     : vector (1x RTX 3090 24 GB, CUDA 13.0 driver 580.95)
+ Model       : bosonai/higgs-tts-3-4b, HF snapshot 239f63fb7b02b1aa085f98d9efae5e35cc5523e8
+ Engine      : vLLM 0.28.0 + vLLM-Omni 0.28.0 (PR #7065 backport), launched through
+               higgs-studio/engine/run_engine.sh (used unchanged)
+ Work folder : qwen-server/higgs-gguf/   (all scripts, weights, logs and audio live here)
+ CSV data    : report/results_summary.csv, results_load_tests.csv, results_takes.csv,
+               results_tensors_q8_0.csv   (regenerate: python3 scripts/make_report_csv.py)
+
+
+1. SUMMARY
+------------------------------------------------------------------------------------------------
+ * The Higgs TTS 3 checkpoint was converted to two GGUF files: BF16 (7.92 GiB) and Q8_0 (4.41 GiB).
+   All 929 checkpoint tensors survive the round trip. BF16 is bit-identical to the original; Q8_0
+   has a relative RMS error of 0.39 % (median) and 0.60 % (max) on the 254 quantised matrices.
+
+ * Stock vLLM-Omni 0.28 does NOT accept GGUF. vLLM 0.28 has no GGUF code left (upstream removed the
+   GGUF loader and GGUF quantisation and moved them to an out-of-tree plugin). Both stock attempts
+   failed in 26 s:
+     - pointing the engine at the GGUF folder  -> "RuntimeError: Cannot find any model weights"
+     - load_format: gguf                       -> "ValueError: Load format `gguf` is not supported"
+
+ * A harness was written (a custom vLLM model loader, `load_format: higgs_gguf`). With it, both GGUF
+   files load into the stock vLLM-Omni Higgs pipeline. The engine was healthy 39-43 s after launch,
+   and each file served 26/26 voice-clone requests, including an 8-way concurrent burst.
+
+ * The BF16 GGUF reproduces production exactly: all 10 sequential fixed-seed takes were
+   byte-identical WAV files to those from the production engine on the original safetensors.
+
+ * Q8_0 showed no measurable quality loss in this test (Urdu WER 8.6 % vs production 8.6 %, English
+   WER 0 % vs 17.2 %). The sample is small (26 takes per condition), so this means "no visible
+   regression", not "equal or better".
+
+ * There is NO VRAM saving. vLLM 0.28 cannot compute on GGML-quantised weights, so the harness
+   dequantises them to bf16 at load time. The model occupies 7.61 GiB on the GPU in every case.
+   GGUF saves disk space only (Q8_0: -44 %).
+
+
+2. WHAT WAS BUILT
+------------------------------------------------------------------------------------------------
+ higgs-gguf/
+   higgs_gguf/names.py          checkpoint name <-> GGUF name mapping
+   higgs_gguf/quant.py          which GGML type each tensor is stored as
+   higgs_gguf/reader.py         GGUF -> checkpoint-named torch tensors (dequantising)
+   higgs_gguf/vllm_loader.py    vLLM model loader "higgs_gguf" (the harness)
+   harness/sitecustomize.py     registers the loader in every vLLM process
+   deploy/higgs_gguf_3090_32.yaml       production profile + load_format: higgs_gguf
+   deploy/stock_load_format_gguf.yaml   production profile + load_format: gguf (rejection test)
+   scripts/convert_higgs_to_gguf.py     the converter (bf16, q8_0, q5_1, q5_0, q4_1, q4_0)
+   scripts/verify_gguf.py               tensor-by-tensor comparison with the checkpoint
+   scripts/gguf_model_dir.py            rebuild config/tokenizer files from a lone .gguf
+   scripts/run_gguf_engine.sh           start the engine on a GGUF (port 8096)
+   scripts/test_stock_vllm_omni.sh      stock acceptance test
+   scripts/run_load_test.sh             harness load test + smoke test
+   scripts/smoke_tts.py                 fixed-seed voice-clone requests, saves WAVs + numbers
+   scripts/summarise_quality.py, make_report_csv.py
+   weights/higgs-tts-3-4b-BF16/, weights/higgs-tts-3-4b-Q8_0/   model.gguf + config/tokenizer
+   results/00_conversion ... 05_quality                          raw logs, JSON and every WAV
+
+ Nothing outside higgs-gguf/ was modified: not higgs-studio, not the shared engine venv, not the HF cache.
+
+
+3. CONVERSION
+------------------------------------------------------------------------------------------------
+ 3.1 GGUF layout
+   general.architecture = "higgs-tts3", with llama.cpp-style hyper-parameter keys:
+     block_count 36, embedding_length 2560, feed_forward_length 9728, head_count 32,
+     head_count_kv 8, key/value_length 128, rope.freq_base 1e6, rms_eps 1e-6,
+     vocab_size 151936, audio.num_codebooks 8, audio.codebook_size 1026.
+   Tensor names:
+     Qwen3 backbone  -> llama.cpp names (token_embd, blk.N.attn_q/k/v/output, attn_q_norm,
+                        attn_k_norm, attn_norm, ffn_norm, ffn_gate/up/down, output_norm)
+     audio embedding -> audio_embd.weight;  audio head -> audio_head.weight
+     bundled codec   -> codec.* with abbreviated paths (GGUF names are capped at 63 bytes;
+                        longest name used: 44 bytes)
+   The exact mapping is stored in the file (higgs.tensor_map.gguf / .hf), together with
+   config.json, tokenizer.json, tokenizer_config.json and the chat template (higgs.hf.*), so a
+   single .gguf is self-contained.
+
+ 3.2 Finding: the checkpoint index is incomplete
+   model.safetensors.index.json lists 927 tensors, but model.safetensors holds 929. The two missing
+   ones are the output heads (tied.head.text_head.weight, tied.head.modality_heads.0.weight).
+   Both are bit-identical copies of the corresponding input embeddings, because the weights are tied.
+   vLLM reads the file, not the index, so the converter does the same. It stores each tied head once
+   and records it as an alias (higgs.alias.*), which saves 0.8 GB. The reader re-emits the aliases,
+   so the loader still delivers all 929 tensors.
+
+ 3.3 Quantisation policy (Q8_0 file)
+   Q8_0 : 252 transformer-block matrices + token_embd (253 tensors, 3.98 GiB)
+   BF16 : audio_embd, audio_head and the whole codec (287 tensors, 0.41 GiB). The codec turns tokens
+          into waveform, so quantisation noise there would be audible, and it is small.
+   F32  : every 1-D tensor (norms, biases, snake alphas), an exact upcast (387 tensors)
+
+ 3.4 Results                                   (results/00_conversion, results/01_verify)
+   +--------+-----------+---------+------------------------------------------+-----------+
+   | file   | size      | tensors | check vs. checkpoint (929 tensors)       | convert   |
+   +--------+-----------+---------+------------------------------------------+-----------+
+   | BF16   | 7.92 GiB  | 927 + 2 | 929/929 bit-identical                    |    3 s    |
+   | Q8_0   | 4.41 GiB  | 927 + 2 | 675 exact + 254 Q8_0 (rel RMS 0.39 % med,|   34 s    |
+   |        |           | aliases |   0.60 % max, max abs err 0.0047)        |           |
+   +--------+-----------+---------+------------------------------------------+-----------+
+   Original safetensors: 7.91 GiB.  Worst Q8_0 tensor: body.layers.2.mlp.down_proj.weight.
+   Per-tensor detail: report/results_tensors_q8_0.csv
+
+
+4. LOADING INTO vLLM-OMNI
+------------------------------------------------------------------------------------------------
+ 4.1 Stock engine (no harness)                    (results/03_stock_vllm_omni, CSV: load_tests)
+   +------------+---------------------------------------+-----------+---------------------------+
+   | attempt    | deploy profile                        | verdict   | root cause                |
+   +------------+---------------------------------------+-----------+---------------------------+
+   | stock_auto | higgs_3090_32.yaml (production)       | REJECTED  | RuntimeError: Cannot find |
+   |            |                                       |  in 26 s  | any model weights         |
+   | stock_gguf | same + load_format: gguf              | REJECTED  | ValueError: Load format   |
+   |            |                                       |  in 26 s  | `gguf` is not supported   |
+   +------------+---------------------------------------+-----------+---------------------------+
+   A grep of the installed vLLM confirms this: no GGUF loader, no GGUF quantisation method and no
+   GGML kernels. Even the out-of-tree GGUF plugin would not help, because it only maps
+   architectures known to llama.cpp, and higgs-tts3 is not one of them.
+
+ 4.2 How the harness works
+   (a) HiggsGGUFModelLoader (a vLLM BaseModelLoader) opens the GGUF (memory-mapped). It
+       dequantises each tensor to bf16 (Q8_0 with a torch fast path, other types with gguf-py),
+       renames it to its checkpoint name and streams it into the model's own load_weights(). The
+       Higgs model code, the API server and every deploy setting stay stock.
+   (b) Stage 1 (Code2Wav) receives only the 528 codec tensors, so it skips dequantising the 4B
+       backbone (0.7 s load).
+   (c) If any parameter is left uninitialised, the loader raises an error, so a partial load
+       cannot pass silently.
+   (d) Registration: vLLM-Omni starts the API server and both stages as fresh "spawn" processes.
+       harness/sitecustomize.py (on PYTHONPATH, active only with HIGGS_GGUF_HARNESS=1) calls
+       register_model_loader("higgs_gguf") as soon as vLLM's model_loader module is imported, in
+       every process. Nothing is installed into the shared engine venv. Verified: a plain Python
+       process without the harness still reports "Load format `higgs_gguf` is not supported".
+   (e) run_gguf_engine.sh refuses a model folder that also contains safetensors, so a test cannot
+       accidentally load the original weights.
+
+ 4.3 Harness results                                    (results/04_harness/*/load.txt)
+   +--------------+---------+---------------+-------------+------------+------------------+
+   | weights      | healthy | tensors fed   | weight load | weights on | GPU use (MiB)    |
+   |              | after   | stage 0 / 1   | (stage 0)   | GPU        | stage 0 / 1      |
+   +--------------+---------+---------------+-------------+------------+------------------+
+   | GGUF BF16    |  43 s   |  929 / 528    |   7.45 s    | 7.61 GiB   | 17454 / 730      |
+   | GGUF Q8_0    |  39 s   |  929 / 528    |   6.12 s    | 7.61 GiB   | 17454 / 730      |
+   +--------------+---------+---------------+-------------+------------+------------------+
+   Talker log for both: "HiggsAudioV3Talker: loaded 291 params, modality_embedding=(8208, 2560),
+   tied=True"; Code2Wav: "Loaded ... from bundled V3 checkpoint (528 codec keys consumed)".
+   GPU use is identical to production. That confirms there is no VRAM saving (see section 7).
+
+
+5. SYNTHESIS TEST
+------------------------------------------------------------------------------------------------
+ 5.1 Method                                   (scripts/smoke_tts.py; CSV: results_takes.csv)
+   Voice      : higgs-studio "callagent" reference, cut to 27.1 s (Urdu, male) with its transcript
+   Texts      : 3 Urdu + 2 English neutral sentences (weather, IVR prompt, health tip with a
+                <|prosody:pause|> tag, order shipped, quick brown fox)
+   Sampling   : temperature 0.8, top_k 50, top_p 1.0 (production defaults)
+   Per run    : 5 sequential takes (seed 1234) + 8 concurrent takes (seeds 1235-1242)
+   Per weights: 2 runs (a, b) = 26 takes
+   Conditions : production engine on safetensors (:8095, before the GPU window), harness on
+                GGUF BF16 and on GGUF Q8_0 (:8096). Same deploy profile in all three.
+   Scoring    : faster-whisper large-v3 (beam 5, language forced) via the existing
+                tts-reference-voices/server/eval/score_run.py, run on CPU. Tags were stripped from
+                the reference text.
+
+ 5.2 Results                                                  (report/results_summary.csv)
+   +---------------------+-------+---------+------------+--------+--------+--------+-------+------+
+   | condition           | takes | seq     | seq mean   | WER    | WER    | WER    | takes | QC   |
+   |                     | ok    | identic.| latency/RTF| all    | Urdu   | Engl.  | >0.3  | bad  |
+   +---------------------+-------+---------+------------+--------+--------+--------+-------+------+
+   | safetensors (prod)  | 26/26 |   ref   | 3.01s/0.53 | 11.0 % |  8.6 % | 17.2 % |   3   |  3   |
+   | GGUF BF16 (harness) | 26/26 |  10/10  | 2.71s/0.46 |  4.7 % |  6.5 % |  0.0 % |   0   |  0   |
+   | GGUF Q8_0 (harness) | 26/26 |   0/10  | 2.48s/0.45 |  6.2 % |  8.6 % |  0.0 % |   0   |  1   |
+   +---------------------+-------+---------+------------+--------+--------+--------+-------+------+
+   8-way burst wall time (run a / run b): production 23.39 / 4.12 s, BF16 4.67 / 4.28 s,
+   Q8_0 5.71 / 4.95 s. Mean audio length: 8.35 s / 6.12 s / 6.35 s.
+
+ 5.3 Interpretation
+   * Exactness (BF16). Each sequential take was byte-identical to the production take with the same
+     seed and position, in both runs (10/10). This is the strongest available proof that the GGUF path
+     delivers exactly the production weights to the model.
+   * Burst takes differ between every pair of runs, including production vs. production, because
+     batch composition depends on request timing. This is normal engine behaviour, not a GGUF
+     effect.
+   * Why production scores worst. One production burst take (run a, burst04_en_fox) ran on to
+     58.2 s of babble (WER 1.0; ASR "Dweck, Ponzo, Zen, Lens, ... SMS"). It alone lifts production's
+     English WER and its run-a burst wall time (23.4 s). Higgs does this occasionally on any weights.
+     The studio's 60-word split + retry exists for that reason. The other production outliers are
+     two Urdu "weather" burst takes with mispronunciations (WER 0.29 and 0.36) and one English take
+     (WER 0.375).
+   * The single Q8_0 "bad" flag (run a, burst07_ur_health, WER 0.14) comes from the QC pacing rule:
+     11.8 s of audio for a sentence that usually takes about 8-9 s.
+   * Latency differences are within noise. The first request of each fresh run is slower (reference
+     encoding is not yet cached: 7.37 s on production, 4.43 s on BF16, 3.53 s on Q8_0), which skews
+     the sequential means.
+   * Conclusion: at this sample size, Q8_0 is indistinguishable from BF16 and production. A real
+     quality verdict needs a few hundred takes (bench/bench_tts.py, as in the Higgs benchmark) and a
+     native-speaker listening pass.
+
+
+6. OPERATIONS LOG
+------------------------------------------------------------------------------------------------
+   15:5x  conversion (BF16 3 s, Q8_0 34 s), re-conversion after the tied-head finding, verification
+   16:00  baseline, 2 runs against the live production engine (:8095)
+   16:08  production higgs-engine + watchdog stopped (approved by the user)
+   16:08  stock tests: both rejected in 26 s each
+   16:09  harness BF16: healthy at 43 s, 26/26 takes
+   16:10  harness Q8_0: healthy at 39 s, 26/26 takes
+   16:12:43 production higgs-engine + watchdog restarted, /health 200 (downtime < 5 min)
+   16:13-16:18  Whisper scoring of 78 takes on CPU (production GPU untouched)
+
+
+7. LIMITATIONS AND CAVEATS
+------------------------------------------------------------------------------------------------
+   * No VRAM or speed gain in vLLM 0.28: weights are dequantised to bf16 at load. A real gain would
+     need GGML dequant-matmul kernels in vLLM (the out-of-tree GGUF plugin), plus support there for
+     this architecture.
+   * llama.cpp cannot run these files. The higgs-tts3 architecture (Qwen3 backbone + 8-codebook audio
+     head with delay pattern + codec decoder) is not implemented in llama.cpp. The backbone tensors
+     use llama.cpp naming, so a future ggml port could reuse them directly.
+   * gguf-py quantises only Q8_0, Q5_x and Q4_x (no k-quants). Q4_K etc. would need llama.cpp's
+     llama-quantize; the reader already loads any type gguf-py can dequantise.
+   * Only BF16 and Q8_0 were produced: about 7.5 GB of disk was free afterwards. The 4/5-bit types
+     are supported by the converter but untested.
+   * Small quality sample (26 takes per condition, one voice). Urdu output was not checked by a
+     native speaker.
+   * Licence: Boson's research / non-commercial licence applies to the converted files exactly as to
+     the originals (also recorded in the GGUF metadata, general.license).
+
+
+8. HOW TO REPRODUCE
+------------------------------------------------------------------------------------------------
+   cd qwen-server/higgs-gguf
+   PY=../tts-reference-voices/server/venvs/engine/bin/python
+   $PY -I scripts/convert_higgs_to_gguf.py --outtype q8_0
+   $PY -I scripts/verify_gguf.py weights/higgs-tts-3-4b-Q8_0/model.gguf
+   systemctl --user stop higgs-engine-watchdog.timer higgs-engine       # frees the GPU
+   scripts/test_stock_vllm_omni.sh
+   scripts/run_load_test.sh weights/higgs-tts-3-4b-Q8_0 04_harness/q8_0
+   systemctl --user start higgs-engine higgs-engine-watchdog.timer
+   python3 scripts/make_report_csv.py
+================================================================================================

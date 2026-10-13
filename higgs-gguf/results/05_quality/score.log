@@ -1,0 +1,8 @@
+/home/vector/Documents/abdullah_workspace/qwen-server/higgs-gguf/results/05_quality/manifest.jsonl: 78 takes, 0 already scored, 78 to score -> /home/vector/Documents/abdullah_workspace/qwen-server/higgs-gguf/results/05_quality/scores.jsonl
+models loaded in 3.2s: {'asr': 3.06}
+  20/78 93s eta 271s | /home/vector/Documents/abdullah_workspace/qwen-server/higgs-gguf/results/02_baseline_safetensors/run_b/burst03_en_order.wav: wer=0.0 cer_ns=0.0 sim_L=None gate=pass
+  40/78 160s eta 152s | /home/vector/Documents/abdullah_workspace/qwen-server/higgs-gguf/results/04_harness/bf16/run_a/burst07_ur_health.wav: wer=0.0909 cer_ns=0.0682 sim_L=None gate=pass
+  60/78 225s eta 68s | /home/vector/Documents/abdullah_workspace/qwen-server/higgs-gguf/results/04_harness/q8_0/run_a/burst03_en_order.wav: wer=0.0 cer_ns=0.0 sim_L=None gate=pass
+  78/78 286s eta 0s | /home/vector/Documents/abdullah_workspace/qwen-server/higgs-gguf/results/04_harness/q8_0/run_b/burst02_ur_health.wav: wer=0.0455 cer_ns=0.0227 sim_L=None gate=pass
+/home/vector/Documents/abdullah_workspace/qwen-server/higgs-gguf/results/05_quality/manifest.jsonl: scored 78 in 286.5s
+/home/vector/Documents/abdullah_workspace/qwen-server/higgs-gguf/results/05_quality/manifest.jsonl: gate fail 4/78, bad 4/78, corpus {'n': 78, 'wer': 0.0733, 'cer': 0.0371, 'cer_nospace': 0.0415} -> /home/vector/Documents/abdullah_workspace/qwen-server/higgs-gguf/results/05_quality/scores_summary.json

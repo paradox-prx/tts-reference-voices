@@ -1,0 +1,74 @@
+# STOCK-REJECTION TEST ONLY: the production profile with vLLM's own `load_format: gguf` per stage, to show what
+# unmodified vLLM-Omni 0.28 does with a GGUF. Used by scripts/test_stock_vllm_omni.sh; expected to fail.
+#
+# Higgs TTS 3 (bosonai/higgs-tts-3-4b) on one 24 GB RTX 3090, tuned for throughput: max_num_seqs 32, stage 0 0.72
+# of the GPU (~65k-token KV cache), stage 1 (the codec decoder, uses ~0.7 GB) 0.08. The default for higgs-studio.
+# 0.80 (the benchmark's mem080_seqs32, one shared short reference) OOMed in stage 0 here when ~24 requests with
+# different ~27 s references arrived at once: the rest of the card also holds the API server's reference codec and
+# the per-request audio activations, so stage 0 keeps ~2 GB more headroom.
+#   Derived from vllm-omni 0.28.0's vllm_omni/deploy/higgs_multimodal_qwen3.yaml. Differences from upstream:
+#   - stage-0 sampling defaults temperature 0.8, top_k 50, top_p 1.0 (Boson's voice-clone recommendation) instead of
+#     1.0 / 50 / 0.95; the studio sends its own values per request anyway;
+#   - no fixed `seed: 42` (upstream pins it, so every take of a prompt would be identical and retries could not help;
+#     the engine honours a per-request seed);
+#   - stage-0 attention_backend FLASH_ATTN instead of FLASHINFER: FlashInfer would need JIT kernels that the venv's
+#     nvcc 13.4 cannot build against torch's CUDA 13.0 headers (see engine/run_engine.sh);
+#   - chunking 25 frames = 1 s at the 25 fps codec, first chunk 1 frame, max_tokens 2048 = 82 s of audio: upstream.
+async_chunk: true
+connectors:
+  connector_of_shared_memory:
+    name: SharedMemoryConnector
+    extra:
+      codec_streaming: true
+      codec_chunk_frames: 25
+      codec_left_context_frames: 25
+      codec_right_holdback_frames: 4
+      initial_codec_chunk_frames: 1
+      connector_get_sleep_s: 0.01
+      connector_get_max_wait_first_chunk: 5000
+      connector_get_max_wait: 500
+stages:
+- stage_id: 0
+  max_num_seqs: 32
+  gpu_memory_utilization: 0.72
+  enforce_eager: true
+  attention_backend: FLASH_ATTN
+  trust_remote_code: true
+  enable_prefix_caching: true
+  load_format: gguf
+  async_scheduling: false
+  max_num_batched_tokens: 4096
+  max_model_len: 8192
+  devices: '0'
+  output_connectors:
+    to_stage_1: connector_of_shared_memory
+  default_sampling_params:
+    temperature: 0.8
+    top_p: 1.0
+    top_k: 50
+    max_tokens: 2048
+    repetition_penalty: 1.0
+- stage_id: 1
+  max_num_seqs: 16
+  gpu_memory_utilization: 0.08
+  enforce_eager: true
+  trust_remote_code: true
+  enable_prefix_caching: false
+  load_format: gguf
+  async_scheduling: false
+  max_num_batched_tokens: 65536
+  max_model_len: 65536
+  devices: '0'
+  input_connectors:
+    from_stage_0: connector_of_shared_memory
+  default_sampling_params:
+    temperature: 0.0
+    top_p: 1.0
+    top_k: -1
+    max_tokens: 65536
+    repetition_penalty: 1.0
+platforms:
+  rocm:
+    stages:
+    - stage_id: 0
+      attention_backend: TRITON_ATTN
