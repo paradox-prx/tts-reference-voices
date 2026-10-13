@@ -86,5 +86,5 @@ the same function to text sent to the fine-tuned model at serving time.
 | `configs/` | training configs and the external evaluation references |
 | `tests/` | layout and dataset tests (`pytest -q tests`) |
 | `scripts/gpu_window.sh` | the validation run used on the production box (pauses the service, restarts it) |
-| `docs/` | RESEARCH.md (findings, sources), EXPERIMENTS.md (validation numbers) |
+| `docs/` | HANDOFF.md (setup + run guide for a new session), RESEARCH.md (findings, sources), EXPERIMENTS.md (validation numbers) |
 | `data/`, `runs/` | derived datasets and training runs (gitignored) |
