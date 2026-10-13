@@ -12,7 +12,6 @@ per-request compute / audio (p50), audio = mean seconds per take, err / susp = e
 GPU = peak MiB on the card (desktop included). Qwen rows carry the gateway's length cap (max_new_tokens auto);
 Higgs rows carry no cap unless the run's params say so.
 """
-
 from __future__ import annotations
 
 import argparse

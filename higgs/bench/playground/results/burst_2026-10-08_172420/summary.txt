@@ -1,0 +1,39 @@
+Higgs TTS burst load test: burst_2026-10-08_172420
+============================================================
+bursts            27   (size None, words None, stream=None, seed=None)
+requests          555   ok None   errors None
+total wall        - s   mean burst wall - s
+audio generated   - s   overall xRT -
+latency p50/p90/p99  - / - / - s
+TTFA p50/p90         - / - s
+
+Percentiles by words per request (seconds; rtf = latency / audio)
+words | requests | errors | audio_s_mean | latency_s_p50 | latency_s_p90 | latency_s_p95 | latency_s_p99 | ttfa_s_p50 | ttfa_s_p90 | ttfa_s_p99 | rtf_p50 | rtf_p90
+--- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---
+10-19 | 84 | 84 | - | - | - | - | - | - | - | - | - | -
+20-29 | 76 | 76 | - | - | - | - | - | - | - | - | - | -
+30-39 | 65 | 65 | - | - | - | - | - | - | - | - | - | -
+40-49 | 88 | 88 | - | - | - | - | - | - | - | - | - | -
+50-59 | 77 | 77 | - | - | - | - | - | - | - | - | - | -
+60-69 | 79 | 79 | - | - | - | - | - | - | - | - | - | -
+70-79 | 81 | 81 | - | - | - | - | - | - | - | - | - | -
+80-89 | 5 | 5 | - | - | - | - | - | - | - | - | - | -
+ALL | 555 | 555 | - | - | - | - | - | - | - | - | - | -
+
+Percentiles by burst size
+burst_size | requests | errors | audio_s_mean | latency_s_p50 | latency_s_p90 | latency_s_p95 | latency_s_p99 | ttfa_s_p50 | ttfa_s_p90 | ttfa_s_p99 | rtf_p50 | rtf_p90
+--- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---
+5-9 | 19 | 19 | - | - | - | - | - | - | - | - | - | -
+10-14 | 63 | 63 | - | - | - | - | - | - | - | - | - | -
+15-19 | 35 | 35 | - | - | - | - | - | - | - | - | - | -
+20-24 | 151 | 151 | - | - | - | - | - | - | - | - | - | -
+25-29 | 105 | 105 | - | - | - | - | - | - | - | - | - | -
+30-34 | 182 | 182 | - | - | - | - | - | - | - | - | - | -
+ALL | 555 | 555 | - | - | - | - | - | - | - | - | - | -
+
+Slowest 5 bursts by p90 latency
+  burst   0 size 30 wall 0.1s p90 -s errors 30
+  burst   1 size 13 wall 0.1s p90 -s errors 13
+  burst   2 size  8 wall 0.0s p90 -s errors 8
+  burst   3 size 12 wall 0.1s p90 -s errors 12
+  burst   4 size 21 wall 0.1s p90 -s errors 21

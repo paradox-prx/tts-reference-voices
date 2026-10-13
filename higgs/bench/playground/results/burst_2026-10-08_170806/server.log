@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/higgs/bench/playground/higgs_server.py", line 151, in <module>
+    main()
+  File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/higgs/bench/playground/higgs_server.py", line 144, in main
+    state["ref_audio"] = "data:audio/wav;base64," + base64.b64encode(a.ref_audio.read_bytes()).decode()
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/pathlib.py", line 1019, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'references/qwen3-tts.wav'

@@ -7,3 +7,7 @@ logs/
 state/
 __pycache__/
 *.pyc
+# voice references of private people stay local (only public-figure voices live under ../voices/)
+voices/
+# playground runs: numbers are versioned, audio is not
+bench/playground/results/**/*.wav

@@ -1,0 +1,20 @@
+INFO:     Started server process [31003]
+INFO:     Waiting for application startup.
+ERROR:    Traceback (most recent call last):
+  File "/home/vector/Documents/abdullah_workspace/qwen-server/higgs-studio/.venv/lib/python3.12/site-packages/starlette/routing.py", line 654, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/higgs/bench/playground/higgs_server.py", line 107, in lifespan
+    proc = subprocess.Popen(shlex.split(cmd))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/local/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/vector/Documents/abdullah_workspace/qwen-server/tts-reference-voices/higgs/bench/playground/engine/run_engine.sh'
+
+ERROR:    Application startup failed. Exiting.
+reference: higgs-v3-25s.wav | transcript (173 chars): سید عاصم منیر کی لیڈرشپ میں وطنِ عزیز کی سلامتی اور خود مختاری کے تحفظ پاکستان ا...

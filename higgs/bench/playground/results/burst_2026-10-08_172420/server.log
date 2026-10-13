@@ -1,0 +1,1135 @@
+INFO:     Started server process [25250]
+INFO:     Waiting for application startup.
+reference: higgs-v3-25s.wav | transcript (173 chars): سید عاصم منیر کی لیڈرشپ میں وطنِ عزیز کی سلامتی اور خود مختاری کے تحفظ پاکستان ا...
+[gateway] engine POST routes: ['/tokenize', '/detokenize', '/ping', '/invocations', '/v1/responses', '/v1/responses/{response_id}/cancel', '/v1/completions', '/v1/messages', '/v1/messages/count_tokens', '/generative_scoring', '/scale_elastic_ep', '/is_scaling_elastic_ep', '/v1/chat/completions/render', '/v1/completions/render', '/v1/chat/completions/derender', '/v1/completions/derender', '/inference/v1/generate', '/v1/chat/completions', '/v1/chat/completions/batch', '/v1/audio/speech', '/v1/audio/speech/batch', '/v1/audio/generate', '/v1/audio/voices', '/v1/images/generations', '/v1/images/edits', '/v1/videos', '/v1/videos/sync', '/v1/omni/sleep', '/v1/omni/wakeup']
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:44252 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44264 - "GET /health HTTP/1.1" 200 OK
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44458 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44466 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44468 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44472 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44494 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44462 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44512 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44506 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44500 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44482 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44458 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44466 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44468 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44458 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44462 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44482 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44458 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44512 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44500 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44494 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44468 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44472 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44466 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44462 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44506 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44458 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44506 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44500 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44512 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44466 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44472 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44494 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44462 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44520 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44482 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44468 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44506 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44458 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44466 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44500 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44468 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44512 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44472 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44462 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44482 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44494 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44462 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44494 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44500 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44482 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44468 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44458 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44466 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44472 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44458 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44466 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44462 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44466 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44462 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44458 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44462 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44472 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44458 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44466 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44468 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44482 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44506 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44500 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44520 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44458 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44466 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44472 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44462 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44494 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44512 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44468 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44482 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44506 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44500 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44472 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44512 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44468 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44494 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44462 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44458 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44466 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44462 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44472 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44482 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44458 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44468 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44466 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44462 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44472 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44468 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44430 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44440 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44466 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44458 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44400 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44402 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44454 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44482 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44416 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44278 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44310 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44296 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44348 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44282 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44332 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44376 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44384 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44354 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44364 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44380 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44288 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44322 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     127.0.0.1:44398 - "POST /tts HTTP/1.1" 404 Not Found
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+engine 404 on /v1/audio/speech: {"error":{"message":"The model `bosonai/higgs-tts-3-4b` does not exist.","type":"NotFoundError","param":"model","code":404}}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [25250]

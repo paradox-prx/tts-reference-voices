@@ -1,0 +1,4 @@
+usage: higgs_server.py [-h] --ref-audio REF_AUDIO
+                       (--ref-text REF_TEXT | --ref-text-file REF_TEXT_FILE)
+                       [--launch-engine] [--host HOST] [--port PORT]
+higgs_server.py: error: one of the arguments --ref-text --ref-text-file is required
