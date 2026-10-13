@@ -1,0 +1,25 @@
+# Full fine-tune on a 40-80 GB card (A100/H100/L40S): fp32 master weights + bf16 autocast, bigger batches.
+model: Qwen/Qwen3-TTS-12Hz-1.7B-Base
+data_dir: data/urdu300
+out_dir: runs/urdu_full_a
+mode: full
+precision: fp32-master
+lr: 5.0e-6
+weight_decay: 0.01
+warmup_steps: 500
+schedule: cosine
+min_lr_ratio: 0.1
+epochs: 4
+max_tokens: 24000
+max_batch: 24
+grad_accum: 1
+clip: 1.0
+cp_weight: 0.3
+grad_checkpointing: true
+language: {name: urdu, row: 2080, p: 0.8, init: mean}
+icl: {p: 0.7, ref_min_s: 3.0, ref_max_s: 20.0, train_on_ref: false}
+eval_every: 500
+save_every: 2000
+keep_last: 2
+save_optimizer: true
+num_workers: 8
